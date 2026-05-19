@@ -1,0 +1,25 @@
+# Shell scripts (build helpers, temporary scripts)
+*.sh
+
+# Markdown files except README.md
+*.md
+!README.md
+
+# Support/documents folder
+support-documents/
+
+# Temporary files from previous builds
+.eas/
+.expo/
+
+# Unnecessary configuration files
+.easignore
+.gitignore
+.eslintignore
+
+# IDE/editor files (if any)
+.vscode/
+.idea/
+
+# Backup engine folders
+lib/engine.bak.*/
