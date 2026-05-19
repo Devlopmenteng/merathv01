@@ -3,7 +3,7 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Merath',
-  slug: 'merath',
+  slug: 'merath_mobile',
   scheme: 'merath',
   android: {
     package: 'com.merath_mobile.merath',
