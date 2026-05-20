@@ -12,7 +12,6 @@
       }
     },
     "preview": {
-      "skipTypeScriptCheck": true,
       "distribution": "internal",
       "autoIncrement": true,
       "android": {
