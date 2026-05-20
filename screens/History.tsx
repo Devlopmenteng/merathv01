@@ -1,4 +1,4 @@
-import { t } from '../lib/i18n';
+// import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { getAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';

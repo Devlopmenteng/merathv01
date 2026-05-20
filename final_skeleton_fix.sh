@@ -1,3 +1,10 @@
+#!/bin/bash
+set -e
+
+echo "Final SkeletonLoader fix..."
+
+# 1. Replace SkeletonLoader component (no internal width prop)
+cat > components/ui/SkeletonLoader.tsx << 'SKELETONEOF'
 import React, { useEffect, useRef } from 'react';
 import { Animated, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
@@ -36,3 +43,9 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({ height = 20, sty
     />
   );
 };
+SKELETONEOF
+
+# 2. Update HeirSelector.tsx to pass width via style
+sed -i 's/<SkeletonLoader width="100%" height={40} style={{ marginVertical: 8 }} \/>/<SkeletonLoader height={40} style={{ width: "100%", marginVertical: 8 }} \/>/g' components/HeirSelector.tsx
+
+echo "✅ Fix applied. Now run 'npx tsc --noEmit'"

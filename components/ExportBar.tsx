@@ -18,7 +18,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
   const generatePDF = async () => {
     const html = `
       <h1>Inheritance Report</h1>
-      <p>Net Estate: $${resultData.netEstate ?? resultData.netTotal ?? 0}</p>
+      <p>Net Estate: $${resultData.netEstate ?? resultData.netEstate ?? 0}</p>
       <ul>${resultData.shares
         .map((s) => `<li>${s.name}: $${s.amount.toFixed(2)}</li>`)
         .join('')}</ul>

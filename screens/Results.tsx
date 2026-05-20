@@ -1,3 +1,5 @@
+import { t } from "../lib/i18n";
+import { heirsArrayToObject } from "../lib/utils/heirsConverter";
 import { incrementCalculationCount } from '../lib/services/UsageStats';
 import { usePremium } from '../lib/context/PremiumContext';
 import { generateLegalReport } from '../components/LegalReportGenerator';
@@ -23,7 +25,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
-import { t } from '../lib/i18n';
+// import { t } from '../lib/i18n';
 import type { CalculationResult, EstateInput } from '../lib/engine/types';
 
 type ChartDataItem = {
@@ -79,11 +81,11 @@ export const Results = ({ navigation }: { navigation: any }) => {
       will: state.will,
     };
 
-    const res = calculateInheritance(state.madhab, estate, state.heirs);
+    const res = calculateInheritance(state.madhab, estate, heirsArrayToObject(state.heirs));
     let confidence = 100;
 
     if ((res.netEstate ?? 0) <= 0) confidence -= 50;
-    if (state.heirs.length === 0) confidence -= 30;
+    if (heirsArrayToObject(state.heirs).length === 0) confidence -= 30;
 
     const safeResult: CalculationResult = {
       ...res,
@@ -102,7 +104,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
       shares: safeResult.shares,
       steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
     }).catch(() => {});
-  }, [state.madhab, state.total, state.funeral, state.debts, state.will, state.heirs]);
+  }, [state.madhab, state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);
 
   const generatePDF = async () => {
     if (!result) return;
@@ -143,9 +145,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
   };
 
   const confidenceColor =
-    result?.confidence >= 70
+    result?.confidence ?? 0 >= 70
       ? theme.colors.success
-      : result?.confidence >= 40
+      : result?.confidence ?? 0 >= 40
       ? theme.colors.warning
       : theme.colors.error;
 

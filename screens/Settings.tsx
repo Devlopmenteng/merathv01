@@ -3,7 +3,7 @@ import { getCalculationCount } from '../lib/services/UsageStats';
 import { useState, useEffect } from 'react';
 import { SupportButton } from '../components/SupportButton';
 import { FeedbackButton } from '../components/FeedbackButton';
-import { t } from '../lib/i18n';
+// import { t } from '../lib/i18n';
 import React from 'react';
 import { View, Text, Switch, ScrollView } from 'react-native';
 import { useTheme } from '../lib/context/ThemeContext';

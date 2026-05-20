@@ -1,3 +1,4 @@
+import { heirsArrayToObject } from "../lib/utils/heirsConverter";
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
@@ -24,9 +25,9 @@ export const Comparison = () => {
       debts: state.debts,
       will: state.will,
     };
-    const all = TABS.map((m) => calculateInheritance(m, estate, state.heirs));
+    const all = TABS.map((m) => calculateInheritance(m, estate, heirsArrayToObject(state.heirs)));
     setResults(all);
-  }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
+  }, [state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);
 
   const notes = FIQH_NOTES[selected] || {};
 
@@ -57,7 +58,7 @@ export const Comparison = () => {
             style={{ padding: 16, marginBottom: 16, backgroundColor: theme.colors.surface, borderRadius: 12 }}
           >
             <Text style={theme.typography.h2}>{MADHAB_NAMES[TABS[idx]]}</Text>
-            <Text style={theme.typography.body}>Net Estate: ${res.netEstate ?? res.netTotal ?? 0}</Text>
+            <Text style={theme.typography.body}>Net Estate: ${res.netEstate ?? res.netEstate ?? 0}</Text>
             {res.shares.map((share, i) => (
               <Text key={i} style={theme.typography.caption}>
                 {share.name}: ${share.amount.toFixed(2)} ({share.fraction?.numerator}/{share.fraction?.denominator})
