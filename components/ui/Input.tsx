@@ -14,6 +14,7 @@ export const Input: React.FC<Props> = ({ label, value, onChangeText, keyboardTyp
         <TextInput
           value={value}
           onChangeText={onChangeText}
+          onChangeText={(text) => { const num = parseFloat(text); if (!isNaN(num) && num >= 0) onChangeText(text); else if (text === "") onChangeText(""); }}
           keyboardType={keyboardType}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}

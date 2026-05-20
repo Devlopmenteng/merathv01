@@ -186,7 +186,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
               }}
             />
           </View>
-          <Text style={{ marginLeft: 8, color: confidenceColor, fontWeight: '600' }}>
+          <Text style={{ marginStart: 8, color: confidenceColor, fontWeight: '600' }}>
             {result.confidence}%
           </Text>
         </View>
@@ -194,9 +194,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
         <Text style={theme.typography.caption}>{t('confidence')}</Text>
 
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginVertical: 12 }}>
-          <Text style={{ marginRight: 8 }}>{t('fractions')}</Text>
+          <Text style={{ marginEnd: 8 }}>{t('fractions')}</Text>
           <Switch value={showPercentage} onValueChange={setShowPercentage} />
-          <Text style={{ marginLeft: 8 }}>{t('percentages')}</Text>
+          <Text style={{ marginStart: 8 }}>{t('percentages')}</Text>
         </View>
 
         <PieChart data={chartData} />

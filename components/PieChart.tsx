@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
 import Svg, { Path, G } from 'react-native-svg';
 
-type PieData = { label: string; value: number; color: string };
-
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+type PieData = { label: string; value: number; color?: string };
+const DEFAULT_COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F7DC6F', '#96CEB4', '#FFB347', '#6B5B95', '#88B04B'];
 
 const polarToCartesian = (cx: number, cy: number, r: number, angle: number) => ({
   x: cx + r * Math.cos((angle - 90) * Math.PI / 180),
@@ -29,6 +28,7 @@ export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number 
   if (total === 0) return null;
 
   let cumulativeAngle = 0;
+  const AnimatedPath = Animated.createAnimatedComponent(Path);
 
   return (
     <View style={{ alignItems: 'center', marginVertical: 16 }}>
@@ -36,23 +36,15 @@ export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number 
         {data.map((item, index) => {
           const sliceAngle = (item.value / total) * 360;
           const path = describeArc(size/2, size/2, size/2 - 5, cumulativeAngle, cumulativeAngle + sliceAngle);
+          const color = item.color || DEFAULT_COLORS[index % DEFAULT_COLORS.length];
           cumulativeAngle += sliceAngle;
-          return (
-            <AnimatedPath
-              key={index}
-              d={path}
-              fill={item.color}
-              stroke="#fff"
-              strokeWidth={2}
-              opacity={animValue}
-            />
-          );
+          return <AnimatedPath key={index} d={path} fill={color} stroke="#fff" strokeWidth={2} opacity={animValue} />;
         })}
       </Svg>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 }}>
         {data.map((item, idx) => (
-          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 12, marginBottom: 4 }}>
-            <View style={{ width: 12, height: 12, backgroundColor: item.color, borderRadius: 6, marginRight: 4 }} />
+          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginEnd: 12, marginBottom: 4 }}>
+            <View style={{ width: 12, height: 12, backgroundColor: item.color || DEFAULT_COLORS[idx % DEFAULT_COLORS.length], borderRadius: 6, marginEnd: 4 }} />
             <Text style={{ fontSize: 12 }}>{item.label}</Text>
           </View>
         ))}

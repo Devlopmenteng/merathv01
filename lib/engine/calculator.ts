@@ -23,6 +23,11 @@ import type {
   HeirShare,
 } from "./types";
 import { HijabSystem } from "./hijab";
+import { computeFixedShares, isUmariyyah, getMaternalSiblingsCount, getFullSiblingsCount } from './modules/fixedShares';
+import { computeAsaba, getFullAndPaternalSiblingsCount } from './modules/asaba';
+import { applyAwl, applyRadd, distributeToBloodRelatives } from './modules/awlRadd';
+import { isMusharraka, computeMusharraka, isAkdariyya, computeAkdariyya } from './modules/specialCases';
+
 
 interface HeirShareObject {
   key: string;

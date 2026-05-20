@@ -44,7 +44,7 @@ export const History = ({ navigation }: any) => {
               <Text>Net Estate: ${entry.netTotal}</Text>
               <Text style={{ marginTop: 8, fontWeight: '600' }}>Calculation Steps:</Text>
               {entry.steps.map((step, i) => (
-                <Text key={i} style={{ fontSize: 12, marginLeft: 8 }}>• {step.title}: {step.description}</Text>
+                <Text key={i} style={{ fontSize: 12, marginStart: 8 }}>• {step.title}: {step.description}</Text>
               ))}
             </TouchableOpacity>
           ))

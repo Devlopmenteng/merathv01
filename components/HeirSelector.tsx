@@ -86,9 +86,11 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     return new Set([...activeTypes].filter(t => !remaining.has(t)));
   }, [heirs]);
 
+  const [loadingTemplates, setLoadingTemplates] = useState(false);
   return (
     <ScrollView>
       {/* Quick Templates */}
+      {loadingTemplates && <Text>Loading templates...</Text>}
       <View style={{ marginBottom: 16 }}>
         <Text style={[theme.typography?.h3, { marginBottom: 8 }]}>Quick Start Templates</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -100,7 +102,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
                 padding: 12,
                 backgroundColor: theme.colors?.primaryLight || '#D4F1E8',
                 borderRadius: 12,
-                marginRight: 8,
+                marginEnd: 8,
                 borderWidth: 1,
                 borderColor: theme.colors?.primary || '#0D7C66',
               }}
@@ -114,6 +116,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
       {/* Heir Categories */}
       {CATEGORIES.map(cat => {
         const open = expanded.has(cat.title);
+  const [loadingTemplates, setLoadingTemplates] = useState(false);
         return (
           <View key={cat.title} style={{ marginBottom: 12 }}>
             <TouchableOpacity
@@ -134,6 +137,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
             {open && cat.types.map(type => {
               const count = counts.get(type) || 0;
               const isBlocked = blockedTypes.has(type) && count === 0;
+  const [loadingTemplates, setLoadingTemplates] = useState(false);
               return (
                 <View key={type} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 6 }}>
                   <View style={{ flex: 1 }}>
