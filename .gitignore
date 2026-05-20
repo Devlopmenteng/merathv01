@@ -40,3 +40,18 @@ yarn-error.*
 /ios
 /android
 .expo/
+
+# Build outputs
+*.apk
+*.aab
+*.tar.gz
+
+# Temporary scripts and backups
+*.sh
+*.py
+*.tmp
+*.bak
+*.backup
+
+# EAS local builds
+.eas/
