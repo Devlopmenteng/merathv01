@@ -153,6 +153,23 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
   if (loading || !result) return <ResultsSkeleton />;
 
+  const renderSpecialCases = () => {
+    if (!result) return null;
+    const cases = [];
+    if (result.awlApplied) cases.push({ name: "العول", desc: "تم تطبيق العول لزيادة أصل المسألة" });
+    if (result.raddApplied) cases.push({ name: "الرد", desc: "تم تطبيق الرد لتوزيع الباقي على أصحاب الفروض" });
+    if (result.bloodRelativesApplied) cases.push({ name: "ذوو الأرحام", desc: "تم توزيع الباقي على ذوي الأرحام" });
+    if (cases.length === 0) return null;
+    return (
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginVertical: 12 }}>
+        {cases.map((c, i) => (
+          <View key={i} style={{ backgroundColor: theme.colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 }}>
+            <Text style={{ color: theme.colors.primary, fontSize: 12 }}>{c.name}</Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
   return (
     <ExportBar resultData={result}>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
@@ -208,6 +225,23 @@ export const Results = ({ navigation }: { navigation: any }) => {
           const displayAmount = showPercentage
             ? `${((share.amount / (result.netEstate ?? 1)) * 100).toFixed(1)}%`
             : `$${share.amount.toFixed(2)}`;
+  const renderSpecialCases = () => {
+    if (!result) return null;
+    const cases = [];
+    if (result.awlApplied) cases.push({ name: "العول", desc: "تم تطبيق العول لزيادة أصل المسألة" });
+    if (result.raddApplied) cases.push({ name: "الرد", desc: "تم تطبيق الرد لتوزيع الباقي على أصحاب الفروض" });
+    if (result.bloodRelativesApplied) cases.push({ name: "ذوو الأرحام", desc: "تم توزيع الباقي على ذوي الأرحام" });
+    if (cases.length === 0) return null;
+    return (
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginVertical: 12 }}>
+        {cases.map((c, i) => (
+          <View key={i} style={{ backgroundColor: theme.colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 }}>
+            <Text style={{ color: theme.colors.primary, fontSize: 12 }}>{c.name}</Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
           return (
             <View
               key={idx}

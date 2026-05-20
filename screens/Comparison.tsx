@@ -8,6 +8,8 @@ import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types
 import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { Button } from '../components/ui/Button';
+import { formatCurrency } from '../lib/utils/currency';
+import { showToast } from '../lib/utils/toast';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -31,9 +33,64 @@ export const Comparison = () => {
 
   const notes = FIQH_NOTES[selected] || {};
 
+  // Collect all heirs across all results
+  const allHeirs = new Set<string>();
+  results.forEach(res => {
+    if (res.success && res.shares) {
+      res.shares.forEach(share => allHeirs.add(share.key || share.name));
+    }
+  });
+
+  const renderComparisonTable = () => (
+    <ScrollView horizontal>
+      <View style={{ marginTop: 16 }}>
+        {/* Header row */}
+        <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8 }}>
+          <Text style={{ width: 120, fontWeight: 'bold', paddingHorizontal: 8 }}>الوارث</Text>
+          {TABS.map(m => (
+            <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
+          ))}
+        </View>
+        {Array.from(allHeirs).map(heirKey => {
+          // Find a share object that matches this heir (by key or name)
+          const sharesByMadhab = TABS.map(madhab => {
+            const result = results[TABS.indexOf(madhab)];
+            if (!result?.success) return null;
+            const share = result.shares.find(s => (s.key === heirKey) || (s.name === heirKey));
+            if (!share) return null;
+            const fractionStr = share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : '—';
+            const percentage = share.fraction ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%' : '—';
+            const amount = share.amount ? formatCurrency(share.amount) : '—';
+            return { fraction: fractionStr, percentage, amount };
+          });
+          // Render row only if at least one madhab has this heir
+          if (sharesByMadhab.every(s => s === null)) return null;
+          return (
+            <View key={heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
+              <Text style={{ width: 120, paddingHorizontal: 8 }}>{heirKey}</Text>
+              {sharesByMadhab.map((data, idx) => (
+                <View key={idx} style={{ width: 100, alignItems: 'center' }}>
+                  {data ? (
+                    <>
+                      <Text style={{ fontSize: 12 }}>{data.fraction}</Text>
+                      <Text style={{ fontSize: 10, color: theme.colors.outline }}>{data.percentage}</Text>
+                      <Text style={{ fontSize: 10, fontWeight: 'bold', color: theme.colors.primary }}>{data.amount}</Text>
+                    </>
+                  ) : (
+                    <Text style={{ color: theme.colors.outline }}>—</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          );
+        })}
+      </View>
+    </ScrollView>
+  );
+
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
-      <Text style={theme.typography.h1}>Madhab Comparison</Text>
+      <Text style={theme.typography.h1}>مقارنة المذاهب</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 }}>
         {TABS.map((m) => (
           <TouchableOpacity
@@ -51,30 +108,13 @@ export const Comparison = () => {
         ))}
       </View>
 
-      {results.map((res, idx) =>
-        res && selected === TABS[idx] ? (
-          <View
-            key={idx}
-            style={{ padding: 16, marginBottom: 16, backgroundColor: theme.colors.surface, borderRadius: 12 }}
-          >
-            <Text style={theme.typography.h2}>{MADHAB_NAMES[TABS[idx]]}</Text>
-            <Text style={theme.typography.body}>Net Estate: ${res.netEstate ?? res.netEstate ?? 0}</Text>
-            {res.shares.map((share, i) => (
-              <Text key={i} style={theme.typography.caption}>
-                {share.name}: ${share.amount.toFixed(2)} ({share.fraction?.numerator}/{share.fraction?.denominator})
-              </Text>
-            ))}
-          </View>
-        ) : null,
-      )}
+      {renderComparisonTable()}
 
-      <Button title={showNotes ? 'Hide Fiqh Notes' : 'Show Fiqh Notes'} onPress={() => setShowNotes(!showNotes)} mode="outlined" />
+      <Button title={showNotes ? 'إخفاء الملاحظات الفقهية' : 'عرض الملاحظات الفقهية'} onPress={() => setShowNotes(!showNotes)} mode="outlined" />
       {showNotes && (
         <View style={{ padding: 12, marginTop: 8, backgroundColor: theme.colors.surfaceVariant, borderRadius: 8 }}>
           {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={{ fontSize: 12, marginBottom: 4 }}>
-              • {val}
-            </Text>
+            <Text key={key} style={{ fontSize: 12, marginBottom: 4 }}>• {val}</Text>
           ))}
         </View>
       )}
