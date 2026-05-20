@@ -1,15 +1,15 @@
 {
-  "netEstate": "Net Estate",
-  "confidence": "Confidence",
-  "fractions": "Fractions",
-  "percentages": "Percentages",
-  "distribution": "Distribution",
-  "steps": "Calculation Steps",
-  "compare": "Compare",
-  "history": "History",
-  "settings": "Settings",
-  "copy": "Copy",
+  "netEstate": "Harta Bersih",
+  "confidence": "Keyakinan",
+  "fractions": "Pecahan",
+  "percentages": "Peratusan",
+  "distribution": "Pengagihan",
+  "steps": "Langkah Pengiraan",
+  "compare": "Bandingkan",
+  "history": "Sejarah",
+  "settings": "tetapan",
+  "copy": "salin",
   "pdf": "PDF",
-  "share": "Share",
-  "deepLinkCopied": "Deep link copied to clipboard"
+  "share": "Kongsi",
+  "deepLinkCopied": "Pautan dalam disalin ke papan keratan"
 }

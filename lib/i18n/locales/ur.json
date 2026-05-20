@@ -1,15 +1,15 @@
 {
-  "netEstate": "Net Estate",
-  "confidence": "Confidence",
-  "fractions": "Fractions",
-  "percentages": "Percentages",
-  "distribution": "Distribution",
-  "steps": "Calculation Steps",
-  "compare": "Compare",
-  "history": "History",
-  "settings": "Settings",
-  "copy": "Copy",
-  "pdf": "PDF",
-  "share": "Share",
-  "deepLinkCopied": "Deep link copied to clipboard"
+  "netEstate": "نیٹ اسٹیٹ",
+  "confidence": "اعتماد",
+  "fractions": "فرکشنز",
+  "percentages": "فیصد",
+  "distribution": "تقسیم",
+  "steps": "حساب کے مراحل",
+  "compare": "موازنہ کریں۔",
+  "history": "تاریخ",
+  "settings": "ترتیبات",
+  "copy": "کاپی",
+  "pdf": "پی ڈی ایف",
+  "share": "شیئر کریں۔",
+  "deepLinkCopied": "گہرا لنک کلپ بورڈ پر کاپی ہو گیا۔"
 }
