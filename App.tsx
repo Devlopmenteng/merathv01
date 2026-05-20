@@ -1,5 +1,3 @@
-import * as Sentry from "sentry-expo";
-Sentry.init({ dsn: "YOUR_DSN_HERE", enableInExpoDevelopment: true });
 import React from 'react';
 import { useEffect } from "react";
 import * as Linking from "expo-linking";
