@@ -16,4 +16,10 @@
   "awl": "العول",
   "radd": "الرد",
   "bloodRelatives": "ذوو الأرحام"
+,
+  "spouse": "Spouse",
+  "children": "Children",
+  "parentsGrandparents": "Parents } Grandparents",
+  "siblings": "Siblings",
+  "extended": "Extended"
 }

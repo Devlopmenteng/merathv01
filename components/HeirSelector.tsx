@@ -5,13 +5,14 @@ import { Stepper } from './ui/Stepper';
 import { HeirType, HeirEntry } from '../lib/engine/types';
 import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
+import { t } from '../lib/i18n';
 
-const CATEGORIES: { title: string; types: HeirType[] }[] = [
-  { title: 'Spouse', types: ['husband', 'wife'] },
-  { title: 'Children', types: ['son', 'daughter', 'grandson', 'granddaughter'] },
-  { title: 'Parents & Grandparents', types: ['father', 'mother', 'grandfather', 'grandmother_mother', 'grandmother_father'] },
-  { title: 'Siblings', types: ['full_brother', 'full_sister', 'paternal_brother', 'paternal_sister', 'maternal_brother', 'maternal_sister'] },
-  { title: 'Extended', types: ['full_nephew', 'paternal_nephew', 'full_uncle', 'paternal_uncle', 'maternal_uncle', 'paternal_aunt', 'maternal_aunt'] },
+const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
+  { titleKey: 'spouse', types: ['husband', 'wife'] },
+  { titleKey: 'children', types: ['son', 'daughter', 'grandson', 'granddaughter'] },
+  { titleKey: 'parentsGrandparents', types: ['father', 'mother', 'grandfather', 'grandmother_mother', 'grandmother_father'] },
+  { titleKey: 'siblings', types: ['full_brother', 'full_sister', 'paternal_brother', 'paternal_sister', 'maternal_brother', 'maternal_sister'] },
+  { titleKey: 'extended', types: ['full_nephew', 'paternal_nephew', 'full_uncle', 'paternal_uncle', 'maternal_uncle', 'paternal_aunt', 'maternal_aunt'] },
 ];
 
 const TEMPLATES: { name: string; heirs: { type: HeirType; count: number }[] }[] = [
@@ -26,7 +27,7 @@ type Props = { heirs: HeirEntry[]; onHeirsChange: (heirs: HeirEntry[]) => void }
 
 export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
   const theme = useAppTheme();
-  const [expanded, setExpanded] = useState<Set<string>>(new Set(['Spouse', 'Children']));
+  const [expanded, setExpanded] = useState<Set<string>>(new Set(['spouse', 'children']));
   const counts = React.useMemo(() => {
     const map = new Map<HeirType, number>();
     heirs.forEach(h => map.set(h.type, h.count));
@@ -40,11 +41,11 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     ]);
   };
 
-  const toggleExpand = (cat: string) => {
+  const toggleExpand = (catKey: string) => {
     setExpanded(prev => {
       const next = new Set(prev);
-      if (next.has(cat)) next.delete(cat);
-      else next.add(cat);
+      if (next.has(catKey)) next.delete(catKey);
+      else next.add(catKey);
       return next;
     });
   };
@@ -86,13 +87,10 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     return new Set([...activeTypes].filter(t => !remaining.has(t)));
   }, [heirs]);
 
-  const [loadingTemplates, setLoadingTemplates] = useState(false);
   return (
     <ScrollView>
-      {/* Quick Templates */}
-      {loadingTemplates && <Text>Loading templates...</Text>}
       <View style={{ marginBottom: 16 }}>
-        <Text style={[theme.typography?.h3, { marginBottom: 8 }]}>Quick Start Templates</Text>
+        <Text style={[theme.typography?.h3, { marginBottom: 8 }]}>{t('quickTemplates') || 'Quick Start Templates'}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {TEMPLATES.map((tmpl, idx) => (
             <TouchableOpacity
@@ -102,7 +100,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
                 padding: 12,
                 backgroundColor: theme.colors?.primaryLight || '#D4F1E8',
                 borderRadius: 12,
-                marginEnd: 8,
+                marginRight: 8,
                 borderWidth: 1,
                 borderColor: theme.colors?.primary || '#0D7C66',
               }}
@@ -113,14 +111,12 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
         </ScrollView>
       </View>
 
-      {/* Heir Categories */}
       {CATEGORIES.map(cat => {
-        const open = expanded.has(cat.title);
-  const [loadingTemplates, setLoadingTemplates] = useState(false);
+        const open = expanded.has(cat.titleKey);
         return (
-          <View key={cat.title} style={{ marginBottom: 12 }}>
+          <View key={cat.titleKey} style={{ marginBottom: 12 }}>
             <TouchableOpacity
-              onPress={() => toggleExpand(cat.title)}
+              onPress={() => toggleExpand(cat.titleKey)}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -131,13 +127,12 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
                 borderColor: theme.colors?.outline || '#A49E93',
               }}
             >
-              <Text style={theme.typography?.h3}>{cat.title}</Text>
+              <Text style={theme.typography?.h3}>{t(cat.titleKey)}</Text>
               <Text style={{ fontSize: 18 }}>{open ? '▲' : '▼'}</Text>
             </TouchableOpacity>
             {open && cat.types.map(type => {
               const count = counts.get(type) || 0;
               const isBlocked = blockedTypes.has(type) && count === 0;
-  const [loadingTemplates, setLoadingTemplates] = useState(false);
               return (
                 <View key={type} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 6 }}>
                   <View style={{ flex: 1 }}>
