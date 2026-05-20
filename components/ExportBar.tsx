@@ -4,13 +4,25 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import { useAppTheme } from '../hooks/useAppTheme';
+import type { CalculationResult } from '../lib/engine/types';
 
-export const ExportBar = ({ resultData, children }: any) => {
+type ExportBarProps = {
+  resultData: CalculationResult;
+  children: React.ReactNode;
+};
+
+export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) => {
   const viewShotRef = useRef<any>(null);
   const theme = useAppTheme();
 
   const generatePDF = async () => {
-    const html = `<h1>Inheritance Report</h1><p>Net Estate: $${resultData.netTotal}</p><ul>${resultData.shares.map((s: any) => `<li>${s.name}: $${s.amount.toFixed(2)}</li>`).join('')}</ul>`;
+    const html = `
+      <h1>Inheritance Report</h1>
+      <p>Net Estate: $${resultData.netEstate ?? resultData.netTotal ?? 0}</p>
+      <ul>${resultData.shares
+        .map((s) => `<li>${s.name}: $${s.amount.toFixed(2)}</li>`)
+        .join('')}</ul>
+    `;
     const { uri } = await Print.printToFileAsync({ html });
     if (Platform.OS === 'web') window.open(uri);
     else await Sharing.shareAsync(uri);
@@ -27,10 +39,16 @@ export const ExportBar = ({ resultData, children }: any) => {
         {children}
       </ViewShot>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 12 }}>
-        <TouchableOpacity onPress={generatePDF} style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}>
+        <TouchableOpacity
+          onPress={generatePDF}
+          style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}
+        >
           <Text style={{ color: theme.colors.onPrimary }}>PDF</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={captureAndShare} style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}>
+        <TouchableOpacity
+          onPress={captureAndShare}
+          style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}
+        >
           <Text style={{ color: theme.colors.onSecondary }}>Share Image</Text>
         </TouchableOpacity>
       </View>

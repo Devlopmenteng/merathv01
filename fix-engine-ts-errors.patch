@@ -1,0 +1,82 @@
+diff --git a/lib/engine/calculator.ts b/lib/engine/calculator.ts
+--- a/lib/engine/calculator.ts
++++ b/lib/engine/calculator.ts
+@@
+ import { FractionClass } from "./fraction";
+ import { FIQH_DATABASE } from "./constants";
+ import type {
+   EstateData,
++  EstateInput,
+   HeirsData,
+   MadhhabType,
+   CalculationResult,
+   HeirShare,
+ } from "./types";
+ import { HijabSystem } from "./hijab";
+@@
+         const calcSteps = steps.map((s, i) => ({
+           stepNumber: i + 1,
+           title: s,
+           description: "",
+           action: "validate",
+           details: {},
+           timestamp: new Date().toISOString(),
+         }));
+ 
+         return {
+@@
+           confidenceFactors: [],
+           steps: calcSteps,
+           calculationTime: endTime - startTime,
+-          error: validation.error,
++          error: validation.error ?? "خطأ في البيانات",
+           specialCases: { awl: false, auled: 0, radd: false, hijabTypes: [] },
+         };
+       }
+@@
+-  private applyHijab(heirs: HeirsData): HeirsData {
+-    const result = this.hijabSystem.applyHijab(heirs as Record<string, number | undefined>);
+-    return result.heirs;
+-  }
+-
+   private isMusharraka(): boolean {
+@@
+       const asabaShares = this.computeAsaba(
+-        adjustedFixed,
+         remainder,
+         validHeirs,
+       );
+       steps.push("العصبات: asaba");
+@@
+-  private computeAsaba(
+-    fixedShares: HeirShareObject[],
+     remainder: FractionClass,
+     heirs: HeirsData,
+   ): HeirShareObject[] {
+@@
+-  const confidence = this.calculateConfidence(results, validHeirs);
++  const confidence = this.calculateConfidence(validHeirs);
+@@
+-  private calculateConfidence(results: HeirShare[], heirs: HeirsData): number {
++  private calculateConfidence(heirs: HeirsData): number {
+     let confidence = 100;
+     const factors: string[] = [];
+ 
+     const heirCount = Object.values(heirs).filter((v) => v && v > 0).length;
+@@
+     const hasChildren = heirs.son || heirs.daughter;
+     const hasParents = heirs.father || heirs.mother;
+     const hasGrandparents =
+       heirs.grandfather || heirs.grandmother_mother || heirs.grandmother_father;
+@@
+     const hasGrandfatherWithSiblings =
+       heirs.grandfather && (heirs.full_brother || heirs.paternal_brother);
+@@
+     const hasDistantHeirs = distantHeirs.some(
+       (key) => (heirs[key as keyof HeirsData] || 0) > 0,
+     );
+@@
+     if (heirs.wife && heirs.wife > 1) {
+       confidence -= 3;
+       factors.push("وجود عدة زوجات");
+     }

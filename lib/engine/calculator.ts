@@ -16,6 +16,7 @@ import { FractionClass } from "./fraction";
 import { FIQH_DATABASE } from "./constants";
 import type {
   EstateData,
+  EstateInput,
   HeirsData,
   MadhhabType,
   CalculationResult,
@@ -109,7 +110,7 @@ export class EnhancedInheritanceCalculationEngine {
           confidenceFactors: [],
           steps: calcSteps,
           calculationTime: endTime - startTime,
-          error: validation.error,
+          error: validation.error ?? "خطأ في البيانات",
           specialCases: { awl: false, auled: 0, radd: false, hijabTypes: [] },
         };
       }
@@ -300,11 +301,6 @@ export class EnhancedInheritanceCalculationEngine {
     net -= actualWill;
 
     return Math.max(0, net);
-  }
-
-  private applyHijab(heirs: HeirsData): HeirsData {
-    const result = this.hijabSystem.applyHijab(heirs as Record<string, number | undefined>);
-    return result.heirs;
   }
 
   private isMusharraka(): boolean {
@@ -682,10 +678,11 @@ export class EnhancedInheritanceCalculationEngine {
   }
 
   private computeAsaba(
-    fixedShares: HeirShareObject[],
+    _fixedShares: HeirShareObject[],
     remainder: FractionClass,
     heirs: HeirsData,
   ): HeirShareObject[] {
+    void _fixedShares;
     if (remainder.toDecimal() <= 0.0001) {
       return [];
     }
@@ -1215,7 +1212,8 @@ export class EnhancedInheritanceCalculationEngine {
     }));
   }
 
-  private calculateConfidence(results: HeirShare[], heirs: HeirsData): number {
+  private calculateConfidence(_results: HeirShare[], heirs: HeirsData): number {
+    void _results;
     let confidence = 100;
     const factors: string[] = [];
 
@@ -1445,7 +1443,11 @@ export class EnhancedInheritanceCalculationEngine {
   }
 }
 
-export function calculateInheritance(madhab: any, estate: any, heirs: any) {
+export function calculateInheritance(
+  madhab: MadhhabType,
+  estate: EstateInput,
+  heirs: HeirsData,
+) {
   const engine = new EnhancedInheritanceCalculationEngine(madhab, estate, heirs);
   return engine.calculate();
 }

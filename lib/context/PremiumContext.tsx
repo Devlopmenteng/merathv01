@@ -1,15 +1,28 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PremiumContext = createContext({ isPremium: false, togglePremium: () => {} });
+type PremiumContextType = {
+  isPremium: boolean;
+  isReady: boolean;
+  togglePremium: () => void;
+};
+
+const PremiumContext = createContext<PremiumContextType>({
+  isPremium: false,
+  isReady: false,
+  togglePremium: () => {},
+});
 
 export const PremiumProvider = ({ children }: { children: React.ReactNode }) => {
   const [isPremium, setIsPremium] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_premium').then(val => {
-      if (val === 'true') setIsPremium(true);
-    });
+    AsyncStorage.getItem('merath_premium')
+      .then((val) => {
+        setIsPremium(val === 'true');
+      })
+      .finally(() => setIsReady(true));
   }, []);
 
   const togglePremium = () => {
@@ -19,7 +32,7 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
   };
 
   return (
-    <PremiumContext.Provider value={{ isPremium, togglePremium }}>
+    <PremiumContext.Provider value={{ isPremium, isReady, togglePremium }}>
       {children}
     </PremiumContext.Provider>
   );
