@@ -1,37 +1,63 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
-import { useAppTheme } from '../hooks/useAppTheme';
+import Svg, { Path, G } from 'react-native-svg';
 
 type PieData = { label: string; value: number; color: string };
 
-export const PieChart = ({ data }: { data: PieData[] }) => {
-  const theme = useAppTheme();
+const polarToCartesian = (cx: number, cy: number, r: number, angle: number) => ({
+  x: cx + r * Math.cos((angle - 90) * Math.PI / 180),
+  y: cy + r * Math.sin((angle - 90) * Math.PI / 180),
+});
+
+const describeArc = (cx: number, cy: number, r: number, startAngle: number, endAngle: number) => {
+  const start = polarToCartesian(cx, cy, r, endAngle);
+  const end = polarToCartesian(cx, cy, r, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} L ${cx} ${cy}`;
+};
+
+export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0);
+  const animValue = useRef(new Animated.Value(0)).current;
+  const [opacity] = React.useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(animValue, { toValue: 1, duration: 800, useNativeDriver: false }).start();
+    Animated.timing(opacity, { toValue: 1, duration: 300, useNativeDriver: false }).start();
+  }, [data]);
+
   if (total === 0) return null;
+
+  let cumulativeAngle = 0;
+  const AnimatedPath = Animated.createAnimatedComponent(Path);
+
   return (
-    <View style={{ marginVertical: 16 }}>
-      <Text style={theme.typography.h2}>توزيع التركة</Text>
-      {data.map((item, idx) => {
-        const percentage = (item.value / total) * 100;
-        return (
-          <View key={idx} style={{ marginBottom: theme.spacing.md }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-              <Text>{item.label}</Text>
-              <Text>{percentage.toFixed(1)}%</Text>
-            </View>
-            <View style={{ height: 8, backgroundColor: theme.colors.surfaceVariant, borderRadius: 4, overflow: 'hidden' }}>
-              <Animated.View
-                style={{
-                  width: `${percentage}%`,
-                  height: '100%',
-                  backgroundColor: item.color,
-                  borderRadius: 4,
-                }}
-              />
-            </View>
+    <View style={{ alignItems: 'center', marginVertical: 16 }}>
+      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {data.map((item, index) => {
+          const sliceAngle = (item.value / total) * 360;
+          const path = describeArc(size/2, size/2, size/2 - 5, cumulativeAngle, cumulativeAngle + sliceAngle);
+          cumulativeAngle += sliceAngle;
+          return (
+            <AnimatedPath
+              key={index}
+              d={path}
+              fill={item.color}
+              stroke="#fff"
+              strokeWidth={2}
+              opacity={animValue}
+            />
+          );
+        })}
+      </Svg>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 8 }}>
+        {data.map((item, idx) => (
+          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 8, marginBottom: 4 }}>
+            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: item.color, marginRight: 4 }} />
+            <Text style={{ fontSize: 12 }}>{item.label}</Text>
           </View>
-        );
-      })}
+        ))}
+      </View>
     </View>
   );
 };
