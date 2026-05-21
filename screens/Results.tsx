@@ -26,7 +26,6 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
-// import { t } from '../lib/i18n';
 import type { CalculationResult, EstateInput } from '../lib/engine/types';
 
 type ChartDataItem = {
@@ -65,11 +64,12 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const [showSteps, setShowSteps] = useState(false);
 
   const chartData = useMemo<ChartDataItem[]>(() => {
+    const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#F7DC6F", "#96CEB4", "#FFB347", "#6B5B95", "#88B04B"];
     if (!result) return [];
-    return result.shares.map((s) => ({
+    return result.shares.map((s, idx) => ({
       label: s.name,
       value: s.amount,
-      color: '#1B6B4A',
+      color: colors[idx % colors.length],
     }));
   }, [result]);
 
@@ -172,21 +172,24 @@ export const Results = ({ navigation }: { navigation: any }) => {
       </View>
     );
   };
+
   return (
     <ExportBar resultData={result}>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 150 }}>
-        <View
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.primaryDark || '#0A5E4A']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={{
-            backgroundColor: theme.colors.primary,
             borderRadius: theme.radius.lg,
             padding: theme.spacing.lg,
             alignItems: 'center',
             marginBottom: theme.spacing.lg,
           }}
         >
-          <Text style={{ color: theme.colors.onPrimary, fontSize: 20 }}>{t('netEstate')}</Text>
-          <AnimatedNumber value={result.netEstate ?? 0} style={{ color: theme.colors.onPrimary, fontSize: 40 }} />
-        </View>
+          <Text style={{ color: theme.colors.onPrimary, fontSize: 16, marginBottom: 4 }}>{t('netEstate')}</Text>
+          <AnimatedNumber value={result.netEstate ?? 0} style={{ color: theme.colors.onPrimary, fontSize: 32, fontWeight: 'bold' }} />
+        </LinearGradient>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md }}>
           <View
@@ -214,6 +217,8 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
         <Text style={theme.typography.caption}>{t('confidence')}</Text>
 
+        {renderSpecialCases()}
+
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginVertical: 12 }}>
           <Text style={{ marginEnd: 8 }}>{t('fractions')}</Text>
           <Switch value={showPercentage} onValueChange={setShowPercentage} />
@@ -227,23 +232,6 @@ export const Results = ({ navigation }: { navigation: any }) => {
           const displayAmount = showPercentage
             ? `${((share.amount / (result.netEstate ?? 1)) * 100).toFixed(1)}%`
             : `$${share.amount.toFixed(2)}`;
-  const renderSpecialCases = () => {
-    if (!result) return null;
-    const cases = [];
-    if (result.awlApplied) cases.push({ name: "العول", desc: "تم تطبيق العول لزيادة أصل المسألة" });
-    if (result.raddApplied) cases.push({ name: "الرد", desc: "تم تطبيق الرد لتوزيع الباقي على أصحاب الفروض" });
-    if (result.bloodRelativesApplied) cases.push({ name: "ذوو الأرحام", desc: "تم توزيع الباقي على ذوي الأرحام" });
-    if (cases.length === 0) return null;
-    return (
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginVertical: 12 }}>
-        {cases.map((c, i) => (
-          <View key={i} style={{ backgroundColor: theme.colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 }}>
-            <Text style={{ color: theme.colors.primary, fontSize: 12 }}>{c.name}</Text>
-          </View>
-        ))}
-      </View>
-    );
-  };
           return (
             <View
               key={idx}
@@ -263,36 +251,39 @@ export const Results = ({ navigation }: { navigation: any }) => {
           );
         })}
 
-        <Text style={[theme.typography.h2, { marginTop: 20 }]}>{t('steps')}</Text>
-        {result.steps.map((step, idx) => (
-          <View key={idx} style={{ paddingVertical: 4 }}>
-            <Text style={{ fontWeight: '600' }}>{step.title}</Text>
-            <Text style={{ fontSize: 12 }}>{step.description}</Text>
+        <TouchableOpacity
+          onPress={() => setShowSteps(!showSteps)}
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.spacing.lg, marginBottom: theme.spacing.md }}
+        >
+          <Text style={theme.typography.h2}>{t('steps')}</Text>
+          <Text style={{ fontSize: 16 }}>{showSteps ? '▲' : '▼'}</Text>
+        </TouchableOpacity>
+        {showSteps && (
+          <View style={{ backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.radius.md, padding: theme.spacing.md }}>
+            {result.steps.map((step, idx) => (
+              <View key={idx} style={{ marginBottom: idx < result.steps.length - 1 ? theme.spacing.md : 0, borderBottomWidth: idx < result.steps.length - 1 ? 1 : 0, borderColor: theme.colors.outline, paddingBottom: idx < result.steps.length - 1 ? theme.spacing.sm : 0 }}>
+                <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>{step.title}</Text>
+                <Text style={{ fontSize: 12, color: theme.colors.onSurface }}>{step.description}</Text>
+                {step.details && (
+                  <View style={{ marginTop: 4 }}>
+                    <TouchableOpacity onPress={() => console.log('details', step.details)}>
+                      <Text style={{ fontSize: 10, color: theme.colors.primary }}>عرض التفاصيل</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            ))}
           </View>
-        ))}
+        )}
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: theme.spacing.lg }}>
-          <Button title={t('compare')} onPress={() => navigation.navigate('Comparison')} mode="outlined" />
-          <Button title={t('history')} onPress={() => navigation.navigate('History')} mode="outlined" />
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: theme.spacing.sm }}>
-          <Button title={t('settings')} onPress={() => navigation.navigate('Settings')} mode="outlined" />
-          <Button title={t('copy')} onPress={copyAsText} mode="outlined" />
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: theme.spacing.sm }}>
-          <Button title={t('pdf')} onPress={generatePDF} mode="outlined" />
-          <Button
-            title={t('share')}
-            onPress={() => {
-              const link = `merath://setup?total=${state.total}&madhab=${state.madhab}`;
-              Clipboard.setStringAsync(link);
-              Alert.alert(t('share'), t('deepLinkCopied'));
-            }}
-            mode="outlined"
-          />
-        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: theme.spacing.md, marginBottom: theme.spacing.md }}>
+          <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+            <Button title={t('compare')} onPress={() => navigation.navigate('Comparison')} mode="outlined" />
+            <Button title={t('history')} onPress={() => navigation.navigate('History')} mode="outlined" />
+            <Button title={t('settings')} onPress={() => navigation.navigate('Settings')} mode="outlined" />
+            <Button title={t('pdf')} onPress={generatePDF} mode="outlined" />
+          </View>
+        </ScrollView>
       </ScrollView>
     </ExportBar>
   );
