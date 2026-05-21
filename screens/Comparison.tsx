@@ -1,4 +1,3 @@
-import { heirsArrayToObject } from "../lib/utils/heirsConverter";
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
@@ -9,7 +8,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { Button } from '../components/ui/Button';
 import { formatCurrency } from '../lib/utils/currency';
-import { showToast } from '../lib/utils/toast';
+import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -29,7 +28,7 @@ export const Comparison = () => {
     };
     const all = TABS.map((m) => calculateInheritance(m, estate, heirsArrayToObject(state.heirs)));
     setResults(all);
-  }, [state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);
+  }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
 
   const notes = FIQH_NOTES[selected] || {};
 
@@ -42,17 +41,16 @@ export const Comparison = () => {
   });
 
   const renderComparisonTable = () => (
-    <ScrollView horizontal>
-      <View style={{ marginTop: 16 }}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+      <View style={{ marginTop: 16, minWidth: 600 }}>
         {/* Header row */}
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8 }}>
-          <Text style={{ width: 120, fontWeight: 'bold', paddingHorizontal: 8 }}>الوارث</Text>
+          <Text style={{ width: 140, fontWeight: 'bold', paddingHorizontal: 8 }}>الوارث</Text>
           {TABS.map(m => (
-            <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
+            <Text key={m} style={{ width: 120, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
           ))}
         </View>
         {Array.from(allHeirs).map(heirKey => {
-          // Find a share object that matches this heir (by key or name)
           const sharesByMadhab = TABS.map(madhab => {
             const result = results[TABS.indexOf(madhab)];
             if (!result?.success) return null;
@@ -63,13 +61,12 @@ export const Comparison = () => {
             const amount = share.amount ? formatCurrency(share.amount) : '—';
             return { fraction: fractionStr, percentage, amount };
           });
-          // Render row only if at least one madhab has this heir
           if (sharesByMadhab.every(s => s === null)) return null;
           return (
             <View key={heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
-              <Text style={{ width: 120, paddingHorizontal: 8 }}>{heirKey}</Text>
+              <Text style={{ width: 140, paddingHorizontal: 8 }}>{heirKey}</Text>
               {sharesByMadhab.map((data, idx) => (
-                <View key={idx} style={{ width: 100, alignItems: 'center' }}>
+                <View key={idx} style={{ width: 120, alignItems: 'center' }}>
                   {data ? (
                     <>
                       <Text style={{ fontSize: 12 }}>{data.fraction}</Text>

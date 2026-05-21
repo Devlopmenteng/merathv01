@@ -182,7 +182,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
             marginBottom: theme.spacing.lg,
           }}
         >
-          <Text style={{ color: theme.colors.onPrimary, fontSize: 24 }}>{t('netEstate')}</Text>
+          <Text style={{ color: theme.colors.onPrimary, fontSize: 20 }}>{t('netEstate')}</Text>
           <AnimatedNumber value={result.netEstate ?? 0} style={{ color: theme.colors.onPrimary, fontSize: 48 }} />
         </View>
 

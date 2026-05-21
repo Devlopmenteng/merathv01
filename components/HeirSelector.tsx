@@ -88,30 +88,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
   }, [heirs]);
 
   return (
-    <ScrollView>
-      <View style={{ marginBottom: 16 }}>
-        <Text style={[theme.typography?.h3, { marginBottom: 8 }]}>{t('quickTemplates') || 'Quick Start Templates'}</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {TEMPLATES.map((tmpl, idx) => (
-            <TouchableOpacity
-              key={idx}
-              onPress={() => applyTemplate(tmpl)}
-              style={{
-                padding: 12,
-                backgroundColor: theme.colors?.primaryLight || '#D4F1E8',
-                borderRadius: 12,
-                marginRight: 8,
-                borderWidth: 1,
-                borderColor: theme.colors?.primary || '#0D7C66',
-              }}
-            >
-              <Text style={{ fontWeight: '600', color: theme.colors?.primary }}>{tmpl.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      {CATEGORIES.map(cat => {
+    <ScrollView>{CATEGORIES.map(cat => {
         const open = expanded.has(cat.titleKey);
         return (
           <View key={cat.titleKey} style={{ marginBottom: 12 }}>
