@@ -19,10 +19,10 @@ export async function generateLegalReport(result: any, madhab: string) {
       .header { text-align: center; border-bottom: 2px solid #0D7C66; padding-bottom: 10px; margin-bottom: 20px; }
       .title { font-size: 24px; font-weight: bold; color: #0D7C66; }
       .subtitle { font-size: 14px; color: #666; }
-      .case-number { font-size: 12px; color: #999; text-align: left; direction: ltr; margin-top: 5px; }
+      .case-number { font-size: 12px; color: #999; text-align: start; direction: ltr; margin-top: 5px; }
       .section { margin-bottom: 20px; }
       .table { width: 100%; border-collapse: collapse; }
-      .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+      .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: end; }
       .table th { background-color: #0D7C66; color: white; }
       .signature { margin-top: 40px; border-top: 1px solid #000; padding-top: 10px; font-size: 12px; text-align: center; }
       .disclaimer { margin-top: 20px; font-size: 10px; color: #777; text-align: center; }

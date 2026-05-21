@@ -38,7 +38,7 @@ export const History = ({ navigation }: any) => {
           <Text style={theme.typography?.body || { fontSize: 16 }}>No audit entries found.</Text>
         ) : (
           filtered.map((entry, idx) => (
-            <TouchableOpacity key={idx} style={{ backgroundColor: theme.colors?.surface || '#fff', padding: 12, marginBottom: 8, borderRadius: 8 }}>
+            <TouchableOpacity accessibilityLabel="Button" key={idx} style={{ backgroundColor: theme.colors?.surface || '#fff', padding: 12, marginBottom: 8, borderRadius: 8 }}>
               <Text style={{ fontWeight: '600' }}>{new Date(entry.timestamp).toLocaleString()}</Text>
               <Text>Madhab: {entry.madhab}</Text>
               <Text>Net Estate: ${entry.netTotal}</Text>

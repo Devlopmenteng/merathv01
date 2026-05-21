@@ -42,10 +42,10 @@ export const EducationalTutorial = () => {
           <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 16 }]}>{slides[step].title}</Text>
           <Text style={[theme.typography.body, { textAlign: 'center', marginBottom: 24 }]}>{slides[step].content}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TouchableOpacity onPress={() => setVisible(false)}>
+            <TouchableOpacity accessibilityLabel="Button" onPress={() => setVisible(false)}>
               <Text style={{ color: theme.colors.error }}>تخطي</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={next}>
+            <TouchableOpacity accessibilityLabel="Button" onPress={next}>
               <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
                 {step === slides.length - 1 ? 'إنهاء' : 'التالي'}
               </Text>

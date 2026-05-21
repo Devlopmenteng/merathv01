@@ -24,7 +24,7 @@ export const OnboardingTooltip = () => {
     <View style={styles.overlay}>
       <View style={[styles.tooltip, { backgroundColor: theme.colors.surface }]}>
         <Text style={theme.typography.body}>Tap the categories to add family members. Use the steppers to set their count.</Text>
-        <TouchableOpacity onPress={dismiss} style={{ marginTop: 12, alignSelf: 'flex-end' }}>
+        <TouchableOpacity accessibilityLabel="Button" onPress={dismiss} style={{ marginTop: 12, alignSelf: 'flex-end' }}>
           <Text style={{ color: theme.colors.primary }}>Got it</Text>
         </TouchableOpacity>
       </View>
@@ -34,7 +34,7 @@ export const OnboardingTooltip = () => {
 
 const styles = StyleSheet.create({
   overlay: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+    position: 'absolute', top: 0, start: 0, end: 0, bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center', zIndex: 999,
   },
   tooltip: {

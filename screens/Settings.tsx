@@ -38,10 +38,10 @@ export const Settings = ({ navigation }: any) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 12 }}>
         <Text style={theme.typography.body}>Language / اللغة</Text>
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <TouchableOpacity onPress={() => changeLanguage('en')} style={{ padding: 8, backgroundColor: locale === 'en' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
+          <TouchableOpacity accessibilityLabel="Button" onPress={() => changeLanguage('en')} style={{ padding: 8, backgroundColor: locale === 'en' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
             <Text style={{ color: locale === 'en' ? theme.colors.onPrimary : theme.colors.onSurface }}>English</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeLanguage('ar')} style={{ padding: 8, backgroundColor: locale === 'ar' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
+          <TouchableOpacity accessibilityLabel="Button" onPress={() => changeLanguage('ar')} style={{ padding: 8, backgroundColor: locale === 'ar' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
             <Text style={{ color: locale === 'ar' ? theme.colors.onPrimary : theme.colors.onSurface }}>العربية</Text>
           </TouchableOpacity>
         </View>

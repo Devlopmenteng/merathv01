@@ -17,7 +17,7 @@ export const FeedbackButton = () => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={{ padding: 12, backgroundColor: '#C5A04E', borderRadius: 8, marginVertical: 8 }}>
+    <TouchableOpacity accessibilityLabel="Button" onPress={handlePress} style={{ padding: 12, backgroundColor: '#C5A04E', borderRadius: 8, marginVertical: 8 }}>
       <Text style={{ color: 'white', textAlign: 'center' }}>⭐ Rate Us / Send Feedback</Text>
     </TouchableOpacity>
   );
