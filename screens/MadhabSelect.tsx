@@ -17,7 +17,7 @@ export const MadhabSelect = ({ navigation }: any) => {
   const { dispatch } = useCalc();
 
   return (
-    <FlatList contentContainerStyle={{ padding: theme.spacing.lg }} data={madhabs} keyExtractor={i => i.key} renderItem={({ item }) => (
+    <FlatList contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }} data={madhabs} keyExtractor={i => i.key} renderItem={({ item }) => (
       <TouchableOpacity accessibilityLabel="Button" onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}>
         <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
         <View>

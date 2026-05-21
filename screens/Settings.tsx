@@ -28,7 +28,7 @@ export const Settings = ({ navigation }: any) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
       <Text style={theme.typography.h1}>Settings</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 16 }}>
         <Text style={theme.typography.body}>Dark Mode</Text>

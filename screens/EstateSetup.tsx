@@ -24,7 +24,7 @@ export const EstateSetup = ({ navigation }: any) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
       <Text style={theme.typography.h1}>Estate Details</Text>
       <Input label="Total Estate ($)" value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>

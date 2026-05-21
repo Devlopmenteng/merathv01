@@ -185,7 +185,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
           }}
         >
           <Text style={{ color: theme.colors.onPrimary, fontSize: 20 }}>{t('netEstate')}</Text>
-          <AnimatedNumber value={result.netEstate ?? 0} style={{ color: theme.colors.onPrimary, fontSize: 48 }} />
+          <AnimatedNumber value={result.netEstate ?? 0} style={{ color: theme.colors.onPrimary, fontSize: 40 }} />
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md }}>
