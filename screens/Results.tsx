@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
+import { LinearGradient } from "expo-linear-gradient";
 import { useAppTheme } from '../hooks/useAppTheme';
 import { ExportBar } from '../components/ExportBar';
 import { ResultsSkeleton } from '../components/SkeletonCard';
@@ -61,6 +62,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPercentage, setShowPercentage] = useState(false);
+  const [showSteps, setShowSteps] = useState(false);
 
   const chartData = useMemo<ChartDataItem[]>(() => {
     if (!result) return [];
