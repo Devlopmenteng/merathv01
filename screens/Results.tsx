@@ -172,7 +172,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
   };
   return (
     <ExportBar resultData={result}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 150 }}>
         <View
           style={{
             backgroundColor: theme.colors.primary,
