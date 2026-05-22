@@ -3,6 +3,7 @@
     "version": ">= 18.0.1",
     "appVersionSource": "remote"
   },
+  "owner": "redme9phone",
   "build": {
     "development": {
       "developmentClient": true,
