@@ -57,7 +57,7 @@ const AnimatedNumber = ({ value, style }: { value: number; style?: any }) => {
 
 export const Results = ({ navigation }: { navigation: any }) => {
   const { isPremium } = usePremium();
-  const { state } = useCalc();
+  const { state, caseName, caseDate } = useCalc();
   const theme = useAppTheme();
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -98,7 +98,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
       will: state.will,
     };
 
-    const res = calculateInheritance(state.madhab, estate, heirsArrayToObject(state.heirs));
+    const res = calculateInheritance(state.madhab as any, estate, heirsArrayToObject(state.heirs));
     let confidence = 100;
 
     if ((res.netEstate ?? 0) <= 0) confidence -= 50;
@@ -119,6 +119,8 @@ export const Results = ({ navigation }: { navigation: any }) => {
       madhab: state.madhab,
       netTotal: safeResult.netEstate ?? 0,
       shares: safeResult.shares,
+      caseName: caseName,
+      caseDate: caseDate,
       steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
     }).catch(() => {});
   }, [state.madhab, state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);

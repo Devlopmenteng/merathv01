@@ -9,7 +9,7 @@ import { useCalc } from '../lib/context/CalcContext';
 
 export const EstateSetup = ({ navigation }: any) => {
   const theme = useAppTheme();
-  const { dispatch } = useCalc();
+  const { dispatch, caseName, setCaseName, caseDate, setCaseDate } = useCalc();
   const [total, setTotal] = useState('');
   const [funeral, setFuneral] = useState('');
   const [debts, setDebts] = useState('');
@@ -26,6 +26,16 @@ export const EstateSetup = ({ navigation }: any) => {
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
       <Text style={theme.typography.h1}>Estate Details</Text>
+      <Input
+        label="Case Name (optional)"
+        value={caseName}
+        onChangeText={setCaseName}
+      />
+      <Input
+        label="Date (YYYY-MM-DD)"
+        value={caseDate}
+        onChangeText={setCaseDate}
+      />
       <Input label="Total Estate ($)" value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
         <Input style={{ flex: 1 }} label="Funeral Costs" value={funeral} onChangeText={setFuneral} keyboardType="numeric" />
