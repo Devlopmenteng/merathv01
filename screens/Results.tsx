@@ -63,6 +63,19 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const [showPercentage, setShowPercentage] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
 
+
+  
+
+  
+  // Warning if no spouse selected
+  useEffect(() => {
+    const heirsObj = heirsArrayToObject(state.heirs);
+    const hasHusband = (heirsObj.husband || 0) > 0;
+    const hasWife = (heirsObj.wife || 0) > 0;
+    if (!hasHusband && !hasWife) {
+      Alert.alert("تنبيه", "لم يتم تحديد زوج أو زوجة. إذا كان المتوفى متزوجاً، يرجى إضافة الزوج/الزوجة في شاشة الورثة.\n\nيمكنك متابعة الحساب إذا كان المتوفى أعزباً.", [{ text: "موافق", style: "default" }]);
+    }
+  }, [state.heirs]);
   const chartData = useMemo<ChartDataItem[]>(() => {
     const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#F7DC6F", "#96CEB4", "#FFB347", "#6B5B95", "#88B04B"];
     if (!result) return [];
@@ -265,10 +278,19 @@ export const Results = ({ navigation }: { navigation: any }) => {
                 <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>{step.title}</Text>
                 <Text style={{ fontSize: 12, color: theme.colors.onSurface }}>{step.description}</Text>
                 {step.details && (
-                  <View style={{ marginTop: 4 }}>
-                    <TouchableOpacity onPress={() => console.log('details', step.details)}>
-                      <Text style={{ fontSize: 10, color: theme.colors.primary }}>عرض التفاصيل</Text>
-                    </TouchableOpacity>
+                  <View style={{ marginTop: 8, paddingTop: 4, borderTopWidth: 1, borderTopColor: theme.colors.outline }}>
+                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 2 }}>التفاصيل:</Text>
+                    {typeof step.details === 'object' ? (
+                      Object.entries(step.details).map(([key, val]) => (
+                        <Text key={key} style={{ fontSize: 10, color: theme.colors.onSurface, marginTop: 2 }}>
+                          {key}: {typeof val === 'object' ? JSON.stringify(val) : val}
+                        </Text>
+                      ))
+                    ) : (
+                      <Text style={{ fontSize: 10, color: theme.colors.onSurface }}>
+                        {JSON.stringify(step.details)}
+                      </Text>
+                    )}
                   </View>
                 )}
               </View>

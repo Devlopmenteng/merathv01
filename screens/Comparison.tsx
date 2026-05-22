@@ -13,6 +13,10 @@ import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
 export const Comparison = () => {
+  const getCount = (key: string) => {
+    const heirsObj = heirsArrayToObject(state.heirs);
+    return heirsObj[key] || 0;
+  };
   const { state } = useCalc();
   const theme = useAppTheme();
   const [selected, setSelected] = useState<Madhab>('hanafi');
@@ -42,12 +46,13 @@ export const Comparison = () => {
 
   const renderComparisonTable = () => (
     <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-      <View style={{ marginTop: 16, minWidth: 600 }}>
+      <View style={{ marginTop: 16, minWidth: 700 }}>
         {/* Header row */}
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8 }}>
           <Text style={{ width: 140, fontWeight: 'bold', paddingHorizontal: 8 }}>الوارث</Text>
+          <Text style={{ width: 60, fontWeight: 'bold', textAlign: 'center' }}>العدد</Text>
           {TABS.map(m => (
-            <Text key={m} style={{ width: 120, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
+            <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
           ))}
         </View>
         {Array.from(allHeirs).map(heirKey => {
@@ -65,8 +70,9 @@ export const Comparison = () => {
           return (
             <View key={heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
               <Text style={{ width: 140, paddingHorizontal: 8 }}>{heirKey}</Text>
+              <Text style={{ width: 60, textAlign: "center" }}>{getCount(heirKey)}</Text>
               {sharesByMadhab.map((data, idx) => (
-                <View key={idx} style={{ width: 120, alignItems: 'center' }}>
+                <View key={idx} style={{ width: 100, alignItems: 'center' }}>
                   {data ? (
                     <>
                       <Text style={{ fontSize: 12 }}>{data.fraction}</Text>
