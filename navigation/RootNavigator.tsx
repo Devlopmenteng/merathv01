@@ -9,6 +9,7 @@ import { Results } from '../screens/Results';
 import { Comparison } from '../screens/Comparison';
 import { Settings } from '../screens/Settings';
 import { History } from '../screens/History';
+import { Glossary } from "../screens/Glossary";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function RootNavigator() {
           <Stack.Screen name="Comparison" component={Comparison} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="History" component={History} />
+          <Stack.Screen name="Glossary" component={Glossary} />
         </Stack.Navigator>
       </NavigationContainer>
     </CalcProvider>

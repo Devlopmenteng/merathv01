@@ -1,3 +1,4 @@
+import { Button } from "../components/ui/Button";
 import { usePremium } from '../lib/context/PremiumContext';
 import { getCalculationCount } from '../lib/services/UsageStats';
 import { useState, useEffect } from 'react';
@@ -52,6 +53,7 @@ export const Settings = ({ navigation }: any) => {
       <Text style={theme.typography.caption}>Built with Expo & TypeScript</Text>
       <FeedbackButton />
       <SupportButton />
+      <Button title="المصطلحات والآيات" onPress={() => navigation.navigate("Glossary")} mode="outlined" style={{ marginTop: theme.spacing.sm }} />
       <Text style={{fontSize:12, marginTop:8}}>Calculations performed: {calcCount}</Text>
       <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginVertical: 12}}>
         <Text>Premium (Unlock legal reports & fiqh notes)</Text>
