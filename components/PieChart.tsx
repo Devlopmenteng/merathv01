@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
-import Svg, { Path, G } from 'react-native-svg';
+import Svg, { Path, G, Text as SvgText } from 'react-native-svg';
 
-type PieData = { label: string; value: number; color: string };
+type PieData = { label: string; value: number; color: string; fraction?: string };
 
 const polarToCartesian = (cx: number, cy: number, r: number, angle: number) => ({
   x: cx + r * Math.cos((angle - 90) * Math.PI / 180),
@@ -19,34 +19,52 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0);
   const animValue = useRef(new Animated.Value(0)).current;
-  const [opacity] = React.useState(new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(animValue, { toValue: 1, duration: 800, useNativeDriver: false }).start();
-    Animated.timing(opacity, { toValue: 1, duration: 300, useNativeDriver: false }).start();
   }, [data]);
 
   if (total === 0) return null;
 
   let cumulativeAngle = 0;
   const AnimatedPath = Animated.createAnimatedComponent(Path);
+  const center = size / 2;
+  const radius = size / 2 - 10;
 
   return (
     <View style={{ alignItems: 'center', marginVertical: 16 }}>
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {data.map((item, index) => {
-          const sliceAngle = (item.value / total) * 360;
-          const path = describeArc(size/2, size/2, size/2 - 5, cumulativeAngle, cumulativeAngle + sliceAngle);
-          cumulativeAngle += sliceAngle;
+        {data.map((item, idx) => {
+          const angle = (item.value / total) * 360;
+          const startAngle = cumulativeAngle;
+          const endAngle = cumulativeAngle + angle;
+          const path = describeArc(center, center, radius, startAngle, endAngle);
+          cumulativeAngle += angle;
+
+          const midAngle = startAngle + angle / 2;
+          const labelRadius = radius * 0.6;
+          const labelPos = polarToCartesian(center, center, labelRadius, midAngle);
+          const fractionText = item.fraction || '';
+          const showLabel = angle > 15 && fractionText;
+
           return (
-            <AnimatedPath
-              key={index}
-              d={path}
-              fill={item.color}
-              stroke="#fff"
-              strokeWidth={2}
-              opacity={animValue}
-            />
+            <G key={idx}>
+              <AnimatedPath d={path} fill={item.color} stroke="#fff" strokeWidth={2} opacity={animValue} />
+              {showLabel && (
+                <SvgText
+                  x={labelPos.x}
+                  y={labelPos.y}
+                  fill="#fff"
+                  fontSize={12}
+                  fontWeight="bold"
+                  textAnchor="middle"
+                  stroke="rgba(0,0,0,0.3)"
+                  strokeWidth={0.5}
+                >
+                  {fractionText}
+                </SvgText>
+              )}
+            </G>
           );
         })}
       </Svg>

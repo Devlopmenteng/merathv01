@@ -17,6 +17,7 @@ import {
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
 import { LinearGradient } from "expo-linear-gradient";
+import { formatCurrency } from "../lib/utils/currency";
 import { useAppTheme } from '../hooks/useAppTheme';
 import { ExportBar } from '../components/ExportBar';
 import { ResultsSkeleton } from '../components/SkeletonCard';
@@ -83,6 +84,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
       label: s.name,
       value: s.amount,
       color: colors[idx % colors.length],
+      fraction: s.fraction ? `${s.fraction.numerator}/${s.fraction.denominator}` : '',
     }));
   }, [result]);
 
@@ -242,29 +244,34 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
         <Text style={theme.typography.h2}>{t('distribution')}</Text>
         {result.shares.map((share, idx) => {
-          const displayAmount = showPercentage
-            ? `${((share.amount / (result.netEstate ?? 1)) * 100).toFixed(1)}%`
-            : `$${share.amount.toFixed(2)}`;
+          const color = chartData[idx]?.color;
           return (
             <View
               key={idx}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
+                borderRadius: theme.radius.md,
                 paddingVertical: theme.spacing.sm,
-                borderBottomWidth: 1,
-                borderColor: theme.colors.outline,
+                paddingHorizontal: theme.spacing.md,
+                marginBottom: theme.spacing.xs,
               }}
             >
-              <Text style={theme.typography.body}>
-                {share.name} ({share.fraction?.numerator}/{share.fraction?.denominator})
-              </Text>
-              <Text style={theme.typography.body}>{displayAmount}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+                <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
+                <Text style={theme.typography.body}>{share.name}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', gap: theme.spacing.md, alignItems: 'baseline' }}>
+                <Text style={theme.typography.body}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ''}</Text>
+                <Text style={{ fontWeight: 'bold', color: theme.colors.primary }}>
+                  {showPercentage ? `${((share.amount / (result.netEstate ?? 1)) * 100).toFixed(1)}%` : formatCurrency(share.amount)}
+                </Text>
+              </View>
             </View>
           );
-        })}
-
-        <TouchableOpacity
+        })}<TouchableOpacity
           onPress={() => setShowSteps(!showSteps)}
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.spacing.lg, marginBottom: theme.spacing.md }}
         >
