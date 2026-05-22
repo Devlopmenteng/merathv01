@@ -8,6 +8,8 @@ export interface AuditEntry {
   shares: any[];
   steps: { title: string; description: string }[];
   hijabLog?: string[];
+  caseName?: string;
+  caseDate?: string;
 }
 
 const STORAGE_KEY = 'merath_audit_trail';
@@ -27,4 +29,14 @@ export async function getAuditTrail(): Promise<AuditEntry[]> {
 
 export async function clearAuditTrail() {
   await AsyncStorage.removeItem(STORAGE_KEY);
+}
+
+export async function searchAuditTrail(query: string): Promise<AuditEntry[]> {
+  const all = await getAuditTrail();
+  const lowerQuery = query.toLowerCase();
+  return all.filter(entry => 
+    entry.caseName?.toLowerCase().includes(lowerQuery) ||
+    entry.caseDate?.includes(lowerQuery) ||
+    entry.madhab.toLowerCase().includes(lowerQuery)
+  );
 }

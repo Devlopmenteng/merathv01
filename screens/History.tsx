@@ -1,8 +1,9 @@
-// import { t } from '../lib/i18n';
+import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import { getAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
+import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { formatCurrency } from '../lib/utils/currency';
 
 export const History = ({ navigation }: any) => {
   const theme = useAppTheme();
@@ -11,41 +12,70 @@ export const History = ({ navigation }: any) => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    getAuditTrail().then(setTrail).then(() => setFiltered(trail));
+    loadEntries();
   }, []);
 
-  const handleSearch = (text: string) => {
+  const loadEntries = async () => {
+    const entries = await getAuditTrail();
+    setTrail(entries);
+    setFiltered(entries);
+  };
+
+  const handleSearch = async (text: string) => {
     setSearch(text);
-    const filtered = trail.filter(entry =>
-      entry.madhab.includes(text) ||
-      entry.shares.some(s => s.name.includes(text)) ||
-      entry.timestamp.includes(text)
-    );
-    setFiltered(filtered);
+    if (text.trim() === '') {
+      setFiltered(trail);
+    } else {
+      const results = await searchAuditTrail(text);
+      setFiltered(results);
+    }
   };
 
   return (
-    <View style={{ flex: 1, padding: theme.spacing?.lg || 24 }}>
-      <Text style={theme.typography?.h1 || { fontSize: 32, lineHeight: 40 }}>Audit Trail</Text>
+    <View style={{ flex: 1, padding: theme.spacing.lg }}>
+      <Text style={theme.typography.h1}>سجل الحسابات</Text>
       <TextInput
-        style={{ padding: 12, borderWidth: 1, borderColor: theme.colors?.outline || '#79747E', borderRadius: 8, marginVertical: 12 }}
-        placeholder="Search by madhab, heir name, or date..."
+        style={{
+          padding: theme.spacing.sm,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
+          borderRadius: theme.radius.md,
+          marginVertical: theme.spacing.md,
+          color: theme.colors.onSurface,
+        }}
+        placeholder="ابحث بالاسم أو التاريخ أو المذهب..."
+        placeholderTextColor={theme.colors.outline}
         value={search}
         onChangeText={handleSearch}
       />
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={theme.typography?.body || { fontSize: 16 }}>No audit entries found.</Text>
+          <Text style={theme.typography.body}>لا توجد سجلات مطابقة.</Text>
         ) : (
           filtered.map((entry, idx) => (
-            <TouchableOpacity accessibilityLabel="Button" key={idx} style={{ backgroundColor: theme.colors?.surface || '#fff', padding: 12, marginBottom: 8, borderRadius: 8 }}>
-              <Text style={{ fontWeight: '600' }}>{new Date(entry.timestamp).toLocaleString()}</Text>
-              <Text>Madhab: {entry.madhab}</Text>
-              <Text>Net Estate: ${entry.netTotal}</Text>
-              <Text style={{ marginTop: 8, fontWeight: '600' }}>Calculation Steps:</Text>
-              {entry.steps.map((step, i) => (
-                <Text key={i} style={{ fontSize: 12, marginStart: 8 }}>• {step.title}: {step.description}</Text>
+            <TouchableOpacity
+              key={idx}
+              style={{
+                backgroundColor: theme.colors.surface,
+                padding: theme.spacing.md,
+                marginBottom: theme.spacing.sm,
+                borderRadius: theme.radius.md,
+                borderLeftWidth: 4,
+                borderLeftColor: theme.colors.primary,
+              }}
+            >
+              <Text style={{ fontWeight: 'bold' }}>
+                {entry.caseName || 'بدون اسم'} – {entry.caseDate || 'بدون تاريخ'}
+              </Text>
+              <Text>المذهب: {entry.madhab}</Text>
+              <Text>صافي التركة: {formatCurrency(entry.netTotal)}</Text>
+              <Text style={{ marginTop: 8, fontWeight: '600' }}>الورثة:</Text>
+              {entry.shares.slice(0, 3).map((share, i) => (
+                <Text key={i} style={{ fontSize: 12, marginLeft: 8 }}>
+                  • {share.name}: {formatCurrency(share.amount)}
+                </Text>
               ))}
+              {entry.shares.length > 3 && <Text style={{ fontSize: 12, marginLeft: 8 }}>...</Text>}
             </TouchableOpacity>
           ))
         )}

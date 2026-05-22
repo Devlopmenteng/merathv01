@@ -88,7 +88,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     AsyncStorage.getItem('theme_preference').then(value => {
       if (value === 'dark') setIsDark(true);
       else if (value === 'light') setIsDark(false);
-      else setIsDark(systemColorScheme === 'dark');
+      else setIsDark(false); // force light mode as default
     });
   }, []);
 

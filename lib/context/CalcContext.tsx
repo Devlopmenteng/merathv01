@@ -1,38 +1,63 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import { Madhab, HeirEntry } from '../engine/types';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 
-interface State {
-  total: number; funeral: number; debts: number; will: number;
-  madhab: Madhab;
-  heirs: HeirEntry[];
-}
-const initialState: State = { total: 0, funeral: 0, debts: 0, will: 0, madhab: 'hanafi', heirs: [] };
+type State = {
+  madhab: string;
+  total: number;
+  funeral: number;
+  debts: number;
+  will: number;
+  heirs: any[];
+};
 
-type Action =
-  | { type: 'SET_ESTATE'; payload: { total: number; funeral: number; debts: number; will: number } }
-  | { type: 'SET_MADHAB'; payload: Madhab }
-  | { type: 'SET_HEIRS'; payload: HeirEntry[] }
-  | { type: 'RESET' };
+const initialState: State = {
+  madhab: 'hanafi',
+  total: 0,
+  funeral: 0,
+  debts: 0,
+  will: 0,
+  heirs: [],
+};
 
-function reducer(state: State, action: Action): State {
+type Action = { type: string; payload: any };
+
+const calcReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'SET_ESTATE': return { ...state, ...action.payload };
-    case 'SET_MADHAB': return { ...state, madhab: action.payload };
-    case 'SET_HEIRS': return { ...state, heirs: action.payload };
-    case 'RESET': return initialState;
-    default: return state;
+    case 'SET_MADHAB':
+      return { ...state, madhab: action.payload };
+    case 'SET_ESTATE':
+      return { ...state, ...action.payload };
+    case 'SET_HEIRS':
+      return { ...state, heirs: action.payload };
+    default:
+      return state;
   }
-}
+};
 
-const CalcContext = createContext<{ state: State; dispatch: React.Dispatch<Action> } | null>(null);
+type CalcContextType = {
+  state: State;
+  dispatch: React.Dispatch<Action>;
+  caseName: string;
+  setCaseName: (name: string) => void;
+  caseDate: string;
+  setCaseDate: (date: string) => void;
+};
+
+const CalcContext = createContext<CalcContextType | undefined>(undefined);
 
 export const CalcProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  return <CalcContext.Provider value={{ state, dispatch }}>{children}</CalcContext.Provider>;
+  const [state, dispatch] = useReducer(calcReducer, initialState);
+  const [caseName, setCaseName] = useState('');
+  const [caseDate, setCaseDate] = useState(new Date().toISOString().split('T')[0]);
+
+  return (
+    <CalcContext.Provider value={{ state, dispatch, caseName, setCaseName, caseDate, setCaseDate }}>
+      {children}
+    </CalcContext.Provider>
+  );
 };
 
 export const useCalc = () => {
-  const ctx = useContext(CalcContext);
-  if (!ctx) throw new Error('Missing CalcProvider');
-  return ctx;
+  const context = useContext(CalcContext);
+  if (!context) throw new Error('useCalc must be used within a CalcProvider');
+  return context;
 };
