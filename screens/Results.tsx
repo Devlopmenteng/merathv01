@@ -63,6 +63,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const [loading, setLoading] = useState(true);
   const [showPercentage, setShowPercentage] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
+  const savedRef = useRef(false);
 
 
   
@@ -113,7 +114,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
     setLoading(false);
 
     incrementCalculationCount().catch(() => {});
-    saveAuditTrail({
+    if (!savedRef.current) {
+      savedRef.current = true;
+      saveAuditTrail({
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
       madhab: state.madhab,
@@ -123,6 +126,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
       caseDate: caseDate,
       steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
     }).catch(() => {});
+    }
   }, [state.madhab, state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);
 
   const generatePDF = async () => {
@@ -245,35 +249,46 @@ export const Results = ({ navigation }: { navigation: any }) => {
         <PieChart data={chartData} />
 
         <Text style={theme.typography.h2}>{t('distribution')}</Text>
-        {result.shares.map((share, idx) => {
-          const color = chartData[idx]?.color;
-          return (
-            <View
-              key={idx}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
-                borderRadius: theme.radius.md,
-                paddingVertical: theme.spacing.sm,
-                paddingHorizontal: theme.spacing.md,
-                marginBottom: theme.spacing.xs,
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
-                <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
-                <Text style={theme.typography.body}>{share.name}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', gap: theme.spacing.md, alignItems: 'baseline' }}>
-                <Text style={theme.typography.body}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ''}</Text>
-                <Text style={{ fontWeight: 'bold', color: theme.colors.primary }}>
-                  {showPercentage ? `${((share.amount / (result.netEstate ?? 1)) * 100).toFixed(1)}%` : formatCurrency(share.amount)}
-                </Text>
-              </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+          <View style={{ minWidth: "100%" }}>
+            <View style={{ flexDirection: "row", borderBottomWidth: 2, borderColor: theme.colors.primary, paddingBottom: 8, marginBottom: 8 }}>
+              <Text style={{ width: 100, fontWeight: "bold", paddingHorizontal: 4 }}>الوارث</Text>
+              <Text style={{ width: 60, fontWeight: "bold", textAlign: "center" }}>العدد</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>النوع</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>الحصة</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>النسبة</Text>
+              <Text style={{ width: 100, fontWeight: "bold", textAlign: "center" }}>المبلغ</Text>
             </View>
-          );
-        })}<TouchableOpacity
+            {result.shares.map((share, idx) => {
+              const color = chartData[idx]?.color;
+              const percentage = ((share.amount / (result.netEstate ?? 1)) * 100).toFixed(2);
+              return (
+                <View
+                  key={idx}
+                  style={{
+                    flexDirection: "row",
+                    backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
+                    borderRadius: theme.radius.sm,
+                    paddingVertical: 8,
+                    marginBottom: 4,
+                  }}
+                >
+                  <View style={{ width: 100, paddingHorizontal: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
+                    <Text>{share.name}</Text>
+                  </View>
+                  <Text style={{ width: 60, textAlign: "center" }}>{share.count}</Text>
+                  <Text style={{ width: 80, textAlign: "center" }}>{share.type}</Text>
+                  <Text style={{ width: 80, textAlign: "center" }}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ""}</Text>
+                  <Text style={{ width: 80, textAlign: "center" }}>{percentage}%</Text>
+                  <Text style={{ width: 100, textAlign: "center", fontWeight: "bold", color: theme.colors.primary }}>
+                    {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        </ScrollView><TouchableOpacity
           onPress={() => setShowSteps(!showSteps)}
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.spacing.lg, marginBottom: theme.spacing.md }}
         >

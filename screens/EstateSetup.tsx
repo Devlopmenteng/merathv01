@@ -1,7 +1,6 @@
 import { showToast } from "../lib/utils/toast";
-// import { t } from '../lib/i18n';
 import React, { useState } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, TextInput } from 'react-native';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -26,15 +25,31 @@ export const EstateSetup = ({ navigation }: any) => {
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
       <Text style={theme.typography.h1}>Estate Details</Text>
-      <Input
-        label="Case Name (optional)"
+      <TextInput
+        placeholder="Case Name (optional)"
         value={caseName}
         onChangeText={setCaseName}
+        style={{
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
+          borderRadius: theme.radius.md,
+          padding: theme.spacing.sm,
+          marginBottom: theme.spacing.md,
+          color: theme.colors.onSurface,
+        }}
       />
-      <Input
-        label="Date (YYYY-MM-DD)"
+      <TextInput
+        placeholder="Date (YYYY-MM-DD)"
         value={caseDate}
         onChangeText={setCaseDate}
+        style={{
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
+          borderRadius: theme.radius.md,
+          padding: theme.spacing.sm,
+          marginBottom: theme.spacing.md,
+          color: theme.colors.onSurface,
+        }}
       />
       <Input label="Total Estate ($)" value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
