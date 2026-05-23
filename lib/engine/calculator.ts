@@ -398,9 +398,9 @@ export class EnhancedInheritanceCalculationEngine {
 
     this.steps.push({
       step: "المسألة المشتركة (الحمارية)",
-      description: `تم تطبيق المشتركة: الزوج (½), الأم (⅙), الإخوة (⅓)`,
+      description: `تم تطبيق المشتركة: الزوج (½), الأم (⅙), الإخوة (⅓) يشتركون بالتساوي`,
       code: "musharraka",
-      data: { shares: shares.length },
+      data: { husband: "1/2", mother: "1/6", siblingsFraction: "1/3", maternalCount: maternalCount, fullCount: fullCount, totalSiblings: totalSiblings },
     });
 
     return shares;
@@ -474,7 +474,7 @@ export class EnhancedInheritanceCalculationEngine {
       step: "الأكدرية (الغراء)",
       description: `تم تطبيق الأكدرية: الزوج (9/27), الأم (6/27), الجد (8/27), الأخت (4/27)`,
       code: "akdariyya",
-      data: { shares: shares.length },
+      data: { husband: "9/27", mother: "6/27", grandfather: "8/27", full_sister: "4/27", originalBase: 6, finalBase: 27 },
     });
 
     return shares;
@@ -844,15 +844,9 @@ export class EnhancedInheritanceCalculationEngine {
 
         this.steps.push({
           step: "اختيار الأفضل للجد مع الإخوة",
-          description: `تم اختيار ${
-            bestReason === "muqasamah"
-              ? "المقاسمة"
-              : bestReason === "third"
-                ? "الثلث"
-                : "السدس"
-          } (${bestOption.toString()})`,
+          description: `تم اختيار ${bestReason === "muqasamah" ? "المقاسمة" : bestReason === "third" ? "الثلث" : "السدس"} (${bestOption.toString()}) للجد مع ${siblingsCount} من الإخوة`,
           code: "grandfather_optimal",
-          data: { bestOption: bestOption.toString(), bestReason },
+          data: { siblingsCount: siblingsCount, muqasamah: byMuqasamah.toString(), third: byThird.toString(), sixth: bySixth.toString(), chosen: bestOption.toString(), reason: bestReason },
         });
 
         asabaShares.push({
