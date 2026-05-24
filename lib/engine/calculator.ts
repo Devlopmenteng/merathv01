@@ -83,6 +83,177 @@ export class EnhancedInheritanceCalculationEngine {
     this.hijabSystem = new HijabSystem(madhab);
   }
 
+
+  private addStep(title: string, description: string, details: any, type: string) {
+    this.steps.push({
+      step: title,
+      description: description,
+      code: type,
+      data: details,
+    });
+  }
+
+
+  // ========== Rich step detail methods (added by automation) ==========
+  private addNetEstateStep(total: number, funeral: number, debts: number, will: number, net: number) {
+    this.addStep(
+      'صافي التركة',
+      `حساب صافي التركة بعد الخصومات`,
+      {
+        formula: `${total.toLocaleString()} - ${funeral.toLocaleString()} (تجهيز) - ${debts.toLocaleString()} (ديون) - ${will.toLocaleString()} (وصية) = ${net.toLocaleString()}`,
+        total: total.toLocaleString(),
+        funeral: funeral.toLocaleString(),
+        debts: debts.toLocaleString(),
+        will: will.toLocaleString(),
+        net: net.toLocaleString()
+      },
+      'estate'
+    );
+  }
+
+  private addHijabStep(blockedHeirs: any[]) {
+    if (blockedHeirs.length === 0) {
+      this.addStep('نتيجة الحجب', 'لا يوجد ورثة محجوبون', null, 'hijab');
+    } else {
+      this.addStep(
+        'نتيجة الحجب',
+        `تم حجب ${blockedHeirs.length} وارث`,
+        {
+          blocked: blockedHeirs.map(b => ({
+            heir: this.getHeirName(b.heir),
+            reason: b.reason
+          }))
+        },
+        'hijab'
+      );
+    }
+  }
+
+  private addFixedSharesStep(shares: HeirShareObject[]) {
+    this.addStep(
+      'حساب الفروض',
+      `تم تحديد ${shares.length} من أصحاب الفروض`,
+      {
+        shares: shares.map(s => ({
+          heir: s.name,
+          fraction: s.fraction.toString(),
+          reason: s.reason,
+          count: s.count
+        }))
+      },
+      'calculation'
+    );
+  }
+
+  private addRemainderStep(totalFixed: FractionClass, remainder: FractionClass) {
+    this.addStep(
+      'حساب الباقي',
+      `بعد الفروض: ${remainder.toArabicName()} (${remainder.toDecimal().toFixed(4)})`,
+      {
+        totalFixed: totalFixed.toString(),
+        remainder: remainder.toString(),
+        remainderDecimal: remainder.toDecimal().toFixed(6)
+      },
+      'calculation'
+    );
+  }
+
+  private addAwlStep(asl: number, totalShares: number) {
+    this.addStep(
+      'العَوْل',
+      `عالت المسألة من ${asl} إلى ${totalShares}`,
+      {
+        originalBase: asl,
+        newBase: totalShares,
+        increase: ((totalShares - asl) / asl * 100).toFixed(1) + '%'
+      },
+      'warning'
+    );
+  }
+
+  private addAsabaStep(asabaShares: HeirShareObject[], remainder: FractionClass) {
+    if (asabaShares.length === 0) {
+      this.addStep('العصبات', 'لا باقي للعصبات (المسألة عادلة أو عائلة)', null, 'info');
+    } else {
+      this.addStep(
+        'توزيع العصبات',
+        `تم توزيع الباقي (${remainder.toArabicName()}) على ${asabaShares.length} عاصب`,
+        {
+          remainder: remainder.toString(),
+          asabaCount: asabaShares.length,
+          shares: asabaShares.map(s => ({
+            heir: s.name,
+            fraction: s.fraction.toString(),
+            weight: s.reason
+          }))
+        },
+        'calculation'
+      );
+    }
+  }
+
+  private addRaddStep(eligibleCount: number, remainder: FractionClass, totalFrac: FractionClass) {
+    this.addStep(
+      'الرَّد',
+      `توزيع الفائض (${remainder.toArabicName()}) على ${eligibleCount} من أصحاب الفروض`,
+      {
+        remainder: remainder.toString(),
+        eligibleCount: eligibleCount,
+        totalFixed: totalFrac.toString()
+      },
+      'calculation'
+    );
+  }
+
+  private addBloodRelativesStep(relatives: any[], remainder: FractionClass) {
+    this.addStep(
+      'ذوو الأرحام',
+      `توزيع الباقي (${remainder.toArabicName()}) على ${relatives.length} من ذوي الأرحام`,
+      {
+        remainder: remainder.toString(),
+        relatives: relatives.map(r => ({
+          name: r.name,
+          count: r.count,
+          priority: r.priority
+        }))
+      },
+      'calculation'
+    );
+  }
+
+  private addSpecialCaseStep(type: string, name: string, description: string) {
+    this.addStep(
+      name,
+      description,
+      { type },
+      'special'
+    );
+  }
+
+  private getHeirName(key: string): string {
+    const names: Record<string, string> = {
+      husband: 'الزوج',
+      wife: 'الزوجة',
+      father: 'الأب',
+      mother: 'الأم',
+      grandfather: 'الجد',
+      grandmother_mother: 'الجدة لأم',
+      grandmother_father: 'الجدة لأب',
+      son: 'الابن',
+      daughter: 'البنت',
+      grandson: 'ابن الابن',
+      granddaughter: 'بنت الابن',
+      full_brother: 'الأخ الشقيق',
+      full_sister: 'الأخت الشقيقة',
+      paternal_brother: 'الأخ لأب',
+      paternal_sister: 'الأخت لأب',
+      maternal_brother: 'الأخ لأم',
+      maternal_sister: 'الأخت لأم',
+      shared_siblings: 'الإخوة لأم والأشقاء'
+    };
+    return names[key] || key;
+  }
+  // ========== End of rich step methods ==========
   calculate(): CalculationResult {
     const startTime = performance.now();
     const steps: string[] = [];
