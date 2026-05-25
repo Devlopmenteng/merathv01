@@ -45,5 +45,14 @@
   "_support_us": "💚 ہماری مدد کریں",
   "language_changed": "زبان تبدیل ہو گئی",
   "restart_required": "براہ کرم مکمل RTL سپورٹ کے لیے ایپ کو دوبارہ شروع کریں۔",
-  "glossary": "اصطلاحات / تعلیمی"
+  "glossary": "اصطلاحات / تعلیمی",
+  "heir": "وارث",
+  "count": "تعداد",
+  "type": "قسم",
+  "percentage": "فیصد",
+  "amount": "رقم",
+  "asset_distribution": "جائیداد کی تقسیم",
+  "history_screen_title": "تاریخ",
+  "no_history": "کوئی ریکارڈ نہیں ملا",
+  "search_placeholder": "نام، تاریخ یا مذہب سے تلاش کریں"
 }

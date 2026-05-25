@@ -45,5 +45,14 @@
   "_support_us": "💚 ادعمنا",
   "language_changed": "تم تغيير اللغة",
   "restart_required": "يرجى إعادة تشغيل التطبيق لدعم RTL الكامل",
-  "glossary": "المصطلحات والتعليم"
+  "glossary": "المصطلحات والتعليم",
+  "heir": "الوارث",
+  "count": "العدد",
+  "type": "النوع",
+  "percentage": "النسبة",
+  "amount": "المبلغ",
+  "asset_distribution": "توزيع التركة",
+  "history_screen_title": "سجل الحسابات",
+  "no_history": "لا توجد سجلات مطابقة.",
+  "search_placeholder": "ابحث بالاسم أو التاريخ أو المذهب..."
 }

@@ -33,7 +33,7 @@ export const History = ({ navigation }: any) => {
 
   return (
     <View style={{ flex: 1, padding: theme.spacing.lg }}>
-      <Text style={theme.typography.h1}>سجل الحسابات</Text>
+      <Text style={theme.typography.h1}>{t("history_screen_title")}</Text>
       <TextInput
         style={{
           padding: theme.spacing.sm,
@@ -43,14 +43,14 @@ export const History = ({ navigation }: any) => {
           marginVertical: theme.spacing.md,
           color: theme.colors.onSurface,
         }}
-        placeholder="ابحث بالاسم أو التاريخ أو المذهب..."
+        placeholder={t("search_placeholder")}
         placeholderTextColor={theme.colors.outline}
         value={search}
         onChangeText={handleSearch}
       />
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={theme.typography.body}>لا توجد سجلات مطابقة.</Text>
+          <Text style={theme.typography.body}>{t("no_history")}</Text>
         ) : (
           filtered.map((entry, idx) => (
             <TouchableOpacity

@@ -252,12 +252,12 @@ export const Results = ({ navigation }: { navigation: any }) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={true}>
           <View style={{ minWidth: "100%" }}>
             <View style={{ flexDirection: "row", borderBottomWidth: 2, borderColor: theme.colors.primary, paddingBottom: 8, marginBottom: 8 }}>
-              <Text style={{ width: 100, fontWeight: "bold", paddingHorizontal: 4 }}>الوارث</Text>
-              <Text style={{ width: 60, fontWeight: "bold", textAlign: "center" }}>العدد</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>النوع</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>الحصة</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>النسبة</Text>
-              <Text style={{ width: 100, fontWeight: "bold", textAlign: "center" }}>المبلغ</Text>
+              <Text style={{ width: 100, fontWeight: "bold", paddingHorizontal: 4 }}>{t("heir")}</Text>
+              <Text style={{ width: 60, fontWeight: "bold", textAlign: "center" }}>{t("count")}</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("type")}</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("share")}</Text>
+              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("percentage")}</Text>
+              <Text style={{ width: 100, fontWeight: "bold", textAlign: "center" }}>{t("amount")}</Text>
             </View>
             {result.shares.map((share, idx) => {
               const color = chartData[idx]?.color;

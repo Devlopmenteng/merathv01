@@ -42,5 +42,14 @@
   "_support_us": "💚 Support Us",
   "language_changed": "Language changed",
   "restart_required": "Please restart the app for full RTL support.",
-  "glossary": "Glossary / Educational"
+  "glossary": "Glossary / Educational",
+  "heir": "Heir",
+  "count": "Count",
+  "type": "Type",
+  "percentage": "Percentage",
+  "amount": "Amount",
+  "asset_distribution": "Asset Distribution",
+  "history_screen_title": "History",
+  "no_history": "No matching records.",
+  "search_placeholder": "Search by name, date, or madhab..."
 }

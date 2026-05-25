@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { showToast } from "../lib/utils/toast";
 import React, { useState } from 'react';
 import { ScrollView, View, Text, TextInput } from 'react-native';
@@ -24,7 +25,7 @@ export const EstateSetup = ({ navigation }: any) => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
-      <Text style={theme.typography.h1}>Estate Details</Text>
+      <Text style={theme.typography.h1}>{t("estate_details")}</Text>
       <TextInput
         placeholder="Case Name (optional)"
         value={caseName}
