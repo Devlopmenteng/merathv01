@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import * as Linking from "expo-linking";
 import { PremiumProvider } from './lib/context/PremiumContext';
 import { ThemeProvider } from './lib/context/ThemeContext';
+import { CalcProvider } from './lib/context/CalcContext';
 import RootNavigator from './navigation/RootNavigator';
 import { ErrorBoundary } from './ErrorBoundary';
 import { EducationalTutorial } from "./components/EducationalTutorial";
@@ -12,7 +13,8 @@ export default function App() {
   useEffect(() => {
     const handleDeepLink = ({ url }: { url: string }) => {
       // Parse URL and navigate
-      console.log("Deep link:", url);
+      const parsed = Linking.parse(url);
+      // TODO: Implement route parsing and navigation based on parsed.path
     };
     const subscription = Linking.addEventListener("url", handleDeepLink);
     return () => subscription.remove();
@@ -21,10 +23,12 @@ export default function App() {
     <ErrorBoundary>
       <PremiumProvider>
         <ThemeProvider>
-          <StartupGate>
-            <RootNavigator />
-<EducationalTutorial />
-          </StartupGate>
+          <CalcProvider>
+            <StartupGate>
+              <RootNavigator />
+              <EducationalTutorial />
+            </StartupGate>
+          </CalcProvider>
         </ThemeProvider>
       </PremiumProvider>
     </ErrorBoundary>

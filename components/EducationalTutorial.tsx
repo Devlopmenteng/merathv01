@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 
 const slides = [
   { title: 'مرحباً بك في ميراث', content: 'تطبيق متخصص لحساب المواريث الشرعية وفق المذاهب الأربعة.' },
@@ -19,7 +20,7 @@ export const EducationalTutorial = () => {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_tutorial_seen').then(val => {
+    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.TUTORIAL_SEEN).then(val => {
       if (!val) setVisible(true);
     });
   }, []);
@@ -28,7 +29,7 @@ export const EducationalTutorial = () => {
     if (step < slides.length - 1) {
       setStep(step + 1);
     } else {
-      AsyncStorage.setItem('merath_tutorial_seen', 'true');
+      AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.TUTORIAL_SEEN, 'true');
       setVisible(false);
     }
   };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CalcProvider } from '../lib/context/CalcContext';
 import { EstateSetup } from '../screens/EstateSetup';
 import { MadhabSelect } from '../screens/MadhabSelect';
 import { HeirSelection } from '../screens/HeirSelection';
@@ -21,8 +20,7 @@ const screenOptions = {
 
 export default function RootNavigator() {
   return (
-    <CalcProvider>
-      <NavigationContainer>
+    <NavigationContainer>
         <Stack.Navigator screenOptions={screenOptions}>
           <Stack.Screen name="EstateSetup" component={EstateSetup} />
           <Stack.Screen name="MadhabSelect" component={MadhabSelect} />
@@ -34,6 +32,5 @@ export default function RootNavigator() {
           <Stack.Screen name="Glossary" component={Glossary} />
         </Stack.Navigator>
       </NavigationContainer>
-    </CalcProvider>
   );
 }

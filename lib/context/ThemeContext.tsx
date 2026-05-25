@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_DEFAULTS } from '../constants/appDefaults';
 
 // Modern color palette
 const lightColors = {
@@ -85,7 +86,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('theme_preference').then(value => {
+    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.THEME_PREFERENCE).then(value => {
       if (value === 'dark') setIsDark(true);
       else if (value === 'light') setIsDark(false);
       else setIsDark(false); // force light mode as default
@@ -95,7 +96,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const toggleTheme = () => {
     const newDark = !isDark;
     setIsDark(newDark);
-    AsyncStorage.setItem('theme_preference', newDark ? 'dark' : 'light');
+    AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.THEME_PREFERENCE, newDark ? 'dark' : 'light');
   };
 
   const theme = {

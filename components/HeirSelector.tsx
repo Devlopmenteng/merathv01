@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Stepper } from './ui/Stepper';
 import { HeirType, HeirEntry } from '../lib/engine/types';
 import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
+import { APP_DEFAULTS } from '../lib/constants/appDefaults';
+import { showConfirm, showValidationError } from '../lib/utils/alerts';
 
 const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
   { titleKey: 'spouse', types: ['husband', 'wife'] },
@@ -35,10 +37,11 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
   }, [heirs]);
 
   const applyTemplate = (template: typeof TEMPLATES[0]) => {
-    Alert.alert('Apply Template', `Replace current heirs with "${template.name}"?`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Apply', onPress: () => onHeirsChange(template.heirs) },
-    ]);
+    showConfirm(
+      'apply_template',
+      `Replace current heirs with "${template.name}"?`,
+      () => onHeirsChange(template.heirs),
+    );
   };
 
   const toggleExpand = (catKey: string) => {
@@ -53,24 +56,25 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
   const updateCount = useCallback((type: HeirType, delta: number) => {
     const current = counts.get(type) || 0;
     const newCount = Math.max(0, current + delta);
+
     if (type === 'husband' && newCount > 0 && (counts.get('wife') || 0) > 0) {
-      Alert.alert('Validation', 'Cannot add husband while wife exists.');
+      showValidationError('Husband', 'cannot_add_with_wife');
       return;
     }
     if (type === 'wife' && newCount > 0 && (counts.get('husband') || 0) > 0) {
-      Alert.alert('Validation', 'Cannot add wife while husband exists.');
+      showValidationError('Wife', 'cannot_add_with_husband');
       return;
     }
-    if (['husband'].includes(type) && newCount > 1) {
-      Alert.alert('Validation', 'Only one husband allowed.');
+    if (type === 'husband' && newCount > APP_DEFAULTS.MAX_HUSBANDS) {
+      showValidationError('Husband', 'only_one_allowed');
       return;
     }
-    if (type === 'wife' && newCount > 4) {
-      Alert.alert('Validation', 'Maximum 4 wives.');
+    if (type === 'wife' && newCount > APP_DEFAULTS.MAX_WIVES) {
+      showValidationError('Wife', `maximum_allowed_${APP_DEFAULTS.MAX_WIVES}`);
       return;
     }
-    if (['father', 'mother', 'grandfather'].includes(type) && newCount > 1) {
-      Alert.alert('Validation', `Only one ${HEIR_NAMES[type]} allowed.`);
+    if (['father', 'mother', 'grandfather'].includes(type) && newCount > APP_DEFAULTS.MAX_SINGLE_HEIRS) {
+      showValidationError(HEIR_NAMES[type], 'only_one_allowed');
       return;
     }
     const newHeirs = heirs.filter(h => h.type !== type);
@@ -124,7 +128,15 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
                       onIncrease={() => updateCount(type, 1)}
                       onDecrease={() => updateCount(type, -1)}
                       min={0}
-                      max={type === 'wife' ? 4 : type === 'husband' ? 1 : ['father', 'mother', 'grandfather'].includes(type) ? 1 : 20}
+                      max={
+                        type === 'wife'
+                          ? APP_DEFAULTS.MAX_WIVES
+                          : type === 'husband'
+                          ? APP_DEFAULTS.MAX_HUSBANDS
+                          : ['father', 'mother', 'grandfather'].includes(type)
+                          ? APP_DEFAULTS.MAX_SINGLE_HEIRS
+                          : APP_DEFAULTS.MAX_HEIR_COUNT
+                      }
                     />
                   )}
                 </View>

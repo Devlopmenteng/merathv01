@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_DEFAULTS } from '../constants/appDefaults';
 
 type PremiumContextType = {
   isPremium: boolean;
@@ -18,7 +19,7 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_premium')
+    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM)
       .then((val) => {
         setIsPremium(val === 'true');
       })
@@ -28,7 +29,7 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
   const togglePremium = () => {
     const next = !isPremium;
     setIsPremium(next);
-    AsyncStorage.setItem('merath_premium', next ? 'true' : 'false');
+    AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM, next ? 'true' : 'false');
   };
 
   return (

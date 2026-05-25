@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_DEFAULTS } from '../constants/appDefaults';
 
 export interface AuditEntry {
   id: string;
@@ -12,13 +13,13 @@ export interface AuditEntry {
   caseDate?: string;
 }
 
-const STORAGE_KEY = 'merath_audit_trail';
+const STORAGE_KEY = APP_DEFAULTS.STORAGE_KEYS.AUDIT_TRAIL;
 
 export async function saveAuditTrail(entry: AuditEntry) {
   const stored = await AsyncStorage.getItem(STORAGE_KEY);
   const trail: AuditEntry[] = stored ? JSON.parse(stored) : [];
   trail.unshift(entry);
-  if (trail.length > 50) trail.pop();
+  if (trail.length > APP_DEFAULTS.MAX_AUDIT_ENTRIES) trail.pop();
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(trail));
 }
 
