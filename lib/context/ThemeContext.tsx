@@ -82,7 +82,7 @@ const ThemeContext = createContext({
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const systemColorScheme = useColorScheme();
+  const _systemColorScheme = useColorScheme();
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {

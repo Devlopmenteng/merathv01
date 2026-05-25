@@ -1,10 +1,10 @@
-import { HeirType, Madhab } from './types';
+import type { Madhab } from './types';
 
 export class HijabSystem {
-  private madhab: Madhab;
+  private _madhab: Madhab;
 
   constructor(madhab: Madhab) {
-    this.madhab = madhab;
+    this._madhab = madhab;
   }
 
   applyHijab(heirs: Record<string, number | undefined>): { heirs: Record<string, number | undefined> } {

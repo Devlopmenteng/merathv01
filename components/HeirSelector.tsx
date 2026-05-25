@@ -36,7 +36,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     return map;
   }, [heirs]);
 
-  const applyTemplate = (template: typeof TEMPLATES[0]) => {
+  const _applyTemplate = (template: typeof TEMPLATES[0]) => {
     showConfirm(
       'apply_template',
       `Replace current heirs with "${template.name}"?`,

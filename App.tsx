@@ -13,8 +13,8 @@ export default function App() {
   useEffect(() => {
     const handleDeepLink = ({ url }: { url: string }) => {
       // Parse URL and navigate
-      const parsed = Linking.parse(url);
-      // TODO: Implement route parsing and navigation based on parsed.path
+      const _parsed = Linking.parse(url);
+      // TODO: Implement route parsing and navigation based on _parsed.path
     };
     const subscription = Linking.addEventListener("url", handleDeepLink);
     return () => subscription.remove();

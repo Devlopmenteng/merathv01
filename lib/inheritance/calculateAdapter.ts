@@ -41,4 +41,3 @@ export function calculateInheritance(input: CalculateInheritanceInput): Calculat
     throw new Error(`Calculation failed: ${errorMessage}`);
   }
 }
-}
