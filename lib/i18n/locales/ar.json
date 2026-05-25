@@ -42,5 +42,8 @@
   "___supportmerathapp": "لمزيد من المعلومات: support@merath.app",
   "_blocked": "⛔ محجوب",
   "_rate_us__send_feedback": "⭐ قيم التطبيق / أرسل ملاحظاتك",
-  "_support_us": "💚 ادعمنا"
+  "_support_us": "💚 ادعمنا",
+  "language_changed": "تم تغيير اللغة",
+  "restart_required": "يرجى إعادة تشغيل التطبيق لدعم RTL الكامل",
+  "glossary": "المصطلحات والتعليم"
 }

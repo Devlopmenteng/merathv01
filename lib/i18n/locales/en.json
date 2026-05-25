@@ -39,5 +39,8 @@
   "tap_the_categories_to_add_family_members_use_the_steppers_to_set_their_count": "Tap the categories to add family members. Use the steppers to set their count.",
   "_blocked": "⛔ Blocked",
   "_rate_us__send_feedback": "⭐ Rate Us / Send Feedback",
-  "_support_us": "💚 Support Us"
+  "_support_us": "💚 Support Us",
+  "language_changed": "Language changed",
+  "restart_required": "Please restart the app for full RTL support.",
+  "glossary": "Glossary / Educational"
 }
