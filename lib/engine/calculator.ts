@@ -262,14 +262,14 @@ export class EnhancedInheritanceCalculationEngine {
       const validation = this.validateInput();
       if (!validation.valid) {
         const endTime = performance.now();
-        const calcSteps = steps.map((s, i) => ({
-          stepNumber: i + 1,
-          title: s,
-          description: "",
-          action: "validate",
-          details: {},
-          timestamp: new Date().toISOString(),
-        }));
+        const calcSteps = this.steps.map((stepObj, idx) => ({
+        stepNumber: idx + 1,
+        title: stepObj.step,
+        description: stepObj.description,
+        action: stepObj.code,
+        details: stepObj.data || {},
+        timestamp: new Date().toISOString(),
+      }));
 
         
     // Ensure success and map grandfather key for tests
@@ -286,16 +286,16 @@ export class EnhancedInheritanceCalculationEngine {
           specialCases: { awl: false, auled: 0, radd: false, hijabTypes: [] },
         };
       }
-      steps.push("التحقق من البيانات: validate");
+      this.addStep("التحقق من البيانات: validate", "", null, "info");
 
       const netEstate = this.calculateNetEstate();
-      steps.push("حساب التركة الصافية: estate_calculation");
+      this.addStep("حساب التركة الصافية: estate_calculation", "", null, "info");
 
       const hijabResult = this.hijabSystem.applyHijab(this.heirs as Record<string, number | undefined>);
       const validHeirs = hijabResult.heirs;
       const hijabLog = (hijabResult as any).log || [];
       this.state.blockedHeirs = hijabLog;
-      steps.push("تطبيق الحجب: hijab");
+      this.addStep("تطبيق الحجب: hijab", "", null, "info");
 
       let fixedShares: HeirShareObject[] = [];
 
@@ -306,7 +306,7 @@ export class EnhancedInheritanceCalculationEngine {
           name: "المشتركة",
           description: "الإخوة الأشقاء يشاركون الإخوة لأم في الثلث",
         });
-        steps.push("المشتركة: musharraka");
+        this.addStep("المشتركة: musharraka", "", null, "info");
       } else if (this.isAkdariyya()) {
         fixedShares = this.computeAkdariyya();
         this.state.specialCases.push({
@@ -314,10 +314,10 @@ export class EnhancedInheritanceCalculationEngine {
           name: "الأكدرية",
           description: "مسألة الأكدرية - للجد مع الأخت طريقة خاصة",
         });
-        steps.push("الأكدرية: akdariyya");
+        this.addStep("الأكدرية: akdariyya", "", null, "info");
       } else {
         fixedShares = this.computeFixedShares(validHeirs);
-        steps.push("الفروض: fixed_shares");
+        this.addStep("الفروض: fixed_shares", "", null, "info");
       }
 
       const totalFixed = this.sumFractions(fixedShares.map((s) => s.fraction));
@@ -326,7 +326,7 @@ export class EnhancedInheritanceCalculationEngine {
       if (totalFixed.toDecimal() > 1) {
         adjustedFixed = this.applyAwl(fixedShares, totalFixed);
         this.state.awlApplied = true;
-        steps.push("الأول: awl");
+        this.addStep("الأول: awl", "", null, "info");
       }
 
       // Edge case: if Akdariyya conditions are NOT met but we have a grandfather
@@ -341,33 +341,33 @@ export class EnhancedInheritanceCalculationEngine {
       ) {
         adjustedFixed = this.applyAwl(fixedShares, totalFixed);
         this.state.awlApplied = true;
-        steps.push("الأول: awl (edge-case grandfather+multiple_sisters)");
+        this.addStep("الأول: awl (edge-case grandfather+multiple_sisters)", "", null, "info");
       }
 
       const remainder = new FractionClass(1, 1).subtract(totalFixed);
-      steps.push("حساب الباقي: remainder");
+      this.addStep("حساب الباقي: remainder", "", null, "info");
 
       const asabaShares = this.computeAsaba(
         adjustedFixed,
         remainder,
         validHeirs,
       );
-      steps.push("العصبات: asaba");
+      this.addStep("العصبات: asaba", "", null, "info");
 
       const allShares = this.mergeShares(adjustedFixed, asabaShares);
-      steps.push("دمج الفروض والعصبات: merge");
+      this.addStep("دمج الفروض والعصبات: merge", "", null, "info");
 
       const totalAllShares = this.sumFractions(
         allShares.map((s) => s.fraction),
       );
       const finalRemainder = new FractionClass(1, 1).subtract(totalAllShares);
-      steps.push("إعادة حساب الباقي: recalculate");
+      this.addStep("إعادة حساب الباقي: recalculate", "", null, "info");
 
       let finalShares = allShares;
       if (finalRemainder.toDecimal() > 0.0001 && asabaShares.length === 0) {
         finalShares = this.applyRadd(allShares, finalRemainder);
         this.state.raddApplied = true;
-        steps.push("الرد: radd");
+        this.addStep("الرد: radd", "", null, "info");
       }
 
       // Recalculate remainder after radd
@@ -391,23 +391,23 @@ export class EnhancedInheritanceCalculationEngine {
             name: "ذوو الأرحام",
             description: "توزيع الباقي على ذوي الأرحام",
           });
-          steps.push("ذوو الأرحام: blood_relatives");
+          this.addStep("ذوو الأرحام: blood_relatives", "", null, "info");
         }
       }
 
       const results = this.calculateFinalAmounts(finalShares, netEstate);
-      steps.push("تحويل للمبالغ: amounts");
+      this.addStep("تحويل للمبالغ: amounts", "", null, "info");
 
       const confidence = this.calculateConfidence(results, validHeirs);
-      steps.push("حساب مستوى الثقة: confidence");
+      this.addStep("حساب مستوى الثقة: confidence", "", null, "info");
 
       const endTime = performance.now();
-      const calcSteps = steps.map((s, i) => ({
-        stepNumber: i + 1,
-        title: s,
-        description: "",
-        action: "info",
-        details: {},
+      const calcSteps = this.steps.map((stepObj, idx) => ({
+        stepNumber: idx + 1,
+        title: stepObj.step,
+        description: stepObj.description,
+        action: stepObj.code,
+        details: stepObj.data || {},
         timestamp: new Date().toISOString(),
       }));
 
@@ -436,12 +436,12 @@ export class EnhancedInheritanceCalculationEngine {
       };
     } catch (error) {
       const endTime = performance.now();
-      const calcSteps = steps.map((s, i) => ({
-        stepNumber: i + 1,
-        title: s,
-        description: "",
-        action: "error",
-        details: {},
+      const calcSteps = this.steps.map((stepObj, idx) => ({
+        stepNumber: idx + 1,
+        title: stepObj.step,
+        description: stepObj.description,
+        action: stepObj.code,
+        details: stepObj.data || {},
         timestamp: new Date().toISOString(),
       }));
 
