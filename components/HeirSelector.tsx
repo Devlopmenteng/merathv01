@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Stepper } from './ui/Stepper';
@@ -7,7 +7,7 @@ import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
-import { showConfirm, showValidationError } from '../lib/utils/alerts';
+import { showValidationError } from '../lib/utils/alerts';
 
 const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
   { titleKey: 'spouse', types: ['husband', 'wife'] },
@@ -17,17 +17,18 @@ const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
   { titleKey: 'extended', types: ['full_nephew', 'paternal_nephew', 'full_uncle', 'paternal_uncle', 'maternal_uncle', 'paternal_aunt', 'maternal_aunt'] },
 ];
 
-const TEMPLATES: { name: string; heirs: { type: HeirType; count: number }[] }[] = [
-  { name: 'Husband, Wife, 2 Sons, 1 Daughter', heirs: [{ type: 'husband', count: 1 }, { type: 'wife', count: 1 }, { type: 'son', count: 2 }, { type: 'daughter', count: 1 }] },
-  { name: 'Father, Mother, Son, Daughter', heirs: [{ type: 'father', count: 1 }, { type: 'mother', count: 1 }, { type: 'son', count: 1 }, { type: 'daughter', count: 1 }] },
-  { name: 'Wife, 3 Daughters', heirs: [{ type: 'wife', count: 1 }, { type: 'daughter', count: 3 }] },
-  { name: 'Husband, 2 Sons', heirs: [{ type: 'husband', count: 1 }, { type: 'son', count: 2 }] },
-  { name: 'Full Brothers (5)', heirs: [{ type: 'full_brother', count: 5 }] },
-];
-
 type Props = { heirs: HeirEntry[]; onHeirsChange: (heirs: HeirEntry[]) => void };
 
-export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
+const areEqual = (prev: Props, next: Props) => {
+  if (prev.onHeirsChange !== next.onHeirsChange) return false;
+  if (prev.heirs.length !== next.heirs.length) return false;
+  return prev.heirs.every((heir, index) => {
+    const nextHeir = next.heirs[index];
+    return heir.type === nextHeir.type && heir.count === nextHeir.count;
+  });
+};
+
+export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange }) => {
   const theme = useAppTheme();
   const [expanded, setExpanded] = useState<Set<string>>(new Set(['spouse', 'children']));
   const counts = React.useMemo(() => {
@@ -36,22 +37,14 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     return map;
   }, [heirs]);
 
-  const _applyTemplate = (template: typeof TEMPLATES[0]) => {
-    showConfirm(
-      'apply_template',
-      `Replace current heirs with "${template.name}"?`,
-      () => onHeirsChange(template.heirs),
-    );
-  };
-
-  const toggleExpand = (catKey: string) => {
+  const toggleExpand = useCallback((catKey: string) => {
     setExpanded(prev => {
       const next = new Set(prev);
       if (next.has(catKey)) next.delete(catKey);
       else next.add(catKey);
       return next;
     });
-  };
+  }, []);
 
   const updateCount = useCallback((type: HeirType, delta: number) => {
     const current = counts.get(type) || 0;
@@ -82,7 +75,7 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
     onHeirsChange(newHeirs);
   }, [heirs, counts, onHeirsChange]);
 
-  const blockedTypes = React.useMemo(() => {
+  const blockedTypes = useMemo(() => {
     const active = heirs.filter(h => h.count > 0);
     if (active.length === 0) return new Set<HeirType>();
     const result = applyHijab(active);
@@ -147,4 +140,4 @@ export const HeirSelector: React.FC<Props> = ({ heirs, onHeirsChange }) => {
       })}
     </ScrollView>
   );
-};
+}, areEqual);

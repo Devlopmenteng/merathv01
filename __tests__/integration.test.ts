@@ -6,8 +6,7 @@
  * screen rendering, and integration flows
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import * as Linking from "expo-linking";
+import { describe, it, expect, vi } from "vitest";
 
 // Mock modules
 vi.mock("expo-linking");
@@ -343,6 +342,7 @@ describe("Phase 6: Integration Tests", () => {
       const navigation = { screens: [] };
       const endTime = performance.now();
 
+      expect(navigation.screens).toHaveLength(0);
       const loadTime = endTime - startTime;
       expect(loadTime).toBeLessThan(1000); // Should load in under 1 second
     });

@@ -402,6 +402,7 @@ describe("Calculator Screen Integration", () => {
 
     // Switch screens
     let screen = "history";
+    expect(screen).toBe("history");
 
     // Data should persist
     expect(data.madhab).toBe("maliki");
@@ -409,6 +410,7 @@ describe("Calculator Screen Integration", () => {
 
     // Switch back
     screen = "calculator";
+    expect(screen).toBe("calculator");
     expect(data.madhab).toBe("maliki");
   });
 

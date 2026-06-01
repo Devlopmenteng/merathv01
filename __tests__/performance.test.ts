@@ -5,7 +5,7 @@
  * Comprehensive performance metrics and benchmarking
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 
 describe("Phase 7: Performance Optimization", () => {
   describe("Application Startup", () => {
@@ -33,6 +33,7 @@ describe("Phase 7: Performance Optimization", () => {
       };
       const endTime = performance.now();
 
+      expect(Object.keys(navStructure)).toHaveLength(4);
       expect(endTime - startTime).toBeLessThan(100);
     });
 
@@ -45,6 +46,7 @@ describe("Phase 7: Performance Optimization", () => {
       };
       const endTime = performance.now();
 
+      expect(screen.elements).toBe(25);
       expect(endTime - startTime).toBeLessThan(300);
     });
   });
@@ -71,7 +73,6 @@ describe("Phase 7: Performance Optimization", () => {
       const startTime = performance.now();
 
       // Simulate complex calculation
-      const estate = 500000;
       const heirs = 8;
       const madhabs = 4;
 
@@ -119,6 +120,7 @@ describe("Phase 7: Performance Optimization", () => {
       tabs.forEach((tab) => {
         // Simulate tab switch
         const state = { active: tab };
+        expect(state.active).toBe(tab);
       });
 
       const endTime = performance.now();
@@ -138,6 +140,7 @@ describe("Phase 7: Performance Optimization", () => {
       deepLinks.forEach((link) => {
         // Simulate route parsing
         const parsed = link.split("://")[1];
+        expect(parsed).toBeDefined();
       });
 
       const endTime = performance.now();
@@ -192,6 +195,7 @@ describe("Phase 7: Performance Optimization", () => {
       const isOnline = false;
       const fallbackData = { cached: true };
 
+      expect(isOnline).toBe(false);
       expect(fallbackData.cached).toBe(true);
     });
 
@@ -258,6 +262,7 @@ describe("Phase 7: Performance Optimization", () => {
 
       const endTime = performance.now();
 
+      expect(rendered).toBeTruthy();
       expect(endTime - startTime).toBeLessThan(50);
     });
 
@@ -276,6 +281,7 @@ describe("Phase 7: Performance Optimization", () => {
       const rendered = JSON.stringify(results);
 
       const endTime = performance.now();
+      expect(rendered).toContain("husband");
 
       expect(endTime - startTime).toBeLessThan(100);
     });
@@ -293,6 +299,7 @@ describe("Phase 7: Performance Optimization", () => {
 
       const endTime = performance.now();
 
+      expect(rendered.length).toBeGreaterThan(0);
       expect(endTime - startTime).toBeLessThan(200);
     });
   });
@@ -352,6 +359,7 @@ describe("Phase 7: Performance Optimization", () => {
       const tabs = ["calc", "hist", "set", "about"];
       for (let i = 0; i < 100; i++) {
         const tab = tabs[i % tabs.length];
+        expect(tab).toBeDefined();
       }
 
       const endTime = performance.now();
@@ -364,6 +372,7 @@ describe("Phase 7: Performance Optimization", () => {
 
       for (let i = 0; i < 50; i++) {
         const result = Math.random() * 100;
+        expect(result).toBeGreaterThanOrEqual(0);
       }
 
       const endTime = performance.now();

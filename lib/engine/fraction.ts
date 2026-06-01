@@ -16,8 +16,16 @@ export class FractionClass {
 
   // ===== FIX C6: Constants for overflow protection =====
   private static readonly MAX_SAFE_DENOMINATOR = 1_000_000_000; // 1e9
-  private static readonly SIMPLIFY_THRESHOLD = 1_000_000; // 1e6 - threshold for aggressive simplification
   private static readonly TOLERANCE = 1e-10; // Tolerance for floating point comparisons
+
+  // Memoization caches for repeated fraction computations
+  private static readonly gcdCache = new Map<string, number>();
+  private static readonly lcmCache = new Map<string, number>();
+  private static readonly decimalToFractionCache = new Map<
+    string,
+    { numerator: number; denominator: number }
+  >();
+  private static readonly simplifyCache = new Map<string, string>();
 
   constructor(numerator: number, denominator: number = 1) {
     if (denominator === 0) {
@@ -78,9 +86,22 @@ export class FractionClass {
     a = Math.abs(a);
     b = Math.abs(b);
 
+    if (a === 0) return b || 1;
+    if (b === 0) return a || 1;
+    if (a === b) return a;
+
+    const [minVal, maxVal] = a < b ? [a, b] : [b, a];
+    const cacheKey = `${minVal}|${maxVal}`;
+    const cached = FractionClass.gcdCache.get(cacheKey);
+    if (cached !== undefined) {
+      return cached;
+    }
+
     // Check if numbers are too large for standard Euclidean algorithm
-    if (a > Number.MAX_SAFE_INTEGER / 2 || b > Number.MAX_SAFE_INTEGER / 2) {
-      return this.approximateGcd(a, b);
+    if (maxVal > Number.MAX_SAFE_INTEGER / 2) {
+      const result = this.approximateGcd(minVal, maxVal);
+      FractionClass.gcdCache.set(cacheKey, result);
+      return result;
     }
 
     // Standard Euclidean algorithm for safe numbers
@@ -91,11 +112,14 @@ export class FractionClass {
 
       // Safety check - prevent infinite loop
       if (isNaN(a) || isNaN(b) || !isFinite(a) || !isFinite(b)) {
+        FractionClass.gcdCache.set(cacheKey, 1);
         return 1;
       }
     }
 
-    return a || 1;
+    const result = a || 1;
+    FractionClass.gcdCache.set(cacheKey, result);
+    return result;
   }
 
   /**
@@ -429,8 +453,16 @@ export class FractionClass {
    * Simplify and return as string
    */
   private simplifyToString(): string {
+    const key = `${this.numerator}/${this.denominator}`;
+    const cached = FractionClass.simplifyCache.get(key);
+    if (cached) {
+      return cached;
+    }
+
     const simplified = new FractionClass(this.numerator, this.denominator);
-    return `${simplified.numerator}/${simplified.denominator}`;
+    const result = `${simplified.numerator}/${simplified.denominator}`;
+    FractionClass.simplifyCache.set(key, result);
+    return result;
   }
 
   /**
@@ -548,9 +580,17 @@ export class FractionClass {
     decimal: number,
     maxDenominator: number = 1000000,
   ): { numerator: number; denominator: number } {
+    const cacheKey = `${decimal.toPrecision(15)}:${maxDenominator}`;
+    const cached = this.decimalToFractionCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     // Handle integer case
     if (Math.abs(decimal - Math.round(decimal)) < this.TOLERANCE) {
-      return { numerator: Math.round(decimal), denominator: 1 };
+      const result = { numerator: Math.round(decimal), denominator: 1 };
+      this.decimalToFractionCache.set(cacheKey, result);
+      return result;
     }
 
     // Use continued fractions algorithm for best rational approximation
@@ -574,7 +614,9 @@ export class FractionClass {
       k1 < maxDenominator
     );
 
-    return { numerator: h1, denominator: k1 };
+    const result = { numerator: h1, denominator: k1 };
+    this.decimalToFractionCache.set(cacheKey, result);
+    return result;
   }
 
   /**
@@ -590,7 +632,19 @@ export class FractionClass {
    * Calculate Least Common Multiple
    */
   private lcm(a: number, b: number): number {
-    return Math.abs(a * b) / this.safeGcd(a, b);
+    if (a === 0 || b === 0) return 0;
+
+    const [minVal, maxVal] = a < b ? [a, b] : [b, a];
+    const cacheKey = `${minVal}|${maxVal}`;
+    const cached = FractionClass.lcmCache.get(cacheKey);
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    const gcd = this.safeGcd(minVal, maxVal);
+    const result = Math.abs((a / gcd) * b);
+    FractionClass.lcmCache.set(cacheKey, result);
+    return result;
   }
 
   /**

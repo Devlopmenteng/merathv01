@@ -7,14 +7,14 @@ import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
 
-export const Glossary = ({ navigation }: any) => {
+export const Glossary = () => {
   const theme = useAppTheme();
   const [activeTab, setActiveTab] = useState<Tab>('glossary');
 
   const renderGlossary = () => (
     <FlatList
       data={GLOSSARY}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
         <View
           style={{
@@ -41,7 +41,7 @@ export const Glossary = ({ navigation }: any) => {
   const renderVerses = () => (
     <FlatList
       data={INHERITANCE_VERSES}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
         <View
           style={{
@@ -67,7 +67,7 @@ export const Glossary = ({ navigation }: any) => {
   const renderHadith = () => (
     <FlatList
       data={HADITH}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
         <View
           style={{

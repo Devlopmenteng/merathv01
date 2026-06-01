@@ -77,7 +77,7 @@ describe("HijabSystem", () => {
   let hijabSystem: HijabSystem;
 
   beforeEach(() => {
-    hijabSystem = new HijabSystem("shafii");
+    hijabSystem = new HijabSystem();
   });
 
   it("should block siblings when son exists", () => {
@@ -95,7 +95,7 @@ describe("HijabSystem", () => {
   });
 
   it("should block grandfather when father exists (Shafi'i)", () => {
-    const hijabSystemShafii = new HijabSystem("shafii");
+    const hijabSystemShafii = new HijabSystem();
     const heirs = {
       father: 1,
       grandfather: 1,
@@ -173,7 +173,7 @@ describe("Validation Functions", () => {
 
 describe("Integration Tests", () => {
   it("should handle basic case: husband + daughter", () => {
-    const hijab = new HijabSystem("shafii");
+    const hijab = new HijabSystem();
     const heirs = { husband: 1, daughter: 1 };
 
     const { heirs: result } = hijab.applyHijab(heirs);
@@ -187,7 +187,7 @@ describe("Integration Tests", () => {
   });
 
   it("should handle complex case with hijab", () => {
-    const hijab = new HijabSystem("shafii");
+    const hijab = new HijabSystem();
     const heirs = {
       son: 1,
       father: 1,

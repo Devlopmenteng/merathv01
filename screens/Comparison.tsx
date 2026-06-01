@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
@@ -12,16 +12,27 @@ import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
-export const Comparison = () => {
-  const getCount = (key: string) => {
-    const heirsObj = heirsArrayToObject(state.heirs);
-    return heirsObj[key] || 0;
-  };
+export const Comparison = React.memo(() => {
   const { state } = useCalc();
   const theme = useAppTheme();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
   const [showNotes, setShowNotes] = useState(false);
+
+  const allHeirs = useMemo(() => {
+    const heirSet = new Set<string>();
+    results.forEach(res => {
+      if (res.success && res.shares) {
+        res.shares.forEach(share => heirSet.add(share.key || share.name));
+      }
+    });
+    return heirSet;
+  }, [results]);
+
+  const getCount = useCallback((key: string) => {
+    const heirsObj = heirsArrayToObject(state.heirs);
+    return heirsObj[key] || 0;
+  }, [state.heirs]);
 
   useEffect(() => {
     const estate: EstateInput = {
@@ -36,13 +47,22 @@ export const Comparison = () => {
 
   const notes = FIQH_NOTES[selected] || {};
 
-  // Collect all heirs across all results
-  const allHeirs = new Set<string>();
-  results.forEach(res => {
-    if (res.success && res.shares) {
-      res.shares.forEach(share => allHeirs.add(share.key || share.name));
-    }
-  });
+  const comparisonRows = useMemo(() => {
+    return Array.from(allHeirs).map(heirKey => {
+      const sharesByMadhab = TABS.map(madhab => {
+        const result = results[TABS.indexOf(madhab)];
+        if (!result?.success) return null;
+        const share = result.shares.find(s => (s.key === heirKey) || (s.name === heirKey));
+        if (!share) return null;
+        const fractionStr = share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : '—';
+        const percentage = share.fraction ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%' : '—';
+        const amount = share.amount ? formatCurrency(share.amount) : '—';
+        return { fraction: fractionStr, percentage, amount };
+      });
+      if (sharesByMadhab.every(s => s === null)) return null;
+      return { heirKey, sharesByMadhab };
+    });
+  }, [allHeirs, results]);
 
   const renderComparisonTable = () => (
     <ScrollView horizontal showsHorizontalScrollIndicator={true}>
@@ -55,24 +75,14 @@ export const Comparison = () => {
             <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
           ))}
         </View>
-        {Array.from(allHeirs).map(heirKey => {
-          const sharesByMadhab = TABS.map(madhab => {
-            const result = results[TABS.indexOf(madhab)];
-            if (!result?.success) return null;
-            const share = result.shares.find(s => (s.key === heirKey) || (s.name === heirKey));
-            if (!share) return null;
-            const fractionStr = share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : '—';
-            const percentage = share.fraction ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%' : '—';
-            const amount = share.amount ? formatCurrency(share.amount) : '—';
-            return { fraction: fractionStr, percentage, amount };
-          });
-          if (sharesByMadhab.every(s => s === null)) return null;
+        {comparisonRows.map((row) => {
+          if (!row) return null;
           return (
-            <View key={heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
-              <Text style={{ width: 140, paddingHorizontal: 8 }}>{heirKey}</Text>
-              <Text style={{ width: 60, textAlign: "center" }}>{getCount(heirKey)}</Text>
-              {sharesByMadhab.map((data, idx) => (
-                <View key={idx} style={{ width: 100, alignItems: 'center' }}>
+            <View key={row.heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
+              <Text style={{ width: 140, paddingHorizontal: 8 }}>{row.heirKey}</Text>
+              <Text style={{ width: 60, textAlign: 'center' }}>{getCount(row.heirKey)}</Text>
+              {row.sharesByMadhab.map((data, index) => (
+                <View key={index} style={{ width: 100, alignItems: 'center' }}>
                   {data ? (
                     <>
                       <Text style={{ fontSize: 12 }}>{data.fraction}</Text>
@@ -123,4 +133,4 @@ export const Comparison = () => {
       )}
     </ScrollView>
   );
-};
+  });

@@ -5,7 +5,7 @@ import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/Aud
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
 
-export const History = ({ navigation }: any) => {
+export const History = () => {
   const theme = useAppTheme();
   const [trail, setTrail] = useState<AuditEntry[]>([]);
   const [filtered, setFiltered] = useState<AuditEntry[]>([]);

@@ -3,7 +3,7 @@
  * Helper Functions and Inheritance System Constants
  */
 
-import { MadhhabType, HeirType, MadhhabConfig, MadhhabRules } from "./types";
+import { MadhhabType, HeirType, MadhhabConfig } from "./types";
 
 /**
  * قائمة أسماء الورثة بالعربية

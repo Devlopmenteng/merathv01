@@ -1,4 +1,4 @@
-import { Alert, Platform } from 'react-native';
+import { Alert } from 'react-native';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -12,6 +12,6 @@ export const showToast = (message: string, type: ToastType = 'info', duration: n
   } else if (type === 'success') {
     Alert.alert('✅ نجاح', message);
   } else {
-    console.log(`[${type.toUpperCase()}] ${message}`);
+    console.log(`[${type.toUpperCase()}] ${message} (displayed for ${duration}ms)`);
   }
 };

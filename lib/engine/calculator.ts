@@ -21,6 +21,8 @@ import type {
   MadhhabType,
   CalculationResult,
   HeirShare,
+  MadhhabConfig,
+  MadhhabRules,
 } from "./types";
 import { HijabSystem } from "./hijab";
 
@@ -61,6 +63,24 @@ export class EnhancedInheritanceCalculationEngine {
     name: string;
     description: string;
   }> = [];
+  private memo: {
+    hasDescendants?: boolean;
+    fullSiblingsCount?: number;
+    maternalSiblingsCount?: number;
+    fullAndPaternalSiblingsCount?: number;
+    isMusharraka?: boolean;
+    isAkdariyya?: boolean;
+  } = {};
+
+  private static readonly madhabConfigCache = new Map<
+    MadhhabType,
+    MadhhabConfig | null
+  >();
+  private static readonly madhabRuleCache = new Map<
+    string,
+    MadhhabRules[keyof MadhhabRules] | undefined
+  >();
+
   private state: EngineState = {
     blockedHeirs: [],
     hijabTypes: [],
@@ -80,7 +100,7 @@ export class EnhancedInheritanceCalculationEngine {
       will: estate.will || 0,
     };
     this.heirs = this.normalizeHeirs(heirs);
-    this.hijabSystem = new HijabSystem(madhab);
+    this.hijabSystem = new HijabSystem();
   }
 
 
@@ -95,168 +115,38 @@ export class EnhancedInheritanceCalculationEngine {
 
 
   // ========== Rich step detail methods (added by automation) ==========
-  private addNetEstateStep(total: number, funeral: number, debts: number, will: number, net: number) {
-    this.addStep(
-      'صافي التركة',
-      `حساب صافي التركة بعد الخصومات`,
-      {
-        formula: `${total.toLocaleString()} - ${funeral.toLocaleString()} (تجهيز) - ${debts.toLocaleString()} (ديون) - ${will.toLocaleString()} (وصية) = ${net.toLocaleString()}`,
-        total: total.toLocaleString(),
-        funeral: funeral.toLocaleString(),
-        debts: debts.toLocaleString(),
-        will: will.toLocaleString(),
-        net: net.toLocaleString()
-      },
-      'estate'
-    );
-  }
 
-  private addHijabStep(blockedHeirs: any[]) {
-    if (blockedHeirs.length === 0) {
-      this.addStep('نتيجة الحجب', 'لا يوجد ورثة محجوبون', null, 'hijab');
-    } else {
-      this.addStep(
-        'نتيجة الحجب',
-        `تم حجب ${blockedHeirs.length} وارث`,
-        {
-          blocked: blockedHeirs.map(b => ({
-            heir: this.getHeirName(b.heir),
-            reason: b.reason
-          }))
-        },
-        'hijab'
-      );
+  private getMadhabConfig(): MadhhabConfig | null {
+    const cached = EnhancedInheritanceCalculationEngine.madhabConfigCache.get(
+      this.madhab,
+    );
+    if (cached !== undefined) {
+      return cached;
     }
+
+    const config = (FIQH_DATABASE.madhabs[this.madhab] as MadhhabConfig) || null;
+    EnhancedInheritanceCalculationEngine.madhabConfigCache.set(this.madhab, config);
+    return config;
   }
 
-  private addFixedSharesStep(shares: HeirShareObject[]) {
-    this.addStep(
-      'حساب الفروض',
-      `تم تحديد ${shares.length} من أصحاب الفروض`,
-      {
-        shares: shares.map(s => ({
-          heir: s.name,
-          fraction: s.fraction.toString(),
-          reason: s.reason,
-          count: s.count
-        }))
-      },
-      'calculation'
+  private getMadhabRule<K extends keyof MadhhabRules>(
+    ruleKey: K,
+  ): MadhhabRules[K] | undefined {
+    const cacheKey = `${this.madhab}:${ruleKey}`;
+    const cached = EnhancedInheritanceCalculationEngine.madhabRuleCache.get(
+      cacheKey,
     );
-  }
-
-  private addRemainderStep(totalFixed: FractionClass, remainder: FractionClass) {
-    this.addStep(
-      'حساب الباقي',
-      `بعد الفروض: ${remainder.toArabicName()} (${remainder.toDecimal().toFixed(4)})`,
-      {
-        totalFixed: totalFixed.toString(),
-        remainder: remainder.toString(),
-        remainderDecimal: remainder.toDecimal().toFixed(6)
-      },
-      'calculation'
-    );
-  }
-
-  private addAwlStep(asl: number, totalShares: number) {
-    this.addStep(
-      'العَوْل',
-      `عالت المسألة من ${asl} إلى ${totalShares}`,
-      {
-        originalBase: asl,
-        newBase: totalShares,
-        increase: ((totalShares - asl) / asl * 100).toFixed(1) + '%'
-      },
-      'warning'
-    );
-  }
-
-  private addAsabaStep(asabaShares: HeirShareObject[], remainder: FractionClass) {
-    if (asabaShares.length === 0) {
-      this.addStep('العصبات', 'لا باقي للعصبات (المسألة عادلة أو عائلة)', null, 'info');
-    } else {
-      this.addStep(
-        'توزيع العصبات',
-        `تم توزيع الباقي (${remainder.toArabicName()}) على ${asabaShares.length} عاصب`,
-        {
-          remainder: remainder.toString(),
-          asabaCount: asabaShares.length,
-          shares: asabaShares.map(s => ({
-            heir: s.name,
-            fraction: s.fraction.toString(),
-            weight: s.reason
-          }))
-        },
-        'calculation'
-      );
+    if (cached !== undefined) {
+      return cached as MadhhabRules[K];
     }
-  }
 
-  private addRaddStep(eligibleCount: number, remainder: FractionClass, totalFrac: FractionClass) {
-    this.addStep(
-      'الرَّد',
-      `توزيع الفائض (${remainder.toArabicName()}) على ${eligibleCount} من أصحاب الفروض`,
-      {
-        remainder: remainder.toString(),
-        eligibleCount: eligibleCount,
-        totalFixed: totalFrac.toString()
-      },
-      'calculation'
-    );
-  }
-
-  private addBloodRelativesStep(relatives: any[], remainder: FractionClass) {
-    this.addStep(
-      'ذوو الأرحام',
-      `توزيع الباقي (${remainder.toArabicName()}) على ${relatives.length} من ذوي الأرحام`,
-      {
-        remainder: remainder.toString(),
-        relatives: relatives.map(r => ({
-          name: r.name,
-          count: r.count,
-          priority: r.priority
-        }))
-      },
-      'calculation'
-    );
-  }
-
-  private addSpecialCaseStep(type: string, name: string, description: string) {
-    this.addStep(
-      name,
-      description,
-      { type },
-      'special'
-    );
-  }
-
-  private getHeirName(key: string): string {
-    const names: Record<string, string> = {
-      husband: 'الزوج',
-      wife: 'الزوجة',
-      father: 'الأب',
-      mother: 'الأم',
-      grandfather: 'الجد',
-      grandmother_mother: 'الجدة لأم',
-      grandmother_father: 'الجدة لأب',
-      son: 'الابن',
-      daughter: 'البنت',
-      grandson: 'ابن الابن',
-      granddaughter: 'بنت الابن',
-      full_brother: 'الأخ الشقيق',
-      full_sister: 'الأخت الشقيقة',
-      paternal_brother: 'الأخ لأب',
-      paternal_sister: 'الأخت لأب',
-      maternal_brother: 'الأخ لأم',
-      maternal_sister: 'الأخت لأم',
-      shared_siblings: 'الإخوة لأم والأشقاء'
-    };
-    return names[key] || key;
+    const ruleValue = this.getMadhabConfig()?.rules?.[ruleKey];
+    EnhancedInheritanceCalculationEngine.madhabRuleCache.set(cacheKey, ruleValue);
+    return ruleValue;
   }
   // ========== End of rich step methods ==========
   calculate(): CalculationResult {
     const startTime = performance.now();
-    const steps: string[] = [];
 
     try {
       const validation = this.validateInput();
@@ -476,10 +366,16 @@ export class EnhancedInheritanceCalculationEngine {
   }
 
   private isMusharraka(): boolean {
-    // Musharraka is only recognized in Shafii madhab (and maybe others, but definitely not Maliki)
+    if (this.memo.isMusharraka !== undefined) {
+      return this.memo.isMusharraka;
+    }
+
+    // Musharraka is only recognized in Shafii madhab
     if (this.madhab !== "shafii") {
+      this.memo.isMusharraka = false;
       return false;
     }
+
     const h = this.heirs;
     const hasHusband = (h.husband || 0) > 0;
     const hasMother = (h.mother || 0) > 0;
@@ -490,35 +386,18 @@ export class EnhancedInheritanceCalculationEngine {
     const noDescendants = !this.hasDescendants();
     const noFather = (h.father || 0) === 0;
     const noGrandfather = (h.grandfather || 0) === 0;
-    console.log("isMusharraka check:", {
-      hasHusband,
-      hasMother,
-      hasGrandmother,
-      hasMotherOrGrandmother,
-      maternalCount,
-      fullSiblingsExist,
-      noDescendants,
-      noFather,
-      noGrandfather,
-      result:
-        hasHusband &&
-        hasMotherOrGrandmother &&
-        maternalCount >= 2 &&
-        fullSiblingsExist &&
-        noDescendants &&
-        noFather &&
-        noGrandfather,
-    });
 
-    return (
+    const result =
       hasHusband &&
       hasMotherOrGrandmother &&
       maternalCount >= 2 &&
       fullSiblingsExist &&
       noDescendants &&
       noFather &&
-      noGrandfather
-    );
+      noGrandfather;
+
+    this.memo.isMusharraka = result;
+    return result;
   }
 
   private computeMusharraka(): HeirShareObject[] {
@@ -578,6 +457,10 @@ export class EnhancedInheritanceCalculationEngine {
   }
 
   private isAkdariyya(): boolean {
+    if (this.memo.isAkdariyya !== undefined) {
+      return this.memo.isAkdariyya;
+    }
+
     const h = this.heirs;
     const result =
       (h.husband || 0) > 0 &&
@@ -587,20 +470,12 @@ export class EnhancedInheritanceCalculationEngine {
       !this.hasDescendants() &&
       (h.father || 0) === 0 &&
       (h.full_brother || 0) === 0;
-    console.log("isAkdariyya:", result, {
-      husband: h.husband || 0,
-      mother: h.mother || 0,
-      grandfather: h.grandfather || 0,
-      full_sister: h.full_sister || 0,
-      hasDescendants: this.hasDescendants(),
-      father: h.father || 0,
-      full_brother: h.full_brother || 0,
-    });
+
+    this.memo.isAkdariyya = result;
     return result;
   }
 
   private computeAkdariyya(): HeirShareObject[] {
-    console.log("computeAkdariyya called");
     const shares: HeirShareObject[] = [];
 
     shares.push({
@@ -940,28 +815,10 @@ export class EnhancedInheritanceCalculationEngine {
 
     if (heirs.grandfather && heirs.grandfather > 0 && !heirs.father) {
       const siblingsCount = this.getFullAndPaternalSiblingsCount();
-      console.log(
-        "Grandfather block entered. siblingsCount:",
-        siblingsCount,
-        "madhab:",
-        this.madhab,
-      );
-
-      const madhabConfig = FIQH_DATABASE.madhabs[this.madhab];
       const shouldShare =
-        madhabConfig?.rules.grandfather_with_siblings === "musharak";
-
-      console.log("Madhab config from constants:", madhabConfig);
-      console.log(
-        "Rule value from config:",
-        madhabConfig?.rules.grandfather_with_siblings,
-      );
-      console.log("Should share based on rule?", shouldShare);
+        this.getMadhabRule("grandfather_with_siblings") === "musharak";
 
       if (siblingsCount > 0 && shouldShare) {
-        console.log("Entering sharing branch (muqasamah)");
-        console.log("heirs.full_brother:", heirs.full_brother);
-        console.log("heirs.full_sister:", heirs.full_sister);
         const totalHeadsCalc =
           2 +
           (heirs.full_brother || 0) * 2 +
@@ -1481,21 +1338,33 @@ export class EnhancedInheritanceCalculationEngine {
   }
 
   private getFullAndPaternalSiblingsCount(): number {
-    return (
+    if (this.memo.fullAndPaternalSiblingsCount !== undefined) {
+      return this.memo.fullAndPaternalSiblingsCount;
+    }
+
+    const value =
       (this.heirs.full_brother || 0) +
       (this.heirs.full_sister || 0) +
       (this.heirs.half_brother_paternal || 0) +
-      (this.heirs.half_sister_paternal || 0)
-    );
+      (this.heirs.half_sister_paternal || 0);
+
+    this.memo.fullAndPaternalSiblingsCount = value;
+    return value;
   }
 
   private hasDescendants(): boolean {
-    return (
+    if (this.memo.hasDescendants !== undefined) {
+      return this.memo.hasDescendants;
+    }
+
+    const result =
       (this.heirs.son || 0) > 0 ||
       (this.heirs.daughter || 0) > 0 ||
       (this.heirs.grandson || 0) > 0 ||
-      (this.heirs.granddaughter || 0) > 0
-    );
+      (this.heirs.granddaughter || 0) > 0;
+
+    this.memo.hasDescendants = result;
+    return result;
   }
 
   private isUmariyyah(heirs: HeirsData): boolean {
@@ -1518,12 +1387,24 @@ export class EnhancedInheritanceCalculationEngine {
   }
 
   private getMaternalSiblingsCount(): number {
+    if (this.memo.maternalSiblingsCount !== undefined) {
+      return this.memo.maternalSiblingsCount;
+    }
+
     const h = this.heirs;
-    return (h.maternal_brother || 0) + (h.maternal_sister || 0);
+    const value = (h.maternal_brother || 0) + (h.maternal_sister || 0);
+    this.memo.maternalSiblingsCount = value;
+    return value;
   }
 
   private getFullSiblingsCount(): number {
-    return (this.heirs.full_brother || 0) + (this.heirs.full_sister || 0);
+    if (this.memo.fullSiblingsCount !== undefined) {
+      return this.memo.fullSiblingsCount;
+    }
+
+    const value = (this.heirs.full_brother || 0) + (this.heirs.full_sister || 0);
+    this.memo.fullSiblingsCount = value;
+    return value;
   }
 
   private sumFractions(fractions: FractionClass[]): FractionClass {

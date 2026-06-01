@@ -1,10 +1,6 @@
-import type { Madhab } from './types';
-
 export class HijabSystem {
-  private _madhab: Madhab;
-
-  constructor(madhab: Madhab) {
-    this._madhab = madhab;
+  constructor() {
+    // Preserved constructor shape for future madhab-specific behavior.
   }
 
   applyHijab(heirs: Record<string, number | undefined>): { heirs: Record<string, number | undefined> } {
@@ -52,7 +48,7 @@ export class HijabSystem {
   }
 }
 export function applyHijab(heirs: any[]) {
-  const system = new HijabSystem("hanafi");
+  const system = new HijabSystem();
   const heirsRecord: Record<string, number | undefined> = {};
   heirs.forEach((h: any) => { if (h.count > 0) heirsRecord[h.type] = h.count; });
   const result = system.applyHijab(heirsRecord);

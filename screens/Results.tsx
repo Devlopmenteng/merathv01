@@ -19,14 +19,14 @@ import { calculateInheritance } from '../lib/engine/calculator';
 import { LinearGradient } from 'expo-linear-gradient';
 import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { ExportBar } from '../components/ExportBar';
 import { ResultsSkeleton } from '../components/SkeletonCard';
 import { Button } from '../components/ui/Button';
-import { PieChart } from '../components/PieChart';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import * as Clipboard from 'expo-clipboard';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
+
+const ExportBar = React.lazy(() => import('../components/ExportBar').then((module) => ({ default: module.ExportBar })));
+const PieChart = React.lazy(() => import('../components/PieChart').then((module) => ({ default: module.PieChart })));
 import type { CalculationResult, EstateInput } from '../lib/engine/types';
 
 type ChartDataItem = {
@@ -158,16 +158,6 @@ export const Results = ({ navigation }: { navigation: any }) => {
     else await Sharing.shareAsync(uri);
   }, [isPremium, result, state.madhab]);
 
-  const copyAsText = useCallback(async () => {
-    if (!result) return;
-    let text = `Net Estate: $${result.netEstate}\n\n`;
-    result.shares.forEach((s) => {
-      text += `${s.name}: $${s.amount.toFixed(2)} (${s.fraction?.numerator}/${s.fraction?.denominator})\n`;
-    });
-    await Clipboard.setStringAsync(text);
-    Alert.alert('Copied', 'Results copied to clipboard');
-  }, [result]);
-
   const confidenceColor =
     result?.confidence ?? 0 >= 70
       ? theme.colors.success
@@ -175,9 +165,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
       ? theme.colors.warning
       : theme.colors.error;
 
-  if (loading || !result) return <ResultsSkeleton />;
-
-  const renderSpecialCases = () => {
+  const specialCaseElements = useMemo(() => {
     if (!result) return null;
     const cases = [];
     if (result.awlApplied) cases.push({ name: "العول", desc: "تم تطبيق العول لزيادة أصل المسألة" });
@@ -193,11 +181,46 @@ export const Results = ({ navigation }: { navigation: any }) => {
         ))}
       </View>
     );
-  };
+  }, [result, theme.colors.primaryLight, theme.colors.primary]);
+
+  const distributionRows = useMemo(() => {
+    if (!result) return null;
+    return result.shares.map((share, idx) => {
+      const color = chartData[idx]?.color;
+      const percentage = ((share.amount / (result.netEstate ?? 1)) * 100).toFixed(2);
+      return (
+        <View
+          key={idx}
+          style={{
+            flexDirection: "row",
+            backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
+            borderRadius: theme.radius.sm,
+            paddingVertical: 8,
+            marginBottom: 4,
+          }}
+        >
+          <View style={{ width: 100, paddingHorizontal: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
+            <Text>{share.name}</Text>
+          </View>
+          <Text style={{ width: 60, textAlign: "center" }}>{share.count}</Text>
+          <Text style={{ width: 80, textAlign: "center" }}>{share.type}</Text>
+          <Text style={{ width: 80, textAlign: "center" }}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ""}</Text>
+          <Text style={{ width: 80, textAlign: "center" }}>{percentage}%</Text>
+          <Text style={{ width: 100, textAlign: "center", fontWeight: "bold", color: theme.colors.primary }}>
+            {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
+          </Text>
+        </View>
+      );
+    });
+  }, [result, chartData, showPercentage, theme.colors.surface, theme.colors.surfaceVariant, theme.colors.primary, theme.radius.sm]);
+
+  if (loading || !result) return <ResultsSkeleton />;
 
   return (
-    <ExportBar resultData={result}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 150 }}>
+    <React.Suspense fallback={<ResultsSkeleton />}>
+      <ExportBar resultData={result}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 150 }}>
         <LinearGradient
           colors={[theme.colors.primary, theme.colors.primaryDark || '#0A5E4A']}
           start={{ x: 0, y: 0 }}
@@ -239,7 +262,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
         <Text style={theme.typography.caption}>{t('confidence')}</Text>
 
-        {renderSpecialCases()}
+        {specialCaseElements}
 
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginVertical: 12 }}>
           <Text style={{ marginEnd: 8 }}>{t('fractions')}</Text>
@@ -260,34 +283,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
               <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("percentage")}</Text>
               <Text style={{ width: 100, fontWeight: "bold", textAlign: "center" }}>{t("amount")}</Text>
             </View>
-            {result.shares.map((share, idx) => {
-              const color = chartData[idx]?.color;
-              const percentage = ((share.amount / (result.netEstate ?? 1)) * 100).toFixed(2);
-              return (
-                <View
-                  key={idx}
-                  style={{
-                    flexDirection: "row",
-                    backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
-                    borderRadius: theme.radius.sm,
-                    paddingVertical: 8,
-                    marginBottom: 4,
-                  }}
-                >
-                  <View style={{ width: 100, paddingHorizontal: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
-                    <Text>{share.name}</Text>
-                  </View>
-                  <Text style={{ width: 60, textAlign: "center" }}>{share.count}</Text>
-                  <Text style={{ width: 80, textAlign: "center" }}>{share.type}</Text>
-                  <Text style={{ width: 80, textAlign: "center" }}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ""}</Text>
-                  <Text style={{ width: 80, textAlign: "center" }}>{percentage}%</Text>
-                  <Text style={{ width: 100, textAlign: "center", fontWeight: "bold", color: theme.colors.primary }}>
-                    {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
-                  </Text>
-                </View>
-              );
-            })}
+            {distributionRows}
           </View>
         </ScrollView><TouchableOpacity
           onPress={() => setShowSteps(!showSteps)}
@@ -333,5 +329,6 @@ export const Results = ({ navigation }: { navigation: any }) => {
         </ScrollView>
       </ScrollView>
     </ExportBar>
+  </React.Suspense>
   );
 };

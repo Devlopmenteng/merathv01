@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, FlatList } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';

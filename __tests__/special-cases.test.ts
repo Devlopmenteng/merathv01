@@ -3,7 +3,7 @@
  * Comprehensive testing for Musharraka, Akdariyya, and Grandfather with siblings
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { InheritanceCalculationEngine } from "../lib/inheritance";
 import type { EstateData, HeirsData } from "../lib/engine/types";
 
