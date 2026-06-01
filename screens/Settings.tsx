@@ -1,32 +1,37 @@
 import { Button } from "../components/ui/Button";
 import { usePremium } from '../lib/context/PremiumContext';
 import { getCalculationCount } from '../lib/services/UsageStats';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SupportButton } from '../components/SupportButton';
 import { FeedbackButton } from '../components/FeedbackButton';
 import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { initI18n, i18n, t } from '../lib/i18n';
+import { useLanguage } from '../lib/context/LanguageContext';
+import { t } from '../lib/i18n';
 import { showAlert } from '../lib/utils/alerts';
 
-export const Settings = ({ navigation }: any) => {
+type SettingsNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => {
   const { isPremium, togglePremium } = usePremium();
   const [calcCount, setCalcCount] = useState(0);
-  const [locale, setLocale] = useState(i18n.locale);
+  const { locale, changeLocale } = useLanguage();
   
   useEffect(() => { getCalculationCount().then(setCalcCount); }, []);
   const { isDark, toggleTheme } = useTheme();
   const theme = useAppTheme();
 
-  const changeLanguage = (lang: string) => {
-    const needsReload = initI18n(lang);
-    setLocale(lang);
+  const changeLanguage = useCallback(async (lang: string) => {
+    if (lang === locale) return;
+    const needsReload = await changeLocale(lang);
     if (needsReload) {
       showAlert(t('language_changed'), t('restart_required'));
     }
-  };
+  }, [changeLocale, locale]);
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>

@@ -1,4 +1,5 @@
 import { EnhancedInheritanceCalculationEngine } from '../engine/calculator';
+import { APP_DEFAULTS } from '../constants/appDefaults';
 import { EstateInput, HeirEntry, HeirsData, MadhhabType, CalculationResult } from '../engine/types';
 
 export interface CalculateInheritanceInput {
@@ -23,13 +24,13 @@ export function calculateInheritance(input: CalculateInheritanceInput): Calculat
     };
 
     const heirs: HeirEntry[] = input.heirs ?? [];
-    const heirsRecord: HeirsData = {};
-    heirs.forEach((h) => {
-      if (h.count > 0) heirsRecord[h.type] = h.count;
-    });
+    const heirsRecord: HeirsData = heirs.reduce<HeirsData>((acc, heir) => {
+      if (heir.count > 0) acc[heir.type] = heir.count;
+      return acc;
+    }, {});
 
     const engine = new EnhancedInheritanceCalculationEngine(
-      input.madhab ?? 'hanafi',
+      input.madhab ?? APP_DEFAULTS.DEFAULT_MADHAB,
       estate,
       heirsRecord,
     );

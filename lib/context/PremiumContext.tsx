@@ -26,14 +26,21 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
       .finally(() => setIsReady(true));
   }, []);
 
-  const togglePremium = () => {
-    const next = !isPremium;
-    setIsPremium(next);
-    AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM, next ? 'true' : 'false');
-  };
+  const togglePremium = React.useCallback(() => {
+    setIsPremium((current) => {
+      const next = !current;
+      AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM, next ? 'true' : 'false');
+      return next;
+    });
+  }, []);
+
+  const value = React.useMemo(
+    () => ({ isPremium, isReady, togglePremium }),
+    [isPremium, isReady, togglePremium],
+  );
 
   return (
-    <PremiumContext.Provider value={{ isPremium, isReady, togglePremium }}>
+    <PremiumContext.Provider value={value}>
       {children}
     </PremiumContext.Provider>
   );

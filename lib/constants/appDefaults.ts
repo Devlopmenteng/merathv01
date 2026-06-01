@@ -18,6 +18,7 @@ export const APP_DEFAULTS = {
     AUDIT_TRAIL: 'merath_audit_trail',
     PREMIUM: 'merath_premium',
     THEME_PREFERENCE: 'theme_preference',
+    LANGUAGE_PREFERENCE: 'language_preference',
     TUTORIAL_SEEN: 'merath_tutorial_seen',
     TOOLTIP_SEEN: 'merath_tooltip_seen',
     HISTORY: 'merath_history',

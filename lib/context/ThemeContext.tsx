@@ -101,15 +101,18 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, []);
 
-  const theme = {
-    colors: isDark ? darkColors : lightColors,
-    spacing,
-    radius,
-    typography,
-  };
+  const theme = React.useMemo(
+    () => ({ colors: isDark ? darkColors : lightColors, spacing, radius, typography }),
+    [isDark],
+  );
+
+  const value = React.useMemo(
+    () => ({ isDark, toggleTheme, theme }),
+    [isDark, toggleTheme, theme],
+  );
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme, theme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
