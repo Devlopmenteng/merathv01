@@ -4,12 +4,12 @@ import { getCalculationCount } from '../lib/services/UsageStats';
 import { useState, useEffect } from 'react';
 import { SupportButton } from '../components/SupportButton';
 import { FeedbackButton } from '../components/FeedbackButton';
-import { t } from '../lib/i18n';
 import React from 'react';
-import { View, Text, Switch, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Switch, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { initI18n, i18n } from '../lib/i18n';
+import { initI18n, i18n, t } from '../lib/i18n';
+import { showAlert } from '../lib/utils/alerts';
 
 export const Settings = ({ navigation }: any) => {
   const { isPremium, togglePremium } = usePremium();
@@ -24,7 +24,7 @@ export const Settings = ({ navigation }: any) => {
     const needsReload = initI18n(lang);
     setLocale(lang);
     if (needsReload) {
-      Alert.alert(t('language_changed'), t('restart_required'));
+      showAlert(t('language_changed'), t('restart_required'));
     }
   };
 

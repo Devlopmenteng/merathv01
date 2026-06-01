@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_DEFAULTS } from '../lib/constants/appDefaults';
+import { t } from '../lib/i18n';
 import { useAppTheme } from '../hooks/useAppTheme';
 
 export const OnboardingTooltip = () => {
@@ -8,13 +10,13 @@ export const OnboardingTooltip = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_tooltip_seen').then(val => {
+    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.TOOLTIP_SEEN).then(val => {
       if (!val) setVisible(true);
     });
   }, []);
 
   const dismiss = () => {
-    AsyncStorage.setItem('merath_tooltip_seen', 'true');
+    AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.TOOLTIP_SEEN, 'true');
     setVisible(false);
   };
 
@@ -23,9 +25,9 @@ export const OnboardingTooltip = () => {
   return (
     <View style={styles.overlay}>
       <View style={[styles.tooltip, { backgroundColor: theme.colors.surface }]}>
-        <Text style={theme.typography.body}>Tap the categories to add family members. Use the steppers to set their count.</Text>
+        <Text style={theme.typography.body}>{t('tap_the_categories_to_add_family_members_use_the_steppers_to_set_their_count')}</Text>
         <TouchableOpacity accessibilityLabel="Button" onPress={dismiss} style={{ marginTop: 12, alignSelf: 'flex-end' }}>
-          <Text style={{ color: theme.colors.primary }}>Got it</Text>
+          <Text style={{ color: theme.colors.primary }}>{t('got_it')}</Text>
         </TouchableOpacity>
       </View>
     </View>

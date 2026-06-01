@@ -11,12 +11,12 @@ import {
   TouchableOpacity,
   Animated,
   Switch,
-  Alert,
   Platform,
 } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
 import { LinearGradient } from 'expo-linear-gradient';
+import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { ResultsSkeleton } from '../components/SkeletonCard';
@@ -71,10 +71,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
   useEffect(() => {
     if (!hasSpouse) {
-      Alert.alert(
+      showAlert(
         'تنبيه',
         'لم يتم تحديد زوج أو زوجة. إذا كان المتوفى متزوجاً، يرجى إضافة الزوج/الزوجة في شاشة الورثة.\n\nيمكنك متابعة الحساب إذا كان المتوفى أعزباً.',
-        [{ text: 'موافق', style: 'default' }],
       );
     }
   }, [hasSpouse]);

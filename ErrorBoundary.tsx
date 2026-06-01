@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showAlert } from './lib/utils/alerts';
 
 interface Props { children: ReactNode; }
 interface State { hasError: boolean; error: Error | null; }
@@ -12,7 +13,7 @@ export class ErrorBoundary extends Component<Props, State> {
   handleReset = async () => {
     try {
       await AsyncStorage.clear();
-      Alert.alert('تم إعادة التعيين', 'سيتم إعادة تشغيل التطبيق. اضغط موافق.');
+      showAlert('تم إعادة التعيين', 'سيتم إعادة تشغيل التطبيق. اضغط موافق.');
       // Reload the app (works in Expo)
       // @ts-ignore
       if (global?.Expo?.reloadApp) global.Expo.reloadApp();

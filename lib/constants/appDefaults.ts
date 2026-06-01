@@ -19,6 +19,8 @@ export const APP_DEFAULTS = {
     PREMIUM: 'merath_premium',
     THEME_PREFERENCE: 'theme_preference',
     TUTORIAL_SEEN: 'merath_tutorial_seen',
+    TOOLTIP_SEEN: 'merath_tooltip_seen',
+    HISTORY: 'merath_history',
     CALC_COUNT: 'merath_calc_count',
   },
 

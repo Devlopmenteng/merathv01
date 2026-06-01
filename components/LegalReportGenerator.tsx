@@ -1,6 +1,7 @@
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { Platform, Alert } from 'react-native';
+import { Platform } from 'react-native';
+import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
 
 export async function generateLegalReport(result: any, madhab: string) {
@@ -65,6 +66,6 @@ export async function generateLegalReport(result: any, madhab: string) {
   if (Platform.OS === 'android' && await Sharing.isAvailableAsync()) {
     await Sharing.shareAsync(uri);
   } else {
-    Alert.alert('تم حفظ التقرير', `تم حفظ التقرير في: ${uri}`);
+    showAlert('تم حفظ التقرير', `تم حفظ التقرير في: ${uri}`);
   }
 }
