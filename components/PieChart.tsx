@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { View, Text, Animated } from 'react-native';
 import Svg, { Path, G, Text as SvgText } from 'react-native-svg';
 
@@ -16,37 +16,44 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} L ${cx} ${cy}`;
 };
 
-export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number }) => {
-  const total = data.reduce((sum, d) => sum + d.value, 0);
+const AnimatedPath = Animated.createAnimatedComponent(Path);
+
+export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; size?: number }) => {
+  const total = useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
   const animValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animValue, { toValue: 1, duration: 800, useNativeDriver: false }).start();
-  }, [data]);
+  }, [data, animValue]);
 
-  if (total === 0) return null;
-
-  let cumulativeAngle = 0;
-  const AnimatedPath = Animated.createAnimatedComponent(Path);
   const center = size / 2;
   const radius = size / 2 - 10;
+
+  const segments = useMemo(() => {
+    let cumulativeAngle = 0;
+    return data.map((item) => {
+      const valueAngle = total > 0 ? (item.value / total) * 360 : 0;
+      const segment = {
+        ...item,
+        startAngle: cumulativeAngle,
+        endAngle: cumulativeAngle + valueAngle,
+      };
+      cumulativeAngle += valueAngle;
+      return segment;
+    });
+  }, [data, total]);
+
+  if (total === 0) return null;
 
   return (
     <View style={{ alignItems: 'center', marginVertical: 16 }}>
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {data.map((item, idx) => {
-          const angle = (item.value / total) * 360;
-          const startAngle = cumulativeAngle;
-          const endAngle = cumulativeAngle + angle;
-          const path = describeArc(center, center, radius, startAngle, endAngle);
-          cumulativeAngle += angle;
-
-          const midAngle = startAngle + angle / 2;
+        {segments.map((item, idx) => {
+          const path = describeArc(center, center, radius, item.startAngle, item.endAngle);
+          const midAngle = item.startAngle + (item.endAngle - item.startAngle) / 2;
           const labelRadius = radius * 0.6;
           const labelPos = polarToCartesian(center, center, labelRadius, midAngle);
-          const fractionText = item.fraction || '';
-          const showLabel = angle > 15 && fractionText;
-
+          const showLabel = item.endAngle - item.startAngle > 15 && item.fraction;
           return (
             <G key={idx}>
               <AnimatedPath d={path} fill={item.color} stroke="#fff" strokeWidth={2} opacity={animValue} />
@@ -61,7 +68,7 @@ export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number 
                   stroke="rgba(0,0,0,0.3)"
                   strokeWidth={0.5}
                 >
-                  {fractionText}
+                  {item.fraction}
                 </SvgText>
               )}
             </G>
@@ -78,4 +85,4 @@ export const PieChart = ({ data, size = 200 }: { data: PieData[]; size?: number 
       </View>
     </View>
   );
-};
+});

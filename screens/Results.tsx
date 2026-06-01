@@ -1,9 +1,9 @@
-import { t } from "../lib/i18n";
-import { heirsArrayToObject } from "../lib/utils/heirsConverter";
+import { t } from '../lib/i18n';
+import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { incrementCalculationCount } from '../lib/services/UsageStats';
 import { usePremium } from '../lib/context/PremiumContext';
 import { generateLegalReport } from '../components/LegalReportGenerator';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
-import { LinearGradient } from "expo-linear-gradient";
-import { formatCurrency } from "../lib/utils/currency";
+import { LinearGradient } from 'expo-linear-gradient';
+import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { ExportBar } from '../components/ExportBar';
 import { ResultsSkeleton } from '../components/SkeletonCard';
@@ -65,21 +65,22 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const [showSteps, setShowSteps] = useState(false);
   const savedRef = useRef(false);
 
+  const heirsObject = useMemo(() => heirsArrayToObject(state.heirs), [state.heirs]);
+  const hasSpouse = (heirsObject.husband || 0) > 0 || (heirsObject.wife || 0) > 0;
+  const hasNoHeirs = Object.keys(heirsObject).length === 0;
 
-  
-
-  
-  // Warning if no spouse selected
   useEffect(() => {
-    const heirsObj = heirsArrayToObject(state.heirs);
-    const hasHusband = (heirsObj.husband || 0) > 0;
-    const hasWife = (heirsObj.wife || 0) > 0;
-    if (!hasHusband && !hasWife) {
-      Alert.alert("تنبيه", "لم يتم تحديد زوج أو زوجة. إذا كان المتوفى متزوجاً، يرجى إضافة الزوج/الزوجة في شاشة الورثة.\n\nيمكنك متابعة الحساب إذا كان المتوفى أعزباً.", [{ text: "موافق", style: "default" }]);
+    if (!hasSpouse) {
+      Alert.alert(
+        'تنبيه',
+        'لم يتم تحديد زوج أو زوجة. إذا كان المتوفى متزوجاً، يرجى إضافة الزوج/الزوجة في شاشة الورثة.\n\nيمكنك متابعة الحساب إذا كان المتوفى أعزباً.',
+        [{ text: 'موافق', style: 'default' }],
+      );
     }
-  }, [state.heirs]);
+  }, [hasSpouse]);
+
   const chartData = useMemo<ChartDataItem[]>(() => {
-    const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#F7DC6F", "#96CEB4", "#FFB347", "#6B5B95", "#88B04B"];
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F7DC6F', '#96CEB4', '#FFB347', '#6B5B95', '#88B04B'];
     if (!result) return [];
     return result.shares.map((s, idx) => ({
       label: s.name,
@@ -99,11 +100,11 @@ export const Results = ({ navigation }: { navigation: any }) => {
       will: state.will,
     };
 
-    const res = calculateInheritance(state.madhab as any, estate, heirsArrayToObject(state.heirs));
+    const res = calculateInheritance(state.madhab as any, estate, heirsObject);
     let confidence = 100;
 
     if ((res.netEstate ?? 0) <= 0) confidence -= 50;
-    if (heirsArrayToObject(state.heirs).length === 0) confidence -= 30;
+    if (hasNoHeirs) confidence -= 30;
 
     const safeResult: CalculationResult = {
       ...res,
@@ -117,19 +118,19 @@ export const Results = ({ navigation }: { navigation: any }) => {
     if (!savedRef.current) {
       savedRef.current = true;
       saveAuditTrail({
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      madhab: state.madhab,
-      netTotal: safeResult.netEstate ?? 0,
-      shares: safeResult.shares,
-      caseName: caseName,
-      caseDate: caseDate,
-      steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
-    }).catch(() => {});
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString(),
+        madhab: state.madhab,
+        netTotal: safeResult.netEstate ?? 0,
+        shares: safeResult.shares,
+        caseName: caseName,
+        caseDate: caseDate,
+        steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
+      }).catch(() => {});
     }
-  }, [state.madhab, state.total, state.funeral, state.debts, state.will, heirsArrayToObject(state.heirs)]);
+  }, [state.madhab, state.total, state.funeral, state.debts, state.will, heirsObject, hasNoHeirs, caseName, caseDate]);
 
-  const generatePDF = async () => {
+  const generatePDF = useCallback(async () => {
     if (!result) return;
     if (isPremium) {
       await generateLegalReport(result, state.madhab);
@@ -155,9 +156,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
     const { uri } = await Print.printToFileAsync({ html });
     if (Platform.OS === 'web') window.open(uri);
     else await Sharing.shareAsync(uri);
-  };
+  }, [isPremium, result, state.madhab]);
 
-  const copyAsText = async () => {
+  const copyAsText = useCallback(async () => {
     if (!result) return;
     let text = `Net Estate: $${result.netEstate}\n\n`;
     result.shares.forEach((s) => {
@@ -165,7 +166,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
     });
     await Clipboard.setStringAsync(text);
     Alert.alert('Copied', 'Results copied to clipboard');
-  };
+  }, [result]);
 
   const confidenceColor =
     result?.confidence ?? 0 >= 70
