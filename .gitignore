@@ -56,3 +56,75 @@ yarn-error.*
 # EAS local builds
 .eas/
 *.backup*
+# dependencies
+node_modules/
+
+# Expo / build outputs
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.eas/
+*.apk
+*.aab
+*.tar.gz
+
+# Native generated folders
+/ios
+/android
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS files
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Temporary / backup files (scripts, backups, temporary outputs)
+*.sh
+*.py
+*.tmp
+*.bak
+*.backup
+
+# Markdown files except README.md
+*.md
+!README.md
+
+# Unnecessary configuration files (keep only essential)
+.easignore
+.gitignore
+.eslintignore
+.eslintrc.json
+prettierrc
+eslint.config.js
+vitest.config.ts
+localize_merath_fixed.py
+
+# Support / docs folder (if any)
+support-documents/
+
+# Engine backup folders (from previous refactors)
+lib/engine.bak.*/
+
+# IDE / editor folders
+.vscode/
+.idea/

@@ -1,25 +1,79 @@
-# Shell scripts (build helpers, temporary scripts)
-*.sh
+# dependencies
+node_modules/
 
-# Markdown files except README.md
+# Expo / build outputs
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.eas/
+*.apk
+*.aab
+*.tar.gz
+
+# Native generated folders
+/ios
+/android
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS files
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Temporary / backup files (all scripts and backups)
+*.sh
+*.py
+*.tmp
+*.bak
+*.backup
+*.backup*
+
+# Markdown files except README.md (for EAS we can exclude even README.md – optional)
 *.md
 !README.md
 
-# Support/documents folder
-support-documents/
-
-# Temporary files from previous builds
-.eas/
-.expo/
-
-# Unnecessary configuration files
+# Unnecessary config files (EAS does not need them)
 .easignore
 .gitignore
 .eslintignore
+.eslintrc.json
+prettierrc
+eslint.config.js
+vitest.config.ts
+localize_merath_fixed.py
 
-# IDE/editor files (if any)
+# Support / docs folder
+support-documents/
+
+# Engine backup folders
+lib/engine.bak.*/
+
+# Test folders – safe to exclude from build
+__tests__/
+
+# IDE folders
 .vscode/
 .idea/
 
-# Backup engine folders
-lib/engine.bak.*/
+# Git metadata
+.git/
