@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { View, Text, Animated } from 'react-native';
+import { View, Text, Animated, StyleSheet } from 'react-native';
 import Svg, { Path, G, Text as SvgText } from 'react-native-svg';
+import { useAppTheme } from '../hooks/useAppTheme';
 
 type PieData = { label: string; value: number; color: string; fraction?: string };
 
@@ -18,7 +19,14 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
+// Color-blind friendly palette
+const COLOR_PALETTE = [
+  '#FF6B6B', '#4ECDC4', '#45B7D1', '#F7DC6F', '#96CEB4', '#FFB347', '#6B5B95', '#88B04B',
+  '#D4A5A5', '#9B59B6', '#3498DB', '#E67E22', '#2ECC71', '#E74C3C', '#1ABC9C', '#F39C12',
+];
+
 export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; size?: number }) => {
+  const theme = useAppTheme();
   const total = useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
   const animValue = useRef(new Animated.Value(0)).current;
 
@@ -31,10 +39,11 @@ export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; siz
 
   const segments = useMemo(() => {
     let cumulativeAngle = 0;
-    return data.map((item) => {
+    return data.map((item, idx) => {
       const valueAngle = total > 0 ? (item.value / total) * 360 : 0;
       const segment = {
         ...item,
+        color: item.color || COLOR_PALETTE[idx % COLOR_PALETTE.length],
         startAngle: cumulativeAngle,
         endAngle: cumulativeAngle + valueAngle,
       };
@@ -46,43 +55,77 @@ export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; siz
   if (total === 0) return null;
 
   return (
-    <View style={{ alignItems: 'center', marginVertical: 16 }}>
+    <View style={styles.container}>
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         {segments.map((item, idx) => {
           const path = describeArc(center, center, radius, item.startAngle, item.endAngle);
           const midAngle = item.startAngle + (item.endAngle - item.startAngle) / 2;
-          const labelRadius = radius * 0.6;
+          const labelRadius = radius * 0.65;
           const labelPos = polarToCartesian(center, center, labelRadius, midAngle);
-          const showLabel = item.endAngle - item.startAngle > 15 && item.fraction;
+          const percentage = ((item.value / total) * 100).toFixed(1);
+          const showLabel = item.endAngle - item.startAngle > 15;
           return (
             <G key={idx}>
-              <AnimatedPath d={path} fill={item.color} stroke="#fff" strokeWidth={2} opacity={animValue} />
+              <AnimatedPath d={path} fill={item.color} stroke={theme.colors.surface} strokeWidth={2} opacity={animValue} />
               {showLabel && (
                 <SvgText
                   x={labelPos.x}
                   y={labelPos.y}
                   fill="#fff"
-                  fontSize={12}
+                  fontSize={10}
                   fontWeight="bold"
                   textAnchor="middle"
                   stroke="rgba(0,0,0,0.3)"
                   strokeWidth={0.5}
                 >
-                  {item.fraction}
+                  {percentage}%
                 </SvgText>
               )}
             </G>
           );
         })}
       </Svg>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 8 }}>
-        {data.map((item, idx) => (
-          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 8, marginBottom: 4 }}>
-            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: item.color, marginRight: 4 }} />
-            <Text style={{ fontSize: 12 }}>{item.label}</Text>
-          </View>
-        ))}
+      <View style={styles.legendContainer}>
+        {data.map((item, idx) => {
+          const percentage = ((item.value / total) * 100).toFixed(1);
+          return (
+            <View key={idx} style={styles.legendItem}>
+              <View style={[styles.legendColor, { backgroundColor: item.color }]} />
+              <Text style={[styles.legendText, { color: theme.colors.onSurface }]}>
+                {item.label}: {percentage}%
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </View>
   );
+});
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 12,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
+    marginBottom: 6,
+  },
+  legendColor: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 6,
+  },
+  legendText: {
+    fontSize: 12,
+  },
 });

@@ -1,3 +1,4 @@
+import { StepIndicator } from "../components/StepIndicator";
 import { t } from '../lib/i18n';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { incrementCalculationCount } from '../lib/services/UsageStats';
@@ -19,8 +20,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useResponsive } from '../hooks/useResponsive';
 import { ResultsSkeleton } from '../components/SkeletonCard';
-import { Button } from '../components/ui/Button';
+import { StepTimeline } from '../components/StepTimeline';
+import { StickyBottomBar } from '../components/StickyBottomBar';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
@@ -59,6 +62,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const { isPremium } = usePremium();
   const { state, caseName, caseDate } = useCalc();
   const theme = useAppTheme();
+  const { isTablet } = useResponsive();
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPercentage, setShowPercentage] = useState(false);
@@ -195,15 +199,15 @@ export const Results = ({ navigation }: { navigation: any }) => {
             marginBottom: 4,
           }}
         >
-          <View style={{ width: 100, paddingHorizontal: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <View style={{ width: isTablet ? 130 : 100, paddingHorizontal: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
             <Text>{share.name}</Text>
           </View>
-          <Text style={{ width: 60, textAlign: "center" }}>{share.count}</Text>
-          <Text style={{ width: 80, textAlign: "center" }}>{share.type}</Text>
-          <Text style={{ width: 80, textAlign: "center" }}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ""}</Text>
-          <Text style={{ width: 80, textAlign: "center" }}>{percentage}%</Text>
-          <Text style={{ width: 100, textAlign: "center", fontWeight: "bold", color: theme.colors.primary }}>
+          <Text style={{ width: isTablet ? 80 : 60, textAlign: "center" }}>{share.count}</Text>
+          <Text style={{ width: isTablet ? 100 : 80, textAlign: "center" }}>{share.type}</Text>
+          <Text style={{ width: isTablet ? 100 : 80, textAlign: "center" }}>{share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ""}</Text>
+          <Text style={{ width: isTablet ? 100 : 80, textAlign: "center" }}>{percentage}%</Text>
+          <Text style={{ width: isTablet ? 130 : 100, textAlign: "center", fontWeight: "bold", color: theme.colors.primary }}>
             {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
           </Text>
         </View>
@@ -216,7 +220,8 @@ export const Results = ({ navigation }: { navigation: any }) => {
   return (
     <React.Suspense fallback={<ResultsSkeleton />}>
       <ExportBar resultData={result}>
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 150 }}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 200 }}>
+      <StepIndicator currentStep={3} steps={["step_estate","step_madhab","step_heirs","step_results"]} />
         <LinearGradient
           colors={[theme.colors.primary, theme.colors.primaryDark || '#0A5E4A']}
           start={{ x: 0, y: 0 }}
@@ -272,12 +277,12 @@ export const Results = ({ navigation }: { navigation: any }) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={true}>
           <View style={{ minWidth: "100%" }}>
             <View style={{ flexDirection: "row", borderBottomWidth: 2, borderColor: theme.colors.primary, paddingBottom: 8, marginBottom: 8 }}>
-              <Text style={{ width: 100, fontWeight: "bold", paddingHorizontal: 4 }}>{t("heir")}</Text>
-              <Text style={{ width: 60, fontWeight: "bold", textAlign: "center" }}>{t("count")}</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("type")}</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("share")}</Text>
-              <Text style={{ width: 80, fontWeight: "bold", textAlign: "center" }}>{t("percentage")}</Text>
-              <Text style={{ width: 100, fontWeight: "bold", textAlign: "center" }}>{t("amount")}</Text>
+              <Text style={{ width: isTablet ? 130 : 100, fontWeight: "bold", paddingHorizontal: 4 }}>{t("heir")}</Text>
+              <Text style={{ width: isTablet ? 80 : 60, fontWeight: "bold", textAlign: "center" }}>{t("count")}</Text>
+              <Text style={{ width: isTablet ? 100 : 80, fontWeight: "bold", textAlign: "center" }}>{t("type")}</Text>
+              <Text style={{ width: isTablet ? 100 : 80, fontWeight: "bold", textAlign: "center" }}>{t("share")}</Text>
+              <Text style={{ width: isTablet ? 100 : 80, fontWeight: "bold", textAlign: "center" }}>{t("percentage")}</Text>
+              <Text style={{ width: isTablet ? 130 : 100, fontWeight: "bold", textAlign: "center" }}>{t("amount")}</Text>
             </View>
             {distributionRows}
           </View>
@@ -290,40 +295,17 @@ export const Results = ({ navigation }: { navigation: any }) => {
           <Text style={{ fontSize: 16 }}>{showSteps ? '▲' : '▼'}</Text>
         </TouchableOpacity>
         {showSteps && (
-          <View style={{ backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.radius.md, padding: theme.spacing.md }}>
-            {result.steps.map((step, idx) => (
-              <View key={idx} style={{ marginBottom: idx < result.steps.length - 1 ? theme.spacing.md : 0, borderBottomWidth: idx < result.steps.length - 1 ? 1 : 0, borderColor: theme.colors.outline, paddingBottom: idx < result.steps.length - 1 ? theme.spacing.sm : 0 }}>
-                <Text style={{ fontWeight: 'bold', marginBottom: 4 }}>{step.title}</Text>
-                <Text style={{ fontSize: 12, color: theme.colors.onSurface }}>{step.description}</Text>
-                {step.details && (
-                  <View style={{ marginTop: 8, paddingTop: 4, borderTopWidth: 1, borderTopColor: theme.colors.outline }}>
-                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 2 }}>{t('details')}:</Text>
-                    {typeof step.details === 'object' ? (
-                      Object.entries(step.details).map(([key, val]) => (
-                        <Text key={key} style={{ fontSize: 10, color: theme.colors.onSurface, marginTop: 2 }}>
-                          {key}: {typeof val === 'object' ? JSON.stringify(val) : val}
-                        </Text>
-                      ))
-                    ) : (
-                      <Text style={{ fontSize: 10, color: theme.colors.onSurface }}>
-                        {JSON.stringify(step.details)}
-                      </Text>
-                    )}
-                  </View>
-                )}
-              </View>
-            ))}
-          </View>
-        )}
+        <View style={{ marginTop: theme.spacing.lg, marginBottom: theme.spacing.lg }}>
+          <StepTimeline steps={result.steps.map(step => ({ title: step.title, description: step.description }))} />
+        </View>
+      )}
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: theme.spacing.md, marginBottom: theme.spacing.md }}>
-          <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-            <Button title={t('compare')} onPress={() => navigation.navigate('Comparison')} mode="outlined" />
-            <Button title={t('history')} onPress={() => navigation.navigate('History')} mode="outlined" />
-            <Button title={t('settings')} onPress={() => navigation.navigate('Settings')} mode="outlined" />
-            <Button title={t('pdf')} onPress={generatePDF} mode="outlined" />
-          </View>
-        </ScrollView>
+        <StickyBottomBar
+          onCompare={() => navigation.navigate('Comparison')}
+          onHistory={() => navigation.navigate('History')}
+          onSettings={() => navigation.navigate('Settings')}
+          onPDF={generatePDF}
+        />
       </ScrollView>
     </ExportBar>
   </React.Suspense>

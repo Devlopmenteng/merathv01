@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Stepper } from './ui/Stepper';
 import { HeirType, HeirEntry } from '../lib/engine/types';
 import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 import { showValidationError } from '../lib/utils/alerts';
+import { HeirRow } from './HeirRow';
+import { TemplatesModal } from './TemplatesModal';
 
 const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
   { titleKey: 'spouse', types: ['husband', 'wife'] },
@@ -31,7 +32,9 @@ const areEqual = (prev: Props, next: Props) => {
 export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange }) => {
   const theme = useAppTheme();
   const [expanded, setExpanded] = useState<Set<string>>(new Set(['spouse', 'children']));
-  const counts = React.useMemo(() => {
+  const [templatesVisible, setTemplatesVisible] = useState(false);
+  
+  const counts = useMemo(() => {
     const map = new Map<HeirType, number>();
     heirs.forEach(h => map.set(h.type, h.count));
     return map;
@@ -84,61 +87,88 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
     return new Set([...activeTypes].filter(t => !remaining.has(t)));
   }, [heirs]);
 
+  const applyTemplate = (templateHeirs: HeirEntry[]) => {
+    onHeirsChange(templateHeirs);
+  };
+
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
+      {/* Templates Button */}
+      <TouchableOpacity
+        style={[styles.templatesButton, { backgroundColor: theme.colors.primaryLight, borderColor: theme.colors.primary }]}
+        onPress={() => setTemplatesVisible(true)}
+      >
+        <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
+      </TouchableOpacity>
+
       {CATEGORIES.map(cat => {
         const open = expanded.has(cat.titleKey);
         return (
-          <View key={cat.titleKey} style={{ marginBottom: 12 }}>
+          <View key={cat.titleKey} style={styles.category}>
             <TouchableOpacity
               onPress={() => toggleExpand(cat.titleKey)}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                padding: 12,
-                backgroundColor: theme.colors?.surface || '#fff',
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: theme.colors?.outline || '#A49E93',
-              }}
+              style={[styles.categoryHeader, { borderBottomColor: theme.colors.outline }]}
             >
-              <Text style={theme.typography?.h3}>{t(cat.titleKey)}</Text>
+              <Text style={theme.typography.h3}>{t(cat.titleKey)}</Text>
               <Text style={{ fontSize: 18 }}>{open ? '▲' : '▼'}</Text>
             </TouchableOpacity>
-            {open && cat.types.map(type => {
-              const count = counts.get(type) || 0;
-              const isBlocked = blockedTypes.has(type) && count === 0;
-              return (
-                <View key={type} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 6 }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={theme.typography?.body}>{HEIR_NAMES[type]}</Text>
-                    {isBlocked && <Text style={{ color: theme.colors?.error, fontSize: 12 }}>{t('_blocked')}</Text>}
-                  </View>
-                  {isBlocked ? (
-                    <Text style={{ color: theme.colors?.error, fontSize: 12 }}>—</Text>
-                  ) : (
-                    <Stepper
-                      value={count}
+            {open && (
+              <View>
+                {cat.types.map(type => {
+                  const count = counts.get(type) || 0;
+                  const isBlocked = blockedTypes.has(type) && count === 0;
+                  const max = type === 'wife' ? APP_DEFAULTS.MAX_WIVES :
+                              type === 'husband' ? APP_DEFAULTS.MAX_HUSBANDS :
+                              ['father', 'mother', 'grandfather'].includes(type) ? APP_DEFAULTS.MAX_SINGLE_HEIRS :
+                              APP_DEFAULTS.MAX_HEIR_COUNT;
+                  return (
+                    <HeirRow
+                      key={type}
+                      type={type}
+                      name={HEIR_NAMES[type]}
+                      count={count}
+                      isBlocked={isBlocked}
                       onIncrease={() => updateCount(type, 1)}
                       onDecrease={() => updateCount(type, -1)}
                       min={0}
-                      max={
-                        type === 'wife'
-                          ? APP_DEFAULTS.MAX_WIVES
-                          : type === 'husband'
-                          ? APP_DEFAULTS.MAX_HUSBANDS
-                          : ['father', 'mother', 'grandfather'].includes(type)
-                          ? APP_DEFAULTS.MAX_SINGLE_HEIRS
-                          : APP_DEFAULTS.MAX_HEIR_COUNT
-                      }
+                      max={max}
                     />
-                  )}
-                </View>
-              );
-            })}
+                  );
+                })}
+              </View>
+            )}
           </View>
         );
       })}
+
+      <TemplatesModal
+        visible={templatesVisible}
+        onClose={() => setTemplatesVisible(false)}
+        onSelectTemplate={applyTemplate}
+      />
     </ScrollView>
   );
 }, areEqual);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  category: {
+    marginBottom: 12,
+  },
+  categoryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    borderBottomWidth: 1,
+  },
+  templatesButton: {
+    margin: 16,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+});

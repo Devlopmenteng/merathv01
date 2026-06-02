@@ -5,6 +5,7 @@ import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
 import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useResponsive } from '../hooks/useResponsive';
 import { formatCurrency } from '../lib/utils/currency';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { t } from '../lib/i18n';
@@ -14,6 +15,7 @@ const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 export const Comparison = React.memo(() => {
   const { state } = useCalc();
   const theme = useAppTheme();
+  const { isTablet } = useResponsive();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
 
@@ -65,20 +67,20 @@ export const Comparison = React.memo(() => {
       <View style={{ marginTop: 16, minWidth: 700 }}>
         {/* Header row */}
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8 }}>
-          <Text style={{ width: 140, fontWeight: 'bold', paddingHorizontal: 8 }}>{t('heir')}</Text>
-          <Text style={{ width: 60, fontWeight: 'bold', textAlign: 'center' }}>{t('count')}</Text>
+          <Text style={{ width: isTablet ? 180 : 140, fontWeight: 'bold', paddingHorizontal: 8 }}>{t('heir')}</Text>
+          <Text style={{ width: isTablet ? 80 : 60, fontWeight: 'bold', textAlign: 'center' }}>{t('count')}</Text>
           {TABS.map(m => (
-            <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
+            <Text key={m} style={{ width: isTablet ? 120 : 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
           ))}
         </View>
         {comparisonRows.map((row) => {
           if (!row) return null;
           return (
             <View key={row.heirKey} style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingVertical: 12 }}>
-              <Text style={{ width: 140, paddingHorizontal: 8 }}>{row.heirKey}</Text>
-              <Text style={{ width: 60, textAlign: 'center' }}>{getCount(row.heirKey)}</Text>
+              <Text style={{ width: isTablet ? 180 : 140, paddingHorizontal: 8 }}>{row.heirKey}</Text>
+              <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>{getCount(row.heirKey)}</Text>
               {row.sharesByMadhab.map((data, index) => (
-                <View key={index} style={{ width: 100, alignItems: 'center' }}>
+                <View key={index} style={{ width: isTablet ? 120 : 100, alignItems: 'center' }}>
                   {data ? (
                     <>
                       <Text style={{ fontSize: 12 }}>{data.fraction}</Text>

@@ -1,3 +1,4 @@
+import { StepIndicator } from "../components/StepIndicator";
 import { t } from "../lib/i18n";
 import React, { useState } from 'react';
 import { ScrollView, View, Text, TextInput } from 'react-native';
@@ -24,6 +25,7 @@ export const EstateSetup = ({ navigation }: any) => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
+      <StepIndicator currentStep={0} steps={["step_estate","step_madhab","step_heirs","step_results"]} />
       <Text style={theme.typography.h1}>{t("estate_details")}</Text>
       <TextInput
         placeholder={t("case_name_optional")}
@@ -51,12 +53,12 @@ export const EstateSetup = ({ navigation }: any) => {
           color: theme.colors.onSurface,
         }}
       />
-      <Input label={t("total_estate")} value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
+      <Input label={t("total_estate")} currency={true} value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-        <Input style={{ flex: 1 }} label={t("funeral_costs")} value={funeral} onChangeText={setFuneral} keyboardType="numeric" />
-        <Input style={{ flex: 1 }} label={t("debts")} value={debts} onChangeText={setDebts} keyboardType="numeric" />
+        <Input style={{ flex: 1 }} label={t("funeral_costs")} currency={true} value={funeral} onChangeText={setFuneral} keyboardType="numeric" />
+        <Input style={{ flex: 1 }} label={t("debts")} currency={true} value={debts} onChangeText={setDebts} keyboardType="numeric" />
       </View>
-      <Input label={t("will_optional")} value={will} onChangeText={setWill} keyboardType="numeric" helper={maxWill > 0 ? `${t("max_allowed")}: $${maxWill.toFixed(2)}` : ''} error={willError} />
+      <Input label={t("will_optional")} currency={true} value={will} onChangeText={setWill} keyboardType="numeric" helper={maxWill > 0 ? `${t("max_allowed")}: $${maxWill.toFixed(2)}` : ''} error={willError} />
       <Button title={t("next_select_school")} onPress={onNext} disabled={!total || parseFloat(total) <= 0} style={{ marginTop: theme.spacing.lg }} />
     </ScrollView>
   );

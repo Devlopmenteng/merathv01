@@ -4,6 +4,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
 import { t } from '../lib/i18n';
+import { StepIndicator } from '../components/StepIndicator';
 
 const madhabs: { key: Madhab; title: string; desc: string; icon: string }[] = [
   { key: 'hanafi', title: t('madhab_hanafi'), desc: t('madhab_hanafi_desc'), icon: '📖' },
@@ -17,22 +18,25 @@ export const MadhabSelect = ({ navigation }: any) => {
   const { dispatch } = useCalc();
 
   return (
-    <FlatList
-      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
-      data={madhabs}
-      keyExtractor={i => i.key}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }}
-          style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}
-        >
-          <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
-          <View>
-            <Text style={theme.typography.h2}>{item.title}</Text>
-            <Text style={theme.typography.body}>{item.desc}</Text>
-          </View>
-        </TouchableOpacity>
-      )}
-    />
+    <View style={{ flex: 1 }}>
+      <StepIndicator currentStep={1} steps={["step_estate","step_madhab","step_heirs","step_results"]} />
+      <FlatList
+        contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
+        data={madhabs}
+        keyExtractor={i => i.key}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }}
+            style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}
+          >
+            <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
+            <View>
+              <Text style={theme.typography.h2}>{item.title}</Text>
+              <Text style={theme.typography.body}>{item.desc}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
   );
 };

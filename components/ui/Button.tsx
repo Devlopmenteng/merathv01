@@ -38,7 +38,7 @@ export const Button: React.FC<Props> = ({ title, onPress, mode = 'filled', disab
         disabled={disabled || loading}
         accessibilityRole="button"
         accessibilityLabel={title}
-        style={[{ borderRadius: theme.radius.full, overflow: 'hidden' }, style]}
+        style={[{ borderRadius: theme.borderRadius.full, overflow: 'hidden' }, style]}
       >
         <LinearGradient
           colors={[theme.colors.primary, theme.colors.primaryDark]}
@@ -70,7 +70,7 @@ export const Button: React.FC<Props> = ({ title, onPress, mode = 'filled', disab
           borderColor: theme.colors.primary,
           paddingVertical: theme.spacing.md,
           paddingHorizontal: theme.spacing.lg,
-          borderRadius: theme.radius.full,
+          borderRadius: theme.borderRadius.full,
           alignItems: 'center',
           opacity: disabled ? 0.5 : 1,
         },
