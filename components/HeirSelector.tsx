@@ -85,7 +85,8 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
   }, [heirs]);
 
   return (
-    <ScrollView>{CATEGORIES.map(cat => {
+    <ScrollView>
+      {CATEGORIES.map(cat => {
         const open = expanded.has(cat.titleKey);
         return (
           <View key={cat.titleKey} style={{ marginBottom: 12 }}>
@@ -111,7 +112,7 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
                 <View key={type} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 6 }}>
                   <View style={{ flex: 1 }}>
                     <Text style={theme.typography?.body}>{HEIR_NAMES[type]}</Text>
-                    {isBlocked && <Text style={{ color: theme.colors?.error, fontSize: 12 }}>⛔ Blocked</Text>}
+                    {isBlocked && <Text style={{ color: theme.colors?.error, fontSize: 12 }}>{t('_blocked')}</Text>}
                   </View>
                   {isBlocked ? (
                     <Text style={{ color: theme.colors?.error, fontSize: 12 }}>—</Text>

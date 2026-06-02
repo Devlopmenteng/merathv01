@@ -65,11 +65,11 @@ export const History = () => {
               }}
             >
               <Text style={{ fontWeight: 'bold' }}>
-                {entry.caseName || 'بدون اسم'} – {entry.caseDate || 'بدون تاريخ'}
+                {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
               </Text>
-              <Text>المذهب: {entry.madhab}</Text>
-              <Text>صافي التركة: {formatCurrency(entry.netTotal)}</Text>
-              <Text style={{ marginTop: 8, fontWeight: '600' }}>الورثة:</Text>
+              <Text>{t('madhab')}: {entry.madhab}</Text>
+              <Text>{t('netEstate')}: {formatCurrency(entry.netTotal)}</Text>
+              <Text style={{ marginTop: 8, fontWeight: '600' }}>{t('heirs')}:</Text>
               {entry.shares.slice(0, 3).map((share, i) => (
                 <Text key={i} style={{ fontSize: 12, marginLeft: 8 }}>
                   • {share.name}: {formatCurrency(share.amount)}

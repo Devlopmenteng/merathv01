@@ -1,5 +1,4 @@
 import { t } from "../lib/i18n";
-// import { t } from '../lib/i18n';
 import React from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { HeirSelector } from '../components/HeirSelector';
@@ -23,7 +22,7 @@ export const HeirSelection = ({ navigation }: any) => {
         <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
           <Text style={theme.typography.h1}>{t("select_heirs")}</Text>
           <HeirSelector heirs={state.heirs} onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })} />
-          <Button title="Calculate Inheritance" onPress={onNext} style={{ marginTop: theme.spacing.lg }} />
+          <Button title={t("calculate_inheritance")} onPress={onNext} style={{ marginTop: theme.spacing.lg }} />
         </ScrollView>
       </KeyboardAvoidingView>
       <OnboardingTooltip />

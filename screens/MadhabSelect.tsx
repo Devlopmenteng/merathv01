@@ -1,15 +1,15 @@
-// import { t } from '../lib/i18n';
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
+import { t } from '../lib/i18n';
 
 const madhabs: { key: Madhab; title: string; desc: string; icon: string }[] = [
-  { key: 'hanafi', title: 'Hanafi', desc: 'Most widespread school', icon: '📖' },
-  { key: 'maliki', title: 'Maliki', desc: 'Official school of Morocco', icon: '⚖️' },
-  { key: 'shafii', title: 'Shafi\'i', desc: 'Predominant in Southeast Asia', icon: '🕌' },
-  { key: 'hanbali', title: 'Hanbali', desc: 'Official school of Saudi Arabia', icon: '📜' },
+  { key: 'hanafi', title: t('madhab_hanafi'), desc: t('madhab_hanafi_desc'), icon: '📖' },
+  { key: 'maliki', title: t('madhab_maliki'), desc: t('madhab_maliki_desc'), icon: '⚖️' },
+  { key: 'shafii', title: t('madhab_shafii'), desc: t('madhab_shafii_desc'), icon: '🕌' },
+  { key: 'hanbali', title: t('madhab_hanbali'), desc: t('madhab_hanbali_desc'), icon: '📜' },
 ];
 
 export const MadhabSelect = ({ navigation }: any) => {
@@ -17,14 +17,22 @@ export const MadhabSelect = ({ navigation }: any) => {
   const { dispatch } = useCalc();
 
   return (
-    <FlatList contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }} data={madhabs} keyExtractor={i => i.key} renderItem={({ item }) => (
-      <TouchableOpacity accessibilityLabel="Button" onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
-        <View>
-          <Text style={theme.typography.h2}>{item.title}</Text>
-          <Text style={theme.typography.body}>{item.desc}</Text>
-        </View>
-      </TouchableOpacity>
-    )} />
+    <FlatList
+      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
+      data={madhabs}
+      keyExtractor={i => i.key}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }}
+          style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}
+        >
+          <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
+          <View>
+            <Text style={theme.typography.h2}>{item.title}</Text>
+            <Text style={theme.typography.body}>{item.desc}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    />
   );
 };

@@ -15,7 +15,7 @@ export const EstateSetup = ({ navigation }: any) => {
   const [will, setWill] = useState('');
   const net = parseFloat(total || '0') - parseFloat(funeral || '0') - parseFloat(debts || '0');
   const maxWill = net / 3;
-  const willError = parseFloat(will) > maxWill && maxWill >= 0 ? 'Exceeds 1/3 of net estate' : '';
+  const willError = parseFloat(will) > maxWill && maxWill >= 0 ? t('will_exceeds') : '';
 
   const onNext = () => {
     dispatch({ type: 'SET_ESTATE', payload: { total: parseFloat(total) || 0, funeral: parseFloat(funeral) || 0, debts: parseFloat(debts) || 0, will: parseFloat(will) || 0 } });
@@ -26,7 +26,7 @@ export const EstateSetup = ({ navigation }: any) => {
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}>
       <Text style={theme.typography.h1}>{t("estate_details")}</Text>
       <TextInput
-        placeholder="Case Name (optional)"
+        placeholder={t("case_name_optional")}
         value={caseName}
         onChangeText={setCaseName}
         style={{
@@ -39,7 +39,7 @@ export const EstateSetup = ({ navigation }: any) => {
         }}
       />
       <TextInput
-        placeholder="Date (YYYY-MM-DD)"
+        placeholder={t("date_format")}
         value={caseDate}
         onChangeText={setCaseDate}
         style={{
@@ -51,13 +51,13 @@ export const EstateSetup = ({ navigation }: any) => {
           color: theme.colors.onSurface,
         }}
       />
-      <Input label="Total Estate ($)" value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
+      <Input label={t("total_estate")} value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-        <Input style={{ flex: 1 }} label="Funeral Costs" value={funeral} onChangeText={setFuneral} keyboardType="numeric" />
-        <Input style={{ flex: 1 }} label="Debts" value={debts} onChangeText={setDebts} keyboardType="numeric" />
+        <Input style={{ flex: 1 }} label={t("funeral_costs")} value={funeral} onChangeText={setFuneral} keyboardType="numeric" />
+        <Input style={{ flex: 1 }} label={t("debts")} value={debts} onChangeText={setDebts} keyboardType="numeric" />
       </View>
-      <Input label="Will (optional)" value={will} onChangeText={setWill} keyboardType="numeric" helper={maxWill > 0 ? `Max: $${maxWill.toFixed(2)}` : ''} error={willError} />
-      <Button title="Next: Select School" onPress={onNext} disabled={!total || parseFloat(total) <= 0} style={{ marginTop: theme.spacing.lg }} />
+      <Input label={t("will_optional")} value={will} onChangeText={setWill} keyboardType="numeric" helper={maxWill > 0 ? `${t("max_allowed")}: $${maxWill.toFixed(2)}` : ''} error={willError} />
+      <Button title={t("next_select_school")} onPress={onNext} disabled={!total || parseFloat(total) <= 0} style={{ marginTop: theme.spacing.lg }} />
     </ScrollView>
   );
 };

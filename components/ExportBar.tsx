@@ -5,6 +5,7 @@ import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import { useAppTheme } from '../hooks/useAppTheme';
 import type { CalculationResult } from '../lib/engine/types';
+import { t } from '../lib/i18n';
 
 type ExportBarProps = {
   resultData: CalculationResult;
@@ -39,17 +40,11 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
         {children}
       </ViewShot>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 12 }}>
-        <TouchableOpacity
-          onPress={generatePDF}
-          style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}
-        >
-          <Text style={{ color: theme.colors.onPrimary }}>PDF</Text>
+        <TouchableOpacity onPress={generatePDF} style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}>
+          <Text style={{ color: theme.colors.onPrimary }}>{t('pdf')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={captureAndShare}
-          style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}
-        >
-          <Text style={{ color: theme.colors.onSecondary }}>Share Image</Text>
+        <TouchableOpacity onPress={captureAndShare} style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}>
+          <Text style={{ color: theme.colors.onSecondary }}>{t('share_image')}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -5,10 +5,9 @@ import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
 import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { FIQH_NOTES } from '../lib/services/FiqhReferences';
-import { Button } from '../components/ui/Button';
 import { formatCurrency } from '../lib/utils/currency';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
+import { t } from '../lib/i18n';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -17,7 +16,6 @@ export const Comparison = React.memo(() => {
   const theme = useAppTheme();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
-  const [showNotes, setShowNotes] = useState(false);
 
   const allHeirs = useMemo(() => {
     const heirSet = new Set<string>();
@@ -45,8 +43,6 @@ export const Comparison = React.memo(() => {
     setResults(all);
   }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
 
-  const notes = FIQH_NOTES[selected] || {};
-
   const comparisonRows = useMemo(() => {
     return Array.from(allHeirs).map(heirKey => {
       const sharesByMadhab = TABS.map(madhab => {
@@ -69,8 +65,8 @@ export const Comparison = React.memo(() => {
       <View style={{ marginTop: 16, minWidth: 700 }}>
         {/* Header row */}
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8 }}>
-          <Text style={{ width: 140, fontWeight: 'bold', paddingHorizontal: 8 }}>الوارث</Text>
-          <Text style={{ width: 60, fontWeight: 'bold', textAlign: 'center' }}>العدد</Text>
+          <Text style={{ width: 140, fontWeight: 'bold', paddingHorizontal: 8 }}>{t('heir')}</Text>
+          <Text style={{ width: 60, fontWeight: 'bold', textAlign: 'center' }}>{t('count')}</Text>
           {TABS.map(m => (
             <Text key={m} style={{ width: 100, textAlign: 'center', fontWeight: 'bold', paddingHorizontal: 4 }}>{MADHAB_NAMES[m]}</Text>
           ))}
@@ -103,7 +99,7 @@ export const Comparison = React.memo(() => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
-      <Text style={theme.typography.h1}>مقارنة المذاهب</Text>
+      <Text style={theme.typography.h1}>{t('comparison_title')}</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 }}>
         {TABS.map((m) => (
           <TouchableOpacity
@@ -120,17 +116,7 @@ export const Comparison = React.memo(() => {
           </TouchableOpacity>
         ))}
       </View>
-
       {renderComparisonTable()}
-
-      <Button title={showNotes ? 'إخفاء الملاحظات الفقهية' : 'عرض الملاحظات الفقهية'} onPress={() => setShowNotes(!showNotes)} mode="outlined" />
-      {showNotes && (
-        <View style={{ padding: 12, marginTop: 8, backgroundColor: theme.colors.surfaceVariant, borderRadius: 8 }}>
-          {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={{ fontSize: 12, marginBottom: 4 }}>• {val}</Text>
-          ))}
-        </View>
-      )}
     </ScrollView>
   );
-  });
+});

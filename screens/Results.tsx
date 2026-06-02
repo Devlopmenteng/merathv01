@@ -71,10 +71,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
   useEffect(() => {
     if (!hasSpouse) {
-      showAlert(
-        'تنبيه',
-        'لم يتم تحديد زوج أو زوجة. إذا كان المتوفى متزوجاً، يرجى إضافة الزوج/الزوجة في شاشة الورثة.\n\nيمكنك متابعة الحساب إذا كان المتوفى أعزباً.',
-      );
+      showAlert(t('warning'), t('spouse_missing_message'));
     }
   }, [hasSpouse]);
 
@@ -167,9 +164,9 @@ export const Results = ({ navigation }: { navigation: any }) => {
   const specialCaseElements = useMemo(() => {
     if (!result) return null;
     const cases = [];
-    if (result.awlApplied) cases.push({ name: "العول", desc: "تم تطبيق العول لزيادة أصل المسألة" });
-    if (result.raddApplied) cases.push({ name: "الرد", desc: "تم تطبيق الرد لتوزيع الباقي على أصحاب الفروض" });
-    if (result.bloodRelativesApplied) cases.push({ name: "ذوو الأرحام", desc: "تم توزيع الباقي على ذوي الأرحام" });
+    if (result.awlApplied) cases.push({ name: t('awl'), desc: t('awl_desc') });
+    if (result.raddApplied) cases.push({ name: t('radd'), desc: t('radd_desc') });
+    if (result.bloodRelativesApplied) cases.push({ name: t('bloodRelatives'), desc: t('blood_relatives_desc') });
     if (cases.length === 0) return null;
     return (
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginVertical: 12 }}>
@@ -284,7 +281,8 @@ export const Results = ({ navigation }: { navigation: any }) => {
             </View>
             {distributionRows}
           </View>
-        </ScrollView><TouchableOpacity
+        </ScrollView>
+        <TouchableOpacity
           onPress={() => setShowSteps(!showSteps)}
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.spacing.lg, marginBottom: theme.spacing.md }}
         >
@@ -299,7 +297,7 @@ export const Results = ({ navigation }: { navigation: any }) => {
                 <Text style={{ fontSize: 12, color: theme.colors.onSurface }}>{step.description}</Text>
                 {step.details && (
                   <View style={{ marginTop: 8, paddingTop: 4, borderTopWidth: 1, borderTopColor: theme.colors.outline }}>
-                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 2 }}>التفاصيل:</Text>
+                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 2 }}>{t('details')}:</Text>
                     {typeof step.details === 'object' ? (
                       Object.entries(step.details).map(([key, val]) => (
                         <Text key={key} style={{ fontSize: 10, color: theme.colors.onSurface, marginTop: 2 }}>

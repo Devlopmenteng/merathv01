@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { t } from '../lib/i18n';
 
 const EstateSetup = lazy(() => import('../screens/EstateSetup').then((module) => ({ default: module.EstateSetup })));
 const MadhabSelect = lazy(() => import('../screens/MadhabSelect').then((module) => ({ default: module.MadhabSelect })));
@@ -15,7 +16,7 @@ const Glossary = lazy(() => import('../screens/Glossary').then((module) => ({ de
 const Stack = createNativeStackNavigator();
 
 const screenOptions = {
-  headerShown: false,
+  headerShown: true,  // Show header to display titles
   animation: 'slide_from_right' as any,
   animationDuration: 300,
 };
@@ -31,14 +32,46 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Suspense fallback={<LoadingView />}>
         <Stack.Navigator screenOptions={screenOptions}>
-          <Stack.Screen name="EstateSetup" component={EstateSetup} />
-          <Stack.Screen name="MadhabSelect" component={MadhabSelect} />
-          <Stack.Screen name="HeirSelection" component={HeirSelection} />
-          <Stack.Screen name="Results" component={Results} />
-          <Stack.Screen name="Comparison" component={Comparison} />
-          <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen name="History" component={History} />
-          <Stack.Screen name="Glossary" component={Glossary} />
+          <Stack.Screen
+            name="EstateSetup"
+            component={EstateSetup}
+            options={{ title: t('estate_details') }}
+          />
+          <Stack.Screen
+            name="MadhabSelect"
+            component={MadhabSelect}
+            options={{ title: t('select_madhab') }}
+          />
+          <Stack.Screen
+            name="HeirSelection"
+            component={HeirSelection}
+            options={{ title: t('select_heirs') }}
+          />
+          <Stack.Screen
+            name="Results"
+            component={Results}
+            options={{ title: t('inheritance_report') }}
+          />
+          <Stack.Screen
+            name="Comparison"
+            component={Comparison}
+            options={{ title: t('compare') }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={{ title: t('settings') }}
+          />
+          <Stack.Screen
+            name="History"
+            component={History}
+            options={{ title: t('history_screen_title') }}
+          />
+          <Stack.Screen
+            name="Glossary"
+            component={Glossary}
+            options={{ title: t('glossary') }}
+          />
         </Stack.Navigator>
       </Suspense>
     </NavigationContainer>

@@ -3,37 +3,36 @@ import { View, Text, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';
+import { t } from '../lib/i18n';
 
-// Fixed shares table (from HTML)
 const FIXED_SHARES = [
-  { share: "النصف (½)", heirs: "الزوج (بدون فرع), البنت الواحدة, بنت الابن الواحدة, الأخت الشقيقة الواحدة, الأخت لأب الواحدة" },
-  { share: "الربع (¼)", heirs: "الزوج (مع فرع), الزوجة (بدون فرع)" },
-  { share: "الثمن (⅛)", heirs: "الزوجة (مع فرع)" },
-  { share: "الثلثان (⅔)", heirs: "بنتان فأكثر, بنتا الابن فأكثر, أختان شقيقتان فأكثر, أختان لأب فأكثر" },
-  { share: "الثلث (⅓)", heirs: "الأم (بدون فرع ولا جمع إخوة), الإخوة لأم (اثنان فأكثر)" },
-  { share: "السدس (⅙)", heirs: "الأب (مع فرع), الأم (مع فرع أو جمع إخوة), الجد, الجدة, بنت الابن (تكملة), الأخت لأب (تكملة), الأخ لأم (الواحد)" },
+  { shareKey: 'share_half', heirsKey: 'heirs_half' },
+  { shareKey: 'share_quarter', heirsKey: 'heirs_quarter' },
+  { shareKey: 'share_eighth', heirsKey: 'heirs_eighth' },
+  { shareKey: 'share_two_thirds', heirsKey: 'heirs_two_thirds' },
+  { shareKey: 'share_third', heirsKey: 'heirs_third' },
+  { shareKey: 'share_sixth', heirsKey: 'heirs_sixth' },
 ];
 
-// Hijab rules table (from HTML)
 const HIJAB_RULES = [
-  { blocked: "الجد", blocker: "الأب", type: "حجب حرمان" },
-  { blocked: "الجدة لأب", blocker: "الأم أو الأب", type: "حجب حرمان" },
-  { blocked: "الجدة لأم", blocker: "الأم", type: "حجب حرمان" },
-  { blocked: "ابن الابن", blocker: "الابن", type: "حجب حرمان" },
-  { blocked: "بنت الابن", blocker: "الابن أو بنتان بدون معصب", type: "حجب حرمان" },
-  { blocked: "الإخوة الأشقاء", blocker: "الابن، ابن الابن، الأب", type: "حجب حرمان" },
-  { blocked: "الإخوة لأب", blocker: "الأخ الشقيق أو من يحجب الأشقاء", type: "حجب حرمان" },
-  { blocked: "الإخوة لأم", blocker: "الفرع الوارث، الأب، الجد", type: "حجب حرمان" },
-  { blocked: "الأخت لأب", blocker: "أختان شقيقتان بدون معصب", type: "حجب حرمان" },
+  { blockedKey: 'hijab_grandfather', blockerKey: 'hijab_father', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_grandmother_father', blockerKey: 'hijab_mother_or_father', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_grandmother_mother', blockerKey: 'hijab_mother', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_grandson', blockerKey: 'hijab_son', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_granddaughter', blockerKey: 'hijab_son_or_two_daughters', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_full_siblings', blockerKey: 'hijab_son_grandson_father', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_paternal_siblings', blockerKey: 'hijab_full_sibling', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_maternal_siblings', blockerKey: 'hijab_descendant_or_male_ascendant', typeKey: 'hijab_type_deprivation' },
+  { blockedKey: 'hijab_paternal_sister', blockerKey: 'hijab_two_full_sisters', typeKey: 'hijab_type_deprivation' },
 ];
 
 const SPECIAL_CASES = [
-  { name: "العُمَريَّتان", description: "زوج/زوجة + أب + أم بدون فرع وارث. الأم تأخذ ثلث الباقي بعد فرض الزوج/الزوجة." },
-  { name: "العَوْل", description: "عندما يزيد مجموع الفروض عن أصل المسألة، يُزاد المقام ليتسع للجميع." },
-  { name: "الرَّد", description: "عندما يبقى فائض ولا يوجد عصبة، يُرد على أصحاب الفروض بنسبة فروضهم (باستثناء الزوجين في بعض المذاهب)." },
-  { name: "المشتركة (الحمارية)", description: "زوج + أم + إخوة لأم (2+) + إخوة أشقاء. في بعض المذاهب يشترك الأشقاء مع الإخوة لأم في الثلث بالتساوي." },
-  { name: "الأكدرية", description: "زوج + أم + جد + أخت شقيقة. تُجمع وتُقسم بطريقة خاصة (من 27)." },
-  { name: "عصبة مع الغير", description: "الأخت الشقيقة أو لأب تصبح عصبة مع وجود البنت أو بنت الابن." },
+  { nameKey: 'special_umariyyah', descKey: 'special_umariyyah_desc' },
+  { nameKey: 'special_awl', descKey: 'special_awl_desc' },
+  { nameKey: 'special_radd', descKey: 'special_radd_desc' },
+  { nameKey: 'special_musharraka', descKey: 'special_musharraka_desc' },
+  { nameKey: 'special_akdariyya', descKey: 'special_akdariyya_desc' },
+  { nameKey: 'special_asaba_with_ghayr', descKey: 'special_asaba_with_ghayr_desc' },
 ];
 
 export const FiqhRules = () => {
@@ -41,79 +40,55 @@ export const FiqhRules = () => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
-      {/* Madhab notes */}
-      <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>ملاحظات مذهبية</Text>
+      <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>{t('madhab_notes')}</Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
-        <View
-          key={madhab}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-            borderLeftWidth: 4,
-            borderLeftColor: theme.colors.primary,
-          }}
-        >
+        <View key={madhab} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 4, borderLeftColor: theme.colors.primary }}>
           <Text style={[theme.typography.h3, { color: theme.colors.primary, marginBottom: 4 }]}>
             {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
           </Text>
           {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={[theme.typography.caption, { marginTop: 4 }]}>
-              • {val as string}
-            </Text>
+            <Text key={key} style={[theme.typography.caption, { marginTop: 4 }]}>• {val as string}</Text>
           ))}
         </View>
       ))}
 
-      {/* Special cases */}
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>⚡ حالات خاصة</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('special_cases_title')}</Text>
       {SPECIAL_CASES.map((caseItem, idx) => (
-        <View
-          key={idx}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
-          <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>{caseItem.name}</Text>
-          <Text style={theme.typography.body}>{caseItem.description}</Text>
+        <View key={idx} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md }}>
+          <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>{t(caseItem.nameKey)}</Text>
+          <Text style={theme.typography.body}>{t(caseItem.descKey)}</Text>
         </View>
       ))}
 
-      {/* Fixed shares table */}
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>📊 جدول الفروض</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('fixed_shares_title')}</Text>
       <ScrollView horizontal>
         <View style={{ minWidth: '100%' }}>
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
-            <Text style={{ width: 100, fontWeight: 'bold' }}>الفرض</Text>
-            <Text style={{ width: 200, fontWeight: 'bold' }}>أصحابه</Text>
+            <Text style={{ width: 100, fontWeight: 'bold' }}>{t('share')}</Text>
+            <Text style={{ width: 200, fontWeight: 'bold' }}>{t('heirs')}</Text>
           </View>
           {FIXED_SHARES.map((item, idx) => (
             <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 100 }}>{item.share}</Text>
-              <Text style={{ width: 200 }}>{item.heirs}</Text>
+              <Text style={{ width: 100 }}>{t(item.shareKey)}</Text>
+              <Text style={{ width: 200 }}>{t(item.heirsKey)}</Text>
             </View>
           ))}
         </View>
       </ScrollView>
 
-      {/* Hijab rules table */}
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>🚫 قواعد الحجب</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('hijab_rules_title')}</Text>
       <ScrollView horizontal>
         <View style={{ minWidth: '100%' }}>
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
-            <Text style={{ width: 120, fontWeight: 'bold' }}>المحجوب</Text>
-            <Text style={{ width: 120, fontWeight: 'bold' }}>الحاجب</Text>
-            <Text style={{ width: 100, fontWeight: 'bold' }}>نوع الحجب</Text>
+            <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocked')}</Text>
+            <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocker')}</Text>
+            <Text style={{ width: 100, fontWeight: 'bold' }}>{t('hijab_type')}</Text>
           </View>
           {HIJAB_RULES.map((item, idx) => (
             <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 120 }}>{item.blocked}</Text>
-              <Text style={{ width: 120 }}>{item.blocker}</Text>
-              <Text style={{ width: 100 }}>{item.type}</Text>
+              <Text style={{ width: 120 }}>{t(item.blockedKey)}</Text>
+              <Text style={{ width: 120 }}>{t(item.blockerKey)}</Text>
+              <Text style={{ width: 100 }}>{t(item.typeKey)}</Text>
             </View>
           ))}
         </View>
