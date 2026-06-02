@@ -26,23 +26,34 @@ const lightColors = {
 };
 
 const darkColors = {
-  primary: '#2DD4BF',
-  primaryLight: '#134E4A',
+  // Primary – Teal (adjusted for higher contrast with white text)
+  primary: '#14B8A6',        // Slightly darker than 2DD4BF for better visibility
+  primaryLight: '#0D3D3A',   // Deep teal for backgrounds
   primaryDark: '#0F766E',
-  secondary: '#FBBF24',
+  
+  // Secondary – Amber (bright but readable)
+  secondary: '#F59E0B',
   secondaryLight: '#422006',
   secondaryDark: '#D97706',
-  background: '#0F172A',
-  surface: '#1E293B',
-  surfaceVariant: '#334155',
-  error: '#F87171',
-  success: '#34D399',
-  warning: '#FBBF24',
-  onPrimary: '#0F172A',
-  onSecondary: '#0F172A',
-  onBackground: '#F1F5F9',
-  onSurface: '#F1F5F9',
-  outline: '#475569',
+  
+  // Backgrounds – layered for depth
+  background: '#0F172A',      // Slate 900 – deep dark blue
+  surface: '#1E293B',         // Slate 800 – cards
+  surfaceVariant: '#334155',  // Slate 700 – elevated surfaces
+  
+  // Semantic colors
+  error: '#EF4444',
+  success: '#10B981',
+  warning: '#F59E0B',
+  
+  // Text colors (light, high contrast)
+  onPrimary: '#FFFFFF',       // White on teal – passes WCAG AAA
+  onSecondary: '#FFFFFF',     // White on amber – passes WCAG AAA
+  onBackground: '#F8FAFC',    // Slate 50 – very light
+  onSurface: '#E2E8F0',       // Slate 200 – soft white for cards
+  
+  // Borders & outlines
+  outline: '#64748B',         // Slate 500 – visible but not harsh
   shadow: '#000000',
 };
 

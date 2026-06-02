@@ -5,8 +5,6 @@ import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
 import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { FIQH_NOTES } from '../lib/services/FiqhReferences';
-import { Button } from '../components/ui/Button';
 import { formatCurrency } from '../lib/utils/currency';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 
@@ -17,7 +15,6 @@ export const Comparison = React.memo(() => {
   const theme = useAppTheme();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
-  const [showNotes, setShowNotes] = useState(false);
 
   const allHeirs = useMemo(() => {
     const heirSet = new Set<string>();
@@ -44,8 +41,6 @@ export const Comparison = React.memo(() => {
     const all = TABS.map((m) => calculateInheritance(m, estate, heirsArrayToObject(state.heirs)));
     setResults(all);
   }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
-
-  const notes = FIQH_NOTES[selected] || {};
 
   const comparisonRows = useMemo(() => {
     return Array.from(allHeirs).map(heirKey => {
@@ -122,15 +117,6 @@ export const Comparison = React.memo(() => {
       </View>
 
       {renderComparisonTable()}
-
-      <Button title={showNotes ? 'إخفاء الملاحظات الفقهية' : 'عرض الملاحظات الفقهية'} onPress={() => setShowNotes(!showNotes)} mode="outlined" />
-      {showNotes && (
-        <View style={{ padding: 12, marginTop: 8, backgroundColor: theme.colors.surfaceVariant, borderRadius: 8 }}>
-          {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={{ fontSize: 12, marginBottom: 4 }}>• {val}</Text>
-          ))}
-        </View>
-      )}
     </ScrollView>
   );
-  });
+});
