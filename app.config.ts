@@ -11,9 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         action: 'VIEW',
         autoVerify: true,
-        data: [
-          { scheme: 'merath', host: '*', pathPrefix: '/' },
-        ],
+        data: [{ scheme: 'merath', host: '*', pathPrefix: '/' }],
         category: ['BROWSABLE', 'DEFAULT'],
       },
     ],

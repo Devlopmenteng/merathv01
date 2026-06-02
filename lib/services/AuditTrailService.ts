@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { APP_DEFAULTS } from '../constants/appDefaults';
+import type { HeirShare } from '../engine/types';
 
 export interface AuditEntry {
   id: string;
   timestamp: string;
   madhab: string;
   netTotal: number;
-  shares: any[];
+  shares: HeirShare[];
   steps: { title: string; description: string }[];
   hijabLog?: string[];
   caseName?: string;
@@ -35,9 +36,10 @@ export async function clearAuditTrail() {
 export async function searchAuditTrail(query: string): Promise<AuditEntry[]> {
   const all = await getAuditTrail();
   const lowerQuery = query.toLowerCase();
-  return all.filter(entry => 
-    entry.caseName?.toLowerCase().includes(lowerQuery) ||
-    entry.caseDate?.includes(lowerQuery) ||
-    entry.madhab.toLowerCase().includes(lowerQuery)
+  return all.filter(
+    (entry) =>
+      entry.caseName?.toLowerCase().includes(lowerQuery) ||
+      entry.caseDate?.includes(lowerQuery) ||
+      entry.madhab.toLowerCase().includes(lowerQuery)
   );
 }

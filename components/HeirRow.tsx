@@ -44,7 +44,12 @@ export const HeirRow: React.FC<HeirRowProps> = ({
         <Text style={[styles.icon, { color: iconColor }]}>{iconConfig?.icon || '👤'}</Text>
       </View>
       <View style={styles.infoContainer}>
-        <Text style={[theme.typography.body, isBlocked && { textDecorationLine: 'line-through', color: theme.colors.outline }]}>
+        <Text
+          style={[
+            theme.typography.body,
+            isBlocked && { textDecorationLine: 'line-through', color: theme.colors.outline },
+          ]}
+        >
           {name}
         </Text>
         {isBlocked && (
@@ -55,7 +60,13 @@ export const HeirRow: React.FC<HeirRowProps> = ({
         {isBlocked ? (
           <Text style={{ color: theme.colors.error }}>—</Text>
         ) : (
-          <Stepper value={count} onIncrease={onIncrease} onDecrease={onDecrease} min={min} max={max} />
+          <Stepper
+            value={count}
+            onIncrease={onIncrease}
+            onDecrease={onDecrease}
+            min={min}
+            max={max}
+          />
         )}
       </View>
     </View>

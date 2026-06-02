@@ -1,10 +1,10 @@
 export const lightTheme = {
   colors: {
-    primary: '#0D7C66',        // deep teal
+    primary: '#0D7C66', // deep teal
     primaryLight: '#D4F1E8',
-    secondary: '#D4A843',      // gold
+    secondary: '#D4A843', // gold
     secondaryLight: '#F9EFD4',
-    background: '#FDF9F2',     // sand
+    background: '#FDF9F2', // sand
     surface: '#FFFFFF',
     surfaceVariant: '#F0ECE2',
     error: '#C62828',
@@ -20,12 +20,12 @@ export const lightTheme = {
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   radius: { sm: 8, md: 12, lg: 16, full: 999 },
   typography: {
-    h1: {  fontSize: 32, lineHeight: 40 },
-    h2: {  fontSize: 24, lineHeight: 32 },
-    h3: {  fontSize: 20, lineHeight: 28 },
-    body: {  fontSize: 16, lineHeight: 24 },
-    caption: {  fontSize: 12, lineHeight: 16 },
-    button: {  fontSize: 14, lineHeight: 20 },
+    h1: { fontSize: 32, lineHeight: 40 },
+    h2: { fontSize: 24, lineHeight: 32 },
+    h3: { fontSize: 20, lineHeight: 28 },
+    body: { fontSize: 16, lineHeight: 24 },
+    caption: { fontSize: 12, lineHeight: 16 },
+    button: { fontSize: 14, lineHeight: 20 },
   },
 };
 

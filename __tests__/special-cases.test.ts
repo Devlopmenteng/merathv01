@@ -3,11 +3,11 @@
  * Comprehensive testing for Musharraka, Akdariyya, and Grandfather with siblings
  */
 
-import { describe, it, expect } from "vitest";
-import { InheritanceCalculationEngine } from "../lib/inheritance";
-import type { EstateData, HeirsData } from "../lib/engine/types";
+import { describe, it, expect } from 'vitest';
+import { InheritanceCalculationEngine } from '../lib/inheritance';
+import type { EstateData, HeirsData } from '../lib/engine/types';
 
-describe("Special Cases - Complete Test Suite", () => {
+describe('Special Cases - Complete Test Suite', () => {
   const estate: EstateData = {
     total: 120000,
     funeral: 0,
@@ -15,8 +15,8 @@ describe("Special Cases - Complete Test Suite", () => {
     will: 0,
   };
 
-  describe("Musharraka (المشتركة/الحمارية) - Complete Tests", () => {
-    it("Case 1: Standard Musharraka - Shafii madhab", () => {
+  describe('Musharraka (المشتركة/الحمارية) - Complete Tests', () => {
+    it('Case 1: Standard Musharraka - Shafii madhab', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -24,14 +24,14 @@ describe("Special Cases - Complete Test Suite", () => {
         full_brother: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
 
-      const husband = result.shares.find((s) => s.key === "husband");
-      const mother = result.shares.find((s) => s.key === "mother");
-      const siblings = result.shares.find((s) => s.key === "shared_siblings");
+      const husband = result.shares.find((s) => s.key === 'husband');
+      const mother = result.shares.find((s) => s.key === 'mother');
+      const siblings = result.shares.find((s) => s.key === 'shared_siblings');
 
       expect(husband?.amount).toBeCloseTo(60000, 0); // 1/2
       expect(mother?.amount).toBeCloseTo(20000, 0); // 1/6
@@ -39,7 +39,7 @@ describe("Special Cases - Complete Test Suite", () => {
       expect(siblings?.count).toBe(3);
     });
 
-    it("Case 2: Musharraka with grandmother instead of mother", () => {
+    it('Case 2: Musharraka with grandmother instead of mother', () => {
       const heirs: HeirsData = {
         husband: 1,
         grandmother_mother: 1,
@@ -47,23 +47,21 @@ describe("Special Cases - Complete Test Suite", () => {
         full_brother: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
 
-      const husband = result.shares.find((s) => s.key === "husband");
-      const grandmother = result.shares.find(
-        (s) => s.key === "grandmother_mother",
-      );
-      const siblings = result.shares.find((s) => s.key === "shared_siblings");
+      const husband = result.shares.find((s) => s.key === 'husband');
+      const grandmother = result.shares.find((s) => s.key === 'grandmother_mother');
+      const siblings = result.shares.find((s) => s.key === 'shared_siblings');
 
       expect(husband?.amount).toBeCloseTo(60000, 0);
       expect(grandmother?.amount).toBeCloseTo(20000, 0); // Grandmother gets 1/6
       expect(siblings?.amount).toBeCloseTo(40000, 0);
     });
 
-    it("Case 3: Musharraka with multiple full brothers", () => {
+    it('Case 3: Musharraka with multiple full brothers', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -71,19 +69,19 @@ describe("Special Cases - Complete Test Suite", () => {
         full_brother: 3,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
 
-      const siblings = result.shares.find((s) => s.key === "shared_siblings");
+      const siblings = result.shares.find((s) => s.key === 'shared_siblings');
       expect(siblings?.count).toBe(5); // 2 maternal + 3 full
 
       // Each of the 5 siblings gets 8,000 (40,000 / 5)
       expect(siblings?.amount).toBeCloseTo(40000, 0);
     });
 
-    it("Case 4: Should NOT apply Musharraka when conditions not met - missing maternal siblings", () => {
+    it('Case 4: Should NOT apply Musharraka when conditions not met - missing maternal siblings', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -91,16 +89,16 @@ describe("Special Cases - Complete Test Suite", () => {
         full_brother: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
 
-      const siblings = result.shares.find((s) => s.key === "shared_siblings");
+      const siblings = result.shares.find((s) => s.key === 'shared_siblings');
       expect(siblings).toBeUndefined();
     });
 
-    it("Case 5: Should NOT apply Musharraka in Maliki madhab", () => {
+    it('Case 5: Should NOT apply Musharraka in Maliki madhab', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -108,18 +106,18 @@ describe("Special Cases - Complete Test Suite", () => {
         full_brother: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("maliki", estate, heirs);
+      const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
 
       // In Maliki, full brothers should be blocked by grandfather? No, but they shouldn't share with maternal
-      const siblings = result.shares.find((s) => s.key === "shared_siblings");
+      const siblings = result.shares.find((s) => s.key === 'shared_siblings');
       expect(siblings).toBeUndefined();
     });
   });
 
-  describe("Akdariyya (الأكدرية/الغراء) - Complete Tests", () => {
+  describe('Akdariyya (الأكدرية/الغراء) - Complete Tests', () => {
     const akdariyyaEstate: EstateData = {
       total: 27000, // Using 27 for exact fractions
       funeral: 0,
@@ -127,7 +125,7 @@ describe("Special Cases - Complete Test Suite", () => {
       will: 0,
     };
 
-    it("Case 1: Standard Akdariyya", () => {
+    it('Case 1: Standard Akdariyya', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -135,20 +133,16 @@ describe("Special Cases - Complete Test Suite", () => {
         full_sister: 1,
       };
 
-      const engine = new InheritanceCalculationEngine(
-        "shafii",
-        akdariyyaEstate,
-        heirs,
-      );
+      const engine = new InheritanceCalculationEngine('shafii', akdariyyaEstate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
       expect(result.awlApplied).toBe(true);
 
-      const husband = result.shares.find((s) => s.key === "husband");
-      const mother = result.shares.find((s) => s.key === "mother");
-      const grandfather = result.shares.find((s) => s.key === "grandfather");
-      const sister = result.shares.find((s) => s.key === "full_sister");
+      const husband = result.shares.find((s) => s.key === 'husband');
+      const mother = result.shares.find((s) => s.key === 'mother');
+      const grandfather = result.shares.find((s) => s.key === 'grandfather');
+      const sister = result.shares.find((s) => s.key === 'full_sister');
 
       expect(husband?.amount).toBeCloseTo(9000, 0); // 9/27
       expect(mother?.amount).toBeCloseTo(6000, 0); // 6/27
@@ -159,7 +153,7 @@ describe("Special Cases - Complete Test Suite", () => {
       expect(total).toBeCloseTo(27000, 0);
     });
 
-    it.skip("Case 2: Verify fraction calculations", () => {
+    it.skip('Case 2: Verify fraction calculations', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -167,17 +161,13 @@ describe("Special Cases - Complete Test Suite", () => {
         full_sister: 1,
       };
 
-      const engine = new InheritanceCalculationEngine(
-        "shafii",
-        akdariyyaEstate,
-        heirs,
-      );
+      const engine = new InheritanceCalculationEngine('shafii', akdariyyaEstate, heirs);
       const result = engine.calculate();
 
-      const husband = result.shares.find((s) => s.key === "husband");
-      const mother = result.shares.find((s) => s.key === "mother");
-      const grandfather = result.shares.find((s) => s.key === "grandfather");
-      const sister = result.shares.find((s) => s.key === "full_sister");
+      const husband = result.shares.find((s) => s.key === 'husband');
+      const mother = result.shares.find((s) => s.key === 'mother');
+      const grandfather = result.shares.find((s) => s.key === 'grandfather');
+      const sister = result.shares.find((s) => s.key === 'full_sister');
 
       expect(husband?.fraction?.numerator).toBe(9);
       expect(husband?.fraction?.denominator).toBe(27);
@@ -189,7 +179,7 @@ describe("Special Cases - Complete Test Suite", () => {
       expect(sister?.fraction?.denominator).toBe(27);
     });
 
-    it("Case 3: Should NOT apply Akdariyya when conditions not met", () => {
+    it('Case 3: Should NOT apply Akdariyya when conditions not met', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -197,11 +187,7 @@ describe("Special Cases - Complete Test Suite", () => {
         full_sister: 2, // Two sisters instead of one
       };
 
-      const engine = new InheritanceCalculationEngine(
-        "shafii",
-        akdariyyaEstate,
-        heirs,
-      );
+      const engine = new InheritanceCalculationEngine('shafii', akdariyyaEstate, heirs);
       const result = engine.calculate();
 
       expect(result.success).toBe(true);
@@ -209,7 +195,7 @@ describe("Special Cases - Complete Test Suite", () => {
     });
   });
 
-  describe("Grandfather with Siblings - Complete Tests", () => {
+  describe('Grandfather with Siblings - Complete Tests', () => {
     const estate: EstateData = {
       total: 120000,
       funeral: 0,
@@ -217,22 +203,18 @@ describe("Special Cases - Complete Test Suite", () => {
       will: 0,
     };
 
-    describe("Maliki Madhab - Grandfather Shares with Siblings", () => {
-      it("Case 1: Grandfather + 1 full brother - muqasamah should be best", () => {
+    describe('Maliki Madhab - Grandfather Shares with Siblings', () => {
+      it('Case 1: Grandfather + 1 full brother - muqasamah should be best', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 1,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "maliki",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
-        const brother = result.shares.find((s) => s.key === "full_brother");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
+        const brother = result.shares.find((s) => s.key === 'full_brother');
 
         expect(grandfather).toBeDefined();
         expect(brother).toBeDefined();
@@ -244,20 +226,16 @@ describe("Special Cases - Complete Test Suite", () => {
         }
       });
 
-      it("Case 2: Grandfather + 3 full brothers - third might be best", () => {
+      it('Case 2: Grandfather + 3 full brothers - third might be best', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 3,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "maliki",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
 
         expect(grandfather).toBeDefined();
         if (grandfather) {
@@ -268,21 +246,17 @@ describe("Special Cases - Complete Test Suite", () => {
         }
       });
 
-      it("Case 3: Grandfather + many siblings - sixth might be best", () => {
+      it('Case 3: Grandfather + many siblings - sixth might be best', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 10,
           full_sister: 5,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "maliki",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
 
         expect(grandfather).toBeDefined();
         if (grandfather) {
@@ -294,21 +268,17 @@ describe("Special Cases - Complete Test Suite", () => {
         }
       });
 
-      it("Case 4: Grandfather with sisters only", () => {
+      it('Case 4: Grandfather with sisters only', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_sister: 3,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "maliki",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
-        const sister = result.shares.find((s) => s.key === "full_sister");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
+        const sister = result.shares.find((s) => s.key === 'full_sister');
 
         expect(grandfather).toBeDefined();
         expect(sister).toBeDefined();
@@ -323,24 +293,20 @@ describe("Special Cases - Complete Test Suite", () => {
       });
     });
 
-    describe("Shafii Madhab - Grandfather Blocks Siblings", () => {
-      it("Case 1: Grandfather with siblings - siblings should be blocked", () => {
+    describe('Shafii Madhab - Grandfather Blocks Siblings', () => {
+      it('Case 1: Grandfather with siblings - siblings should be blocked', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 2,
           full_sister: 1,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "shafii",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
-        const brother = result.shares.find((s) => s.key === "full_brother");
-        const sister = result.shares.find((s) => s.key === "full_sister");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
+        const brother = result.shares.find((s) => s.key === 'full_brother');
+        const sister = result.shares.find((s) => s.key === 'full_sister');
 
         expect(grandfather).toBeDefined();
         expect(brother).toBeUndefined();
@@ -351,19 +317,15 @@ describe("Special Cases - Complete Test Suite", () => {
         }
       });
 
-      it("Case 2: Grandfather alone (no siblings) - takes all", () => {
+      it('Case 2: Grandfather alone (no siblings) - takes all', () => {
         const heirs: HeirsData = {
           grandfather: 1,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "shafii",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
 
         expect(grandfather).toBeDefined();
         if (grandfather) {
@@ -372,22 +334,18 @@ describe("Special Cases - Complete Test Suite", () => {
       });
     });
 
-    describe("Hanbali Madhab - Grandfather Shares with Siblings", () => {
-      it("Case 1: Grandfather with siblings - should share", () => {
+    describe('Hanbali Madhab - Grandfather Shares with Siblings', () => {
+      it('Case 1: Grandfather with siblings - should share', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 2,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "hanbali",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('hanbali', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
-        const brother = result.shares.find((s) => s.key === "full_brother");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
+        const brother = result.shares.find((s) => s.key === 'full_brother');
 
         expect(grandfather).toBeDefined();
         expect(brother).toBeDefined();
@@ -400,22 +358,18 @@ describe("Special Cases - Complete Test Suite", () => {
       });
     });
 
-    describe("Hanafi Madhab - Grandfather Blocks Siblings", () => {
-      it("Case 1: Grandfather with siblings - siblings should be blocked", () => {
+    describe('Hanafi Madhab - Grandfather Blocks Siblings', () => {
+      it('Case 1: Grandfather with siblings - siblings should be blocked', () => {
         const heirs: HeirsData = {
           grandfather: 1,
           full_brother: 2,
         };
 
-        const engine = new InheritanceCalculationEngine(
-          "hanafi",
-          estate,
-          heirs,
-        );
+        const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
         const result = engine.calculate();
 
-        const grandfather = result.shares.find((s) => s.key === "grandfather");
-        const brother = result.shares.find((s) => s.key === "full_brother");
+        const grandfather = result.shares.find((s) => s.key === 'grandfather');
+        const brother = result.shares.find((s) => s.key === 'full_brother');
 
         expect(grandfather).toBeDefined();
         expect(brother).toBeUndefined();
@@ -423,7 +377,7 @@ describe("Special Cases - Complete Test Suite", () => {
     });
   });
 
-  describe("Blood Relatives - Complete Priority Tests", () => {
+  describe('Blood Relatives - Complete Priority Tests', () => {
     const estate: EstateData = {
       total: 120000,
       funeral: 0,
@@ -431,17 +385,17 @@ describe("Special Cases - Complete Test Suite", () => {
       will: 0,
     };
 
-    it("Class 1: Children of daughters only", () => {
+    it('Class 1: Children of daughters only', () => {
       const heirs: HeirsData = {
         daughter_son: 2,
         daughter_daughter: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
-      const son = result.shares.find((s) => s.key === "daughter_son");
-      const daughter = result.shares.find((s) => s.key === "daughter_daughter");
+      const son = result.shares.find((s) => s.key === 'daughter_son');
+      const daughter = result.shares.find((s) => s.key === 'daughter_daughter');
 
       expect(son).toBeDefined();
       expect(daughter).toBeDefined();
@@ -455,17 +409,15 @@ describe("Special Cases - Complete Test Suite", () => {
       }
     });
 
-    it("Class 2: Children of sisters", () => {
+    it('Class 2: Children of sisters', () => {
       const heirs: HeirsData = {
         sister_children: 3,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
-      const sisterChildren = result.shares.find(
-        (s) => s.key === "sister_children",
-      );
+      const sisterChildren = result.shares.find((s) => s.key === 'sister_children');
 
       expect(sisterChildren).toBeDefined();
       if (sisterChildren) {
@@ -474,17 +426,17 @@ describe("Special Cases - Complete Test Suite", () => {
       }
     });
 
-    it("Class 3: Maternal uncles and aunts", () => {
+    it('Class 3: Maternal uncles and aunts', () => {
       const heirs: HeirsData = {
         maternal_uncle: 2,
         maternal_aunt: 2,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
-      const uncles = result.shares.find((s) => s.key === "maternal_uncle");
-      const aunts = result.shares.find((s) => s.key === "maternal_aunt");
+      const uncles = result.shares.find((s) => s.key === 'maternal_uncle');
+      const aunts = result.shares.find((s) => s.key === 'maternal_aunt');
 
       expect(uncles).toBeDefined();
       expect(aunts).toBeDefined();
@@ -496,15 +448,15 @@ describe("Special Cases - Complete Test Suite", () => {
       }
     });
 
-    it("Class 4: Paternal aunts only", () => {
+    it('Class 4: Paternal aunts only', () => {
       const heirs: HeirsData = {
         paternal_aunt: 2,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
-      const aunts = result.shares.find((s) => s.key === "paternal_aunt");
+      const aunts = result.shares.find((s) => s.key === 'paternal_aunt');
 
       expect(aunts).toBeDefined();
       if (aunts) {
@@ -513,7 +465,7 @@ describe("Special Cases - Complete Test Suite", () => {
       }
     });
 
-    it("Multiple classes - should only inherit from highest class", () => {
+    it('Multiple classes - should only inherit from highest class', () => {
       const heirs: HeirsData = {
         // Class 1
         daughter_son: 1,
@@ -525,24 +477,22 @@ describe("Special Cases - Complete Test Suite", () => {
         paternal_aunt: 4,
       };
 
-      const engine = new InheritanceCalculationEngine("shafii", estate, heirs);
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
       // Only class 1 should inherit
-      expect(result.shares.some((s) => s.key === "daughter_son")).toBe(true);
-      expect(result.shares.some((s) => s.key === "sister_children")).toBe(
-        false,
-      );
-      expect(result.shares.some((s) => s.key === "maternal_uncle")).toBe(false);
-      expect(result.shares.some((s) => s.key === "paternal_aunt")).toBe(false);
+      expect(result.shares.some((s) => s.key === 'daughter_son')).toBe(true);
+      expect(result.shares.some((s) => s.key === 'sister_children')).toBe(false);
+      expect(result.shares.some((s) => s.key === 'maternal_uncle')).toBe(false);
+      expect(result.shares.some((s) => s.key === 'paternal_aunt')).toBe(false);
     });
 
-    it("Maliki madhab - should NOT inherit blood relatives (goes to treasury)", () => {
+    it('Maliki madhab - should NOT inherit blood relatives (goes to treasury)', () => {
       const heirs: HeirsData = {
         daughter_son: 1,
       };
 
-      const engine = new InheritanceCalculationEngine("maliki", estate, heirs);
+      const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
       const result = engine.calculate();
 
       // In Maliki, no blood relatives, remainder should go to treasury

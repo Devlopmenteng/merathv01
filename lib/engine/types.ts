@@ -4,41 +4,41 @@
  */
 
 // ====== المذاهب الإسلامية ======
-export type MadhhabType = "shafii" | "hanafi" | "maliki" | "hanbali";
+export type MadhhabType = 'shafii' | 'hanafi' | 'maliki' | 'hanbali';
 
 // ====== أنواع الورثة ======
 export type HeirType =
-  | "husband"
-  | "wife"
-  | "son"
-  | "daughter"
-  | "grandson"
-  | "granddaughter"
-  | "daughter_son"
-  | "daughter_daughter"
-  | "sister_children"
-  | "father"
-  | "mother"
-  | "grandfather"
-  | "grandmother_mother"
-  | "grandmother_father"
-  | "full_brother"
-  | "full_sister"
-  | "paternal_brother"
-  | "paternal_sister"
-  | "maternal_brother"
-  | "maternal_sister"
-  | "full_nephew"
-  | "paternal_nephew"
-  | "full_uncle"
-  | "paternal_uncle"
-  | "maternal_uncle"
-  | "paternal_aunt"
-  | "maternal_aunt"
-  | "full_cousin"
-  | "paternal_cousin"
-  | "treasury"
-  | "shared_siblings";
+  | 'husband'
+  | 'wife'
+  | 'son'
+  | 'daughter'
+  | 'grandson'
+  | 'granddaughter'
+  | 'daughter_son'
+  | 'daughter_daughter'
+  | 'sister_children'
+  | 'father'
+  | 'mother'
+  | 'grandfather'
+  | 'grandmother_mother'
+  | 'grandmother_father'
+  | 'full_brother'
+  | 'full_sister'
+  | 'paternal_brother'
+  | 'paternal_sister'
+  | 'maternal_brother'
+  | 'maternal_sister'
+  | 'full_nephew'
+  | 'paternal_nephew'
+  | 'full_uncle'
+  | 'paternal_uncle'
+  | 'maternal_uncle'
+  | 'paternal_aunt'
+  | 'maternal_aunt'
+  | 'full_cousin'
+  | 'paternal_cousin'
+  | 'treasury'
+  | 'shared_siblings';
 
 // ====== بيانات التركة ======
 export interface EstateData {
@@ -132,11 +132,11 @@ export interface MadhhabConfig {
 
 // ====== قواعد المذهب ======
 export interface MadhhabRules {
-  grandfather_with_siblings: "hijab" | "musharak";
-  mother_with_father_children: "third_of_remainder" | "sixth";
-  mother_with_father_only: "third" | "sixth";
+  grandfather_with_siblings: 'hijab' | 'musharak';
+  mother_with_father_children: 'third_of_remainder' | 'sixth';
+  mother_with_father_only: 'third' | 'sixth';
   spouse_radd: boolean;
-  umariyyah_rule: "first" | "second";
+  umariyyah_rule: 'first' | 'second';
 }
 
 // ====== حالات الاختبار ======
@@ -165,11 +165,19 @@ export interface AuditEntry {
   id: string;
   timestamp: Date;
   action: string;
-  type: "success" | "error" | "warning" | "info" | "calculation";
+  type: 'success' | 'error' | 'warning' | 'info' | 'calculation';
   message: string;
   details?: Record<string, any>;
   component?: string;
 }
-export type Madhab = "hanafi" | "maliki" | "shafii" | "hanbali";
-export interface HeirEntry { type: HeirType; count: number; }
-export interface EstateInput { total: number; funeral: number; debts: number; will: number; }
+export type Madhab = 'hanafi' | 'maliki' | 'shafii' | 'hanbali';
+export interface HeirEntry {
+  type: HeirType;
+  count: number;
+}
+export interface EstateInput {
+  total: number;
+  funeral: number;
+  debts: number;
+  will: number;
+}

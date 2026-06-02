@@ -8,7 +8,7 @@
  * - C6 (🔴): Fraction simplification overflow protection for large denominators (>1e9)
  */
 
-import { FractionData } from "./types";
+import { FractionData } from './types';
 
 export class FractionClass {
   private numerator: number;
@@ -29,9 +29,7 @@ export class FractionClass {
 
   constructor(numerator: number, denominator: number = 1) {
     if (denominator === 0) {
-      throw new Error(
-        "المقام لا يمكن أن يكون صفراً | Denominator cannot be zero",
-      );
+      throw new Error('المقام لا يمكن أن يكون صفراً | Denominator cannot be zero');
     }
 
     // تحويل الكسور السالبة
@@ -135,10 +133,7 @@ export class FractionClass {
     }
 
     const inverseRatio = b / a;
-    if (
-      Math.abs(inverseRatio - Math.round(inverseRatio)) <
-      FractionClass.TOLERANCE
-    ) {
+    if (Math.abs(inverseRatio - Math.round(inverseRatio)) < FractionClass.TOLERANCE) {
       return a; // a divides b roughly
     }
 
@@ -183,8 +178,7 @@ export class FractionClass {
    */
   add(other: FractionClass): FractionClass {
     // Check for potential overflow
-    const newNumerator =
-      this.numerator * other.denominator + other.numerator * this.denominator;
+    const newNumerator = this.numerator * other.denominator + other.numerator * this.denominator;
     const newDenominator = this.denominator * other.denominator;
 
     // Check if result might overflow
@@ -204,8 +198,7 @@ export class FractionClass {
    */
   subtract(other: FractionClass): FractionClass {
     // Check for potential overflow
-    const newNumerator =
-      this.numerator * other.denominator - other.numerator * this.denominator;
+    const newNumerator = this.numerator * other.denominator - other.numerator * this.denominator;
     const newDenominator = this.denominator * other.denominator;
 
     // Check if result might overflow
@@ -224,12 +217,9 @@ export class FractionClass {
    * ===== FIX C6: Added overflow protection =====
    */
   multiply(scalar: number | FractionClass): FractionClass {
-    if (typeof scalar === "number") {
+    if (typeof scalar === 'number') {
       // Check for overflow
-      if (
-        Math.abs(this.denominator) >
-        FractionClass.MAX_SAFE_DENOMINATOR / Math.abs(scalar)
-      ) {
+      if (Math.abs(this.denominator) > FractionClass.MAX_SAFE_DENOMINATOR / Math.abs(scalar)) {
         // Use decimal multiplication
         const decimal = this.toDecimal() * scalar;
         return FractionClass.fromDecimal(decimal, 12);
@@ -245,10 +235,7 @@ export class FractionClass {
         return FractionClass.fromDecimal(decimal, 12);
       }
 
-      return new FractionClass(
-        this.numerator * scalar.numerator,
-        newDenominator,
-      );
+      return new FractionClass(this.numerator * scalar.numerator, newDenominator);
     }
   }
 
@@ -258,15 +245,13 @@ export class FractionClass {
    * ===== FIX C6: Added overflow protection =====
    */
   divide(scalar: number | FractionClass): FractionClass {
-    if (typeof scalar === "number") {
+    if (typeof scalar === 'number') {
       if (scalar === 0) {
-        throw new Error("لا يمكن القسمة على صفر | Cannot divide by zero");
+        throw new Error('لا يمكن القسمة على صفر | Cannot divide by zero');
       }
 
       // Check for overflow
-      if (
-        Math.abs(this.denominator * scalar) > FractionClass.MAX_SAFE_DENOMINATOR
-      ) {
+      if (Math.abs(this.denominator * scalar) > FractionClass.MAX_SAFE_DENOMINATOR) {
         // Use decimal division
         const decimal = this.toDecimal() / scalar;
         return FractionClass.fromDecimal(decimal, 12);
@@ -275,7 +260,7 @@ export class FractionClass {
       return new FractionClass(this.numerator, this.denominator * scalar);
     } else {
       if (scalar.numerator === 0) {
-        throw new Error("لا يمكن القسمة على صفر | Cannot divide by zero");
+        throw new Error('لا يمكن القسمة على صفر | Cannot divide by zero');
       }
 
       // Check for overflow
@@ -286,10 +271,7 @@ export class FractionClass {
         return FractionClass.fromDecimal(decimal, 12);
       }
 
-      return new FractionClass(
-        this.numerator * scalar.denominator,
-        newDenominator,
-      );
+      return new FractionClass(this.numerator * scalar.denominator, newDenominator);
     }
   }
 
@@ -363,68 +345,68 @@ export class FractionClass {
     // Comprehensive Arabic fraction names for all inheritance scenarios
     const arabicFractions: Record<string, string> = {
       // Basic fractions
-      "0/1": "لا شيء",
-      "1/1": "كامل التركة",
-      "1/2": "النصف",
-      "1/3": "الثلث",
-      "2/3": "الثلثان",
-      "1/4": "الربع",
-      "3/4": "ثلاثة أرباع",
-      "1/5": "الخمس",
-      "2/5": "خمسان",
-      "3/5": "ثلاثة أخماس",
-      "4/5": "أربعة أخماس",
-      "1/6": "السدس",
-      "5/6": "خمسة أسداس",
-      "1/7": "السبع",
-      "2/7": "سبعان",
-      "3/7": "ثلاثة أسباع",
-      "4/7": "أربعة أسباع",
-      "5/7": "خمسة أسباع",
-      "6/7": "ستة أسباع",
-      "1/8": "الثمن",
-      "3/8": "ثلاثة أثمان",
-      "5/8": "خمسة أثمان",
-      "7/8": "سبعة أثمان",
-      "1/9": "التسع",
-      "2/9": "تسعان",
-      "4/9": "أربعة أتساع",
-      "5/9": "خمسة أتساع",
-      "7/9": "سبعة أتساع",
-      "8/9": "ثمانية أتساع",
-      "1/10": "العشر",
-      "3/10": "ثلاثة أعشار",
-      "7/10": "سبعة أعشار",
-      "9/10": "تسعة أعشار",
+      '0/1': 'لا شيء',
+      '1/1': 'كامل التركة',
+      '1/2': 'النصف',
+      '1/3': 'الثلث',
+      '2/3': 'الثلثان',
+      '1/4': 'الربع',
+      '3/4': 'ثلاثة أرباع',
+      '1/5': 'الخمس',
+      '2/5': 'خمسان',
+      '3/5': 'ثلاثة أخماس',
+      '4/5': 'أربعة أخماس',
+      '1/6': 'السدس',
+      '5/6': 'خمسة أسداس',
+      '1/7': 'السبع',
+      '2/7': 'سبعان',
+      '3/7': 'ثلاثة أسباع',
+      '4/7': 'أربعة أسباع',
+      '5/7': 'خمسة أسباع',
+      '6/7': 'ستة أسباع',
+      '1/8': 'الثمن',
+      '3/8': 'ثلاثة أثمان',
+      '5/8': 'خمسة أثمان',
+      '7/8': 'سبعة أثمان',
+      '1/9': 'التسع',
+      '2/9': 'تسعان',
+      '4/9': 'أربعة أتساع',
+      '5/9': 'خمسة أتساع',
+      '7/9': 'سبعة أتساع',
+      '8/9': 'ثمانية أتساع',
+      '1/10': 'العشر',
+      '3/10': 'ثلاثة أعشار',
+      '7/10': 'سبعة أعشار',
+      '9/10': 'تسعة أعشار',
 
       // Common inheritance combinations
-      "1/12": "واحد من اثني عشر",
-      "5/12": "خمسة من اثني عشر",
-      "7/12": "سبعة من اثني عشر",
-      "11/12": "أحد عشر من اثني عشر",
-      "1/24": "واحد من أربعة وعشرين",
-      "5/24": "خمسة من أربعة وعشرين",
-      "7/24": "سبعة من أربعة وعشرين",
-      "11/24": "أحد عشر من أربعة وعشرين",
-      "13/24": "ثلاثة عشر من أربعة وعشرين",
-      "17/24": "سبعة عشر من أربعة وعشرين",
-      "19/24": "تسعة عشر من أربعة وعشرين",
-      "23/24": "ثلاثة وعشرون من أربعة وعشرين",
+      '1/12': 'واحد من اثني عشر',
+      '5/12': 'خمسة من اثني عشر',
+      '7/12': 'سبعة من اثني عشر',
+      '11/12': 'أحد عشر من اثني عشر',
+      '1/24': 'واحد من أربعة وعشرين',
+      '5/24': 'خمسة من أربعة وعشرين',
+      '7/24': 'سبعة من أربعة وعشرين',
+      '11/24': 'أحد عشر من أربعة وعشرين',
+      '13/24': 'ثلاثة عشر من أربعة وعشرين',
+      '17/24': 'سبعة عشر من أربعة وعشرين',
+      '19/24': 'تسعة عشر من أربعة وعشرين',
+      '23/24': 'ثلاثة وعشرون من أربعة وعشرين',
 
       // Simplified forms
-      "2/6": "ثلث", // Simplified from 2/6
-      "3/6": "نصف", // Simplified from 3/6
-      "4/6": "ثلثان", // Simplified from 4/6
-      "2/8": "ربع", // Simplified from 2/8
-      "4/8": "نصف", // Simplified from 4/8
-      "6/8": "ثلاثة أرباع", // Simplified from 6/8
-      "3/9": "ثلث", // Simplified from 3/9
-      "6/9": "ثلثان", // Simplified from 6/9
-      "2/10": "خمس", // Simplified from 2/10
-      "4/10": "خمسان", // Simplified from 4/10
-      "5/10": "نصف", // Simplified from 5/10
-      "6/10": "ثلاثة أخماس", // Simplified from 6/10
-      "8/10": "أربعة أخماس", // Simplified from 8/10
+      '2/6': 'ثلث', // Simplified from 2/6
+      '3/6': 'نصف', // Simplified from 3/6
+      '4/6': 'ثلثان', // Simplified from 4/6
+      '2/8': 'ربع', // Simplified from 2/8
+      '4/8': 'نصف', // Simplified from 4/8
+      '6/8': 'ثلاثة أرباع', // Simplified from 6/8
+      '3/9': 'ثلث', // Simplified from 3/9
+      '6/9': 'ثلثان', // Simplified from 6/9
+      '2/10': 'خمس', // Simplified from 2/10
+      '4/10': 'خمسان', // Simplified from 4/10
+      '5/10': 'نصف', // Simplified from 5/10
+      '6/10': 'ثلاثة أخماس', // Simplified from 6/10
+      '8/10': 'أربعة أخماس', // Simplified from 8/10
     };
 
     // Check if we have an exact match
@@ -578,7 +560,7 @@ export class FractionClass {
    */
   private static decimalToFraction(
     decimal: number,
-    maxDenominator: number = 1000000,
+    maxDenominator: number = 1000000
   ): { numerator: number; denominator: number } {
     const cacheKey = `${decimal.toPrecision(15)}:${maxDenominator}`;
     const cached = this.decimalToFractionCache.get(cacheKey);
@@ -609,10 +591,7 @@ export class FractionClass {
       k1 = a * k1 + k2;
       k2 = aux;
       b = 1 / (b - a);
-    } while (
-      Math.abs(decimal - h1 / k1) > decimal * 1e-12 &&
-      k1 < maxDenominator
-    );
+    } while (Math.abs(decimal - h1 / k1) > decimal * 1e-12 && k1 < maxDenominator);
 
     const result = { numerator: h1, denominator: k1 };
     this.decimalToFractionCache.set(cacheKey, result);
@@ -653,7 +632,7 @@ export class FractionClass {
    */
   toDenominator(targetDenominator: number): FractionClass {
     if (targetDenominator % this.denominator !== 0) {
-      throw new Error("المقام المستهدف يجب أن يكون مضاعفاً للمقام الحالي");
+      throw new Error('المقام المستهدف يجب أن يكون مضاعفاً للمقام الحالي');
     }
     const multiplier = targetDenominator / this.denominator;
     return new FractionClass(this.numerator * multiplier, targetDenominator);

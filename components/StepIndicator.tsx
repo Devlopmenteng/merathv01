@@ -12,7 +12,12 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
   const theme = useAppTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.outline }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.outline },
+      ]}
+    >
       {steps.map((stepKey, index) => (
         <View key={stepKey} style={styles.stepWrapper}>
           <View style={styles.stepRow}>
@@ -27,7 +32,10 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               <Text
                 style={[
                   styles.stepNumber,
-                  { color: currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary },
+                  {
+                    color:
+                      currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary,
+                  },
                 ]}
               >
                 {index + 1}

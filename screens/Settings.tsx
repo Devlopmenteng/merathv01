@@ -36,17 +36,20 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
   const appVersion = '1.0.0';
 
-  const changeLanguage = useCallback(async (langCode: string) => {
-    if (langCode === locale) {
+  const changeLanguage = useCallback(
+    async (langCode: string) => {
+      if (langCode === locale) {
+        setLanguageModalVisible(false);
+        return;
+      }
+      const needsReload = await changeLocale(langCode);
+      if (needsReload) {
+        showAlert(t('language_changed'), t('restart_required'));
+      }
       setLanguageModalVisible(false);
-      return;
-    }
-    const needsReload = await changeLocale(langCode);
-    if (needsReload) {
-      showAlert(t('language_changed'), t('restart_required'));
-    }
-    setLanguageModalVisible(false);
-  }, [changeLocale, locale]);
+    },
+    [changeLocale, locale]
+  );
 
   const handleEmailFeedback = () => {
     Linking.openURL('mailto:smartengineer3000@gmail.com?subject=Merath App Feedback');
@@ -84,12 +87,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
   };
 
   const handleLegalNotices = () => {
-    Alert.alert(
-      t('legal_notices'),
-      t('legal_notices_text'),
-      [{ text: t('close') }],
-      { cancelable: true }
-    );
+    Alert.alert(t('legal_notices'), t('legal_notices_text'), [{ text: t('close') }], {
+      cancelable: true,
+    });
   };
 
   const LanguageDropdown = () => (
@@ -109,7 +109,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       >
         <Text style={theme.typography.body}>{t('language')}</Text>
         <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
-          {LANGUAGES.find(l => l.code === locale)?.label || locale}
+          {LANGUAGES.find((l) => l.code === locale)?.label || locale}
         </Text>
       </TouchableOpacity>
 
@@ -135,10 +135,8 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
               padding: 20,
             }}
           >
-            <Text style={[theme.typography.h2, { marginBottom: 16 }]}>
-              {t('select_language')}
-            </Text>
-            {LANGUAGES.map(lang => (
+            <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('select_language')}</Text>
+            {LANGUAGES.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
                 style={{
@@ -152,9 +150,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 onPress={() => changeLanguage(lang.code)}
               >
                 <Text style={theme.typography.body}>{lang.label}</Text>
-                {locale === lang.code && (
-                  <Text style={{ color: theme.colors.primary }}>✓</Text>
-                )}
+                {locale === lang.code && <Text style={{ color: theme.colors.primary }}>✓</Text>}
               </TouchableOpacity>
             ))}
             <TouchableOpacity
@@ -214,9 +210,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           marginVertical: 12,
         }}
       >
-        <Text style={[theme.typography.body, { marginBottom: 12 }]}>
-          {t('language')}
-        </Text>
+        <Text style={[theme.typography.body, { marginBottom: 12 }]}>{t('language')}</Text>
         {LanguageDropdown()}
       </View>
 
@@ -244,12 +238,8 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           marginVertical: 12,
         }}
       >
-        <Text style={[theme.typography.h2, { marginBottom: 8 }]}>
-          {t('about')}
-        </Text>
-        <Text style={theme.typography.body}>
-          {t('merath_v10__islamic_inheritance_calculator')}
-        </Text>
+        <Text style={[theme.typography.h2, { marginBottom: 8 }]}>{t('about')}</Text>
+        <Text style={theme.typography.body}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
         <Text style={[theme.typography.caption, { marginTop: 8 }]}>
           {t('built_with_expo__typescript')}
         </Text>
@@ -276,10 +266,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <Text style={theme.typography.body}>{t('rate_us')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{ paddingVertical: 12 }}
-          onPress={handleEmailFeedback}
-        >
+        <TouchableOpacity style={{ paddingVertical: 12 }} onPress={handleEmailFeedback}>
           <Text style={theme.typography.body}>{t('send_feedback')}</Text>
         </TouchableOpacity>
       </View>

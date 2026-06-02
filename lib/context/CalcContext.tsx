@@ -19,7 +19,9 @@ const initialState: State = {
   heirs: [],
 };
 
-type CalcPayload = Partial<Pick<State, 'madhab' | 'total' | 'funeral' | 'debts' | 'will' | 'heirs'>>;
+type CalcPayload = Partial<
+  Pick<State, 'madhab' | 'total' | 'funeral' | 'debts' | 'will' | 'heirs'>
+>;
 
 type Action =
   | { type: 'SET_MADHAB'; payload: string }
@@ -57,14 +59,10 @@ export const CalcProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = React.useMemo(
     () => ({ state, dispatch, caseName, setCaseName, caseDate, setCaseDate }),
-    [state, dispatch, caseName, caseDate],
+    [state, dispatch, caseName, caseDate]
   );
 
-  return (
-    <CalcContext.Provider value={value}>
-      {children}
-    </CalcContext.Provider>
-  );
+  return <CalcContext.Provider value={value}>{children}</CalcContext.Provider>;
 };
 
 export const useCalc = () => {

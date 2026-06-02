@@ -36,10 +36,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     return true;
   }, []);
 
-  const value = useMemo(
-    () => ({ locale, isReady, changeLocale }),
-    [locale, isReady, changeLocale],
-  );
+  const value = useMemo(() => ({ locale, isReady, changeLocale }), [locale, isReady, changeLocale]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };

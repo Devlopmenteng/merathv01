@@ -17,11 +17,15 @@ export const StepTimeline: React.FC<StepTimelineProps> = ({ steps }) => {
             <View style={[styles.circle, { backgroundColor: theme.colors.primary }]}>
               <Text style={[styles.checkmark, { color: theme.colors.onPrimary }]}>✓</Text>
             </View>
-            {index < steps.length - 1 && <View style={[styles.line, { backgroundColor: theme.colors.outline }]} />}
+            {index < steps.length - 1 && (
+              <View style={[styles.line, { backgroundColor: theme.colors.outline }]} />
+            )}
           </View>
           <View style={styles.contentColumn}>
             <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>{step.title}</Text>
-            <Text style={[theme.typography.body, { color: theme.colors.onSurface }]}>{step.description}</Text>
+            <Text style={[theme.typography.body, { color: theme.colors.onSurface }]}>
+              {step.description}
+            </Text>
           </View>
         </View>
       ))}

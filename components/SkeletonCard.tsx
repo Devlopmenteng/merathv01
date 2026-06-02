@@ -9,7 +9,7 @@ const Skeleton = React.memo(({ width = 100, height = 20 }: { width?: number; hei
       Animated.sequence([
         Animated.timing(shimmer, { toValue: 1, duration: 1000, useNativeDriver: false }),
         Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: false }),
-      ]),
+      ])
     );
 
     animation.start();
@@ -17,7 +17,11 @@ const Skeleton = React.memo(({ width = 100, height = 20 }: { width?: number; hei
   }, [shimmer]);
 
   const bg = shimmer.interpolate({ inputRange: [0, 1], outputRange: ['#E0E0E0', '#F0F0F0'] });
-  return <Animated.View style={{ width, height, backgroundColor: bg, borderRadius: 4, marginBottom: 8 }} />;
+  return (
+    <Animated.View
+      style={{ width, height, backgroundColor: bg, borderRadius: 4, marginBottom: 8 }}
+    />
+  );
 });
 
 export const ResultsSkeleton = React.memo(() => (

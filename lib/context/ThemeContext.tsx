@@ -103,17 +103,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   const theme = React.useMemo(
     () => ({ colors: isDark ? darkColors : lightColors, spacing, radius, typography }),
-    [isDark],
+    [isDark]
   );
 
-  const value = React.useMemo(
-    () => ({ isDark, toggleTheme, theme }),
-    [isDark, toggleTheme, theme],
-  );
+  const value = React.useMemo(() => ({ isDark, toggleTheme, theme }), [isDark, toggleTheme, theme]);
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };

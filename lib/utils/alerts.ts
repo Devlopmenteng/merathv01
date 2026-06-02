@@ -17,11 +17,7 @@ interface AlertOptions {
  * @param messageKey - i18n key for message
  * @param options - Alert options (buttons, cancelable, etc)
  */
-export const showAlert = (
-  titleKey: string,
-  messageKey: string,
-  options?: AlertOptions,
-): void => {
+export const showAlert = (titleKey: string, messageKey: string, options?: AlertOptions): void => {
   Alert.alert(t(titleKey), t(messageKey), options?.buttons, {
     cancelable: options?.cancelable ?? false,
   });
@@ -38,7 +34,7 @@ export const showConfirm = (
   titleKey: string,
   messageKey: string,
   onConfirm: () => void,
-  onCancel?: () => void,
+  onCancel?: () => void
 ): void => {
   Alert.alert(t(titleKey), t(messageKey), [
     {

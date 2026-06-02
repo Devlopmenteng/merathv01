@@ -1,9 +1,13 @@
+import type { HeirEntry, HeirType } from './types';
+
 export class HijabSystem {
   constructor() {
     // Preserved constructor shape for future madhab-specific behavior.
   }
 
-  applyHijab(heirs: Record<string, number | undefined>): { heirs: Record<string, number | undefined> } {
+  applyHijab(heirs: Record<string, number | undefined>): {
+    heirs: Record<string, number | undefined>;
+  } {
     const result = { ...heirs };
 
     // Block siblings if there is a son
@@ -28,31 +32,59 @@ export class HijabSystem {
   }
 
   countMales(heirs: Record<string, number>): number {
-    const maleHeirs = ['son', 'father', 'full_brother', 'half_brother_paternal', 'paternal_grandfather', 'grandfather', 'grandson'];
+    const maleHeirs = [
+      'son',
+      'father',
+      'full_brother',
+      'half_brother_paternal',
+      'paternal_grandfather',
+      'grandfather',
+      'grandson',
+    ];
     return maleHeirs.reduce((sum, key) => sum + (heirs[key] || 0), 0);
   }
 
   countFemales(heirs: Record<string, number>): number {
-    const femaleHeirs = ['daughter', 'mother', 'full_sister', 'half_sister_paternal', 'maternal_grandmother', 'granddaughter'];
+    const femaleHeirs = [
+      'daughter',
+      'mother',
+      'full_sister',
+      'half_sister_paternal',
+      'maternal_grandmother',
+      'granddaughter',
+    ];
     return femaleHeirs.reduce((sum, key) => sum + (heirs[key] || 0), 0);
   }
 
   checkInheritanceRights(heirType: string): boolean {
     const validTypes = [
-      'husband', 'wife', 'son', 'daughter', 'father', 'mother',
-      'full_brother', 'full_sister', 'paternal_grandfather', 'grandfather',
-      'maternal_grandmother', 'grandson', 'granddaughter',
-      'half_brother_paternal', 'half_sister_paternal'
+      'husband',
+      'wife',
+      'son',
+      'daughter',
+      'father',
+      'mother',
+      'full_brother',
+      'full_sister',
+      'paternal_grandfather',
+      'grandfather',
+      'maternal_grandmother',
+      'grandson',
+      'granddaughter',
+      'half_brother_paternal',
+      'half_sister_paternal',
     ];
     return validTypes.includes(heirType);
   }
 }
-export function applyHijab(heirs: any[]) {
+export function applyHijab(heirs: HeirEntry[]) {
   const system = new HijabSystem();
   const heirsRecord: Record<string, number | undefined> = {};
-  heirs.forEach((h: any) => { if (h.count > 0) heirsRecord[h.type] = h.count; });
+  heirs.forEach((h: HeirEntry) => {
+    if (h.count > 0) heirsRecord[h.type] = h.count;
+  });
   const result = system.applyHijab(heirsRecord);
   return Object.entries(result.heirs)
     .filter(([_, count]) => count !== undefined && count > 0)
-    .map(([type, count]) => ({ type: type as any, count }));
+    .map(([type, count]) => ({ type: type as HeirType, count }));
 }

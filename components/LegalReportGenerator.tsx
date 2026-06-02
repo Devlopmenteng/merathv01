@@ -4,10 +4,13 @@ import { Platform } from 'react-native';
 import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
 import { t, i18n } from '../lib/i18n';
+import type { CalculationResult } from '../lib/engine/types';
 
-export async function generateLegalReport(result: any, madhab: string) {
+export async function generateLegalReport(result: CalculationResult, madhab: string) {
   const today = new Date().toLocaleDateString(i18n.locale === 'ar' ? 'ar-EG' : 'en-US', {
-    year: 'numeric', month: 'long', day: 'numeric'
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
   const caseNumber = `MER-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
@@ -39,20 +42,24 @@ export async function generateLegalReport(result: any, madhab: string) {
     </div>
     <div class="section">
       <h3>${t('report_estate_summary')}</h3>
-      <p>${t('report_net_estate')}: ${formatCurrency(result.netEstate || result.netTotal)}</p>
+      <p>${t('report_net_estate')}: ${formatCurrency(result.netEstate || 0)}</p>
     </div>
     <div class="section">
       <h3>${t('report_distribution')}</h3>
       <table class="table">
         <thead><tr><th>${t('heir')}</th><th>${t('amount')}</th><th>${t('report_share_fraction')}</th></tr></thead>
         <tbody>
-          ${result.shares.map((s: any) => `
+          ${result.shares
+            .map(
+              (s) => `
             <tr>
               <td>${s.name}</td>
               <td>${formatCurrency(s.amount)}</td>
-              <td>${s.fraction.numerator}/${s.fraction.denominator}</td>
+              <td>${s.fraction?.numerator}/${s.fraction?.denominator || 'N/A'}</td>
             </tr>
-          `).join('')}
+          `
+            )
+            .join('')}
         </tbody>
       </table>
     </div>
@@ -65,7 +72,7 @@ export async function generateLegalReport(result: any, madhab: string) {
   </html>`;
 
   const { uri } = await Print.printToFileAsync({ html });
-  if (Platform.OS === 'android' && await Sharing.isAvailableAsync()) {
+  if (Platform.OS === 'android' && (await Sharing.isAvailableAsync())) {
     await Sharing.shareAsync(uri);
   } else {
     showAlert(t('report_saved'), uri);

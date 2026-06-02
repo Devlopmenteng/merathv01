@@ -6,8 +6,8 @@ import { useAppTheme } from '../hooks/useAppTheme';
 type PieData = { label: string; value: number; color: string; fraction?: string };
 
 const polarToCartesian = (cx: number, cy: number, r: number, angle: number) => ({
-  x: cx + r * Math.cos((angle - 90) * Math.PI / 180),
-  y: cy + r * Math.sin((angle - 90) * Math.PI / 180),
+  x: cx + r * Math.cos(((angle - 90) * Math.PI) / 180),
+  y: cy + r * Math.sin(((angle - 90) * Math.PI) / 180),
 });
 
 const describeArc = (cx: number, cy: number, r: number, startAngle: number, endAngle: number) => {
@@ -21,8 +21,22 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 // Color-blind friendly palette
 const COLOR_PALETTE = [
-  '#FF6B6B', '#4ECDC4', '#45B7D1', '#F7DC6F', '#96CEB4', '#FFB347', '#6B5B95', '#88B04B',
-  '#D4A5A5', '#9B59B6', '#3498DB', '#E67E22', '#2ECC71', '#E74C3C', '#1ABC9C', '#F39C12',
+  '#FF6B6B',
+  '#4ECDC4',
+  '#45B7D1',
+  '#F7DC6F',
+  '#96CEB4',
+  '#FFB347',
+  '#6B5B95',
+  '#88B04B',
+  '#D4A5A5',
+  '#9B59B6',
+  '#3498DB',
+  '#E67E22',
+  '#2ECC71',
+  '#E74C3C',
+  '#1ABC9C',
+  '#F39C12',
 ];
 
 export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; size?: number }) => {
@@ -66,7 +80,13 @@ export const PieChart = React.memo(({ data, size = 200 }: { data: PieData[]; siz
           const showLabel = item.endAngle - item.startAngle > 15;
           return (
             <G key={idx}>
-              <AnimatedPath d={path} fill={item.color} stroke={theme.colors.surface} strokeWidth={2} opacity={animValue} />
+              <AnimatedPath
+                d={path}
+                fill={item.color}
+                stroke={theme.colors.surface}
+                strokeWidth={2}
+                opacity={animValue}
+              />
               {showLabel && (
                 <SvgText
                   x={labelPos.x}

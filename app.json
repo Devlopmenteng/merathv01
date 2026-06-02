@@ -27,10 +27,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-sharing",
-      "expo-font"
-    ],
+    "plugins": ["expo-sharing", "expo-font"],
     "extra": {
       "eas": {
         "projectId": "a524145d-db5e-41df-ac7b-94b4334a3cf5"

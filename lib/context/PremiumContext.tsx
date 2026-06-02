@@ -36,14 +36,10 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
 
   const value = React.useMemo(
     () => ({ isPremium, isReady, togglePremium }),
-    [isPremium, isReady, togglePremium],
+    [isPremium, isReady, togglePremium]
   );
 
-  return (
-    <PremiumContext.Provider value={value}>
-      {children}
-    </PremiumContext.Provider>
-  );
+  return <PremiumContext.Provider value={value}>{children}</PremiumContext.Provider>;
 };
 
 export const usePremium = () => useContext(PremiumContext);

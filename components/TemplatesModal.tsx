@@ -50,7 +50,11 @@ interface TemplatesModalProps {
   onSelectTemplate: (heirs: HeirEntry[]) => void;
 }
 
-export const TemplatesModal: React.FC<TemplatesModalProps> = ({ visible, onClose, onSelectTemplate }) => {
+export const TemplatesModal: React.FC<TemplatesModalProps> = ({
+  visible,
+  onClose,
+  onSelectTemplate,
+}) => {
   const theme = useAppTheme();
 
   return (
@@ -74,7 +78,10 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({ visible, onClose
               </TouchableOpacity>
             )}
           />
-          <TouchableOpacity style={[styles.closeButton, { backgroundColor: theme.colors.primary }]} onPress={onClose}>
+          <TouchableOpacity
+            style={[styles.closeButton, { backgroundColor: theme.colors.primary }]}
+            onPress={onClose}
+          >
             <Text style={{ color: theme.colors.onPrimary }}>{t('close')}</Text>
           </TouchableOpacity>
         </View>

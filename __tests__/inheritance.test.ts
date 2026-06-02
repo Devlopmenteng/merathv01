@@ -3,16 +3,12 @@
  * Basic Unit Tests
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
-import { FractionClass } from "../lib/engine/fraction";
-import { HijabSystem } from "../lib/engine/hijab";
-import {
-  validateEstateData,
-  validateHeirsData,
-  countTotalHeirs,
-} from "../lib/engine/constants";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { FractionClass } from '../lib/engine/fraction';
+import { HijabSystem } from '../lib/engine/hijab';
+import { validateEstateData, validateHeirsData, countTotalHeirs } from '../lib/engine/constants';
 
-describe("FractionClass", () => {
+describe('FractionClass', () => {
   let half: FractionClass;
   let third: FractionClass;
   let quarter: FractionClass;
@@ -23,64 +19,64 @@ describe("FractionClass", () => {
     quarter = new FractionClass(1, 4);
   });
 
-  it("should simplify fractions", () => {
+  it('should simplify fractions', () => {
     const fraction = new FractionClass(2, 4);
     expect(fraction.numeratorValue).toBe(1);
     expect(fraction.denominatorValue).toBe(2);
   });
 
-  it("should convert to decimal correctly", () => {
+  it('should convert to decimal correctly', () => {
     expect(half.toDecimal()).toBeCloseTo(0.5);
     expect(third.toDecimal()).toBeCloseTo(0.333, 2);
     expect(quarter.toDecimal()).toBeCloseTo(0.25);
   });
 
-  it("should add fractions", () => {
+  it('should add fractions', () => {
     const result = half.add(quarter);
     expect(result.toDecimal()).toBeCloseTo(0.75);
   });
 
-  it("should subtract fractions", () => {
+  it('should subtract fractions', () => {
     const result = half.subtract(quarter);
     expect(result.toDecimal()).toBeCloseTo(0.25);
   });
 
-  it("should multiply fractions", () => {
+  it('should multiply fractions', () => {
     const result = half.multiply(2);
     expect(result.toDecimal()).toBeCloseTo(1.0);
   });
 
-  it("should divide fractions", () => {
+  it('should divide fractions', () => {
     const result = half.divide(2);
     expect(result.toDecimal()).toBeCloseTo(0.25);
   });
 
-  it("should handle Arabic names", () => {
-    expect(half.toArabicName()).toBe("النصف");
-    expect(third.toArabicName()).toBe("الثلث");
-    expect(quarter.toArabicName()).toBe("الربع");
+  it('should handle Arabic names', () => {
+    expect(half.toArabicName()).toBe('النصف');
+    expect(third.toArabicName()).toBe('الثلث');
+    expect(quarter.toArabicName()).toBe('الربع');
   });
 
-  it("should throw on division by zero", () => {
+  it('should throw on division by zero', () => {
     expect(() => {
       half.divide(0);
     }).toThrow();
   });
 
-  it("should check equality with tolerance", () => {
+  it('should check equality with tolerance', () => {
     const similar = new FractionClass(999, 2000); // قريب جداً من 0.5
     expect(half.equals(similar)).toBe(true);
   });
 });
 
-describe("HijabSystem", () => {
+describe('HijabSystem', () => {
   let hijabSystem: HijabSystem;
 
   beforeEach(() => {
     hijabSystem = new HijabSystem();
   });
 
-  it("should block siblings when son exists", () => {
+  it('should block siblings when son exists', () => {
     const heirs = {
       son: 1,
       full_brother: 2,
@@ -107,7 +103,7 @@ describe("HijabSystem", () => {
     expect(result.grandfather).toBe(0); // محجوب
   });
 
-  it("should detect descendants", () => {
+  it('should detect descendants', () => {
     const withChildren = { son: 1, daughter: 2 };
     const withoutChildren = { father: 1, mother: 1 };
 
@@ -115,7 +111,7 @@ describe("HijabSystem", () => {
     expect(hijabSystem.hasDescendants(withoutChildren)).toBe(false);
   });
 
-  it("should count males and females", () => {
+  it('should count males and females', () => {
     const heirs = {
       husband: 1,
       wife: 1,
@@ -127,15 +123,15 @@ describe("HijabSystem", () => {
     expect(hijabSystem.countFemales(heirs)).toBe(1); // daughter فقط (بدون الزوجة)
   });
 
-  it("should verify inheritance rights", () => {
-    expect(hijabSystem.checkInheritanceRights("husband")).toBe(true);
-    expect(hijabSystem.checkInheritanceRights("son")).toBe(true);
-    expect(hijabSystem.checkInheritanceRights("invalid_heir")).toBe(false);
+  it('should verify inheritance rights', () => {
+    expect(hijabSystem.checkInheritanceRights('husband')).toBe(true);
+    expect(hijabSystem.checkInheritanceRights('son')).toBe(true);
+    expect(hijabSystem.checkInheritanceRights('invalid_heir')).toBe(false);
   });
 });
 
-describe("Validation Functions", () => {
-  it("should validate estate data", () => {
+describe('Validation Functions', () => {
+  it('should validate estate data', () => {
     const valid = validateEstateData(100000, 5000, 10000);
     expect(valid).toBeNull();
 
@@ -146,7 +142,7 @@ describe("Validation Functions", () => {
     expect(exceedingCosts).not.toBeNull();
   });
 
-  it("should validate heirs data", () => {
+  it('should validate heirs data', () => {
     const validHeirs = { husband: 1, daughter: 1 };
     expect(validateHeirsData(validHeirs)).toBeNull();
 
@@ -160,7 +156,7 @@ describe("Validation Functions", () => {
     expect(validateHeirsData(negativeCount)).not.toBeNull();
   });
 
-  it("should count total and types of heirs", () => {
+  it('should count total and types of heirs', () => {
     const heirs = {
       husband: 1,
       daughter: 2,
@@ -171,8 +167,8 @@ describe("Validation Functions", () => {
   });
 });
 
-describe("Integration Tests", () => {
-  it("should handle basic case: husband + daughter", () => {
+describe('Integration Tests', () => {
+  it('should handle basic case: husband + daughter', () => {
     const hijab = new HijabSystem();
     const heirs = { husband: 1, daughter: 1 };
 
@@ -186,7 +182,7 @@ describe("Integration Tests", () => {
     // البنت: 1/2
   });
 
-  it("should handle complex case with hijab", () => {
+  it('should handle complex case with hijab', () => {
     const hijab = new HijabSystem();
     const heirs = {
       son: 1,

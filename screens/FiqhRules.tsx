@@ -15,15 +15,47 @@ const FIXED_SHARES = [
 ];
 
 const HIJAB_RULES = [
-  { blockedKey: 'hijab_grandfather', blockerKey: 'hijab_father', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_grandmother_father', blockerKey: 'hijab_mother_or_father', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_grandmother_mother', blockerKey: 'hijab_mother', typeKey: 'hijab_type_deprivation' },
+  {
+    blockedKey: 'hijab_grandfather',
+    blockerKey: 'hijab_father',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_grandmother_father',
+    blockerKey: 'hijab_mother_or_father',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_grandmother_mother',
+    blockerKey: 'hijab_mother',
+    typeKey: 'hijab_type_deprivation',
+  },
   { blockedKey: 'hijab_grandson', blockerKey: 'hijab_son', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_granddaughter', blockerKey: 'hijab_son_or_two_daughters', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_full_siblings', blockerKey: 'hijab_son_grandson_father', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_paternal_siblings', blockerKey: 'hijab_full_sibling', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_maternal_siblings', blockerKey: 'hijab_descendant_or_male_ascendant', typeKey: 'hijab_type_deprivation' },
-  { blockedKey: 'hijab_paternal_sister', blockerKey: 'hijab_two_full_sisters', typeKey: 'hijab_type_deprivation' },
+  {
+    blockedKey: 'hijab_granddaughter',
+    blockerKey: 'hijab_son_or_two_daughters',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_full_siblings',
+    blockerKey: 'hijab_son_grandson_father',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_paternal_siblings',
+    blockerKey: 'hijab_full_sibling',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_maternal_siblings',
+    blockerKey: 'hijab_descendant_or_male_ascendant',
+    typeKey: 'hijab_type_deprivation',
+  },
+  {
+    blockedKey: 'hijab_paternal_sister',
+    blockerKey: 'hijab_two_full_sisters',
+    typeKey: 'hijab_type_deprivation',
+  },
 ];
 
 const SPECIAL_CASES = [
@@ -40,30 +72,66 @@ export const FiqhRules = () => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
-      <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>{t('madhab_notes')}</Text>
+      <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>
+        {t('madhab_notes')}
+      </Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
-        <View key={madhab} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 4, borderLeftColor: theme.colors.primary }}>
+        <View
+          key={madhab}
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            marginBottom: theme.spacing.md,
+            borderLeftWidth: 4,
+            borderLeftColor: theme.colors.primary,
+          }}
+        >
           <Text style={[theme.typography.h3, { color: theme.colors.primary, marginBottom: 4 }]}>
             {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
           </Text>
           {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={[theme.typography.caption, { marginTop: 4 }]}>• {val as string}</Text>
+            <Text key={key} style={[theme.typography.caption, { marginTop: 4 }]}>
+              • {val as string}
+            </Text>
           ))}
         </View>
       ))}
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('special_cases_title')}</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+        {t('special_cases_title')}
+      </Text>
       {SPECIAL_CASES.map((caseItem, idx) => (
-        <View key={idx} style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md }}>
-          <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>{t(caseItem.nameKey)}</Text>
+        <View
+          key={idx}
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            marginBottom: theme.spacing.md,
+          }}
+        >
+          <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>
+            {t(caseItem.nameKey)}
+          </Text>
           <Text style={theme.typography.body}>{t(caseItem.descKey)}</Text>
         </View>
       ))}
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('fixed_shares_title')}</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+        {t('fixed_shares_title')}
+      </Text>
       <ScrollView horizontal>
         <View style={{ minWidth: '100%' }}>
-          <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderColor: theme.colors.outline,
+              paddingBottom: 8,
+              marginBottom: 8,
+            }}
+          >
             <Text style={{ width: 100, fontWeight: 'bold' }}>{t('share')}</Text>
             <Text style={{ width: 200, fontWeight: 'bold' }}>{t('heirs')}</Text>
           </View>
@@ -76,10 +144,20 @@ export const FiqhRules = () => {
         </View>
       </ScrollView>
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>{t('hijab_rules_title')}</Text>
+      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+        {t('hijab_rules_title')}
+      </Text>
       <ScrollView horizontal>
         <View style={{ minWidth: '100%' }}>
-          <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderColor: theme.colors.outline,
+              paddingBottom: 8,
+              marginBottom: 8,
+            }}
+          >
             <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocked')}</Text>
             <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocker')}</Text>
             <Text style={{ width: 100, fontWeight: 'bold' }}>{t('hijab_type')}</Text>

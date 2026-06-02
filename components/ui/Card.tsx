@@ -2,7 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
-export const Card: React.FC<{ children: React.ReactNode; style?: object; noShadow?: boolean }> = ({ children, style, noShadow }) => {
+export const Card: React.FC<{ children: React.ReactNode; style?: object; noShadow?: boolean }> = ({
+  children,
+  style,
+  noShadow,
+}) => {
   const theme = useAppTheme();
   return (
     <View

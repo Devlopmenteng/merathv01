@@ -12,13 +12,19 @@ export const FeedbackButton = () => {
       StoreReview.requestReview();
     } else {
       showConfirm('feedback_title', 'feedback_prompt', () => {
-        MailComposer.composeAsync({ recipients: ['support@merath.app'], subject: 'Merath Feedback' });
+        MailComposer.composeAsync({
+          recipients: ['support@merath.app'],
+          subject: 'Merath Feedback',
+        });
       });
     }
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={{ padding: 12, backgroundColor: '#C5A04E', borderRadius: 8, marginVertical: 8 }}>
+    <TouchableOpacity
+      onPress={handlePress}
+      style={{ padding: 12, backgroundColor: '#C5A04E', borderRadius: 8, marginVertical: 8 }}
+    >
       <Text style={{ color: 'white', textAlign: 'center' }}>{t('rate_us_send_feedback')}</Text>
     </TouchableOpacity>
   );

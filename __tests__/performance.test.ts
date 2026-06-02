@@ -5,11 +5,11 @@
  * Comprehensive performance metrics and benchmarking
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-describe("Phase 7: Performance Optimization", () => {
-  describe("Application Startup", () => {
-    it("should initialize app in acceptable time", () => {
+describe('Phase 7: Performance Optimization', () => {
+  describe('Application Startup', () => {
+    it('should initialize app in acceptable time', () => {
       const startTime = performance.now();
       // Simulate app initialization
       const modules = 10;
@@ -23,7 +23,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(initTime).toBeLessThan(500);
     });
 
-    it("should load navigation in < 100ms", () => {
+    it('should load navigation in < 100ms', () => {
       const startTime = performance.now();
       const navStructure = {
         calculator: true,
@@ -37,7 +37,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should render first screen in < 300ms", () => {
+    it('should render first screen in < 300ms', () => {
       const startTime = performance.now();
       const screen = {
         components: 5,
@@ -51,8 +51,8 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Calculation Performance", () => {
-    it("should calculate simple inheritance < 50ms", () => {
+  describe('Calculation Performance', () => {
+    it('should calculate simple inheritance < 50ms', () => {
       const startTime = performance.now();
 
       // Simulate simple calculation
@@ -69,7 +69,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(results).toHaveLength(2);
     });
 
-    it("should calculate complex inheritance < 100ms", () => {
+    it('should calculate complex inheritance < 100ms', () => {
       const startTime = performance.now();
 
       // Simulate complex calculation
@@ -86,7 +86,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should process calculation with audit log < 75ms", () => {
+    it('should process calculation with audit log < 75ms', () => {
       const startTime = performance.now();
 
       const calculation = {
@@ -101,7 +101,7 @@ describe("Phase 7: Performance Optimization", () => {
         logs.push({
           step: i,
           time: Date.now(),
-          action: "calculate",
+          action: 'calculate',
         });
       }
 
@@ -112,11 +112,11 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Navigation Performance", () => {
-    it("should switch tabs in < 100ms", () => {
+  describe('Navigation Performance', () => {
+    it('should switch tabs in < 100ms', () => {
       const startTime = performance.now();
 
-      const tabs = ["Calculator", "History", "Settings", "About"];
+      const tabs = ['Calculator', 'History', 'Settings', 'About'];
       tabs.forEach((tab) => {
         // Simulate tab switch
         const state = { active: tab };
@@ -128,18 +128,14 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should handle deep link navigation < 150ms", () => {
+    it('should handle deep link navigation < 150ms', () => {
       const startTime = performance.now();
 
-      const deepLinks = [
-        "merath://calculator",
-        "merath://history",
-        "merath://settings",
-      ];
+      const deepLinks = ['merath://calculator', 'merath://history', 'merath://settings'];
 
       deepLinks.forEach((link) => {
         // Simulate route parsing
-        const parsed = link.split("://")[1];
+        const parsed = link.split('://')[1];
         expect(parsed).toBeDefined();
       });
 
@@ -148,7 +144,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(150);
     });
 
-    it("should maintain 60 FPS during interaction", () => {
+    it('should maintain 60 FPS during interaction', () => {
       const fps = 60;
       const frameDuration = 1000 / fps;
 
@@ -157,8 +153,8 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Memory Usage", () => {
-    it("should use < 100MB for core operations", () => {
+  describe('Memory Usage', () => {
+    it('should use < 100MB for core operations', () => {
       const baseMemory = 20; // MB
       const components = 6; // ~5MB each
       const hooks = 5; // ~2MB each
@@ -169,7 +165,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(total).toBeLessThan(100);
     });
 
-    it("should handle history with < 50MB", () => {
+    it('should handle history with < 50MB', () => {
       const maxEntries = 1000;
       const entrySize = 0.05; // MB per entry
 
@@ -178,7 +174,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(total).toBeLessThanOrEqual(50);
     });
 
-    it("should not leak memory on calculations", () => {
+    it('should not leak memory on calculations', () => {
       const initialMemory = 50; // MB
       const calculations = 1000;
       const memoryPerCalc = 0.01; // MB
@@ -190,8 +186,8 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Network Performance", () => {
-    it("should handle offline mode gracefully", () => {
+  describe('Network Performance', () => {
+    it('should handle offline mode gracefully', () => {
       const isOnline = false;
       const fallbackData = { cached: true };
 
@@ -199,7 +195,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(fallbackData.cached).toBe(true);
     });
 
-    it("should sync data efficiently", () => {
+    it('should sync data efficiently', () => {
       const dataSize = 1024; // KB
       const bandwidth = 5000; // KB/s
       const syncTime = dataSize / bandwidth;
@@ -208,14 +204,14 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Storage Performance", () => {
-    it("should save calculation < 50ms", () => {
+  describe('Storage Performance', () => {
+    it('should save calculation < 50ms', () => {
       const startTime = performance.now();
 
       const calculation = {
         estate: 100000,
         heirs: 3,
-        madhab: "shafii",
+        madhab: 'shafii',
         timestamp: Date.now(),
       };
 
@@ -227,7 +223,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(50);
     });
 
-    it("should load history < 100ms", () => {
+    it('should load history < 100ms', () => {
       const startTime = performance.now();
 
       const entries = Array.from({ length: 100 }, (_, i) => ({
@@ -246,8 +242,8 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Component Rendering", () => {
-    it("should render EstateInput in < 50ms", () => {
+  describe('Component Rendering', () => {
+    it('should render EstateInput in < 50ms', () => {
       const startTime = performance.now();
 
       const props = {
@@ -266,13 +262,13 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(50);
     });
 
-    it("should render ResultsDisplay in < 100ms", () => {
+    it('should render ResultsDisplay in < 100ms', () => {
       const startTime = performance.now();
 
       const results = {
         shares: [
-          { heir: "husband", amount: 25000 },
-          { heir: "daughter", amount: 75000 },
+          { heir: 'husband', amount: 25000 },
+          { heir: 'daughter', amount: 75000 },
         ],
         total: 100000,
         calculations: 5,
@@ -281,12 +277,12 @@ describe("Phase 7: Performance Optimization", () => {
       const rendered = JSON.stringify(results);
 
       const endTime = performance.now();
-      expect(rendered).toContain("husband");
+      expect(rendered).toContain('husband');
 
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should render CalculationHistory in < 200ms", () => {
+    it('should render CalculationHistory in < 200ms', () => {
       const startTime = performance.now();
 
       const history = Array.from({ length: 50 }, (_, i) => ({
@@ -304,15 +300,15 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Build Metrics", () => {
-    it("should have acceptable bundle size", () => {
+  describe('Build Metrics', () => {
+    it('should have acceptable bundle size', () => {
       const targetSize = 50; // MB
       const estimatedSize = 40; // MB (estimated)
 
       expect(estimatedSize).toBeLessThan(targetSize);
     });
 
-    it("should have gzipped size < 20MB", () => {
+    it('should have gzipped size < 20MB', () => {
       const uncompressed = 40; // MB
       const compressionRatio = 0.5; // 50% compression
       const gzipped = uncompressed * compressionRatio;
@@ -320,7 +316,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(gzipped).toBeLessThanOrEqual(20);
     });
 
-    it("should have minimal dependencies impact", () => {
+    it('should have minimal dependencies impact', () => {
       const coreSize = 10; // MB
       const dependencies = 30; // MB
       const ratio = dependencies / coreSize;
@@ -329,22 +325,22 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("User Experience Metrics", () => {
-    it("should have acceptable Time to Interactive (TTI)", () => {
+  describe('User Experience Metrics', () => {
+    it('should have acceptable Time to Interactive (TTI)', () => {
       const tti = 1500; // ms
       const target = 2000; // ms
 
       expect(tti).toBeLessThan(target);
     });
 
-    it("should have minimal First Contentful Paint (FCP)", () => {
+    it('should have minimal First Contentful Paint (FCP)', () => {
       const fcp = 1000; // ms
       const target = 1500; // ms
 
       expect(fcp).toBeLessThan(target);
     });
 
-    it("should have low Cumulative Layout Shift (CLS)", () => {
+    it('should have low Cumulative Layout Shift (CLS)', () => {
       const cls = 0.05; // score
       const target = 0.1; // score
 
@@ -352,11 +348,11 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Stress Testing", () => {
-    it("should handle rapid tab switching", () => {
+  describe('Stress Testing', () => {
+    it('should handle rapid tab switching', () => {
       const startTime = performance.now();
 
-      const tabs = ["calc", "hist", "set", "about"];
+      const tabs = ['calc', 'hist', 'set', 'about'];
       for (let i = 0; i < 100; i++) {
         const tab = tabs[i % tabs.length];
         expect(tab).toBeDefined();
@@ -367,7 +363,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(200);
     });
 
-    it("should handle rapid calculations", () => {
+    it('should handle rapid calculations', () => {
       const startTime = performance.now();
 
       for (let i = 0; i < 50; i++) {
@@ -380,7 +376,7 @@ describe("Phase 7: Performance Optimization", () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
 
-    it("should handle large dataset (1000 entries)", () => {
+    it('should handle large dataset (1000 entries)', () => {
       const startTime = performance.now();
 
       const data = Array.from({ length: 1000 }, (_, i) => ({
@@ -397,22 +393,22 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Energy Efficiency", () => {
-    it("should use minimal CPU", () => {
+  describe('Energy Efficiency', () => {
+    it('should use minimal CPU', () => {
       const idleCpu = 5; // %
       const targetCpu = 20; // %
 
       expect(idleCpu).toBeLessThan(targetCpu);
     });
 
-    it("should use minimal GPU", () => {
+    it('should use minimal GPU', () => {
       const gpuUsage = 10; // %
       const targetGpu = 30; // %
 
       expect(gpuUsage).toBeLessThan(targetGpu);
     });
 
-    it("should optimize battery drain", () => {
+    it('should optimize battery drain', () => {
       const batteryDrainRate = 5; // % per hour
       const targetRate = 10; // % per hour
 
@@ -420,8 +416,8 @@ describe("Phase 7: Performance Optimization", () => {
     });
   });
 
-  describe("Phase 7 Summary", () => {
-    it("should meet all performance targets", () => {
+  describe('Phase 7 Summary', () => {
+    it('should meet all performance targets', () => {
       const targets = {
         appStartup: true,
         calculation: true,
@@ -437,7 +433,7 @@ describe("Phase 7: Performance Optimization", () => {
       });
     });
 
-    it("should be ready for deployment", () => {
+    it('should be ready for deployment', () => {
       const readiness = {
         performanceOK: true,
         testsPass: true,
@@ -453,8 +449,8 @@ describe("Phase 7: Performance Optimization", () => {
   });
 });
 
-describe("Deployment Readiness", () => {
-  it("should have all performance metrics within targets", () => {
+describe('Deployment Readiness', () => {
+  it('should have all performance metrics within targets', () => {
     const metrics = {
       bundleSize: { actual: 40, target: 50, pass: true },
       appStartup: { actual: 1200, target: 2000, pass: true },
@@ -469,7 +465,7 @@ describe("Deployment Readiness", () => {
     });
   });
 
-  it("should be production-ready", () => {
+  it('should be production-ready', () => {
     const checklist = {
       testsPass: true,
       noErrors: true,

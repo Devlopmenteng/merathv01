@@ -13,21 +13,40 @@ const madhabs: { key: Madhab; title: string; desc: string; icon: string }[] = [
   { key: 'hanbali', title: t('madhab_hanbali'), desc: t('madhab_hanbali_desc'), icon: '📜' },
 ];
 
-export const MadhabSelect = ({ navigation }: any) => {
+type MadhabSelectNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigation }) => {
   const theme = useAppTheme();
   const { dispatch } = useCalc();
 
   return (
     <View style={{ flex: 1 }}>
-      <StepIndicator currentStep={1} steps={["step_estate","step_madhab","step_heirs","step_results"]} />
+      <StepIndicator
+        currentStep={1}
+        steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
+      />
       <FlatList
         contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
         data={madhabs}
-        keyExtractor={i => i.key}
+        keyExtractor={(i) => i.key}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => { dispatch({ type: 'SET_MADHAB', payload: item.key }); navigation.navigate('HeirSelection'); }}
-            style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 6, borderLeftColor: theme.colors.primary, flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => {
+              dispatch({ type: 'SET_MADHAB', payload: item.key });
+              navigation.navigate('HeirSelection');
+            }}
+            style={{
+              backgroundColor: theme.colors.surface,
+              borderRadius: theme.radius.md,
+              padding: theme.spacing.md,
+              marginBottom: theme.spacing.md,
+              borderLeftWidth: 6,
+              borderLeftColor: theme.colors.primary,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
           >
             <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
             <View>

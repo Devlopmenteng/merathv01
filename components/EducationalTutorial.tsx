@@ -21,7 +21,7 @@ export const EducationalTutorial = () => {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.TUTORIAL_SEEN).then(val => {
+    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.TUTORIAL_SEEN).then((val) => {
       if (!val) setVisible(true);
     });
   }, []);
@@ -41,8 +41,12 @@ export const EducationalTutorial = () => {
     <Modal transparent animationType="fade" visible={visible}>
       <View style={styles.overlay}>
         <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
-          <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 16 }]}>{t(slides[step].titleKey)}</Text>
-          <Text style={[theme.typography.body, { textAlign: 'center', marginBottom: 24 }]}>{t(slides[step].contentKey)}</Text>
+          <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 16 }]}>
+            {t(slides[step].titleKey)}
+          </Text>
+          <Text style={[theme.typography.body, { textAlign: 'center', marginBottom: 24 }]}>
+            {t(slides[step].contentKey)}
+          </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => setVisible(false)}>
               <Text style={{ color: theme.colors.error }}>{t('skip')}</Text>
@@ -60,6 +64,11 @@ export const EducationalTutorial = () => {
 };
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center' },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: { width: width * 0.8, padding: 24, borderRadius: 16, alignItems: 'center' },
 });

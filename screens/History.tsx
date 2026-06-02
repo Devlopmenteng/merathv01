@@ -33,7 +33,7 @@ export const History = () => {
 
   return (
     <View style={{ flex: 1, padding: theme.spacing.lg }}>
-      <Text style={theme.typography.h1}>{t("history_screen_title")}</Text>
+      <Text style={theme.typography.h1}>{t('history_screen_title')}</Text>
       <TextInput
         style={{
           padding: theme.spacing.sm,
@@ -43,14 +43,14 @@ export const History = () => {
           marginVertical: theme.spacing.md,
           color: theme.colors.onSurface,
         }}
-        placeholder={t("search_placeholder")}
+        placeholder={t('search_placeholder')}
         placeholderTextColor={theme.colors.outline}
         value={search}
         onChangeText={handleSearch}
       />
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={theme.typography.body}>{t("no_history")}</Text>
+          <Text style={theme.typography.body}>{t('no_history')}</Text>
         ) : (
           filtered.map((entry, idx) => (
             <TouchableOpacity
@@ -67,8 +67,12 @@ export const History = () => {
               <Text style={{ fontWeight: 'bold' }}>
                 {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
               </Text>
-              <Text>{t('madhab')}: {entry.madhab}</Text>
-              <Text>{t('netEstate')}: {formatCurrency(entry.netTotal)}</Text>
+              <Text>
+                {t('madhab')}: {entry.madhab}
+              </Text>
+              <Text>
+                {t('netEstate')}: {formatCurrency(entry.netTotal)}
+              </Text>
               <Text style={{ marginTop: 8, fontWeight: '600' }}>{t('heirs')}:</Text>
               {entry.shares.slice(0, 3).map((share, i) => (
                 <Text key={i} style={{ fontSize: 12, marginLeft: 8 }}>

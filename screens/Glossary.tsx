@@ -17,7 +17,16 @@ export const Glossary = () => {
       data={GLOSSARY}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md, borderLeftWidth: 4, borderLeftColor: theme.colors.primary }}>
+        <View
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            marginBottom: theme.spacing.md,
+            borderLeftWidth: 4,
+            borderLeftColor: theme.colors.primary,
+          }}
+        >
           <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
             {item.term} – {item.termAr}
           </Text>
@@ -35,7 +44,14 @@ export const Glossary = () => {
       data={INHERITANCE_VERSES}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md }}>
+        <View
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            marginBottom: theme.spacing.md,
+          }}
+        >
           <Text style={[theme.typography.h3, { color: theme.colors.secondary, marginBottom: 4 }]}>
             {item.surah} {item.verseNumber}
           </Text>
@@ -54,9 +70,18 @@ export const Glossary = () => {
       data={HADITH}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View style={{ backgroundColor: theme.colors.surface, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.md }}>
+        <View
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            marginBottom: theme.spacing.md,
+          }}
+        >
           <Text style={{ fontSize: 16, lineHeight: 24, marginBottom: 8 }}>{item.text}</Text>
-          <Text style={[theme.typography.caption, { color: theme.colors.outline }]}>{item.reference}</Text>
+          <Text style={[theme.typography.caption, { color: theme.colors.outline }]}>
+            {item.reference}
+          </Text>
         </View>
       )}
     />
@@ -66,22 +91,61 @@ export const Glossary = () => {
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
         <TouchableOpacity
-          style={{ flex: 1, padding: theme.spacing.sm, borderRadius: theme.radius.md, backgroundColor: activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant, alignItems: 'center' }}
+          style={{
+            flex: 1,
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.md,
+            backgroundColor:
+              activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant,
+            alignItems: 'center',
+          }}
           onPress={() => setActiveTab('glossary')}
         >
-          <Text style={{ color: activeTab === 'glossary' ? theme.colors.onPrimary : theme.colors.onSurface }}>{t('tab_glossary')}</Text>
+          <Text
+            style={{
+              color: activeTab === 'glossary' ? theme.colors.onPrimary : theme.colors.onSurface,
+            }}
+          >
+            {t('tab_glossary')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ flex: 1, padding: theme.spacing.sm, borderRadius: theme.radius.md, backgroundColor: activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant, alignItems: 'center' }}
+          style={{
+            flex: 1,
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.md,
+            backgroundColor:
+              activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant,
+            alignItems: 'center',
+          }}
           onPress={() => setActiveTab('verses')}
         >
-          <Text style={{ color: activeTab === 'verses' ? theme.colors.onPrimary : theme.colors.onSurface }}>{t('tab_verses')}</Text>
+          <Text
+            style={{
+              color: activeTab === 'verses' ? theme.colors.onPrimary : theme.colors.onSurface,
+            }}
+          >
+            {t('tab_verses')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ flex: 1, padding: theme.spacing.sm, borderRadius: theme.radius.md, backgroundColor: activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant, alignItems: 'center' }}
+          style={{
+            flex: 1,
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.md,
+            backgroundColor:
+              activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant,
+            alignItems: 'center',
+          }}
           onPress={() => setActiveTab('hadith')}
         >
-          <Text style={{ color: activeTab === 'hadith' ? theme.colors.onPrimary : theme.colors.onSurface }}>{t('tab_hadith')}</Text>
+          <Text
+            style={{
+              color: activeTab === 'hadith' ? theme.colors.onPrimary : theme.colors.onSurface,
+            }}
+          >
+            {t('tab_hadith')}
+          </Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>

@@ -40,10 +40,16 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
         {children}
       </ViewShot>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 12 }}>
-        <TouchableOpacity onPress={generatePDF} style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}>
+        <TouchableOpacity
+          onPress={generatePDF}
+          style={{ padding: 12, backgroundColor: theme.colors.primary, borderRadius: 8 }}
+        >
           <Text style={{ color: theme.colors.onPrimary }}>{t('pdf')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={captureAndShare} style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}>
+        <TouchableOpacity
+          onPress={captureAndShare}
+          style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}
+        >
           <Text style={{ color: theme.colors.onSecondary }}>{t('share_image')}</Text>
         </TouchableOpacity>
       </View>

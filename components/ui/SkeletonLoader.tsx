@@ -29,10 +29,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({ height = 20, sty
 
   return (
     <Animated.View
-      style={[
-        { height, borderRadius: theme.radius.sm, backgroundColor: bg },
-        style,
-      ]}
+      style={[{ height, borderRadius: theme.radius.sm, backgroundColor: bg }, style]}
     />
   );
 };

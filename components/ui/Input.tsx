@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, Animated } from 'react-native';
+import { View, TextInput, Text, Animated, KeyboardTypeOptions } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { formatCurrency, parseCurrency } from '../../lib/utils/currencyFormatter';
 
@@ -7,7 +7,7 @@ type Props = {
   label: string;
   value: string;
   onChangeText: (text: string) => void;
-  keyboardType?: any;
+  keyboardType?: KeyboardTypeOptions;
   error?: string;
   helper?: string;
   leftIcon?: React.ReactNode;
@@ -78,11 +78,7 @@ export const Input: React.FC<Props> = ({
       inputRange: [0, 1],
       outputRange: [16, 12],
     }),
-    color: error
-      ? theme.colors.error
-      : focused
-      ? theme.colors.primary
-      : theme.colors.outline,
+    color: error ? theme.colors.error : focused ? theme.colors.primary : theme.colors.outline,
     backgroundColor: theme.colors.surfaceVariant,
     paddingHorizontal: 4,
   };
@@ -90,8 +86,8 @@ export const Input: React.FC<Props> = ({
   const borderColor = error
     ? theme.colors.error
     : focused
-    ? theme.colors.primary
-    : theme.colors.outline;
+      ? theme.colors.primary
+      : theme.colors.outline;
 
   return (
     <View style={[{ marginBottom: theme.spacing.md }, style]}>

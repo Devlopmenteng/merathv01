@@ -12,7 +12,14 @@ type Props = {
   style?: object;
 };
 
-export const Button: React.FC<Props> = ({ title, onPress, mode = 'filled', disabled, loading, style }) => {
+export const Button: React.FC<Props> = ({
+  title,
+  onPress,
+  mode = 'filled',
+  disabled,
+  loading,
+  style,
+}) => {
   const theme = useAppTheme();
   const isOutlined = mode === 'outlined';
   const isGradient = mode === 'gradient';
@@ -27,7 +34,11 @@ export const Button: React.FC<Props> = ({ title, onPress, mode = 'filled', disab
         },
       ]}
     >
-      {loading ? <ActivityIndicator color={isOutlined ? theme.colors.primary : theme.colors.onPrimary} /> : title}
+      {loading ? (
+        <ActivityIndicator color={isOutlined ? theme.colors.primary : theme.colors.onPrimary} />
+      ) : (
+        title
+      )}
     </Text>
   );
 

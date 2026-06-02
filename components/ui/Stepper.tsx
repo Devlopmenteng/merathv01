@@ -2,7 +2,13 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
-type Props = { value: number; onIncrease: () => void; onDecrease: () => void; min?: number; max?: number };
+type Props = {
+  value: number;
+  onIncrease: () => void;
+  onDecrease: () => void;
+  min?: number;
+  max?: number;
+};
 export const Stepper: React.FC<Props> = ({ value, onIncrease, onDecrease, min = 0, max = 99 }) => {
   const theme = useAppTheme();
   return (
@@ -22,7 +28,16 @@ export const Stepper: React.FC<Props> = ({ value, onIncrease, onDecrease, min = 
       >
         <Text style={{ fontSize: 18 }}>−</Text>
       </TouchableOpacity>
-      <Text style={{ marginHorizontal: 12, fontSize: 18, fontWeight: '600', color: theme.colors.text.primary }}>{value}</Text>
+      <Text
+        style={{
+          marginHorizontal: 12,
+          fontSize: 18,
+          fontWeight: '600',
+          color: theme.colors.text.primary,
+        }}
+      >
+        {value}
+      </Text>
       <TouchableOpacity
         onPress={onIncrease}
         disabled={value >= max}
