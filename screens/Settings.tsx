@@ -34,7 +34,6 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
   const theme = useAppTheme();
   const { locale, changeLocale } = useLanguage();
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
-  const [selectedLang, setSelectedLang] = useState(locale);
 
   // App version (can be imported from package.json dynamically)
   const appVersion = '1.0.0';
