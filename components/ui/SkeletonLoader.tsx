@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { APP_DEFAULTS } from '../../lib/constants/appDefaults';
 
 type SkeletonLoaderProps = {
   height?: number;
@@ -14,8 +15,16 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({ height = 20, sty
   useEffect(() => {
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 800, useNativeDriver: false }),
-        Animated.timing(shimmer, { toValue: 0, duration: 800, useNativeDriver: false }),
+        Animated.timing(shimmer, {
+          toValue: 1,
+          duration: APP_DEFAULTS.ANIMATION_DURATION.SKELETON_SHIMMER,
+          useNativeDriver: false,
+        }),
+        Animated.timing(shimmer, {
+          toValue: 0,
+          duration: APP_DEFAULTS.ANIMATION_DURATION.SKELETON_SHIMMER,
+          useNativeDriver: false,
+        }),
       ])
     );
     loop.start();

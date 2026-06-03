@@ -76,9 +76,9 @@ describe('Phase 7: Performance Optimization', () => {
       const heirs = 8;
       const madhabs = 4;
 
-      let totalTime = 0;
+      let _totalTime = 0;
       for (let i = 0; i < heirs * madhabs; i++) {
-        totalTime += Math.random() * 5;
+        _totalTime += Math.random() * 5;
       }
 
       const endTime = performance.now();

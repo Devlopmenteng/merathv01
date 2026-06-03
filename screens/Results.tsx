@@ -29,6 +29,7 @@ import { StickyBottomBar } from '../components/StickyBottomBar';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
+import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 
 const ExportBar = React.lazy(() =>
   import('../components/ExportBar').then((module) => ({ default: module.ExportBar }))
@@ -54,7 +55,7 @@ const AnimatedNumber = ({ value, style }: { value: number; style?: StyleProp<Tex
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: value,
-      duration: 1000,
+      duration: APP_DEFAULTS.ANIMATION_DURATION.NUMBER_ANIMATION,
       useNativeDriver: false,
     }).start();
   }, [value]);

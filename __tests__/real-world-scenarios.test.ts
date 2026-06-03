@@ -455,8 +455,8 @@ describe('Real-World Islamic Inheritance Scenarios', () => {
       // Note: Current implementation may not fully implement Maliki sharing
       // This test documents current behavior
       const malikiGrandfather = malikiResult.shares.find((s) => s.key === 'grandfather');
-      const malikiBrothers = malikiResult.shares.filter((s) => s.key === 'full_brother');
-      const malikiSisters = malikiResult.shares.filter((s) => s.key === 'full_sister');
+      const _malikiBrothers = malikiResult.shares.filter((s) => s.key === 'full_brother');
+      const _malikiSisters = malikiResult.shares.filter((s) => s.key === 'full_sister');
 
       expect(malikiGrandfather).toBeDefined();
       // Current implementation behavior - may need enhancement for full Maliki support

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, Text, Animated, KeyboardTypeOptions } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { formatCurrency, parseCurrency } from '../../lib/utils/currencyFormatter';
+import { APP_DEFAULTS } from '../../lib/constants/appDefaults';
 
 type Props = {
   label: string;
@@ -48,7 +49,7 @@ export const Input: React.FC<Props> = ({
   useEffect(() => {
     Animated.timing(animatedLabel, {
       toValue: focused || localValue ? 1 : 0,
-      duration: 200,
+      duration: APP_DEFAULTS.ANIMATION_DURATION.SKELETON_PULSE / 5, // 200ms for label animation
       useNativeDriver: false,
     }).start();
   }, [focused, localValue]);

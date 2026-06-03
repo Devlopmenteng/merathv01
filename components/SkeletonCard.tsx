@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
+import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 
 const Skeleton = React.memo(({ width = 100, height = 20 }: { width?: number; height?: number }) => {
   const shimmer = useRef(new Animated.Value(0)).current;
@@ -7,8 +8,16 @@ const Skeleton = React.memo(({ width = 100, height = 20 }: { width?: number; hei
   useEffect(() => {
     const animation = Animated.loop(
       Animated.sequence([
-        Animated.timing(shimmer, { toValue: 1, duration: 1000, useNativeDriver: false }),
-        Animated.timing(shimmer, { toValue: 0, duration: 1000, useNativeDriver: false }),
+        Animated.timing(shimmer, {
+          toValue: 1,
+          duration: APP_DEFAULTS.ANIMATION_DURATION.SKELETON_SHIMMER,
+          useNativeDriver: false,
+        }),
+        Animated.timing(shimmer, {
+          toValue: 0,
+          duration: APP_DEFAULTS.ANIMATION_DURATION.SKELETON_SHIMMER,
+          useNativeDriver: false,
+        }),
       ])
     );
 

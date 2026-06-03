@@ -388,7 +388,7 @@ export class CalculationShare {
    */
   public static generatePreview(
     estate: EstateInput,
-    heirs: HeirEntry[],
+    _heirs: HeirEntry[],
     result: CalculationResult,
     language: 'en' | 'ar' = 'en'
   ): string {

@@ -76,7 +76,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             try {
               await AsyncStorage.clear();
               showAlert(t('success'), t('cache_cleared_restart'));
-            } catch (error) {
+            } catch (_error) {
               showAlert(t('error'), t('clear_cache_failed'));
             }
           },

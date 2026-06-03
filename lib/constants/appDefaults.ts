@@ -33,8 +33,10 @@ export const APP_DEFAULTS = {
   ANIMATION_DURATION: {
     SCREEN_TRANSITION: 300,
     SKELETON_PULSE: 1000,
+    SKELETON_SHIMMER: 800,
     NUMBER_ANIMATION: 1000,
   },
+  TOAST_DURATION: 3000,
 
   // Chart display
   CHART_SIZE: 200,
@@ -48,6 +50,12 @@ export const APP_DEFAULTS = {
   WILL_MAX_FRACTION: 1 / 3, // Will cannot exceed 1/3 of net estate
   MIN_ESTATE_VALUE: 0,
   MAX_AUDIT_DISPLAY: 3, // Show first 3 heirs in history, then "..."
+
+  // Validation limits
+  MAX_ESTATE_VALUE: 999999999999, // Maximum estate value (1 trillion)
+  MAX_DECIMAL_PLACES: 2, // For monetary values
+  MAX_TEXT_LENGTH: 100, // For name fields
+  ALLOWED_NUMBER_REGEX: /^[0-9]*\.?[0-9]*$/, // Only numbers and decimal point
 
   // Error handling
   ASYNC_ERROR_THRESHOLD: 5000, // ms before considering operation failed

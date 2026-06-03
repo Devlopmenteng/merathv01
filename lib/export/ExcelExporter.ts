@@ -62,7 +62,7 @@ export class CalculationExporter {
    * @returns CSV string
    */
   public static exportToCSV(data: ExportData, config: ExportConfig = {}): string {
-    const { result, estate, heirs } = data;
+    const { result, estate } = data;
     const currencySymbol = config.currencySymbol || '$';
 
     // Build CSV content
@@ -166,7 +166,7 @@ export class CalculationExporter {
    * @returns Text string
    */
   public static exportToText(data: ExportData, config: ExportConfig = {}): string {
-    const { result, estate, heirs } = data;
+    const { result, estate } = data;
     const currencySymbol = config.currencySymbol || '$';
 
     let text = 'ISLAMIC INHERITANCE CALCULATION REPORT\n';

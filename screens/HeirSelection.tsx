@@ -1,12 +1,15 @@
 import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { HeirSelector } from '../components/HeirSelector';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { OnboardingTooltip } from '../components/OnboardingTooltip';
+import { validateHeirsConfig } from '../lib/utils/validation';
+import { heirsArrayToObject } from '../lib/utils/heirsConverter';
+import { showAlert } from '../lib/utils/alerts';
 
 type HeirSelectionNavigation = {
   navigate: (screen: string) => void;
@@ -16,10 +19,20 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
   const theme = useAppTheme();
   const { state, dispatch } = useCalc();
 
-  const onNext = () => {
+  const onNext = useCallback(() => {
+    // Convert array to object for validation
+    const heirsObject = heirsArrayToObject(state.heirs);
+
+    const validation = validateHeirsConfig(heirsObject);
+
+    if (!validation.valid) {
+      showAlert(t('validation_error'), validation.errors.join('\n'));
+      return;
+    }
+
     dispatch({ type: 'SET_HEIRS', payload: state.heirs });
     navigation.navigate('Results');
-  };
+  }, [state.heirs, dispatch, navigation]);
 
   return (
     <View style={{ flex: 1 }}>

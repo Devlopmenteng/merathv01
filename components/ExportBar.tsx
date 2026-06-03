@@ -13,7 +13,7 @@ type ExportBarProps = {
 };
 
 export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) => {
-  const viewShotRef = useRef<any>(null);
+  const viewShotRef = useRef(null);
   const theme = useAppTheme();
 
   const generatePDF = async () => {

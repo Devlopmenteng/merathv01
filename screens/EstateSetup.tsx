@@ -1,11 +1,13 @@
 import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ScrollView, View, Text, TextInput } from 'react-native';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
+import { validateEstateInput, sanitizeInput } from '../lib/utils/validation';
+import { showAlert } from '../lib/utils/alerts';
 
 type EstateSetupNavigation = {
   navigate: (screen: string) => void;
@@ -22,18 +24,35 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   const maxWill = net / 3;
   const willError = parseFloat(will) > maxWill && maxWill >= 0 ? t('will_exceeds') : '';
 
-  const onNext = () => {
+  const onNext = useCallback(() => {
+    const estate = {
+      total: parseFloat(total) || 0,
+      funeral: parseFloat(funeral) || 0,
+      debts: parseFloat(debts) || 0,
+      will: parseFloat(will) || 0,
+    };
+
+    const validation = validateEstateInput(estate);
+
+    if (!validation.valid) {
+      showAlert(t('validation_error'), validation.errors.join('\n'));
+      return;
+    }
+
+    // Sanitize case name
+    if (caseName) {
+      const sanitized = sanitizeInput(caseName);
+      if (sanitized !== caseName) {
+        setCaseName(sanitized);
+      }
+    }
+
     dispatch({
       type: 'SET_ESTATE',
-      payload: {
-        total: parseFloat(total) || 0,
-        funeral: parseFloat(funeral) || 0,
-        debts: parseFloat(debts) || 0,
-        will: parseFloat(will) || 0,
-      },
+      payload: estate,
     });
     navigation.navigate('MadhabSelect');
-  };
+  }, [total, funeral, debts, will, caseName, dispatch, navigation]);
 
   return (
     <ScrollView
