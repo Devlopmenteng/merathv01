@@ -63,7 +63,7 @@ export class CalculationShare {
     estate: EstateInput,
     heirs: HeirEntry[],
     result: CalculationResult,
-    config: ShareConfig = {}
+    config: ShareConfig = { detailLevel: 'summary' }
   ): ShareContent {
     const language = config.language || 'en';
     const isArabic = language === 'ar';
@@ -295,35 +295,44 @@ export class CalculationShare {
     heirs: HeirEntry[],
     result: CalculationResult,
     method: ShareMethod,
-    config: ShareConfig = {}
+    config: ShareConfig = { detailLevel: 'summary' }
   ): ShareContent {
     const baseContent = this.generateShareContent(estate, heirs, result, config);
 
     switch (method) {
       case 'email':
-        return {
+        const emailContent: ShareContent = {
           title: baseContent.emailSubject || baseContent.title,
           message: baseContent.message,
-          emailSubject: baseContent.emailSubject,
         };
+        if (baseContent.emailSubject) {
+          emailContent.emailSubject = baseContent.emailSubject;
+        }
+        return emailContent;
 
       case 'whatsapp':
       case 'telegram':
         // These platforms prefer shorter messages
         const shortConfig = { ...config, detailLevel: 'summary' as const };
         const shortContent = this.generateShareContent(estate, heirs, result, shortConfig);
-        return {
+        const mobileContent: ShareContent = {
           title: shortContent.title,
           message: shortContent.message,
-          url: shortContent.url,
         };
+        if (shortContent.url) {
+          mobileContent.url = shortContent.url;
+        }
+        return mobileContent;
 
       case 'link':
-        return {
+        const linkContent: ShareContent = {
           title: baseContent.title,
           message: baseContent.url || baseContent.message,
-          url: baseContent.url,
         };
+        if (baseContent.url) {
+          linkContent.url = baseContent.url;
+        }
+        return linkContent;
 
       default:
         return baseContent;
@@ -354,7 +363,7 @@ export class CalculationShare {
    * @param config - Share configuration to validate
    * @returns Validated configuration
    */
-  public static validateConfig(config: ShareConfig = {}): ShareConfig {
+  public static validateConfig(config: ShareConfig = { detailLevel: 'summary' }): ShareConfig {
     const defaults: ShareConfig = {
       detailLevel: 'summary',
       includeSteps: false,
@@ -409,7 +418,7 @@ export function shareCalculation(
   heirs: HeirEntry[],
   result: CalculationResult,
   method: ShareMethod = 'text',
-  config: ShareConfig = {}
+  config: ShareConfig = { detailLevel: 'summary' }
 ): ShareContent {
   const validatedConfig = CalculationShare.validateConfig(config);
   return CalculationShare.generatePlatformShare(estate, heirs, result, method, validatedConfig);

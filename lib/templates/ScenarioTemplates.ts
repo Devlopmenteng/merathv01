@@ -32,7 +32,7 @@ export interface ScenarioTemplate {
   /** Notes about this specific scenario */
   notes?: string;
   /** Whether this is a commonly used template */
-  popular: boolean;
+  popular?: boolean;
 }
 
 /**
@@ -551,7 +551,7 @@ export function getCategoryDisplayName(category: ScenarioCategory): string {
 export function applyTemplate(template: ScenarioTemplate): {
   estate: EstateInput;
   heirs: HeirEntry[];
-  recommendedMadhab?: MadhhabType;
+  recommendedMadhab?: MadhhabType | undefined;
 } {
   return {
     estate: { ...template.estate },

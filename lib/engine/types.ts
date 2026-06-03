@@ -3,8 +3,13 @@
  * Fundamental Data Types for Islamic Inheritance Calculator
  */
 
+import { FractionClass } from './fraction';
+
 // ====== المذاهب الإسلامية ======
-export type MadhhabType = 'shafii' | 'hanafi' | 'maliki' | 'hanbali';
+export type Madhab = 'hanafi' | 'maliki' | 'shafii' | 'hanbali';
+
+// @deprecated Use Madhab instead - for backward compatibility
+export type MadhhabType = Madhab;
 
 // ====== أنواع الورثة ======
 export type HeirType =
@@ -78,6 +83,16 @@ export interface HeirShare {
     person: number;
     amount: number;
   }[];
+}
+
+export interface HeirShareObject {
+  key: string;
+  name: string;
+  type: string;
+  fraction: FractionClass;
+  count: number;
+  reason: string;
+  addToExisting?: boolean;
 }
 
 // ====== الحالات الخاصة ======
@@ -170,7 +185,6 @@ export interface AuditEntry {
   details?: Record<string, any>;
   component?: string;
 }
-export type Madhab = 'hanafi' | 'maliki' | 'shafii' | 'hanbali';
 export interface HeirEntry {
   type: HeirType;
   count: number;

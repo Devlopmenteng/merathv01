@@ -36,6 +36,4 @@ export type {
   HeirShare,
   HeirShareObject,
   CalculationStep,
-  AwlResult,
-  RaddResult,
 } from '../engine/types';

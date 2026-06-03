@@ -114,6 +114,9 @@ export const Input: React.FC<Props> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           editable={!disabled}
+          accessibilityLabel={label}
+          accessibilityHint={helper || error}
+          accessibilityState={{ disabled: disabled }}
           style={{
             flex: 1,
             paddingVertical: theme.spacing.sm,
