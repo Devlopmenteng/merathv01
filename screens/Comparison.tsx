@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
@@ -12,12 +12,30 @@ import { t } from '../lib/i18n';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
+interface DifferenceAnalysis {
+  heirKey: string;
+  madhab1: string;
+  madhab2: string;
+  amountDifference: number;
+  percentageDifference: number;
+  isSignificant: boolean;
+}
+
+interface ComparisonSummary {
+  totalMadhhabsDiffering: number;
+  maxDifference: number;
+  mostDifferentHeir: string;
+  consistentMadhhabs: string[];
+  specialCasesApplied: Record<string, string[]>;
+}
+
 export const Comparison = React.memo(() => {
   const { state } = useCalc();
   const theme = useAppTheme();
   const { isTablet } = useResponsive();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
+  const [showAnalysis, setShowAnalysis] = useState(false);
 
   const allHeirs = useMemo(() => {
     const heirSet = new Set<string>();
@@ -62,12 +80,208 @@ export const Comparison = React.memo(() => {
           ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%'
           : '—';
         const amount = share.amount ? formatCurrency(share.amount) : '—';
-        return { fraction: fractionStr, percentage, amount };
+        return { fraction: fractionStr, percentage, amount, amountValue: share.amount };
       });
       if (sharesByMadhab.every((s) => s === null)) return null;
       return { heirKey, sharesByMadhab };
     });
   }, [allHeirs, results]);
+
+  const differenceAnalysis = useMemo((): DifferenceAnalysis[] => {
+    const differences: DifferenceAnalysis[] = [];
+
+    comparisonRows.forEach((row) => {
+      if (!row) return;
+
+      const amounts = row.sharesByMadhab.map((s) => s?.amountValue || 0);
+      const uniqueAmounts = new Set(amounts.filter((a) => a > 0));
+
+      if (uniqueAmounts.size > 1) {
+        // Find the maximum difference
+        const maxAmount = Math.max(...amounts);
+        const minAmount = Math.min(...amounts.filter((a) => a > 0));
+        const maxDiff = maxAmount - minAmount;
+        const percentageDiff = minAmount > 0 ? (maxDiff / minAmount) * 100 : 0;
+
+        const maxIndex = amounts.indexOf(maxAmount);
+        const minIndex = amounts.indexOf(minAmount);
+
+        differences.push({
+          heirKey: row.heirKey,
+          madhab1: TABS[maxIndex],
+          madhab2: TABS[minIndex],
+          amountDifference: maxDiff,
+          percentageDifference: percentageDiff,
+          isSignificant: percentageDiff > 10, // More than 10% difference is significant
+        });
+      }
+    });
+
+    return differences.sort((a, b) => b.amountDifference - a.amountDifference);
+  }, [comparisonRows]);
+
+  const comparisonSummary = useMemo((): ComparisonSummary => {
+    const specialCases: Record<string, string[]> = {};
+
+    results.forEach((result, index) => {
+      if (result?.specialCases) {
+        const madhab = TABS[index];
+        const cases: string[] = [];
+
+        if (result.specialCases.awl) cases.push('Awl (عول)');
+        if (result.specialCases.radd) cases.push('Radd (رد)');
+        if (result.specialCases.hijabTypes?.length > 0) {
+          cases.push(...result.specialCases.hijabTypes);
+        }
+
+        if (cases.length > 0) {
+          specialCases[madhab] = cases;
+        }
+      }
+    });
+
+    const differingMadhhabs = differenceAnalysis.length > 0 ? TABS : [];
+    const maxDiff = differenceAnalysis.length > 0 ? differenceAnalysis[0].amountDifference : 0;
+    const mostDiff = differenceAnalysis.length > 0 ? differenceAnalysis[0].heirKey : 'None';
+
+    return {
+      totalMadhhabsDiffering: differingMadhhabs.length,
+      maxDifference: maxDiff,
+      mostDifferentHeir: mostDiff,
+      consistentMadhhabs: differenceAnalysis.length === 0 ? TABS : [],
+      specialCasesApplied: specialCases,
+    };
+  }, [differenceAnalysis, results]);
+
+  const handleExportComparison = useCallback(() => {
+    const exportData = {
+      estate: {
+        total: state.total,
+        funeral: state.funeral,
+        debts: state.debts,
+        will: state.will,
+      },
+      heirs: state.heirs,
+      comparisonSummary,
+      differences: differenceAnalysis,
+      results: results.map((result, index) => ({
+        madhab: TABS[index],
+        madhabName: MADHAB_NAMES[TABS[index]],
+        shares: result.shares,
+        specialCases: result.specialCases,
+      })),
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    console.log('Export data:', jsonString);
+
+    Alert.alert(
+      'Export Complete',
+      'Comparison data has been logged to console for development. Full export functionality coming soon.',
+      [{ text: 'OK', onPress: () => {} }]
+    );
+  }, [state, comparisonSummary, differenceAnalysis, results]);
+
+  const renderSummary = () => (
+    <View
+      style={{
+        backgroundColor: theme.colors.surfaceVariant,
+        padding: 16,
+        borderRadius: 12,
+        marginBottom: 16,
+      }}
+    >
+      <Text style={{ fontWeight: 'bold', marginBottom: 12, fontSize: 16 }}>
+        {t('comparison_summary')}
+      </Text>
+
+      {comparisonSummary.totalMadhhabsDiffering === 0 ? (
+        <Text style={{ color: 'green' }}>✅ {t('all_madhhabs_consistent')}</Text>
+      ) : (
+        <View>
+          <Text style={{ marginBottom: 8 }}>
+            ⚠️ {comparisonSummary.totalMadhhabsDiffering} {t('madhhabs_differ')}
+          </Text>
+          {comparisonSummary.maxDifference > 0 && (
+            <Text style={{ marginBottom: 8 }}>
+              {t('max_difference')}: {formatCurrency(comparisonSummary.maxDifference)} (
+              {comparisonSummary.mostDifferentHeir})
+            </Text>
+          )}
+        </View>
+      )}
+
+      {Object.keys(comparisonSummary.specialCasesApplied).length > 0 && (
+        <View style={{ marginTop: 12 }}>
+          <Text style={{ fontWeight: 'bold', marginBottom: 8 }}>{t('special_cases')}:</Text>
+          {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
+            <Text key={madhab} style={{ fontSize: 12, marginBottom: 4 }}>
+              • {MADHAB_NAMES[madhab as Madhab]}: {cases.join(', ')}
+            </Text>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+
+  const renderDifferenceAnalysis = () => {
+    if (differenceAnalysis.length === 0) {
+      return (
+        <View
+          style={{
+            backgroundColor: theme.colors.surfaceVariant,
+            padding: 16,
+            borderRadius: 12,
+            marginBottom: 16,
+          }}
+        >
+          <Text style={{ color: 'green', textAlign: 'center' }}>
+            ✅ {t('no_significant_differences')}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View
+        style={{
+          backgroundColor: theme.colors.surfaceVariant,
+          padding: 16,
+          borderRadius: 12,
+          marginBottom: 16,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', marginBottom: 12, fontSize: 16 }}>
+          {t('difference_analysis')}
+        </Text>
+
+        {differenceAnalysis.slice(0, 5).map((diff, index) => (
+          <View
+            key={index}
+            style={{
+              paddingVertical: 8,
+              borderBottomWidth: 1,
+              borderColor: theme.colors.outline,
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>{diff.heirKey}</Text>
+            <Text style={{ fontSize: 12, color: theme.colors.outline }}>
+              {MADHAB_NAMES[diff.madhab1 as Madhab]} vs {MADHAB_NAMES[diff.madhab2 as Madhab]}
+            </Text>
+            <Text style={{ fontSize: 12 }}>
+              Difference: {formatCurrency(diff.amountDifference)} (
+              {diff.percentageDifference.toFixed(1)}%)
+            </Text>
+            {diff.isSignificant && (
+              <Text style={{ fontSize: 11, color: 'orange', marginTop: 4 }}>
+                ⚠️ {t('significant_difference')}
+              </Text>
+            )}
+          </View>
+        ))}
+      </View>
+    );
+  };
 
   const renderComparisonTable = () => (
     <ScrollView horizontal showsHorizontalScrollIndicator={true}>
@@ -148,6 +362,8 @@ export const Comparison = React.memo(() => {
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
       <Text style={theme.typography.h1}>{t('comparison_title')}</Text>
+
+      {/* Toggle buttons */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 }}>
         {TABS.map((m) => (
           <TouchableOpacity
@@ -166,6 +382,45 @@ export const Comparison = React.memo(() => {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Action buttons */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+        <TouchableOpacity
+          onPress={() => setShowAnalysis(!showAnalysis)}
+          style={{
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
+          }}
+        >
+          <Text style={{ color: showAnalysis ? '#fff' : theme.colors.onSurface }}>
+            {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={handleExportComparison}
+          style={{
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            backgroundColor: theme.colors.primary,
+          }}
+        >
+          <Text style={{ color: '#fff' }}>📥 Export</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Summary and Analysis */}
+      {showAnalysis && (
+        <>
+          {renderSummary()}
+          {renderDifferenceAnalysis()}
+        </>
+      )}
+
+      {/* Comparison Table */}
       {renderComparisonTable()}
     </ScrollView>
   );
