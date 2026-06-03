@@ -30,6 +30,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
+import { calculateInheritanceWithCache } from '../lib/inheritance/calculateAdapter';
 
 const ExportBar = React.lazy(() =>
   import('../components/ExportBar').then((module) => ({ default: module.ExportBar }))
@@ -113,41 +114,60 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   useEffect(() => {
     setLoading(true);
 
-    const estate: EstateInput = {
-      total: state.total,
-      funeral: state.funeral,
-      debts: state.debts,
-      will: state.will,
+    const performCalculation = async () => {
+      const estate: EstateInput = {
+        total: state.total,
+        funeral: state.funeral,
+        debts: state.debts,
+        will: state.will,
+      };
+
+      try {
+        // Use cached calculation for better performance
+        const res = await calculateInheritanceWithCache({
+          madhab: state.madhab,
+          totalEstate: estate.total,
+          funeralExpenses: estate.funeral,
+          debts: estate.debts,
+          will: estate.will,
+          heirs: state.heirs,
+        });
+
+        let confidence = 100;
+
+        if ((res.netEstate ?? 0) <= 0) confidence -= 50;
+        if (hasNoHeirs) confidence -= 30;
+
+        const safeResult: CalculationResult = {
+          ...res,
+          confidence: Math.max(confidence, 10),
+        };
+
+        setResult(safeResult);
+        
+        incrementCalculationCount().catch(() => {});
+        if (!savedRef.current) {
+          savedRef.current = true;
+          saveAuditTrail({
+            id: Date.now().toString(),
+            timestamp: new Date().toISOString(),
+            madhab: state.madhab,
+            netTotal: safeResult.netEstate ?? 0,
+            shares: safeResult.shares,
+            caseName: caseName,
+            caseDate: caseDate,
+            steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
+          }).catch(() => {});
+        }
+      } catch (error) {
+        console.error('Calculation error:', error);
+        showAlert(t('calculation_error'), t('try_again_message'));
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const res = calculateInheritance(state.madhab as any, estate, heirsObject);
-    let confidence = 100;
-
-    if ((res.netEstate ?? 0) <= 0) confidence -= 50;
-    if (hasNoHeirs) confidence -= 30;
-
-    const safeResult: CalculationResult = {
-      ...res,
-      confidence: Math.max(confidence, 10),
-    };
-
-    setResult(safeResult);
-    setLoading(false);
-
-    incrementCalculationCount().catch(() => {});
-    if (!savedRef.current) {
-      savedRef.current = true;
-      saveAuditTrail({
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        madhab: state.madhab,
-        netTotal: safeResult.netEstate ?? 0,
-        shares: safeResult.shares,
-        caseName: caseName,
-        caseDate: caseDate,
-        steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
-      }).catch(() => {});
-    }
+    performCalculation();
   }, [
     state.madhab,
     state.total,

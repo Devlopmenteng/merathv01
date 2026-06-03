@@ -101,6 +101,8 @@ npm run type-check
 - **[API Documentation](./docs/API.md)** - Complete API reference
 - **[Code Examples](./docs/EXAMPLES.md)** - Usage examples and patterns
 - **[System Architecture](./docs/ARCHITECTURE.md)** - Architecture and design
+- **[Fiqh References](./docs/FIQH_REFERENCES.md)** - Islamic law sources
+- **[Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Type Definitions](./lib/engine/types.ts)** - TypeScript type definitions
 - **[Error Handling](./lib/engine/errors.ts)** - Custom error classes
 
