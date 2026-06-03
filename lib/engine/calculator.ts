@@ -319,25 +319,6 @@ export class EnhancedInheritanceCalculationEngine {
     const noDescendants = !this.hasDescendants();
     const noFather = (h.father || 0) === 0;
     const noGrandfather = (h.grandfather || 0) === 0;
-    console.log("isMusharraka check:", {
-      hasHusband,
-      hasMother,
-      hasGrandmother,
-      hasMotherOrGrandmother,
-      maternalCount,
-      fullSiblingsExist,
-      noDescendants,
-      noFather,
-      noGrandfather,
-      result:
-        hasHusband &&
-        hasMotherOrGrandmother &&
-        maternalCount >= 2 &&
-        fullSiblingsExist &&
-        noDescendants &&
-        noFather &&
-        noGrandfather,
-    });
 
     return (
       hasHusband &&
@@ -416,20 +397,10 @@ export class EnhancedInheritanceCalculationEngine {
       !this.hasDescendants() &&
       (h.father || 0) === 0 &&
       (h.full_brother || 0) === 0;
-    console.log("isAkdariyya:", result, {
-      husband: h.husband || 0,
-      mother: h.mother || 0,
-      grandfather: h.grandfather || 0,
-      full_sister: h.full_sister || 0,
-      hasDescendants: this.hasDescendants(),
-      father: h.father || 0,
-      full_brother: h.full_brother || 0,
-    });
     return result;
   }
 
   private computeAkdariyya(): HeirShareObject[] {
-    console.log("computeAkdariyya called");
     const shares: HeirShareObject[] = [];
 
     shares.push({
@@ -769,35 +740,19 @@ export class EnhancedInheritanceCalculationEngine {
 
     if (heirs.grandfather && heirs.grandfather > 0 && !heirs.father) {
       const siblingsCount = this.getFullAndPaternalSiblingsCount();
-      console.log(
-        "Grandfather block entered. siblingsCount:",
-        siblingsCount,
-        "madhab:",
-        this.madhab,
-      );
 
       const madhabConfig = FIQH_DATABASE.madhabs[this.madhab];
       const shouldShare =
         madhabConfig?.rules.grandfather_with_siblings === "musharak";
 
-      console.log("Madhab config from constants:", madhabConfig);
-      console.log(
-        "Rule value from config:",
-        madhabConfig?.rules.grandfather_with_siblings,
-      );
-      console.log("Should share based on rule?", shouldShare);
 
       if (siblingsCount > 0 && shouldShare) {
-        console.log("Entering sharing branch (muqasamah)");
-        console.log("heirs.full_brother:", heirs.full_brother);
-        console.log("heirs.full_sister:", heirs.full_sister);
         const totalHeadsCalc =
           2 +
           (heirs.full_brother || 0) * 2 +
           (heirs.full_sister || 0) +
           (heirs.half_brother_paternal || 0) * 2 +
           (heirs.half_sister_paternal || 0);
-        console.log("totalHeads calculated:", totalHeadsCalc);
         const totalHeads =
           2 +
           (heirs.full_brother || 0) * 2 +
@@ -809,15 +764,6 @@ export class EnhancedInheritanceCalculationEngine {
         const byThird = new FractionClass(1, 3);
         const bySixth = new FractionClass(1, 6);
 
-        console.log("Grandfather options:", {
-          totalHeads,
-          byMuqasamah: byMuqasamah.toString(),
-          byMuqasamahDecimal: byMuqasamah.toDecimal(),
-          byThird: byThird.toString(),
-          byThirdDecimal: byThird.toDecimal(),
-          bySixth: bySixth.toString(),
-          bySixthDecimal: bySixth.toDecimal(),
-        });
 
         let bestOption = byMuqasamah;
         let bestReason = "muqasamah";
@@ -837,10 +783,6 @@ export class EnhancedInheritanceCalculationEngine {
           bestValue = sixthValue;
         }
 
-        console.log("Chosen option:", {
-          bestReason,
-          bestOption: bestOption.toString(),
-        });
 
         this.steps.push({
           step: "اختيار الأفضل للجد مع الإخوة",
@@ -872,15 +814,10 @@ export class EnhancedInheritanceCalculationEngine {
         });
 
         if (bestReason === "muqasamah") {
-          console.log(
-            "Adding siblings shares via muqasamah. remainder:",
-            remainder.toString(),
-          );
           if (heirs.full_brother && heirs.full_brother > 0) {
             const brotherFrac = remainder.multiply(
               new FractionClass(heirs.full_brother * 2, totalHeads),
             );
-            console.log("full_brother fraction:", brotherFrac.toString());
             asabaShares.push({
               key: "full_brother",
               name: "الأخ الشقيق",
@@ -895,7 +832,6 @@ export class EnhancedInheritanceCalculationEngine {
             const sisterFrac = remainder.multiply(
               new FractionClass(heirs.full_sister, totalHeads),
             );
-            console.log("full_sister fraction:", sisterFrac.toString());
             asabaShares.push({
               key: "full_sister",
               name: "الأخت الشقيقة",
@@ -935,7 +871,6 @@ export class EnhancedInheritanceCalculationEngine {
 
         return asabaShares;
       } else if (siblingsCount > 0 && !shouldShare) {
-        console.log("Entering blocking branch (grandfather takes all)");
         asabaShares.push({
           key: "grandfather",
           name: "الجد",
@@ -947,7 +882,6 @@ export class EnhancedInheritanceCalculationEngine {
         });
         return asabaShares;
       } else {
-        console.log("Entering no-siblings branch");
         asabaShares.push({
           key: "grandfather",
           name: "الجد",
@@ -1096,10 +1030,6 @@ export class EnhancedInheritanceCalculationEngine {
     shares: HeirShareObject[],
     remainder: FractionClass,
   ): { shares: HeirShareObject[]; bloodRelatives: HeirShareObject[] } {
-    console.log(
-      "distributeToBloodRelatives called with remainder:",
-      remainder.toString(),
-    );
     const bloodRelatives: HeirShareObject[] = [];
 
     if (remainder.toDecimal() <= 0.0001) {
@@ -1141,10 +1071,6 @@ export class EnhancedInheritanceCalculationEngine {
 
       if (classHeirs.length > 0) {
         inheritingClass = classHeirs;
-        console.log(
-          `Found inheriting class ${classIndex + 1} with heirs:`,
-          classHeirs,
-        );
         this.steps.push({
           step: `ذوو الأرحام - الصنف ${classIndex + 1}`,
           description: `الوارثون من الصنف ${classIndex + 1} يرثون الباقي`,
@@ -1156,7 +1082,6 @@ export class EnhancedInheritanceCalculationEngine {
     }
 
     if (inheritingClass.length === 0) {
-      console.log("No blood relatives found");
       return { shares, bloodRelatives };
     }
 
@@ -1167,12 +1092,10 @@ export class EnhancedInheritanceCalculationEngine {
     });
 
     const totalCount = inheritingClass.reduce((sum, h) => sum + h.count, 0);
-    console.log("Total count in inheriting class:", totalCount);
     inheritingClass.forEach((heir) => {
       const fraction = remainder.multiply(
         new FractionClass(heir.count, totalCount),
       );
-      console.log(`Adding ${heir.name} with fraction ${fraction.toString()}`);
       bloodRelatives.push({
         key: heir.key,
         name: heir.name,

@@ -5,6 +5,7 @@ import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import { useAppTheme } from '../hooks/useAppTheme';
 import type { CalculationResult } from '../lib/engine/types';
+import { escapeHtml } from '../lib/utils/sanitize';
 
 type ExportBarProps = {
   resultData: CalculationResult;
@@ -18,9 +19,9 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
   const generatePDF = async () => {
     const html = `
       <h1>Inheritance Report</h1>
-      <p>Net Estate: $${resultData.netEstate ?? resultData.netEstate ?? 0}</p>
+      <p>Net Estate: $${Number(resultData.netEstate ?? 0)}</p>
       <ul>${resultData.shares
-        .map((s) => `<li>${s.name}: $${s.amount.toFixed(2)}</li>`)
+        .map((s) => `<li>${escapeHtml(String(s.name))}: $${Number(s.amount).toFixed(2)}</li>`)
         .join('')}</ul>
     `;
     const { uri } = await Print.printToFileAsync({ html });

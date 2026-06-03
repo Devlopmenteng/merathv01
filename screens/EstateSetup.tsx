@@ -5,6 +5,7 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
+import { validateEstateData } from '../lib/engine/constants';
 
 export const EstateSetup = ({ navigation }: any) => {
   const theme = useAppTheme();
@@ -18,7 +19,16 @@ export const EstateSetup = ({ navigation }: any) => {
   const willError = parseFloat(will) > maxWill && maxWill >= 0 ? 'Exceeds 1/3 of net estate' : '';
 
   const onNext = () => {
-    dispatch({ type: 'SET_ESTATE', payload: { total: parseFloat(total) || 0, funeral: parseFloat(funeral) || 0, debts: parseFloat(debts) || 0, will: parseFloat(will) || 0 } });
+    const t = parseFloat(total) || 0;
+    const f = parseFloat(funeral) || 0;
+    const d = parseFloat(debts) || 0;
+    const w = parseFloat(will) || 0;
+    const validationError = validateEstateData(t, f, d, w);
+    if (validationError) {
+      showToast(validationError, 'error');
+      return;
+    }
+    dispatch({ type: 'SET_ESTATE', payload: { total: t, funeral: f, debts: d, will: w } });
     navigation.navigate('MadhabSelect');
   };
 

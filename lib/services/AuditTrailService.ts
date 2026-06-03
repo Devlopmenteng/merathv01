@@ -14,9 +14,19 @@ export interface AuditEntry {
 
 const STORAGE_KEY = 'merath_audit_trail';
 
+function safeParse(stored: string | null): AuditEntry[] {
+  if (!stored) return [];
+  try {
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function saveAuditTrail(entry: AuditEntry) {
   const stored = await AsyncStorage.getItem(STORAGE_KEY);
-  const trail: AuditEntry[] = stored ? JSON.parse(stored) : [];
+  const trail = safeParse(stored);
   trail.unshift(entry);
   if (trail.length > 50) trail.pop();
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(trail));
@@ -24,7 +34,7 @@ export async function saveAuditTrail(entry: AuditEntry) {
 
 export async function getAuditTrail(): Promise<AuditEntry[]> {
   const stored = await AsyncStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  return safeParse(stored);
 }
 
 export async function clearAuditTrail() {

@@ -11,8 +11,10 @@ import StartupGate from './lib/context/StartupGate';
 export default function App() {
   useEffect(() => {
     const handleDeepLink = ({ url }: { url: string }) => {
-      // Parse URL and navigate
-      console.log("Deep link:", url);
+      if (!url.startsWith('merath://') && !url.startsWith('https://merath.app')) {
+        return;
+      }
+      // TODO: parse validated URL and navigate to the appropriate screen
     };
     const subscription = Linking.addEventListener("url", handleDeepLink);
     return () => subscription.remove();

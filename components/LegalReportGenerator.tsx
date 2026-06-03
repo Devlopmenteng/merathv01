@@ -2,6 +2,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform, Alert } from 'react-native';
 import { formatCurrency } from '../lib/utils/currency';
+import { escapeHtml } from '../lib/utils/sanitize';
 
 export async function generateLegalReport(result: any, madhab: string) {
   const today = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -31,7 +32,7 @@ export async function generateLegalReport(result: any, madhab: string) {
   <body>
     <div class="header">
       <div class="title">تقرير توزيع الميراث الشرعي</div>
-      <div class="subtitle">حسب المذهب ${madhab} – ${today}</div>
+      <div class="subtitle">حسب المذهب ${escapeHtml(madhab)} – ${today}</div>
       <div class="case-number">رقم الحالة: ${caseNumber}</div>
     </div>
     <div class="section">
@@ -45,9 +46,9 @@ export async function generateLegalReport(result: any, madhab: string) {
         <tbody>
           ${result.shares.map((s: any) => `
             <tr>
-              <td>${s.name}</td>
-              <td>${formatCurrency(s.amount)}</td>
-              <td>${s.fraction.numerator}/${s.fraction.denominator}</td>
+              <td>${escapeHtml(String(s.name))}</td>
+              <td>${formatCurrency(Number(s.amount))}</td>
+              <td>${Number(s.fraction.numerator)}/${Number(s.fraction.denominator)}</td>
             </tr>
           `).join('')}
         </tbody>

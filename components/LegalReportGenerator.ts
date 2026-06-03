@@ -1,6 +1,7 @@
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform, Alert } from 'react-native';
+import { escapeHtml } from '../lib/utils/sanitize';
 
 export async function generateLegalReport(result: any, madhab: string) {
   const today = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -22,7 +23,7 @@ export async function generateLegalReport(result: any, madhab: string) {
   <body>
     <div class="header">
       <div class="title">Inheritance Distribution Report</div>
-      <div class="subtitle">According to ${madhab} school – ${today}</div>
+      <div class="subtitle">According to ${escapeHtml(madhab)} school – ${today}</div>
     </div>
     <div class="section">
       <h3>Estate Summary</h3>
@@ -32,7 +33,7 @@ export async function generateLegalReport(result: any, madhab: string) {
       <h3>Heir Distribution</h3>
       <table class="table">
         <tr><th>Heir</th><th>Amount</th><th>Fraction</th></tr>
-        ${result.shares.map((s: any) => `<tr><td>${s.name}</td><td>$${s.amount.toFixed(2)}</td><td>${s.fraction.numerator}/${s.fraction.denominator}</td></tr>`).join('')}
+        ${result.shares.map((s: any) => `<tr><td>${escapeHtml(String(s.name))}</td><td>$${Number(s.amount).toFixed(2)}</td><td>${Number(s.fraction.numerator)}/${Number(s.fraction.denominator)}</td></tr>`).join('')}
       </table>
     </div>
     <div class="signature">
