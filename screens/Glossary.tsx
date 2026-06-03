@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, ScrollView, FlatList } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
+import { ThemedListCard } from '../components/ui/ThemedListCard';
+import { TabBar } from '../components/ui/TabBar';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
+
+const TABS: { key: Tab; label: string }[] = [
+  { key: 'glossary', label: 'المصطلحات' },
+  { key: 'verses', label: 'آيات قرآنية' },
+  { key: 'hadith', label: 'أحاديث' },
+];
 
 export const Glossary = ({ navigation }: any) => {
   const theme = useAppTheme();
@@ -16,16 +24,7 @@ export const Glossary = ({ navigation }: any) => {
       data={GLOSSARY}
       keyExtractor={(item, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-            borderLeftWidth: 4,
-            borderLeftColor: theme.colors.primary,
-          }}
-        >
+        <ThemedListCard accentColor={theme.colors.primary}>
           <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
             {item.term} – {item.termAr}
           </Text>
@@ -33,7 +32,7 @@ export const Glossary = ({ navigation }: any) => {
           <Text style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}>
             {item.definitionAr}
           </Text>
-        </View>
+        </ThemedListCard>
       )}
     />
   );
@@ -43,14 +42,7 @@ export const Glossary = ({ navigation }: any) => {
       data={INHERITANCE_VERSES}
       keyExtractor={(item, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <ThemedListCard>
           <Text style={[theme.typography.h3, { color: theme.colors.secondary, marginBottom: 4 }]}>
             {item.surah} {item.verseNumber}
           </Text>
@@ -59,7 +51,7 @@ export const Glossary = ({ navigation }: any) => {
           <Text style={[theme.typography.caption, { marginTop: 8, color: theme.colors.outline }]}>
             الموضوع: {item.topic}
           </Text>
-        </View>
+        </ThemedListCard>
       )}
     />
   );
@@ -69,66 +61,18 @@ export const Glossary = ({ navigation }: any) => {
       data={HADITH}
       keyExtractor={(item, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <ThemedListCard>
           <Text style={{ fontSize: 16, lineHeight: 24, marginBottom: 8 }}>{item.text}</Text>
           <Text style={[theme.typography.caption, { color: theme.colors.outline }]}>{item.reference}</Text>
-        </View>
+        </ThemedListCard>
       )}
     />
   );
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
-            backgroundColor: activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant,
-            alignItems: 'center',
-          }}
-          onPress={() => setActiveTab('glossary')}
-        >
-          <Text style={{ color: activeTab === 'glossary' ? theme.colors.onPrimary : theme.colors.onSurface }}>
-            المصطلحات
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
-            backgroundColor: activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant,
-            alignItems: 'center',
-          }}
-          onPress={() => setActiveTab('verses')}
-        >
-          <Text style={{ color: activeTab === 'verses' ? theme.colors.onPrimary : theme.colors.onSurface }}>
-            آيات قرآنية
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
-            backgroundColor: activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant,
-            alignItems: 'center',
-          }}
-          onPress={() => setActiveTab('hadith')}
-        >
-          <Text style={{ color: activeTab === 'hadith' ? theme.colors.onPrimary : theme.colors.onSurface }}>
-            أحاديث
-          </Text>
-        </TouchableOpacity>
+      <View style={{ padding: theme.spacing.md }}>
+        <TabBar tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
       </View>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
         {activeTab === 'glossary' && renderGlossary()}

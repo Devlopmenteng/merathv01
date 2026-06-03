@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, FlatList } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';
+import { ThemedListCard } from '../components/ui/ThemedListCard';
+import { DataTable } from '../components/ui/DataTable';
 
 // Fixed shares table (from HTML)
 const FIXED_SHARES = [
@@ -36,6 +38,17 @@ const SPECIAL_CASES = [
   { name: "عصبة مع الغير", description: "الأخت الشقيقة أو لأب تصبح عصبة مع وجود البنت أو بنت الابن." },
 ];
 
+const FIXED_SHARES_COLUMNS = [
+  { key: 'share', label: 'الفرض', width: 100 },
+  { key: 'heirs', label: 'أصحابه', width: 200 },
+];
+
+const HIJAB_COLUMNS = [
+  { key: 'blocked', label: 'المحجوب', width: 120 },
+  { key: 'blocker', label: 'الحاجب', width: 120 },
+  { key: 'type', label: 'نوع الحجب', width: 100 },
+];
+
 export const FiqhRules = () => {
   const theme = useAppTheme();
 
@@ -44,17 +57,7 @@ export const FiqhRules = () => {
       {/* Madhab notes */}
       <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>ملاحظات مذهبية</Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
-        <View
-          key={madhab}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-            borderLeftWidth: 4,
-            borderLeftColor: theme.colors.primary,
-          }}
-        >
+        <ThemedListCard key={madhab} accentColor={theme.colors.primary}>
           <Text style={[theme.typography.h3, { color: theme.colors.primary, marginBottom: 4 }]}>
             {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
           </Text>
@@ -63,61 +66,25 @@ export const FiqhRules = () => {
               • {val as string}
             </Text>
           ))}
-        </View>
+        </ThemedListCard>
       ))}
 
       {/* Special cases */}
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>⚡ حالات خاصة</Text>
       {SPECIAL_CASES.map((caseItem, idx) => (
-        <View
-          key={idx}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <ThemedListCard key={idx}>
           <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>{caseItem.name}</Text>
           <Text style={theme.typography.body}>{caseItem.description}</Text>
-        </View>
+        </ThemedListCard>
       ))}
 
       {/* Fixed shares table */}
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>📊 جدول الفروض</Text>
-      <ScrollView horizontal>
-        <View style={{ minWidth: '100%' }}>
-          <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
-            <Text style={{ width: 100, fontWeight: 'bold' }}>الفرض</Text>
-            <Text style={{ width: 200, fontWeight: 'bold' }}>أصحابه</Text>
-          </View>
-          {FIXED_SHARES.map((item, idx) => (
-            <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 100 }}>{item.share}</Text>
-              <Text style={{ width: 200 }}>{item.heirs}</Text>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <DataTable columns={FIXED_SHARES_COLUMNS} data={FIXED_SHARES} />
 
       {/* Hijab rules table */}
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>🚫 قواعد الحجب</Text>
-      <ScrollView horizontal>
-        <View style={{ minWidth: '100%' }}>
-          <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: theme.colors.outline, paddingBottom: 8, marginBottom: 8 }}>
-            <Text style={{ width: 120, fontWeight: 'bold' }}>المحجوب</Text>
-            <Text style={{ width: 120, fontWeight: 'bold' }}>الحاجب</Text>
-            <Text style={{ width: 100, fontWeight: 'bold' }}>نوع الحجب</Text>
-          </View>
-          {HIJAB_RULES.map((item, idx) => (
-            <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 120 }}>{item.blocked}</Text>
-              <Text style={{ width: 120 }}>{item.blocker}</Text>
-              <Text style={{ width: 100 }}>{item.type}</Text>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <DataTable columns={HIJAB_COLUMNS} data={HIJAB_RULES} />
     </ScrollView>
   );
 };

@@ -5,6 +5,7 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
+import { themedTextInputStyle } from '../lib/utils/themedStyles';
 
 export const EstateSetup = ({ navigation }: any) => {
   const theme = useAppTheme();
@@ -29,27 +30,13 @@ export const EstateSetup = ({ navigation }: any) => {
         placeholder="Case Name (optional)"
         value={caseName}
         onChangeText={setCaseName}
-        style={{
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.radius.md,
-          padding: theme.spacing.sm,
-          marginBottom: theme.spacing.md,
-          color: theme.colors.onSurface,
-        }}
+        style={themedTextInputStyle(theme.colors, theme.spacing, theme.radius)}
       />
       <TextInput
         placeholder="Date (YYYY-MM-DD)"
         value={caseDate}
         onChangeText={setCaseDate}
-        style={{
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.radius.md,
-          padding: theme.spacing.sm,
-          marginBottom: theme.spacing.md,
-          color: theme.colors.onSurface,
-        }}
+        style={themedTextInputStyle(theme.colors, theme.spacing, theme.radius)}
       />
       <Input label="Total Estate ($)" value={total} onChangeText={setTotal} keyboardType="numeric" leftIcon={<Text>$</Text>} />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>

@@ -50,6 +50,7 @@ export function isValidHeirType(heir: any): heir is HeirType {
 
 /**
  * تنسيق المبلغ كعملة
+ * @deprecated Use formatCurrency from lib/utils/currency instead for locale-aware formatting.
  */
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("ar-SA", {

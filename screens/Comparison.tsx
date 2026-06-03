@@ -3,11 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
-import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
+import type { Madhab, CalculationResult } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { Button } from '../components/ui/Button';
 import { formatCurrency } from '../lib/utils/currency';
+import { formatFraction } from '../lib/utils/formatFraction';
+import { buildEstateInput } from '../lib/utils/buildEstateInput';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
@@ -24,12 +26,7 @@ export const Comparison = () => {
   const [showNotes, setShowNotes] = useState(false);
 
   useEffect(() => {
-    const estate: EstateInput = {
-      total: state.total,
-      funeral: state.funeral,
-      debts: state.debts,
-      will: state.will,
-    };
+    const estate = buildEstateInput(state);
     const all = TABS.map((m) => calculateInheritance(m, estate, heirsArrayToObject(state.heirs)));
     setResults(all);
   }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
@@ -61,7 +58,7 @@ export const Comparison = () => {
             if (!result?.success) return null;
             const share = result.shares.find(s => (s.key === heirKey) || (s.name === heirKey));
             if (!share) return null;
-            const fractionStr = share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : '—';
+            const fractionStr = formatFraction(share.fraction) || '—';
             const percentage = share.fraction ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%' : '—';
             const amount = share.amount ? formatCurrency(share.amount) : '—';
             return { fraction: fractionStr, percentage, amount };

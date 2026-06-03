@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useDismissableFlag } from '../hooks/useDismissableFlag';
 
 export const OnboardingTooltip = () => {
   const theme = useAppTheme();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    AsyncStorage.getItem('merath_tooltip_seen').then(val => {
-      if (!val) setVisible(true);
-    });
-  }, []);
-
-  const dismiss = () => {
-    AsyncStorage.setItem('merath_tooltip_seen', 'true');
-    setVisible(false);
-  };
+  const { visible, dismiss } = useDismissableFlag('merath_tooltip_seen');
 
   if (!visible) return null;
 

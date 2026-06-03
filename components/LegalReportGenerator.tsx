@@ -2,6 +2,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform, Alert } from 'react-native';
 import { formatCurrency } from '../lib/utils/currency';
+import { formatFraction } from '../lib/utils/formatFraction';
 
 export async function generateLegalReport(result: any, madhab: string) {
   const today = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -47,7 +48,7 @@ export async function generateLegalReport(result: any, madhab: string) {
             <tr>
               <td>${s.name}</td>
               <td>${formatCurrency(s.amount)}</td>
-              <td>${s.fraction.numerator}/${s.fraction.denominator}</td>
+              <td>${formatFraction(s.fraction)}</td>
             </tr>
           `).join('')}
         </tbody>

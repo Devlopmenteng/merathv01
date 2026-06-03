@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useDismissableFlag } from '../hooks/useDismissableFlag';
 
 const slides = [
   { title: 'مرحباً بك في ميراث', content: 'تطبيق متخصص لحساب المواريث الشرعية وفق المذاهب الأربعة.' },
@@ -15,21 +15,14 @@ const { width } = Dimensions.get('window');
 
 export const EducationalTutorial = () => {
   const theme = useAppTheme();
-  const [visible, setVisible] = useState(false);
+  const { visible, dismiss } = useDismissableFlag('merath_tutorial_seen');
   const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    AsyncStorage.getItem('merath_tutorial_seen').then(val => {
-      if (!val) setVisible(true);
-    });
-  }, []);
 
   const next = () => {
     if (step < slides.length - 1) {
       setStep(step + 1);
     } else {
-      AsyncStorage.setItem('merath_tutorial_seen', 'true');
-      setVisible(false);
+      dismiss();
     }
   };
 
@@ -42,7 +35,7 @@ export const EducationalTutorial = () => {
           <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 16 }]}>{slides[step].title}</Text>
           <Text style={[theme.typography.body, { textAlign: 'center', marginBottom: 24 }]}>{slides[step].content}</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TouchableOpacity accessibilityLabel="Button" onPress={() => setVisible(false)}>
+            <TouchableOpacity accessibilityLabel="Button" onPress={dismiss}>
               <Text style={{ color: theme.colors.error }}>تخطي</Text>
             </TouchableOpacity>
             <TouchableOpacity accessibilityLabel="Button" onPress={next}>

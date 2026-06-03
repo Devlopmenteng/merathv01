@@ -6,10 +6,11 @@ import { SupportButton } from '../components/SupportButton';
 import { FeedbackButton } from '../components/FeedbackButton';
 import { t } from '../lib/i18n';
 import React from 'react';
-import { View, Text, Switch, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Switch, ScrollView, Alert } from 'react-native';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { initI18n, i18n } from '../lib/i18n';
+import { TabBar } from '../components/ui/TabBar';
 
 export const Settings = ({ navigation }: any) => {
   const { isPremium, togglePremium } = usePremium();
@@ -38,13 +39,15 @@ export const Settings = ({ navigation }: any) => {
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 12 }}>
         <Text style={theme.typography.body}>Language / اللغة</Text>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <TouchableOpacity accessibilityLabel="Button" onPress={() => changeLanguage('en')} style={{ padding: 8, backgroundColor: locale === 'en' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
-            <Text style={{ color: locale === 'en' ? theme.colors.onPrimary : theme.colors.onSurface }}>English</Text>
-          </TouchableOpacity>
-          <TouchableOpacity accessibilityLabel="Button" onPress={() => changeLanguage('ar')} style={{ padding: 8, backgroundColor: locale === 'ar' ? theme.colors.primary : theme.colors.surfaceVariant, borderRadius: 8 }}>
-            <Text style={{ color: locale === 'ar' ? theme.colors.onPrimary : theme.colors.onSurface }}>العربية</Text>
-          </TouchableOpacity>
+        <View style={{ flex: 1, marginStart: 12 }}>
+          <TabBar
+            tabs={[
+              { key: 'en', label: 'English' },
+              { key: 'ar', label: 'العربية' },
+            ]}
+            activeTab={locale}
+            onTabChange={changeLanguage}
+          />
         </View>
       </View>
 
