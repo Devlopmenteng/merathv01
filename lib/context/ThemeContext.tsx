@@ -85,17 +85,24 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('theme_preference').then(value => {
-      if (value === 'dark') setIsDark(true);
-      else if (value === 'light') setIsDark(false);
-      else setIsDark(false); // force light mode as default
-    });
+    AsyncStorage.getItem('theme_preference')
+      .then(value => {
+        if (value === 'dark') setIsDark(true);
+        else if (value === 'light') setIsDark(false);
+        else setIsDark(false); // force light mode as default
+      })
+      .catch(() => {
+        setIsDark(false);
+      });
   }, []);
 
   const toggleTheme = () => {
     const newDark = !isDark;
     setIsDark(newDark);
-    AsyncStorage.setItem('theme_preference', newDark ? 'dark' : 'light');
+    AsyncStorage.setItem('theme_preference', newDark ? 'dark' : 'light').catch(() => {
+      // Revert optimistic state update on persistence failure
+      setIsDark(!newDark);
+    });
   };
 
   const theme = {

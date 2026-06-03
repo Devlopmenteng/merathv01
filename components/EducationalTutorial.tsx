@@ -19,17 +19,23 @@ export const EducationalTutorial = () => {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_tutorial_seen').then(val => {
-      if (!val) setVisible(true);
-    });
+    AsyncStorage.getItem('merath_tutorial_seen')
+      .then(val => {
+        if (!val) setVisible(true);
+      })
+      .catch(() => {
+        setVisible(true);
+      });
   }, []);
 
   const next = () => {
     if (step < slides.length - 1) {
       setStep(step + 1);
     } else {
-      AsyncStorage.setItem('merath_tutorial_seen', 'true');
       setVisible(false);
+      AsyncStorage.setItem('merath_tutorial_seen', 'true').catch(() => {
+        // Non-critical: tutorial may reappear next session
+      });
     }
   };
 

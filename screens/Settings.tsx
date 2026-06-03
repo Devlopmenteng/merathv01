@@ -16,7 +16,13 @@ export const Settings = ({ navigation }: any) => {
   const [calcCount, setCalcCount] = useState(0);
   const [locale, setLocale] = useState(i18n.locale);
   
-  useEffect(() => { getCalculationCount().then(setCalcCount); }, []);
+  useEffect(() => {
+    getCalculationCount()
+      .then(setCalcCount)
+      .catch(() => {
+        setCalcCount(0);
+      });
+  }, []);
   const { isDark, toggleTheme } = useTheme();
   const theme = useAppTheme();
 

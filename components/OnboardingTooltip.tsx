@@ -8,14 +8,20 @@ export const OnboardingTooltip = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('merath_tooltip_seen').then(val => {
-      if (!val) setVisible(true);
-    });
+    AsyncStorage.getItem('merath_tooltip_seen')
+      .then(val => {
+        if (!val) setVisible(true);
+      })
+      .catch(() => {
+        setVisible(true);
+      });
   }, []);
 
   const dismiss = () => {
-    AsyncStorage.setItem('merath_tooltip_seen', 'true');
     setVisible(false);
+    AsyncStorage.setItem('merath_tooltip_seen', 'true').catch(() => {
+      // Non-critical: tooltip may reappear next session
+    });
   };
 
   if (!visible) return null;

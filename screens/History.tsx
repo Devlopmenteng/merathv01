@@ -1,6 +1,6 @@
 import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
@@ -10,15 +10,23 @@ export const History = ({ navigation }: any) => {
   const [trail, setTrail] = useState<AuditEntry[]>([]);
   const [filtered, setFiltered] = useState<AuditEntry[]>([]);
   const [search, setSearch] = useState('');
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     loadEntries();
   }, []);
 
   const loadEntries = async () => {
-    const entries = await getAuditTrail();
-    setTrail(entries);
-    setFiltered(entries);
+    try {
+      const entries = await getAuditTrail();
+      setTrail(entries);
+      setFiltered(entries);
+      setLoadError(false);
+    } catch {
+      setTrail([]);
+      setFiltered([]);
+      setLoadError(true);
+    }
   };
 
   const handleSearch = async (text: string) => {
@@ -26,8 +34,12 @@ export const History = ({ navigation }: any) => {
     if (text.trim() === '') {
       setFiltered(trail);
     } else {
-      const results = await searchAuditTrail(text);
-      setFiltered(results);
+      try {
+        const results = await searchAuditTrail(text);
+        setFiltered(results);
+      } catch {
+        setFiltered([]);
+      }
     }
   };
 
@@ -49,7 +61,9 @@ export const History = ({ navigation }: any) => {
         onChangeText={handleSearch}
       />
       <ScrollView>
-        {filtered.length === 0 ? (
+        {loadError ? (
+          <Text style={[theme.typography.body, { color: theme.colors.error }]}>تعذر تحميل السجلات. حاول مرة أخرى لاحقاً.</Text>
+        ) : filtered.length === 0 ? (
           <Text style={theme.typography.body}>لا توجد سجلات مطابقة.</Text>
         ) : (
           filtered.map((entry, idx) => (

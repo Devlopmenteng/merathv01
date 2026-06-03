@@ -22,13 +22,18 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
       .then((val) => {
         setIsPremium(val === 'true');
       })
+      .catch(() => {
+        setIsPremium(false);
+      })
       .finally(() => setIsReady(true));
   }, []);
 
   const togglePremium = () => {
     const next = !isPremium;
     setIsPremium(next);
-    AsyncStorage.setItem('merath_premium', next ? 'true' : 'false');
+    AsyncStorage.setItem('merath_premium', next ? 'true' : 'false').catch(() => {
+      setIsPremium(!next);
+    });
   };
 
   return (

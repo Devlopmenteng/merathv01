@@ -7,7 +7,11 @@ const StartupGate = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const init = async () => {
-      await initI18n();
+      try {
+        await initI18n();
+      } catch {
+        // Proceed with default locale on i18n init failure
+      }
       setIsReady(true);
     };
     init();
