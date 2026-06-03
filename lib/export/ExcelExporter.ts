@@ -1,6 +1,6 @@
 /**
  * Excel/CSV Export Functionality for Inheritance Calculations
-* تصدير حسابات المواريث إلى Excel/CSV
+ * تصدير حسابات المواريث إلى Excel/CSV
  *
  * This module provides functionality to export calculation results to CSV format
  * (which can be opened in Excel, Google Sheets, and other spreadsheet applications).
@@ -9,7 +9,7 @@
  */
 
 import type { CalculationResult, EstateInput, HeirEntry } from '../engine/types';
-import { MADHAB_NAMES } from '../lib/engine/constants';
+import { MADHAB_NAMES } from '../engine/constants';
 
 /**
  * Export format options
@@ -102,7 +102,21 @@ export class CalculationExporter {
       const amount = share.amount ? currencySymbol + share.amount.toFixed(2) : 'N/A';
 
       csvRows.push(
-        '"' + share.name + '","' + (share.key || 'N/A') + '",' + (share.count || 1) + ',' + fraction + ',' + percentage + ',' + amount + ',"' + (share.shareType || 'N/A') + '"'
+        '"' +
+          share.name +
+          '","' +
+          (share.key || 'N/A') +
+          '",' +
+          (share.count || 1) +
+          ',' +
+          fraction +
+          ',' +
+          percentage +
+          ',' +
+          amount +
+          ',"' +
+          (share.shareType || 'N/A') +
+          '"'
       );
     });
 
@@ -204,10 +218,7 @@ export class CalculationExporter {
    * @param madhab - Madhab used
    * @returns Suggested filename
    */
-  public static generateFilename(
-    format: ExportFormat = 'csv',
-    madhab?: string
-  ): string {
+  public static generateFilename(format: ExportFormat = 'csv', madhab?: string): string {
     const date = new Date();
     const dateStr = date.toISOString().split('T')[0];
     const madhabStr = madhab ? '_' + madhab : '';

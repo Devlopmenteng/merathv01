@@ -9,7 +9,7 @@
  */
 
 import type { CalculationResult, EstateInput, HeirEntry } from '../engine/types';
-import { MADHAB_NAMES } from '../lib/engine/constants';
+import { MADHAB_NAMES } from '../engine/constants';
 
 /**
  * Share method types
