@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json}\"",
     "type-check": "tsc --noEmit",
+    "analyze": "npx expo export --output-dir dist --platform web && npx @rollup/plugin-dynamic-import-vars",
     "prepare": "husky install"
   },
   "dependencies": {
