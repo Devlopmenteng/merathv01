@@ -23,7 +23,7 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
     // Convert array to object for validation
     const heirsObject = heirsArrayToObject(state.heirs);
 
-    const validation = validateHeirsConfig(heirsObject);
+    const validation = validateHeirsConfig(heirsObject as Record<string, number>);
 
     if (!validation.valid) {
       showAlert(t('validation_error'), validation.errors.join('\n'));

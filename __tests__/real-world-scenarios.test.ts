@@ -452,13 +452,9 @@ describe('Real-World Islamic Inheritance Scenarios', () => {
       expect(shafiiSisters.length).toBe(0); // Siblings should be blocked
 
       // Maliki: grandfather should also block siblings in current implementation
-      // Note: Current implementation may not fully implement Maliki sharing
-      // This test documents current behavior
-      const malikiGrandfather = malikiResult.shares.find((s) => s.key === 'grandfather');
-      const _malikiBrothers = malikiResult.shares.filter((s) => s.key === 'full_brother');
-      const _malikiSisters = malikiResult.shares.filter((s) => s.key === 'full_sister');
+      const _malikiGrandfather = malikiResult.shares.find((s) => s.key === 'grandfather');
 
-      expect(malikiGrandfather).toBeDefined();
+      expect(_malikiGrandfather).toBeDefined();
       // Current implementation behavior - may need enhancement for full Maliki support
     });
   });

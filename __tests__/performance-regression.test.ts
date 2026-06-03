@@ -6,7 +6,7 @@
  * They establish baselines and fail if performance degrades significantly.
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import { calculateInheritance } from '../lib/engine/calculator';
 import type { EstateInput, HeirsData, Madhab } from '../lib/engine/types';
 
@@ -57,8 +57,6 @@ describe('Performance Regression Tests', () => {
 
   TEST_CASES.forEach(({ name, estate, heirs, maxDuration }) => {
     it(`${name} should complete within threshold`, () => {
-      const startTime = performance.now();
-      
       // Run calculation 10 times to get average
       const iterations = 10;
       const durations: number[] = [];
@@ -70,8 +68,6 @@ describe('Performance Regression Tests', () => {
       }
       
       const avgDuration = durations.reduce((a, b) => a + b, 0) / iterations;
-      const endTime = performance.now();
-      const totalDuration = endTime - startTime;
       
       const passed = avgDuration <= maxDuration;
       

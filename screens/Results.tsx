@@ -17,7 +17,6 @@ import {
   TextStyle,
 } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
-import { calculateInheritance } from '../lib/engine/calculator';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
@@ -125,7 +124,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
       try {
         // Use cached calculation for better performance
         const res = await calculateInheritanceWithCache({
-          madhab: state.madhab,
+          madhab: state.madhab as any,
           totalEstate: estate.total,
           funeralExpenses: estate.funeral,
           debts: estate.debts,
@@ -329,7 +328,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             }}>
               <Text style={[
                 theme.typography.body,
-                { color: theme.colors.onWarning || '#000', textAlign: 'center' }
+                { color: '#000', textAlign: 'center' }
               ]}>
                 {t('treasury_notice')}
               </Text>
