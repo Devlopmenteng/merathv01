@@ -573,7 +573,7 @@ describe('Real-World Islamic Inheritance Scenarios', () => {
       expect(result.success).toBe(false);
     });
 
-    it('Should handle empty heirs list', () => {
+    it('Should handle empty heirs list (goes to treasury)', () => {
       const estate: EstateData = {
         total: 100000,
         funeral: 0,
@@ -586,7 +586,11 @@ describe('Real-World Islamic Inheritance Scenarios', () => {
       const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
       const result = engine.calculate();
 
-      expect(result.success).toBe(false);
+      // Should succeed and distribute to treasury (Bait al-Mal)
+      expect(result.success).toBe(true);
+      expect(result.shares).toHaveLength(1);
+      expect(result.shares[0].key).toBe('treasury');
+      expect(result.shares[0].amount).toBe(100000);
     });
 
     it('Should reject negative debts', () => {

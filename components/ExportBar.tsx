@@ -1,18 +1,23 @@
 import React, { useRef } from 'react';
-import { View, TouchableOpacity, Text, Share, Platform } from 'react-native';
+import { View, TouchableOpacity, Text, Share, Platform, Alert } from 'react-native';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
 import ViewShot from 'react-native-view-shot';
 import { useAppTheme } from '../hooks/useAppTheme';
 import type { CalculationResult } from '../lib/engine/types';
 import { t } from '../lib/i18n';
+import { ExcelExporter } from '../lib/export/ExcelExporter';
+import type { HeirEntry, EstateInput } from '../lib/engine/types';
 
 type ExportBarProps = {
   resultData: CalculationResult;
+  estate?: EstateInput;
+  heirs?: HeirEntry[];
   children: React.ReactNode;
 };
 
-export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) => {
+export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs, children }) => {
   const viewShotRef = useRef(null);
   const theme = useAppTheme();
 
@@ -34,6 +39,44 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
     await Share.share({ message: 'Inheritance Report', url: uri });
   };
 
+  const exportToExcel = async () => {
+    if (!estate || !heirs) {
+      Alert.alert('Error', 'Estate and heirs data required for Excel export');
+      return;
+    }
+
+    try {
+      const csv = ExcelExporter.exportToCSV({
+        result: resultData,
+        estate,
+        heirs,
+      }, { currencySymbol: '$' });
+
+      const fileUri = FileSystem.documentDirectory + '/inheritance_report.csv';
+      await FileSystem.writeAsStringAsync(fileUri, csv);
+
+      if (Platform.OS === 'web') {
+        // On web, create a download link
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inheritance_report.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        await Sharing.shareAsync({
+          url: fileUri,
+          mimeType: 'text/csv',
+        });
+      }
+
+      Alert.alert('Success', 'CSV file exported successfully');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to export to CSV format');
+    }
+  };
+
   return (
     <View>
       <ViewShot ref={viewShotRef} options={{ format: 'png', quality: 1 }}>
@@ -47,10 +90,16 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, children }) =>
           <Text style={{ color: theme.colors.onPrimary }}>{t('pdf')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={captureAndShare}
+          onPress={exportToExcel}
           style={{ padding: 12, backgroundColor: theme.colors.secondary, borderRadius: 8 }}
         >
-          <Text style={{ color: theme.colors.onSecondary }}>{t('share_image')}</Text>
+          <Text style={{ color: theme.colors.onSecondary }}>{t('csv')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={captureAndShare}
+          style={{ padding: 12, backgroundColor: theme.colors.tertiary || '#6B5B95', borderRadius: 8 }}
+        >
+          <Text style={{ color: theme.colors.onTertiary || '#FFF' }}>{t('share_image')}</Text>
         </TouchableOpacity>
       </View>
     </View>

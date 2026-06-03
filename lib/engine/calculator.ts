@@ -261,6 +261,24 @@ export class EnhancedInheritanceCalculationEngine {
         }
       }
 
+      // Treasury (Bait al-Mal) - if no heirs, estate goes to treasury
+      if (finalShares.length === 0) {
+        this.addStep('بيت المال: treasury', '', null, 'info');
+        this.state.specialCases.push({
+          type: 'treasury',
+          name: 'بيت المال',
+          description: 'لا يوجد ورثة - التركة لبيت المال',
+        });
+        finalShares.push({
+          key: 'treasury',
+          name: 'بيت المال (Treasury)',
+          type: 'بيت المال',
+          fraction: new FractionClass(1, 1),
+          count: 1,
+          reason: 'لا يوجد ورثة - التركة لبيت المال الإسلامي',
+        });
+      }
+
       const results = this.calculateFinalAmounts(finalShares, netEstate);
       this.addStep('تحويل للمبالغ: amounts', '', null, 'info');
 
@@ -1393,11 +1411,10 @@ export class EnhancedInheritanceCalculationEngine {
     }
 
     const totalHeirs = Object.values(this.heirs).filter((v) => v && v > 0).length;
+    // Allow zero heirs - estate will go to treasury (Bait al-Mal)
     if (totalHeirs === 0) {
-      return {
-        valid: false,
-        error: 'يجب تحديد وارث واحد على الأقل',
-      };
+      console.log('No heirs specified - estate will go to treasury (Bait al-Mal)');
+      this.state.bloodRelativesApplied = true;
     }
 
     return { valid: true };
