@@ -274,7 +274,13 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           </View>
           <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>{share.count}</Text>
           <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{share.type}</Text>
-          <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
+          <Text
+            style={{
+              width: isTablet ? 100 : 80,
+              textAlign: 'center',
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            }}
+          >
             {share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ''}
           </Text>
           <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{percentage}%</Text>
@@ -432,12 +438,22 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                   {t('count')}
                 </Text>
                 <Text
-                  style={{ width: isTablet ? 100 : 80, fontWeight: 'bold', textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
+                  style={{
+                    width: isTablet ? 100 : 80,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  }}
                 >
                   {t('type')}
                 </Text>
                 <Text
-                  style={{ width: isTablet ? 100 : 80, fontWeight: 'bold', textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
+                  style={{
+                    width: isTablet ? 100 : 80,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  }}
                 >
                   {t('share')}
                 </Text>
@@ -447,7 +463,12 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                   {t('percentage')}
                 </Text>
                 <Text
-                  style={{ width: isTablet ? 130 : 100, fontWeight: 'bold', textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
+                  style={{
+                    width: isTablet ? 130 : 100,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  }}
                 >
                   {t('amount')}
                 </Text>

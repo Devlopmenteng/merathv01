@@ -49,27 +49,30 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       .finally(() => setIsReady(true));
   }, []);
 
-  const changeLocale = useCallback(async (nextLocale: string) => {
-    const previousLocale = locale;
-    initI18n(nextLocale);
-    setLocale(nextLocale);
+  const changeLocale = useCallback(
+    async (nextLocale: string) => {
+      const previousLocale = locale;
+      initI18n(nextLocale);
+      setLocale(nextLocale);
 
-    // Force re-render of all components
-    forceUpdate({});
+      // Force re-render of all components
+      forceUpdate({});
 
-    // Update RTL direction if needed
-    const shouldBeRTL = RTL_LOCALES.includes(nextLocale);
-    I18nManager.allowRTL(shouldBeRTL);
-    
-    if (I18nManager.isRTL !== shouldBeRTL) {
-      I18nManager.forceRTL(shouldBeRTL);
-    }
+      // Update RTL direction if needed
+      const shouldBeRTL = RTL_LOCALES.includes(nextLocale);
+      I18nManager.allowRTL(shouldBeRTL);
 
-    await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
-    
-    // Return true if RTL changed (would need restart in older React Native versions)
-    return RTL_LOCALES.includes(previousLocale) !== RTL_LOCALES.includes(nextLocale);
-  }, [forceUpdate, locale]);
+      if (I18nManager.isRTL !== shouldBeRTL) {
+        I18nManager.forceRTL(shouldBeRTL);
+      }
+
+      await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
+
+      // Return true if RTL changed (would need restart in older React Native versions)
+      return RTL_LOCALES.includes(previousLocale) !== RTL_LOCALES.includes(nextLocale);
+    },
+    [forceUpdate, locale]
+  );
 
   const value = useMemo(
     () => ({ locale, isReady, isRTL, changeLocale, forceUpdate }),
