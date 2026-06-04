@@ -117,7 +117,11 @@ export const Button: React.FC<Props> = ({
           colors={[theme.colors.primary, theme.colors.primaryDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={[StyleSheet.absoluteFillObject, getSizeStyles(), { alignItems: 'center', justifyContent: 'center' }]}
+          style={[
+            StyleSheet.absoluteFillObject,
+            getSizeStyles(),
+            { alignItems: 'center', justifyContent: 'center' },
+          ]}
         >
           {content}
         </LinearGradient>

@@ -137,7 +137,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
               ...theme.elevation.large,
             }}
           >
-            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>{t('select_language')}</Text>
+            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>
+              {t('select_language')}
+            </Text>
             {LANGUAGES.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
@@ -152,7 +154,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 onPress={() => changeLanguage(lang.code)}
               >
                 <Text style={theme.typography.body}>{lang.label}</Text>
-                {locale === lang.code && <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>✓</Text>}
+                {locale === lang.code && (
+                  <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>✓</Text>
+                )}
               </TouchableOpacity>
             ))}
             <TouchableOpacity
@@ -225,7 +229,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
       >
-        <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>{t('language__')}</Text>
+        <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>
+          {t('language__')}
+        </Text>
         {LanguageDropdown()}
       </View>
 
@@ -290,7 +296,10 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ paddingVertical: theme.spacing.sm }} onPress={handleEmailFeedback}>
+        <TouchableOpacity
+          style={{ paddingVertical: theme.spacing.sm }}
+          onPress={handleEmailFeedback}
+        >
           <Text style={theme.typography.body}>{t('feedback_title')}</Text>
         </TouchableOpacity>
       </View>

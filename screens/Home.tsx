@@ -101,7 +101,9 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                 style={[
                   styles.menuItemDescription,
                   {
-                    color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.text.secondary,
+                    color: item.primary
+                      ? theme.colors.onPrimary + 'CC'
+                      : theme.colors.text.secondary,
                   },
                 ]}
               >

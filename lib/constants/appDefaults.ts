@@ -31,9 +31,9 @@ export const APP_DEFAULTS = {
 
   // Animation durations (ms)
   ANIMATION_DURATION: {
-    FAST: 150,      // Button presses, micro-interactions
-    NORMAL: 300,    // Screen transitions
-    SLOW: 500,      // Complex animations
+    FAST: 150, // Button presses, micro-interactions
+    NORMAL: 300, // Screen transitions
+    SLOW: 500, // Complex animations
     SCREEN_TRANSITION: 300,
     SKELETON_PULSE: 1000,
     SKELETON_SHIMMER: 800,

@@ -1,11 +1,11 @@
 // Professional 8px grid spacing system
 export const spacing = {
-  xs: 4,    // 0.5 grid units
-  sm: 8,    // 1 grid unit
-  md: 16,   // 2 grid units
-  lg: 24,   // 3 grid units
-  xl: 32,   // 4 grid units
-  xxl: 48,  // 6 grid units
+  xs: 4, // 0.5 grid units
+  sm: 8, // 1 grid unit
+  md: 16, // 2 grid units
+  lg: 24, // 3 grid units
+  xl: 32, // 4 grid units
+  xxl: 48, // 6 grid units
   xxxl: 64, // 8 grid units
 };
 
@@ -30,7 +30,13 @@ export const typography = {
   bodySmall: { fontSize: 14, fontWeight: '400' as const, lineHeight: 20 },
   caption: { fontSize: 12, fontWeight: '400' as const, lineHeight: 16 },
   button: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24, letterSpacing: 0.5 },
-  overline: { fontSize: 11, fontWeight: '600' as const, lineHeight: 16, textTransform: 'uppercase' as const, letterSpacing: 0.5 },
+  overline: {
+    fontSize: 11,
+    fontWeight: '600' as const,
+    lineHeight: 16,
+    textTransform: 'uppercase' as const,
+    letterSpacing: 0.5,
+  },
 };
 
 // Enhanced elevation system with color-tinted shadows

@@ -62,7 +62,9 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
       />
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}>
+          <Text
+            style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}
+          >
             {t('no_history')}
           </Text>
         ) : (
@@ -90,15 +92,35 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
               <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
                 {t('netEstate')}: {formatCurrency(entry.netTotal)}
               </Text>
-              <Text style={[theme.typography.bodySmall, { fontWeight: '600', marginTop: theme.spacing.sm }]}>
+              <Text
+                style={[
+                  theme.typography.bodySmall,
+                  { fontWeight: '600', marginTop: theme.spacing.sm },
+                ]}
+              >
                 {t('heirs')}:
               </Text>
               {entry.shares.slice(0, 3).map((share, i) => (
-                <Text key={i} style={[theme.typography.caption, { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary }]}>
+                <Text
+                  key={i}
+                  style={[
+                    theme.typography.caption,
+                    { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary },
+                  ]}
+                >
                   • {share.name}: {formatCurrency(share.amount)}
                 </Text>
               ))}
-              {entry.shares.length > 3 && <Text style={[theme.typography.caption, { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary }]}>...</Text>}
+              {entry.shares.length > 3 && (
+                <Text
+                  style={[
+                    theme.typography.caption,
+                    { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary },
+                  ]}
+                >
+                  ...
+                </Text>
+              )}
             </TouchableOpacity>
           ))
         )}
