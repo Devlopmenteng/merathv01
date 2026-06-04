@@ -29,7 +29,11 @@ interface ComparisonSummary {
   specialCasesApplied: Record<string, string[]>;
 }
 
-export const Comparison = React.memo(() => {
+type ComparisonNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNavigation }) => {
   const { state } = useCalc();
   const theme = useAppTheme();
   const { isTablet } = useResponsive();
@@ -86,6 +90,9 @@ export const Comparison = React.memo(() => {
       return { heirKey, sharesByMadhab };
     });
   }, [allHeirs, results]);
+
+  // Check if there's any data to compare
+  const hasData = comparisonRows.length > 0 && allHeirs.size > 0;
 
   const differenceAnalysis = useMemo((): DifferenceAnalysis[] => {
     const differences: DifferenceAnalysis[] = [];
@@ -361,67 +368,118 @@ export const Comparison = React.memo(() => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
-      <Text style={theme.typography.h1}>{t('comparison_title')}</Text>
-
-      {/* Toggle buttons */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 }}>
-        {TABS.map((m) => (
-          <TouchableOpacity
-            key={m}
-            onPress={() => setSelected(m)}
-            style={{
-              paddingVertical: 8,
-              paddingHorizontal: 16,
-              borderRadius: 20,
-              backgroundColor: selected === m ? MADHAB_COLORS[m] : theme.colors.surfaceVariant,
-            }}
-          >
-            <Text style={{ color: selected === m ? '#fff' : theme.colors.onSurface }}>
-              {MADHAB_NAMES[m]}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Action buttons */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
+        <Text style={theme.typography.h1}>{t('comparison_title')}</Text>
         <TouchableOpacity
-          onPress={() => setShowAnalysis(!showAnalysis)}
+          onPress={() => navigation.navigate('Home')}
           style={{
+            backgroundColor: theme.colors.surfaceVariant,
+            paddingHorizontal: 12,
             paddingVertical: 8,
-            paddingHorizontal: 16,
             borderRadius: 8,
-            backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
           }}
         >
-          <Text style={{ color: showAnalysis ? '#fff' : theme.colors.onSurface }}>
-            {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
+          <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+            {t('back_to_home')}
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={handleExportComparison}
-          style={{
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            borderRadius: 8,
-            backgroundColor: theme.colors.primary,
-          }}
-        >
-          <Text style={{ color: '#fff' }}>📥 Export</Text>
-        </TouchableOpacity>
       </View>
 
-      {/* Summary and Analysis */}
-      {showAnalysis && (
-        <>
-          {renderSummary()}
-          {renderDifferenceAnalysis()}
-        </>
+      {!hasData && (
+        <View
+          style={{
+            backgroundColor: theme.colors.surfaceVariant,
+            padding: 16,
+            borderRadius: 12,
+            marginTop: 16,
+          }}
+        >
+          <Text style={{ textAlign: 'center', fontSize: 16 }}>{t('no_history')}</Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 14,
+              marginTop: 8,
+              color: theme.colors.secondary,
+            }}
+          >
+            {t('start_new_calculation')}
+          </Text>
+        </View>
       )}
 
-      {/* Comparison Table */}
-      {renderComparisonTable()}
+      {hasData && (
+        <>
+          {/* Toggle buttons */}
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 }}
+          >
+            {TABS.map((m) => (
+              <TouchableOpacity
+                key={m}
+                onPress={() => setSelected(m)}
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 16,
+                  borderRadius: 20,
+                  backgroundColor: selected === m ? MADHAB_COLORS[m] : theme.colors.surfaceVariant,
+                }}
+              >
+                <Text style={{ color: selected === m ? '#fff' : theme.colors.onSurface }}>
+                  {MADHAB_NAMES[m]}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Action buttons */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+            <TouchableOpacity
+              onPress={() => setShowAnalysis(!showAnalysis)}
+              style={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
+              }}
+            >
+              <Text style={{ color: showAnalysis ? '#fff' : theme.colors.onSurface }}>
+                {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleExportComparison}
+              style={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                backgroundColor: theme.colors.primary,
+              }}
+            >
+              <Text style={{ color: '#fff' }}>📥 Export</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Summary and Analysis */}
+          {showAnalysis && (
+            <>
+              {renderSummary()}
+              {renderDifferenceAnalysis()}
+            </>
+          )}
+
+          {/* Comparison Table */}
+          {renderComparisonTable()}
+        </>
+      )}
     </ScrollView>
   );
 });

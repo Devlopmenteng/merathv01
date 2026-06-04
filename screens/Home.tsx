@@ -19,6 +19,13 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
       primary: true,
     },
     {
+      title: t('compare'),
+      description: t('comparison_title'),
+      icon: '⚖️',
+      screen: 'Comparison',
+      primary: false,
+    },
+    {
       title: t('history'),
       description: t('view_previous_calculations'),
       icon: '📜',
@@ -53,7 +60,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
         <Text
           style={[
             theme.typography.body,
-            { color: theme.colors.textSecondary, marginTop: theme.spacing.sm },
+            { color: theme.colors.secondary, marginTop: theme.spacing.sm },
           ]}
         >
           {t('app_description')}
@@ -86,7 +93,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               style={[
                 styles.menuItemDescription,
                 {
-                  color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.textSecondary,
+                  color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.secondary,
                 },
               ]}
             >
