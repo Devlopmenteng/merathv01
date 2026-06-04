@@ -320,10 +320,10 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
 const styles = StyleSheet.create({
   categoryChip: {
-    paddingHorizontal: theme.spacing?.md || 16,
-    paddingVertical: theme.spacing?.sm || 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 20,
-    marginRight: theme.spacing?.sm || 8,
+    marginRight: 8,
     borderWidth: 1,
   },
   templateCard: {
@@ -332,15 +332,15 @@ const styles = StyleSheet.create({
   templateName: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: theme.spacing?.xs || 4,
+    marginBottom: 4,
   },
   templateDescription: {
     fontSize: 14,
-    marginBottom: theme.spacing?.sm || 8,
+    marginBottom: 8,
   },
   detailsRow: {
     flexDirection: 'row',
-    marginBottom: theme.spacing?.xs || 4,
+    marginBottom: 4,
   },
   detailLabel: {
     fontSize: 14,

@@ -12,15 +12,15 @@ type CalculationStepsNavigation = {
 
 type Props = {
   route: {
-    params: {
-      auditEntry: AuditEntry;
+    params?: {
+      auditEntry?: AuditEntry;
     };
   };
   navigation: CalculationStepsNavigation;
 };
 
 export const CalculationSteps = ({ route, navigation }: Props) => {
-  const { auditEntry } = route.params;
+  const { auditEntry } = route.params || {};
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
 

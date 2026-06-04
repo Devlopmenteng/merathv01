@@ -90,7 +90,7 @@ export default function RootNavigator() {
           <Stack.Screen name="Glossary" component={Glossary} options={{ title: t('glossary') }} />
           <Stack.Screen
             name="CalculationSteps"
-            component={CalculationSteps}
+            component={CalculationSteps as any}
             options={{ title: t('calculation_steps') }}
           />
           <Stack.Screen

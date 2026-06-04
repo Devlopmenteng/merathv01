@@ -7,7 +7,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
 
 type HistoryNavigation = {
-  navigate: (screen: string) => void;
+  navigate: (screen: string, params?: Record<string, unknown>) => void;
 };
 
 export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
