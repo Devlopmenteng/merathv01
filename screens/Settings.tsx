@@ -9,6 +9,7 @@ import {
   Pressable,
   Linking,
   Alert,
+  I18nManager,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -110,8 +111,8 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityHint={`Current language: ${LANGUAGES.find((l) => l.code === locale)?.label || locale}. Tap to change.`}
         accessibilityRole="button"
       >
-        <Text style={theme.typography.body}>{t('language__')}</Text>
-        <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
+        <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{t('language__')}</Text>
+        <Text style={[theme.typography.body, { color: theme.colors.primary }]} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
           {LANGUAGES.find((l) => l.code === locale)?.label || locale}
         </Text>
       </TouchableOpacity>
@@ -139,7 +140,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
               ...theme.elevation.large,
             }}
           >
-            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>
+            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
               {t('select_language')}
             </Text>
             {LANGUAGES.map((lang) => (
@@ -161,7 +162,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 accessibilityRole="button"
                 accessibilityState={{ selected: locale === lang.code }}
               >
-                <Text style={theme.typography.body}>{lang.label}</Text>
+                <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{lang.label}</Text>
                 {locale === lang.code && (
                   <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>✓</Text>
                 )}
@@ -226,7 +227,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             alignItems: 'center',
           }}
         >
-          <Text style={theme.typography.body}>{t('dark_mode')}</Text>
+          <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{t('dark_mode')}</Text>
           <Switch
             value={isDark}
             onValueChange={toggleTheme}

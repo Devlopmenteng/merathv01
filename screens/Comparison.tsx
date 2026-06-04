@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
@@ -244,7 +244,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             marginBottom: 16,
           }}
         >
-          <Text style={{ color: 'green', textAlign: 'center' }}>
+          <Text style={{ color: 'green', textAlign: 'center' }} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
             ✅ {t('no_significant_differences')}
           </Text>
         </View>

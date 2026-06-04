@@ -1,7 +1,7 @@
 import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
 import React, { useCallback } from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView, Platform, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeirSelector } from '../components/HeirSelector';
 import { Button } from '../components/ui/Button';
@@ -53,7 +53,7 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
             currentStep={2}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
           />
-          <Text style={theme.typography.h1}>{t('select_heirs')}</Text>
+          <Text style={theme.typography.h1} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{t('select_heirs')}</Text>
           <HeirSelector
             heirs={state.heirs}
             onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })}

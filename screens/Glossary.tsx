@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, FlatList, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { GLOSSARY } from '../lib/constants/glossary';
@@ -58,12 +58,12 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             marginBottom: theme.spacing.md,
           }}
         >
-          <Text style={[theme.typography.h3, { color: theme.colors.secondary, marginBottom: 4 }]}>
+          <Text style={[theme.typography.h3, { color: theme.colors.secondary, marginBottom: 4 }]} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
             {item.surah} {item.verseNumber}
           </Text>
-          <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8 }}>{item.arabic}</Text>
-          <Text style={theme.typography.body}>{item.translation}</Text>
-          <Text style={[theme.typography.caption, { marginTop: 8, color: theme.colors.outline }]}>
+          <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8 }} writingDirection={'rtl'}>{item.arabic}</Text>
+          <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{item.translation}</Text>
+          <Text style={[theme.typography.caption, { marginTop: 8, color: theme.colors.outline }]} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
             {t('topic')}: {item.topic}
           </Text>
         </View>
@@ -84,8 +84,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             marginBottom: theme.spacing.md,
           }}
         >
-          <Text style={{ fontSize: 16, lineHeight: 24, marginBottom: 8 }}>{item.text}</Text>
-          <Text style={[theme.typography.caption, { color: theme.colors.outline }]}>
+          <Text style={{ fontSize: 16, lineHeight: 24, marginBottom: 8 }} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{item.text}</Text>
+          <Text style={[theme.typography.caption, { color: theme.colors.outline }]} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
             {item.reference}
           </Text>
         </View>
@@ -99,7 +99,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         onPress={() => navigation.navigate('Home')}
         style={{ padding: theme.spacing.md, marginBottom: theme.spacing.sm }}
       >
-        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+        <Text style={{ color: theme.colors.primary, fontSize: 16 }} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>← {t('back_to_home')}</Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
         <TouchableOpacity
@@ -117,6 +117,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             style={{
               color: activeTab === 'glossary' ? theme.colors.onPrimary : theme.colors.onSurface,
             }}
+            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
           >
             {t('tab_glossary')}
           </Text>
@@ -136,6 +137,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             style={{
               color: activeTab === 'verses' ? theme.colors.onPrimary : theme.colors.onSurface,
             }}
+            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
           >
             {t('tab_verses')}
           </Text>
@@ -155,6 +157,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             style={{
               color: activeTab === 'hadith' ? theme.colors.onPrimary : theme.colors.onSurface,
             }}
+            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
           >
             {t('tab_hadith')}
           </Text>
@@ -174,6 +177,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             style={{
               color: activeTab === 'fiqh' ? theme.colors.onPrimary : theme.colors.onSurface,
             }}
+            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
           >
             {t('tab_fiqh')}
           </Text>
