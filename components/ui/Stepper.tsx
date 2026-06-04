@@ -61,6 +61,10 @@ export const Stepper: React.FC<Props> = ({
         onPressIn={() => setPressedDecrease(true)}
         onPressOut={() => setPressedDecrease(false)}
         disabled={!canDecrease}
+        accessibilityLabel="Decrease"
+        accessibilityHint={`Decrease value from ${value} to ${value - 1}. Minimum is ${min}.`}
+        accessibilityState={{ disabled: !canDecrease }}
+        accessibilityRole="button"
         style={[
           styles.button,
           {
@@ -86,7 +90,11 @@ export const Stepper: React.FC<Props> = ({
           −
         </Text>
       </TouchableOpacity>
-      <View style={[styles.valueContainer, { marginHorizontal: spacing }]}>
+      <View
+        style={[styles.valueContainer, { marginHorizontal: spacing }]}
+        accessible
+        accessibilityLabel={`Current value: ${value}`}
+      >
         <Text
           style={[
             styles.valueText,
@@ -105,6 +113,10 @@ export const Stepper: React.FC<Props> = ({
         onPressIn={() => setPressedIncrease(true)}
         onPressOut={() => setPressedIncrease(false)}
         disabled={!canIncrease}
+        accessibilityLabel="Increase"
+        accessibilityHint={`Increase value from ${value} to ${value + 1}. Maximum is ${max}.`}
+        accessibilityState={{ disabled: !canIncrease }}
+        accessibilityRole="button"
         style={[
           styles.button,
           {

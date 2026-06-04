@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
@@ -19,6 +20,7 @@ type MadhabSelectNavigation = {
 
 export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigation }) => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { dispatch } = useCalc();
 
   return (
@@ -28,7 +30,11 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
       <FlatList
-        contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
+        contentContainerStyle={{
+          padding: theme.spacing.lg,
+          paddingBottom: theme.spacing.xxl + insets.bottom,
+          paddingTop: insets.top + theme.spacing.lg,
+        }}
         data={madhabs}
         keyExtractor={(i) => i.key}
         renderItem={({ item }) => (

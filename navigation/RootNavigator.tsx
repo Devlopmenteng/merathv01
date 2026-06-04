@@ -29,6 +29,12 @@ const History = lazy(() =>
 const Glossary = lazy(() =>
   import('../screens/Glossary').then((module) => ({ default: module.Glossary }))
 );
+const CalculationSteps = lazy(() =>
+  import('../screens/CalculationSteps').then((module) => ({ default: module.CalculationSteps }))
+);
+const TestCases = lazy(() =>
+  import('../screens/TestCases').then((module) => ({ default: module.TestCases }))
+);
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +88,16 @@ export default function RootNavigator() {
             options={{ title: t('history_screen_title') }}
           />
           <Stack.Screen name="Glossary" component={Glossary} options={{ title: t('glossary') }} />
+          <Stack.Screen
+            name="CalculationSteps"
+            component={CalculationSteps}
+            options={{ title: t('calculation_steps') }}
+          />
+          <Stack.Screen
+            name="TestCases"
+            component={TestCases}
+            options={{ title: t('test_cases') }}
+          />
         </Stack.Navigator>
       </Suspense>
     </NavigationContainer>

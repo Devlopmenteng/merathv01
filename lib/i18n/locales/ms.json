@@ -220,5 +220,19 @@
   "learn_terminology": "Pelajari terminologi pusaka Islam",
   "configure_app": "Konfigurasi tetapan dan keutamaan aplikasi",
   "app_description": "Kira pusaka Islam mengikut empat mazhab dengan keputusan yang tepat",
-  "back_to_home": "Kembali ke Utama"
+  "back_to_home": "Kembali ke Utama",
+  "back": "Kembali",
+  "no_calculation_data": "Tiada data pengiraan tersedia",
+  "no_steps_available": "Tiada langkah tersedia untuk pengiraan ini",
+  "hijab_log": "Log Hijab",
+  "test_cases": "Kes Ujian",
+  "test_cases_description": "Skenario pusaka yang telah ditetapkan untuk ujian dan pembelajaran",
+  "search_templates": "Cari templat...",
+  "no_templates_found": "Tiada templat yang sepadan dengan carian anda",
+  "template_applied": "Templat Digunakan",
+  "template_name": "Templat",
+  "recommended_madhab": "Mazhab Disarankan",
+  "estate": "Harta",
+  "case_name": "Nama Kes",
+  "date": "Tarikh"
 }

@@ -10,6 +10,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -31,6 +32,7 @@ type SettingsNavigation = {
 export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => {
   const { isDark, toggleTheme } = useTheme();
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { locale, changeLocale } = useLanguage();
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
@@ -107,6 +109,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
         onPress={() => setLanguageModalVisible(true)}
+        accessibilityLabel={t('language__')}
+        accessibilityHint={`Current language: ${LANGUAGES.find((l) => l.code === locale)?.label || locale}. Tap to change.`}
+        accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('language__')}</Text>
         <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
@@ -152,6 +157,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                   borderBottomColor: theme.colors.outline,
                 }}
                 onPress={() => changeLanguage(lang.code)}
+                accessibilityLabel={lang.label}
+                accessibilityHint={
+                  locale === lang.code ? 'Currently selected' : 'Tap to select this language'
+                }
+                accessibilityRole="button"
+                accessibilityState={{ selected: locale === lang.code }}
               >
                 <Text style={theme.typography.body}>{lang.label}</Text>
                 {locale === lang.code && (
@@ -169,6 +180,8 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 ...theme.elevation.small,
               }}
               onPress={() => setLanguageModalVisible(false)}
+              accessibilityLabel={t('cancel')}
+              accessibilityRole="button"
             >
               <Text style={{ color: theme.colors.onPrimary, fontWeight: '600' }}>
                 {t('cancel')}
@@ -184,12 +197,15 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
     <ScrollView
       contentContainerStyle={{
         padding: theme.spacing.lg,
-        paddingBottom: theme.spacing.xxl,
+        paddingBottom: theme.spacing.xxl + insets.bottom,
+        paddingTop: insets.top + theme.spacing.lg,
       }}
     >
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={{ marginBottom: theme.spacing.md }}
+        accessibilityLabel={t('back_to_home')}
+        accessibilityRole="button"
       >
         <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
       </TouchableOpacity>
@@ -214,7 +230,17 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           }}
         >
           <Text style={theme.typography.body}>{t('dark_mode')}</Text>
-          <Switch value={isDark} onValueChange={toggleTheme} />
+          <Switch
+            value={isDark}
+            onValueChange={toggleTheme}
+            accessibilityLabel={t('dark_mode')}
+            accessibilityHint={
+              isDark
+                ? 'Dark mode is enabled. Tap to disable.'
+                : 'Dark mode is disabled. Tap to enable.'
+            }
+            accessibilityRole="switch"
+          />
         </View>
       </View>
 
@@ -249,6 +275,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
         onPress={() => navigation.navigate('Glossary')}
+        accessibilityLabel={t('glossary_and_education')}
+        accessibilityHint="Tap to view glossary and educational content"
+        accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>→</Text>
@@ -293,12 +322,18 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             borderBottomColor: theme.colors.outline,
           }}
           onPress={handleRateUs}
+          accessibilityLabel={t('rate_us_send_feedback')}
+          accessibilityHint="Tap to rate us on Google Play"
+          accessibilityRole="button"
         >
           <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{ paddingVertical: theme.spacing.sm }}
           onPress={handleEmailFeedback}
+          accessibilityLabel={t('feedback_title')}
+          accessibilityHint="Tap to send feedback via email"
+          accessibilityRole="button"
         >
           <Text style={theme.typography.body}>{t('feedback_title')}</Text>
         </TouchableOpacity>
@@ -318,6 +353,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
         onPress={handlePrivacyPolicy}
+        accessibilityLabel={t('privacy_policy')}
+        accessibilityHint="Tap to view privacy policy"
+        accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>→</Text>
@@ -337,6 +375,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
         onPress={handleClearCache}
+        accessibilityLabel={t('clear_cache_reset')}
+        accessibilityHint="Tap to clear all cached data. This action cannot be undone."
+        accessibilityRole="button"
       >
         <Text style={[theme.typography.body, { color: theme.colors.error }]}>
           {t('clear_cache_reset')}
@@ -358,6 +399,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           borderColor: theme.colors.outline,
         }}
         onPress={handleLegalNotices}
+        accessibilityLabel={t('legal_notices')}
+        accessibilityHint="Tap to view legal notices"
+        accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('legal_notices')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>⚖️</Text>

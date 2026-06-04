@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 
@@ -10,6 +11,7 @@ type HomeNavigation = {
 
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
 
   const menuItems = [
     {
@@ -47,6 +49,13 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
       screen: 'Settings',
       primary: false,
     },
+    {
+      title: t('test_cases'),
+      description: t('test_cases_description'),
+      icon: '🧪',
+      screen: 'TestCases',
+      primary: false,
+    },
   ];
 
   return (
@@ -59,7 +68,8 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
       <ScrollView
         contentContainerStyle={{
           padding: theme.spacing.lg,
-          paddingBottom: theme.spacing.xxl,
+          paddingBottom: theme.spacing.xxl + insets.bottom,
+          paddingTop: insets.top + theme.spacing.lg,
         }}
       >
         <View style={{ marginBottom: theme.spacing.xxl }}>
@@ -86,6 +96,9 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               },
             ]}
             onPress={() => navigation.navigate(item.screen)}
+            accessibilityLabel={item.title}
+            accessibilityHint={item.description}
+            accessibilityRole="button"
           >
             <Text style={styles.icon}>{item.icon}</Text>
             <View style={styles.menuItemContent}>

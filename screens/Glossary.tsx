@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
@@ -14,6 +15,7 @@ type GlossaryNavigation = {
 
 export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<Tab>('glossary');
 
   const renderGlossary = () => (
@@ -177,7 +179,13 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
+      <ScrollView
+        contentContainerStyle={{
+          padding: theme.spacing.md,
+          paddingTop: insets.top + theme.spacing.md,
+          paddingBottom: insets.bottom,
+        }}
+      >
         {activeTab === 'glossary' && renderGlossary()}
         {activeTab === 'verses' && renderVerses()}
         {activeTab === 'hadith' && renderHadith()}

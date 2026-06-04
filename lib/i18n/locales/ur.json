@@ -220,5 +220,19 @@
   "learn_terminology": "اسلامی وراثت کی اصطلاحات سیکھیں",
   "configure_app": "ایپ کی ترتیبات اور ترجیحات کنفیگر کریں",
   "app_description": "چاروں مذاہب کے مطابق اسلامی وراثت کا درست نتائج کے ساتھ حساب کریں",
-  "back_to_home": "ہوم واپس جائیں"
+  "back_to_home": "ہوم واپس جائیں",
+  "back": "واپس",
+  "no_calculation_data": "کوئی حساب ڈیٹا دستیاب نہیں ہے",
+  "no_steps_available": "اس حساب کے لیے کوئی مراحل دستیاب نہیں ہیں",
+  "hijab_log": "حجب لاگ",
+  "test_cases": "ٹیسٹ کیسز",
+  "test_cases_description": "ٹیسٹ اور سیکھنے کے لیے پہلے سے تعین کردہ وراثت کے مناظر",
+  "search_templates": "ٹیمپلیٹس تلاش کریں...",
+  "no_templates_found": "آپ کی تلاش سے مطابق کوئی ٹیمپلیٹ نہیں ملا",
+  "template_applied": "ٹیمپلیٹ اطلاق ہو گیا",
+  "template_name": "ٹیمپلیٹ",
+  "recommended_madhab": "مشورہ دیا گیا مذہب",
+  "estate": "وراثت",
+  "case_name": "کیس کا نام",
+  "date": "تاریخ"
 }

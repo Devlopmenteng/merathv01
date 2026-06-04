@@ -16,6 +16,7 @@ import {
   StyleProp,
   TextStyle,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '../lib/utils/alerts';
@@ -73,6 +74,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   const { isPremium } = usePremium();
   const { state, caseName, caseDate } = useCalc();
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { isTablet } = useResponsive();
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -312,7 +314,13 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
         }}
         heirs={state.heirs}
       >
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 200 }}>
+        <ScrollView
+          contentContainerStyle={{
+            padding: theme.spacing.lg,
+            paddingBottom: 200 + insets.bottom,
+            paddingTop: insets.top + theme.spacing.lg,
+          }}
+        >
           <StepIndicator
             currentStep={3}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}

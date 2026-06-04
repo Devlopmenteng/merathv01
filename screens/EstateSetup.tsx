@@ -2,6 +2,7 @@ import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
 import React, { useState, useCallback } from 'react';
 import { ScrollView, View, Text, TextInput } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -15,6 +16,7 @@ type EstateSetupNavigation = {
 
 export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation }) => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { dispatch, caseName, setCaseName, caseDate, setCaseDate } = useCalc();
   const [total, setTotal] = useState('');
   const [funeral, setFuneral] = useState('');
@@ -56,7 +58,11 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
 
   return (
     <ScrollView
-      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: theme.spacing.xxl }}
+      contentContainerStyle={{
+        padding: theme.spacing.lg,
+        paddingBottom: theme.spacing.xxl + insets.bottom,
+        paddingTop: insets.top + theme.spacing.lg,
+      }}
     >
       <StepIndicator
         currentStep={0}

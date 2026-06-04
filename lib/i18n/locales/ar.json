@@ -221,5 +221,19 @@
   "learn_terminology": "تعلم مصطلحات المواريث الشرعية",
   "configure_app": "تكوين إعدادات التطبيق وتفضيلاته",
   "app_description": "احسب المواريث الشرعية وفقاً للمذاهب الأربعة بنتائج دقيقة",
-  "back_to_home": "العودة إلى الرئيسية"
+  "back_to_home": "العودة إلى الرئيسية",
+  "back": "رجوع",
+  "no_calculation_data": "لا توجد بيانات حساب متاحة",
+  "no_steps_available": "لا توجد خطوات متاحة لهذا الحساب",
+  "hijab_log": "سجل الحجب",
+  "test_cases": "حالات الاختبار",
+  "test_cases_description": "سيناريوهات ميراث معدة مسبقاً للاختبار والتعلم",
+  "search_templates": "البحث في القوالب...",
+  "no_templates_found": "لم يتم العثور على قوالب تطابق بحثك",
+  "template_applied": "تم تطبيق القالب",
+  "template_name": "القالب",
+  "recommended_madhab": "المذهب الموصى به",
+  "estate": "التركة",
+  "case_name": "اسم الحالة",
+  "date": "التاريخ"
 }

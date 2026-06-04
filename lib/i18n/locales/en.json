@@ -218,5 +218,19 @@
   "learn_terminology": "Learn Islamic inheritance terminology",
   "configure_app": "Configure app settings and preferences",
   "app_description": "Calculate Islamic inheritance according to the four schools of thought with accurate results",
-  "back_to_home": "Back to Home"
+  "back_to_home": "Back to Home",
+  "back": "Back",
+  "no_calculation_data": "No calculation data available",
+  "no_steps_available": "No steps available for this calculation",
+  "hijab_log": "Hijab Log",
+  "test_cases": "Test Cases",
+  "test_cases_description": "Pre-defined inheritance scenarios for testing and learning",
+  "search_templates": "Search templates...",
+  "no_templates_found": "No templates found matching your search",
+  "template_applied": "Template Applied",
+  "template_name": "Template",
+  "recommended_madhab": "Recommended Madhab",
+  "estate": "Estate",
+  "case_name": "Case Name",
+  "date": "Date"
 }

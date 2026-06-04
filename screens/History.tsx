@@ -1,6 +1,7 @@
 import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
@@ -11,6 +12,7 @@ type HistoryNavigation = {
 
 export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const [trail, setTrail] = useState<AuditEntry[]>([]);
   const [filtered, setFiltered] = useState<AuditEntry[]>([]);
   const [search, setSearch] = useState('');
@@ -36,10 +38,19 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, padding: theme.spacing.lg }}>
+    <View
+      style={{
+        flex: 1,
+        padding: theme.spacing.lg,
+        paddingTop: insets.top + theme.spacing.lg,
+        paddingBottom: insets.bottom,
+      }}
+    >
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={{ marginBottom: theme.spacing.md }}
+        accessibilityLabel={t('back_to_home')}
+        accessibilityRole="button"
       >
         <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
       </TouchableOpacity>
@@ -82,6 +93,10 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                 borderWidth: 1,
                 borderColor: theme.colors.outline,
               }}
+              onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
+              accessibilityLabel={`${entry.caseName || t('no_name')}, ${entry.caseDate || t('no_date')}, ${entry.madhab} madhab, ${formatCurrency(entry.netTotal)}`}
+              accessibilityHint={`${entry.shares.length} heirs. Tap to view calculation steps.`}
+              accessibilityRole="button"
             >
               <Text style={{ fontWeight: '600', fontSize: 16, marginBottom: theme.spacing.xs }}>
                 {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}

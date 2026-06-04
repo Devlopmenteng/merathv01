@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
 import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
@@ -36,6 +37,7 @@ type ComparisonNavigation = {
 export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNavigation }) => {
   const { state } = useCalc();
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
   const { isTablet } = useResponsive();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
@@ -367,7 +369,13 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   );
 
   return (
-    <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <ScrollView
+      contentContainerStyle={{
+        padding: theme.spacing.lg,
+        paddingTop: insets.top + theme.spacing.lg,
+        paddingBottom: insets.bottom,
+      }}
+    >
       <View
         style={{
           flexDirection: 'row',
