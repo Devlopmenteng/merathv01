@@ -44,10 +44,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         setLanguageModalVisible(false);
         return;
       }
-      const needsReload = await changeLocale(langCode);
-      if (needsReload) {
-        showAlert(t('language_changed'), t('restart_required'));
-      }
+      await changeLocale(langCode);
       setLanguageModalVisible(false);
     },
     [changeLocale, locale]

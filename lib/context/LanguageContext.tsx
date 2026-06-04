@@ -12,6 +12,7 @@ type LanguageContextType = {
   isReady: boolean;
   isRTL: boolean;
   changeLocale: (locale: string) => Promise<boolean>;
+  forceUpdate: () => void;
 };
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -19,11 +20,13 @@ const LanguageContext = createContext<LanguageContextType>({
   isReady: false,
   isRTL: false,
   changeLocale: async () => false,
+  forceUpdate: () => {},
 });
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [locale, setLocale] = useState(APP_DEFAULTS.DEFAULT_LOCALE);
   const [isReady, setIsReady] = useState(false);
+  const [, forceUpdate] = useState({});
 
   const isRTL = useMemo(() => RTL_LOCALES.includes(locale), [locale]);
 
@@ -47,26 +50,30 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   }, []);
 
   const changeLocale = useCallback(async (nextLocale: string) => {
+    const previousLocale = locale;
     initI18n(nextLocale);
     setLocale(nextLocale);
 
+    // Force re-render of all components
+    forceUpdate({});
+
     // Update RTL direction if needed
-    if (RTL_LOCALES.includes(nextLocale) && !I18nManager.isRTL) {
-      I18nManager.allowRTL(true);
-      I18nManager.forceRTL(true);
-      // Note: In production, you might need to restart the app for this to take full effect
-    } else if (!RTL_LOCALES.includes(nextLocale) && I18nManager.isRTL) {
-      I18nManager.allowRTL(false);
-      I18nManager.forceRTL(false);
+    const shouldBeRTL = RTL_LOCALES.includes(nextLocale);
+    I18nManager.allowRTL(shouldBeRTL);
+    
+    if (I18nManager.isRTL !== shouldBeRTL) {
+      I18nManager.forceRTL(shouldBeRTL);
     }
 
     await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
-    return true;
-  }, []);
+    
+    // Return true if RTL changed (would need restart in older React Native versions)
+    return RTL_LOCALES.includes(previousLocale) !== RTL_LOCALES.includes(nextLocale);
+  }, [forceUpdate, locale]);
 
   const value = useMemo(
-    () => ({ locale, isReady, isRTL, changeLocale }),
-    [locale, isReady, isRTL, changeLocale]
+    () => ({ locale, isReady, isRTL, changeLocale, forceUpdate }),
+    [locale, isReady, isRTL, changeLocale, forceUpdate]
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

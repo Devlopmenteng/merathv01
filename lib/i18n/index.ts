@@ -8,6 +8,10 @@ import ar from './locales/ar.json';
 import ms from './locales/ms.json';
 import ur from './locales/ur.json';
 
+// RTL-aware helper
+export const isRTL = () => I18nManager.isRTL;
+export const isLocaleRTL = (locale: string) => locale === 'ar' || locale === 'ur';
+
 const i18n = new I18n({ en, ar, ms, ur });
 i18n.defaultLocale = APP_DEFAULTS.DEFAULT_LOCALE;
 i18n.locale = APP_DEFAULTS.DEFAULT_LOCALE;
@@ -15,6 +19,7 @@ i18n.enableFallback = true;
 
 function applyRTL(locale: string) {
   const shouldBeRTL = locale === 'ar' || locale === 'ur';
+  I18nManager.allowRTL(shouldBeRTL);
   if (I18nManager.isRTL !== shouldBeRTL) {
     I18nManager.forceRTL(shouldBeRTL);
   }
