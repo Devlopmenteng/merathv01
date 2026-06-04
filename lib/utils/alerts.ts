@@ -37,7 +37,7 @@ interface ErrorInfo {
  */
 function getErrorInfo(error: Error | string): ErrorInfo {
   const errorMessage = typeof error === 'string' ? error : error.message;
-  
+
   // Common error patterns
   if (errorMessage.toLowerCase().includes('cannot have both')) {
     return {
@@ -46,7 +46,7 @@ function getErrorInfo(error: Error | string): ErrorInfo {
       suggestion: t('remove_one_spouse_suggestion'),
     };
   }
-  
+
   if (errorMessage.toLowerCase().includes('exceeds')) {
     return {
       message: t('limit_exceeded_error'),
@@ -54,7 +54,7 @@ function getErrorInfo(error: Error | string): ErrorInfo {
       suggestion: t('reduce_count_suggestion'),
     };
   }
-  
+
   if (errorMessage.toLowerCase().includes('calculation failed')) {
     return {
       message: t('calculation_error'),
@@ -62,15 +62,18 @@ function getErrorInfo(error: Error | string): ErrorInfo {
       suggestion: t('check_inputs_suggestion'),
     };
   }
-  
-  if (errorMessage.toLowerCase().includes('storage') || errorMessage.toLowerCase().includes('async')) {
+
+  if (
+    errorMessage.toLowerCase().includes('storage') ||
+    errorMessage.toLowerCase().includes('async')
+  ) {
     return {
       message: t('storage_error'),
       category: ErrorCategory.STORAGE,
       suggestion: t('check_storage_suggestion'),
     };
   }
-  
+
   return {
     message: errorMessage,
     category: ErrorCategory.UNKNOWN,
@@ -124,12 +127,12 @@ export const showConfirm = (
  */
 export const showError = (error: Error | string, details?: string): void => {
   const errorInfo = getErrorInfo(error);
-  const message = errorInfo.suggestion 
+  const message = errorInfo.suggestion
     ? `${errorInfo.message}\n\n${errorInfo.suggestion}`
     : errorInfo.message;
-    
+
   const fullMessage = details ? `${message}\n\n${details}` : message;
-  
+
   Alert.alert(t('error'), fullMessage, [{ text: t('ok'), style: 'default' }]);
 };
 
@@ -141,13 +144,18 @@ export const showError = (error: Error | string, details?: string): void => {
 export const showCalculationError = (error: Error | string, context?: string): void => {
   const errorInfo = getErrorInfo(error);
   const contextText = context ? `${context}\n\n` : '';
-  
+
   Alert.alert(
     t('calculation_error'),
     `${contextText}${errorInfo.message}${errorInfo.suggestion ? `\n\n${errorInfo.suggestion}` : ''}`,
     [
       { text: t('ok'), style: 'default' },
-      { text: t('retry'), onPress: () => {/* Retry logic can be added here */ } },
+      {
+        text: t('retry'),
+        onPress: () => {
+          /* Retry logic can be added here */
+        },
+      },
     ]
   );
 };
@@ -168,13 +176,13 @@ export const showSuccess = (titleKey: string, messageKey: string): void => {
  * @param suggestion - Optional suggestion for fixing the error
  */
 export const showValidationError = (
-  fieldName: string, 
+  fieldName: string,
   errorMessageKey: string,
   suggestion?: string
 ): void => {
-  const message = suggestion 
+  const message = suggestion
     ? `${fieldName}: ${t(errorMessageKey)}\n\n${t(suggestion)}`
     : `${fieldName}: ${t(errorMessageKey)}`;
-    
+
   Alert.alert(t('validation_error'), message);
 };

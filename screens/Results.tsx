@@ -143,7 +143,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
         };
 
         setResult(safeResult);
-        
+
         incrementCalculationCount().catch(() => {});
         if (!savedRef.current) {
           savedRef.current = true;
@@ -302,7 +302,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
 
   return (
     <React.Suspense fallback={<ResultsSkeleton />}>
-      <ExportBar 
+      <ExportBar
         resultData={result}
         estate={{
           total: state.total,
@@ -317,24 +317,23 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             currentStep={3}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
           />
-          
+
           {/* Treasury Notification */}
-          {result.shares.some(s => s.key === 'treasury') && (
-            <View style={{
-              backgroundColor: theme.colors.warning || '#FFA500',
-              padding: theme.spacing.md,
-              borderRadius: theme.radius.sm,
-              marginBottom: theme.spacing.md,
-            }}>
-              <Text style={[
-                theme.typography.body,
-                { color: '#000', textAlign: 'center' }
-              ]}>
+          {result.shares.some((s) => s.key === 'treasury') && (
+            <View
+              style={{
+                backgroundColor: theme.colors.warning || '#FFA500',
+                padding: theme.spacing.md,
+                borderRadius: theme.radius.sm,
+                marginBottom: theme.spacing.md,
+              }}
+            >
+              <Text style={[theme.typography.body, { color: '#000', textAlign: 'center' }]}>
                 {t('treasury_notice')}
               </Text>
             </View>
           )}
-          
+
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.primaryDark || '#0A5E4A']}
             start={{ x: 0, y: 0 }}

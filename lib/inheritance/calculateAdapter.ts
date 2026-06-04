@@ -133,7 +133,9 @@ export function calculateInheritance(input: CalculateInheritanceInput): Calculat
  * Async version for compatibility with async workflows
  * دعم الوظائف غير المتزامنة
  */
-export async function calculateInheritanceWithCache(input: CalculateInheritanceInput): Promise<CalculationResult> {
+export async function calculateInheritanceWithCache(
+  input: CalculateInheritanceInput
+): Promise<CalculationResult> {
   // Simply call the synchronous version
   return calculateInheritance(input);
 }

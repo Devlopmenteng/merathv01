@@ -46,7 +46,9 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
     }
 
     try {
-      const { content, filename } = exportCalculation(estate, heirs, resultData, 'csv', { currencySymbol: '$' });
+      const { content, filename } = exportCalculation(estate, heirs, resultData, 'csv', {
+        currencySymbol: '$',
+      });
 
       if (Platform.OS === 'web') {
         // On web, create a download link
@@ -92,7 +94,11 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
         </TouchableOpacity>
         <TouchableOpacity
           onPress={captureAndShare}
-          style={{ padding: 12, backgroundColor: theme.colors.success || '#4CAF50', borderRadius: 8 }}
+          style={{
+            padding: 12,
+            backgroundColor: theme.colors.success || '#4CAF50',
+            borderRadius: 8,
+          }}
         >
           <Text style={{ color: '#FFF' }}>{t('share_image')}</Text>
         </TouchableOpacity>

@@ -1,6 +1,6 @@
 /**
  * Performance Monitoring Utilities
-* أدوات مراقبة الأداء
+ * أدوات مراقبة الأداء
  *
  * This module provides utilities for monitoring and tracking performance metrics
  * in the application, including calculation times, render times, and custom metrics.
@@ -34,17 +34,17 @@ class PerformanceMonitor {
    */
   startMeasurement(name: string): () => void {
     const startTime = performance.now();
-    
+
     return () => {
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       this.recordMetric({
         name,
         duration,
         timestamp: Date.now(),
       });
-      
+
       // Log slow operations (> 100ms)
       if (duration > 100) {
         console.warn(`[Performance] ${name} took ${duration.toFixed(2)}ms`);
@@ -57,7 +57,7 @@ class PerformanceMonitor {
    */
   recordMetric(metric: PerformanceMetric): void {
     this.metrics.push(metric);
-    
+
     // Keep only the most recent metrics
     if (this.metrics.length > this.maxMetrics) {
       this.metrics.shift();
@@ -75,7 +75,7 @@ class PerformanceMonitor {
    * Get metrics by name
    */
   getMetricsByName(name: string): PerformanceMetric[] {
-    return this.metrics.filter(m => m.name === name);
+    return this.metrics.filter((m) => m.name === name);
   }
 
   /**
@@ -84,7 +84,7 @@ class PerformanceMonitor {
   getAverageDuration(name: string): number {
     const metrics = this.getMetricsByName(name);
     if (metrics.length === 0) return 0;
-    
+
     const total = metrics.reduce((sum, m) => sum + m.duration, 0);
     return total / metrics.length;
   }
@@ -101,22 +101,22 @@ class PerformanceMonitor {
    */
   getSummary(): Record<string, { count: number; avg: number; max: number; min: number }> {
     const summary: Record<string, { count: number; avg: number; max: number; min: number }> = {};
-    
+
     // Group by name
     const grouped: Record<string, number[]> = {};
-    this.metrics.forEach(m => {
+    this.metrics.forEach((m) => {
       if (!grouped[m.name]) {
         grouped[m.name] = [];
       }
       grouped[m.name].push(m.duration);
     });
-    
+
     // Calculate stats
     Object.entries(grouped).forEach(([name, durations]) => {
       const avg = durations.reduce((sum, d) => sum + d, 0) / durations.length;
       const max = Math.max(...durations);
       const min = Math.min(...durations);
-      
+
       summary[name] = {
         count: durations.length,
         avg,
@@ -124,7 +124,7 @@ class PerformanceMonitor {
         min,
       };
     });
-    
+
     return summary;
   }
 }
@@ -174,14 +174,15 @@ export function useRenderTime(componentName: string): void {
     return () => {
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       performanceMonitor.recordMetric({
         name: `render_${componentName}`,
         duration,
         timestamp: Date.now(),
       });
-      
-      if (duration > 16) { // > 1 frame at 60fps
+
+      if (duration > 16) {
+        // > 1 frame at 60fps
         console.warn(`[Performance] ${componentName} render took ${duration.toFixed(2)}ms`);
       }
     };

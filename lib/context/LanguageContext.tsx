@@ -33,7 +33,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
         const initialLocale = storedLocale || APP_DEFAULTS.DEFAULT_LOCALE;
         initI18n(initialLocale);
         setLocale(initialLocale);
-        
+
         // Set RTL direction if needed
         if (RTL_LOCALES.includes(initialLocale) && !I18nManager.isRTL) {
           I18nManager.allowRTL(true);
@@ -49,7 +49,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   const changeLocale = useCallback(async (nextLocale: string) => {
     initI18n(nextLocale);
     setLocale(nextLocale);
-    
+
     // Update RTL direction if needed
     if (RTL_LOCALES.includes(nextLocale) && !I18nManager.isRTL) {
       I18nManager.allowRTL(true);
@@ -59,12 +59,15 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       I18nManager.allowRTL(false);
       I18nManager.forceRTL(false);
     }
-    
+
     await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
     return true;
   }, []);
 
-  const value = useMemo(() => ({ locale, isReady, isRTL, changeLocale }), [locale, isReady, isRTL, changeLocale]);
+  const value = useMemo(
+    () => ({ locale, isReady, isRTL, changeLocale }),
+    [locale, isReady, isRTL, changeLocale]
+  );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
