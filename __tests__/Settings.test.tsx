@@ -45,7 +45,7 @@ vi.mock('react-native', () => ({
   Alert: { alert: vi.fn() },
   useColorScheme: () => 'light',
   Linking: { openURL: vi.fn() },
-  I18nManager: { forceRTL: vi.fn(), isRTL: false },
+  I18nManager: { forceRTL: vi.fn(), allowRTL: vi.fn(), isRTL: false },
 }));
 
 vi.mock('expo-localization', () => ({

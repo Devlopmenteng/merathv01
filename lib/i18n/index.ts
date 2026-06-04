@@ -14,7 +14,7 @@ i18n.locale = APP_DEFAULTS.DEFAULT_LOCALE;
 i18n.enableFallback = true;
 
 function applyRTL(locale: string) {
-  const shouldBeRTL = locale === 'ar';
+  const shouldBeRTL = locale === 'ar' || locale === 'ur';
   if (I18nManager.isRTL !== shouldBeRTL) {
     I18nManager.forceRTL(shouldBeRTL);
   }

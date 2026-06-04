@@ -76,7 +76,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             try {
               await AsyncStorage.clear();
               showAlert(t('success'), t('cache_cleared_restart'));
-            } catch (_error) {
+            } catch {
               showAlert(t('error'), t('clear_cache_failed'));
             }
           },
@@ -107,7 +107,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={() => setLanguageModalVisible(true)}
       >
-        <Text style={theme.typography.body}>{t('language')}</Text>
+        <Text style={theme.typography.body}>{t('language__')}</Text>
         <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
           {LANGUAGES.find((l) => l.code === locale)?.label || locale}
         </Text>
@@ -210,7 +210,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           marginVertical: 12,
         }}
       >
-        <Text style={[theme.typography.body, { marginBottom: 12 }]}>{t('language')}</Text>
+        <Text style={[theme.typography.body, { marginBottom: 12 }]}>{t('language__')}</Text>
         {LanguageDropdown()}
       </View>
 
@@ -264,10 +264,10 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           }}
           onPress={handleRateUs}
         >
-          <Text style={theme.typography.body}>{t('rate_us')}</Text>
+          <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ paddingVertical: 12 }} onPress={handleEmailFeedback}>
-          <Text style={theme.typography.body}>{t('send_feedback')}</Text>
+          <Text style={theme.typography.body}>{t('feedback_title')}</Text>
         </TouchableOpacity>
       </View>
 

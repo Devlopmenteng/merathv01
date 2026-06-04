@@ -147,6 +147,25 @@ export const Glossary = () => {
             {t('tab_hadith')}
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            padding: theme.spacing.sm,
+            borderRadius: theme.radius.md,
+            backgroundColor:
+              activeTab === 'fiqh' ? theme.colors.primary : theme.colors.surfaceVariant,
+            alignItems: 'center',
+          }}
+          onPress={() => setActiveTab('fiqh')}
+        >
+          <Text
+            style={{
+              color: activeTab === 'fiqh' ? theme.colors.onPrimary : theme.colors.onSurface,
+            }}
+          >
+            {t('tab_fiqh')}
+          </Text>
+        </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
         {activeTab === 'glossary' && renderGlossary()}
