@@ -8,7 +8,11 @@ import { t } from '../lib/i18n';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
 
-export const Glossary = () => {
+type GlossaryNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => {
   const theme = useAppTheme();
   const [activeTab, setActiveTab] = useState<Tab>('glossary');
 
@@ -89,6 +93,12 @@ export const Glossary = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+        style={{ padding: theme.spacing.md, marginBottom: theme.spacing.sm }}
+      >
+        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+      </TouchableOpacity>
       <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
         <TouchableOpacity
           style={{

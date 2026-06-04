@@ -4,6 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { t } from '../lib/i18n';
 
+const Home = lazy(() =>
+  import('../screens/Home').then((module) => ({ default: module.Home }))
+);
 const EstateSetup = lazy(() =>
   import('../screens/EstateSetup').then((module) => ({ default: module.EstateSetup }))
 );
@@ -47,7 +50,12 @@ export default function RootNavigator() {
   return (
     <NavigationContainer>
       <Suspense fallback={<LoadingView />}>
-        <Stack.Navigator screenOptions={screenOptions}>
+        <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="EstateSetup"
             component={EstateSetup}

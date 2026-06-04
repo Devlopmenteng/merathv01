@@ -5,7 +5,11 @@ import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/Aud
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
 
-export const History = () => {
+type HistoryNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
   const theme = useAppTheme();
   const [trail, setTrail] = useState<AuditEntry[]>([]);
   const [filtered, setFiltered] = useState<AuditEntry[]>([]);
@@ -33,6 +37,12 @@ export const History = () => {
 
   return (
     <View style={{ flex: 1, padding: theme.spacing.lg }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+        style={{ marginBottom: theme.spacing.md }}
+      >
+        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+      </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('history_screen_title')}</Text>
       <TextInput
         style={{

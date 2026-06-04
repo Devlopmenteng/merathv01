@@ -215,5 +215,11 @@
   "heirs": "الورثة",
   "calculation_error": "خطأ في الحساب",
   "try_again_message": "حدث خطأ أثناء الحساب. يرجى المحاولة مرة أخرى.",
-  "csv": "ملف CSV/Excel"
+  "csv": "ملف CSV/Excel",
+  "start_new_calculation": "ابدأ حساب ميراث جديد",
+  "view_previous_calculations": "عرض حساباتك السابقة",
+  "learn_terminology": "تعلم مصطلحات المواريث الشرعية",
+  "configure_app": "تكوين إعدادات التطبيق وتفضيلاته",
+  "app_description": "احسب المواريث الشرعية وفقاً للمذاهب الأربعة بنتائج دقيقة",
+  "back_to_home": "العودة إلى الرئيسية"
 }

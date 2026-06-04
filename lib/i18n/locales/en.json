@@ -212,5 +212,11 @@
   "heirs": "Heirs",
   "calculation_error": "Calculation Error",
   "try_again_message": "An error occurred during calculation. Please try again.",
-  "csv": "CSV/Excel"
+  "csv": "CSV/Excel",
+  "start_new_calculation": "Start a new inheritance calculation",
+  "view_previous_calculations": "View your previous calculations",
+  "learn_terminology": "Learn Islamic inheritance terminology",
+  "configure_app": "Configure app settings and preferences",
+  "app_description": "Calculate Islamic inheritance according to the four schools of thought with accurate results",
+  "back_to_home": "Back to Home"
 }

@@ -205,5 +205,11 @@
   "calculation_error": "حساب کی خرابی",
   "try_again_message": "حساب کے دوران خرابی ہوئی۔ براہ کرم دوبارہ کوشش کریں۔",
   "csv": "CSV/Excel",
-  "comparison_summary": "موازنہ کا خلاصہ"
+  "comparison_summary": "موازنہ کا خلاصہ",
+  "start_new_calculation": "نئی وراثت کا حساب شروع کریں",
+  "view_previous_calculations": "اپنے پچھلے حسابات دیکھیں",
+  "learn_terminology": "اسلامی وراثت کی اصطلاحات سیکھیں",
+  "configure_app": "ایپ کی ترتیبات اور ترجیحات کنفیگر کریں",
+  "app_description": "چاروں مذاہب کے مطابق اسلامی وراثت کا درست نتائج کے ساتھ حساب کریں",
+  "back_to_home": "ہوم واپس جائیں"
 }

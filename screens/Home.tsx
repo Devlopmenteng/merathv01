@@ -1,0 +1,119 @@
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { useAppTheme } from '../hooks/useAppTheme';
+import { t } from '../lib/i18n';
+
+type HomeNavigation = {
+  navigate: (screen: string) => void;
+};
+
+export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
+  const theme = useAppTheme();
+
+  const menuItems = [
+    {
+      title: t('calculate_inheritance'),
+      description: t('start_new_calculation'),
+      icon: '📊',
+      screen: 'EstateSetup',
+      primary: true,
+    },
+    {
+      title: t('history'),
+      description: t('view_previous_calculations'),
+      icon: '📜',
+      screen: 'History',
+      primary: false,
+    },
+    {
+      title: t('glossary'),
+      description: t('learn_terminology'),
+      icon: '📖',
+      screen: 'Glossary',
+      primary: false,
+    },
+    {
+      title: t('settings'),
+      description: t('configure_app'),
+      icon: '⚙️',
+      screen: 'Settings',
+      primary: false,
+    },
+  ];
+
+  return (
+    <ScrollView
+      contentContainerStyle={{
+        padding: theme.spacing.lg,
+        paddingBottom: theme.spacing.xxl,
+      }}
+    >
+      <View style={{ marginBottom: theme.spacing.xxl }}>
+        <Text style={theme.typography.h1}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
+        <Text style={[theme.typography.body, { color: theme.colors.textSecondary, marginTop: theme.spacing.sm }]}>
+          {t('app_description')}
+        </Text>
+      </View>
+
+      {menuItems.map((item) => (
+        <TouchableOpacity
+          key={item.screen}
+          style={[
+            styles.menuItem,
+            {
+              backgroundColor: item.primary ? theme.colors.primary : theme.colors.surfaceVariant,
+              borderColor: theme.colors.outline,
+            },
+          ]}
+          onPress={() => navigation.navigate(item.screen)}
+        >
+          <Text style={styles.icon}>{item.icon}</Text>
+          <View style={styles.menuItemContent}>
+            <Text
+              style={[
+                styles.menuItemTitle,
+                { color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface },
+              ]}
+            >
+              {item.title}
+            </Text>
+            <Text
+              style={[
+                styles.menuItemDescription,
+                { color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.textSecondary },
+              ]}
+            >
+              {item.description}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+  },
+  icon: {
+    fontSize: 32,
+    marginRight: 16,
+  },
+  menuItemContent: {
+    flex: 1,
+  },
+  menuItemTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  menuItemDescription: {
+    fontSize: 14,
+  },
+});

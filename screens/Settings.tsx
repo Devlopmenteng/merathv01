@@ -180,6 +180,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         paddingBottom: theme.spacing.xxl,
       }}
     >
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+        style={{ marginBottom: theme.spacing.md }}
+      >
+        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+      </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('settings')}</Text>
 
       <View

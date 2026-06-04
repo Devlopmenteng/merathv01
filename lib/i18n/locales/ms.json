@@ -205,5 +205,11 @@
   "calculation_error": "Ralat Pengiraan",
   "try_again_message": "Ralat berlaku semasa pengiraan. Sila cuba lagi.",
   "csv": "CSV/Excel",
-  "comparison_summary": "Ringkasan Perbandingan"
+  "comparison_summary": "Ringkasan Perbandingan",
+  "start_new_calculation": "Mulakan pengiraan pusaka baru",
+  "view_previous_calculations": "Lihat pengiraan anda sebelum ini",
+  "learn_terminology": "Pelajari terminologi pusaka Islam",
+  "configure_app": "Konfigurasi tetapan dan keutamaan aplikasi",
+  "app_description": "Kira pusaka Islam mengikut empat mazhab dengan keputusan yang tepat",
+  "back_to_home": "Kembali ke Utama"
 }
