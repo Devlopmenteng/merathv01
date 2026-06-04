@@ -50,7 +50,12 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
     >
       <View style={{ marginBottom: theme.spacing.xxl }}>
         <Text style={theme.typography.h1}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
-        <Text style={[theme.typography.body, { color: theme.colors.textSecondary, marginTop: theme.spacing.sm }]}>
+        <Text
+          style={[
+            theme.typography.body,
+            { color: theme.colors.textSecondary, marginTop: theme.spacing.sm },
+          ]}
+        >
           {t('app_description')}
         </Text>
       </View>
@@ -80,7 +85,9 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
             <Text
               style={[
                 styles.menuItemDescription,
-                { color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.textSecondary },
+                {
+                  color: item.primary ? theme.colors.onPrimary + 'CC' : theme.colors.textSecondary,
+                },
               ]}
             >
               {item.description}
