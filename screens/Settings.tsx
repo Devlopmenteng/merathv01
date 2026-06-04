@@ -99,11 +99,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingVertical: 12,
-          paddingHorizontal: 16,
+          paddingVertical: theme.spacing.sm,
+          paddingHorizontal: theme.spacing.md,
           backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 12,
-          marginBottom: 16,
+          borderRadius: theme.borderRadius.md,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
         onPress={() => setLanguageModalVisible(true)}
       >
@@ -130,12 +131,13 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           <View
             style={{
               backgroundColor: theme.colors.surface,
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              padding: 20,
+              borderTopLeftRadius: theme.borderRadius.xl,
+              borderTopRightRadius: theme.borderRadius.xl,
+              padding: theme.spacing.lg,
+              ...theme.elevation.large,
             }}
           >
-            <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('select_language')}</Text>
+            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>{t('select_language')}</Text>
             {LANGUAGES.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
@@ -143,27 +145,28 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  paddingVertical: 14,
+                  paddingVertical: theme.spacing.md,
                   borderBottomWidth: 1,
                   borderBottomColor: theme.colors.outline,
                 }}
                 onPress={() => changeLanguage(lang.code)}
               >
                 <Text style={theme.typography.body}>{lang.label}</Text>
-                {locale === lang.code && <Text style={{ color: theme.colors.primary }}>✓</Text>}
+                {locale === lang.code && <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>✓</Text>}
               </TouchableOpacity>
             ))}
             <TouchableOpacity
               style={{
-                marginTop: 20,
-                paddingVertical: 12,
+                marginTop: theme.spacing.lg,
+                paddingVertical: theme.spacing.md,
                 backgroundColor: theme.colors.primary,
-                borderRadius: 12,
+                borderRadius: theme.borderRadius.md,
                 alignItems: 'center',
+                ...theme.elevation.small,
               }}
               onPress={() => setLanguageModalVisible(false)}
             >
-              <Text style={{ color: theme.colors.onPrimary, fontWeight: 'bold' }}>
+              <Text style={{ color: theme.colors.onPrimary, fontWeight: '600' }}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
@@ -190,10 +193,13 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
       >
         <View
@@ -210,25 +216,31 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
       >
-        <Text style={[theme.typography.body, { marginBottom: 12 }]}>{t('language__')}</Text>
+        <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>{t('language__')}</Text>
         {LanguageDropdown()}
       </View>
 
       <TouchableOpacity
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
         onPress={() => navigation.navigate('Glossary')}
       >
@@ -238,33 +250,39 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
       >
-        <Text style={[theme.typography.h2, { marginBottom: 8 }]}>{t('about')}</Text>
+        <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>{t('about')}</Text>
         <Text style={theme.typography.body}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
-        <Text style={[theme.typography.caption, { marginTop: 8 }]}>
+        <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
           {t('built_with_expo__typescript')}
         </Text>
-        <Text style={[theme.typography.caption, { marginTop: 4 }]}>
+        <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
           {t('version')} {appVersion}
         </Text>
       </View>
 
       <View
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
       >
         <TouchableOpacity
           style={{
-            paddingVertical: 12,
+            paddingVertical: theme.spacing.sm,
             borderBottomWidth: 1,
             borderBottomColor: theme.colors.outline,
           }}
@@ -272,20 +290,23 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ paddingVertical: 12 }} onPress={handleEmailFeedback}>
+        <TouchableOpacity style={{ paddingVertical: theme.spacing.sm }} onPress={handleEmailFeedback}>
           <Text style={theme.typography.body}>{t('feedback_title')}</Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
         onPress={handlePrivacyPolicy}
       >
@@ -295,13 +316,16 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <TouchableOpacity
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
         onPress={handleClearCache}
       >
@@ -313,13 +337,16 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <TouchableOpacity
         style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 16,
-          padding: 16,
-          marginVertical: 12,
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.md,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          ...theme.elevation.small,
+          borderWidth: 1,
+          borderColor: theme.colors.outline,
         }}
         onPress={handleLegalNotices}
       >

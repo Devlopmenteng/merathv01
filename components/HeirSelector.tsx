@@ -123,16 +123,16 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
 
   return (
     <ScrollView style={styles.container}>
-      {/* Templates Button */}
-      <TouchableOpacity
-        style={[
-          styles.templatesButton,
-          { backgroundColor: theme.colors.primaryLight, borderColor: theme.colors.primary },
-        ]}
-        onPress={() => setTemplatesVisible(true)}
-      >
-        <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
-      </TouchableOpacity>
+        {/* Templates Button */}
+        <TouchableOpacity
+          style={[
+            styles.templatesButton,
+            { backgroundColor: theme.colors.primaryLight, borderColor: theme.colors.primary },
+          ]}
+          onPress={() => setTemplatesVisible(true)}
+        >
+          <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
+        </TouchableOpacity>
 
       {CATEGORIES.map((cat) => {
         const open = expanded.has(cat.titleKey);

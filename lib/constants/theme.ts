@@ -1,33 +1,39 @@
-import { colors as baseColors } from './colors';
-
+// Professional 8px grid spacing system
 export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
-  xxxl: 48,
+  xs: 4,    // 0.5 grid units
+  sm: 8,    // 1 grid unit
+  md: 16,   // 2 grid units
+  lg: 24,   // 3 grid units
+  xl: 32,   // 4 grid units
+  xxl: 48,  // 6 grid units
+  xxxl: 64, // 8 grid units
 };
 
+// Consistent border radius scale
 export const borderRadius = {
   xs: 4,
   sm: 8,
   md: 12,
   lg: 16,
-  xl: 20,
+  xl: 24,
+  '2xl': 32,
   full: 9999,
 };
 
+// Enhanced typography with better hierarchy and readability
 export const typography = {
-  h1: { fontSize: 32, fontWeight: '700' as const, lineHeight: 40 },
-  h2: { fontSize: 24, fontWeight: '700' as const, lineHeight: 32 },
+  h1: { fontSize: 28, fontWeight: '700' as const, lineHeight: 36, letterSpacing: -0.5 },
+  h2: { fontSize: 24, fontWeight: '600' as const, lineHeight: 32, letterSpacing: -0.25 },
   h3: { fontSize: 20, fontWeight: '600' as const, lineHeight: 28 },
+  h4: { fontSize: 18, fontWeight: '600' as const, lineHeight: 26 },
   body: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
+  bodySmall: { fontSize: 14, fontWeight: '400' as const, lineHeight: 20 },
   caption: { fontSize: 12, fontWeight: '400' as const, lineHeight: 16 },
-  button: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24 },
+  button: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24, letterSpacing: 0.5 },
+  overline: { fontSize: 11, fontWeight: '600' as const, lineHeight: 16, textTransform: 'uppercase' as const, letterSpacing: 0.5 },
 };
 
+// Enhanced elevation system with color-tinted shadows
 export const elevation = {
   none: {},
   small: {
@@ -53,17 +59,19 @@ export const elevation = {
   },
 };
 
+// Professional light theme with refined colors
 export const lightTheme = {
   colors: {
-    primary: baseColors.primary,
-    primaryDark: baseColors.primaryDark,
-    primaryLight: baseColors.primaryLight,
-    secondary: baseColors.info,
-    success: baseColors.success,
-    warning: baseColors.warning,
-    error: baseColors.danger,
-    dangerLight: baseColors.dangerLight,
-    background: '#F8FAFC',
+    primary: '#0A5E4A', // Deeper, more professional teal
+    primaryDark: '#084A3A',
+    primaryLight: '#E8F5F1', // Softer accent
+    secondary: '#C49A2A', // More refined gold
+    secondaryLight: '#FEF5E6',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    dangerLight: '#FEE2E2',
+    background: '#F8FAFC', // Light gray base
     surface: '#FFFFFF',
     surfaceVariant: '#F1F5F9',
     outline: '#E2E8F0',
@@ -85,12 +93,14 @@ export const lightTheme = {
   elevation,
 };
 
+// Professional dark theme with better contrast
 export const darkTheme = {
   colors: {
     primary: '#2DD4BF',
     primaryDark: '#0F766E',
     primaryLight: '#134E4A',
     secondary: '#FBBF24',
+    secondaryLight: '#422006',
     success: '#34D399',
     warning: '#FBBF24',
     error: '#F87171',

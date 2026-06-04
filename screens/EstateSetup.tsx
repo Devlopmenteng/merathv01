@@ -68,26 +68,32 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         value={caseName}
         onChangeText={setCaseName}
         style={{
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: theme.colors.outline,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.borderRadius.md,
           padding: theme.spacing.sm,
           marginBottom: theme.spacing.md,
           color: theme.colors.onSurface,
+          backgroundColor: theme.colors.surface,
+          ...theme.elevation.small,
         }}
+        placeholderTextColor={theme.colors.outline}
       />
       <TextInput
         placeholder={t('date_format')}
         value={caseDate}
         onChangeText={setCaseDate}
         style={{
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: theme.colors.outline,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.borderRadius.md,
           padding: theme.spacing.sm,
           marginBottom: theme.spacing.md,
           color: theme.colors.onSurface,
+          backgroundColor: theme.colors.surface,
+          ...theme.elevation.small,
         }}
+        placeholderTextColor={theme.colors.outline}
       />
       <Input
         label={t('total_estate')}

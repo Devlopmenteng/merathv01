@@ -40,7 +40,7 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
           <StepIndicator
             currentStep={2}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}

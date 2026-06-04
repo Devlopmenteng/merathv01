@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 
@@ -21,7 +21,7 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
       {steps.map((stepKey, index) => (
         <View key={stepKey} style={styles.stepWrapper}>
           <View style={styles.stepRow}>
-            <View
+            <Animated.View
               style={[
                 styles.circle,
                 { borderColor: theme.colors.primary },
@@ -40,9 +40,9 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               >
                 {index + 1}
               </Text>
-            </View>
+            </Animated.View>
             {index < steps.length - 1 && (
-              <View
+              <Animated.View
                 style={[
                   styles.line,
                   { backgroundColor: theme.colors.outline },

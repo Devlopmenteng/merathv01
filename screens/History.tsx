@@ -47,11 +47,13 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
       <TextInput
         style={{
           padding: theme.spacing.sm,
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: theme.colors.outline,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.borderRadius.md,
           marginVertical: theme.spacing.md,
           color: theme.colors.onSurface,
+          backgroundColor: theme.colors.surface,
+          ...theme.elevation.small,
         }}
         placeholder={t('search_placeholder')}
         placeholderTextColor={theme.colors.outline}
@@ -60,7 +62,9 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
       />
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={theme.typography.body}>{t('no_history')}</Text>
+          <Text style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}>
+            {t('no_history')}
+          </Text>
         ) : (
           filtered.map((entry, idx) => (
             <TouchableOpacity
@@ -69,27 +73,32 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                 backgroundColor: theme.colors.surface,
                 padding: theme.spacing.md,
                 marginBottom: theme.spacing.sm,
-                borderRadius: theme.radius.md,
+                borderRadius: theme.borderRadius.md,
                 borderLeftWidth: 4,
                 borderLeftColor: theme.colors.primary,
+                ...theme.elevation.small,
+                borderWidth: 1,
+                borderColor: theme.colors.outline,
               }}
             >
-              <Text style={{ fontWeight: 'bold' }}>
+              <Text style={{ fontWeight: '600', fontSize: 16, marginBottom: theme.spacing.xs }}>
                 {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
               </Text>
-              <Text>
+              <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
                 {t('madhab')}: {entry.madhab}
               </Text>
-              <Text>
+              <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
                 {t('netEstate')}: {formatCurrency(entry.netTotal)}
               </Text>
-              <Text style={{ marginTop: 8, fontWeight: '600' }}>{t('heirs')}:</Text>
+              <Text style={[theme.typography.bodySmall, { fontWeight: '600', marginTop: theme.spacing.sm }]}>
+                {t('heirs')}:
+              </Text>
               {entry.shares.slice(0, 3).map((share, i) => (
-                <Text key={i} style={{ fontSize: 12, marginLeft: 8 }}>
+                <Text key={i} style={[theme.typography.caption, { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary }]}>
                   • {share.name}: {formatCurrency(share.amount)}
                 </Text>
               ))}
-              {entry.shares.length > 3 && <Text style={{ fontSize: 12, marginLeft: 8 }}>...</Text>}
+              {entry.shares.length > 3 && <Text style={[theme.typography.caption, { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary }]}>...</Text>}
             </TouchableOpacity>
           ))
         )}
