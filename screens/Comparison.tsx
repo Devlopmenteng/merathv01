@@ -443,7 +443,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   backgroundColor: selected === m ? MADHAB_COLORS[m] : theme.colors.surfaceVariant,
                 }}
               >
-                <Text style={{ color: selected === m ? theme.colors.onPrimary : theme.colors.onSurface }}>
+                <Text
+                  style={{
+                    color: selected === m ? theme.colors.onPrimary : theme.colors.onSurface,
+                  }}
+                >
                   {MADHAB_NAMES[m]}
                 </Text>
               </TouchableOpacity>
@@ -461,7 +465,9 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
               }}
             >
-              <Text style={{ color: showAnalysis ? theme.colors.onPrimary : theme.colors.onSurface }}>
+              <Text
+                style={{ color: showAnalysis ? theme.colors.onPrimary : theme.colors.onSurface }}
+              >
                 {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
               </Text>
             </TouchableOpacity>

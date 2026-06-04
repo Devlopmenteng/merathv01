@@ -344,7 +344,12 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                 marginBottom: theme.spacing.md,
               }}
             >
-              <Text style={[theme.typography.body, { color: theme.colors.onBackground, textAlign: 'center' }]}>
+              <Text
+                style={[
+                  theme.typography.body,
+                  { color: theme.colors.onBackground, textAlign: 'center' },
+                ]}
+              >
                 {t('treasury_notice')}
               </Text>
             </View>
