@@ -40,7 +40,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           accessibilityLabel={t('back')}
           accessibilityRole="button"
         >
-          <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back')}</Text>
+          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
         </TouchableOpacity>
         <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
         <Text style={[theme.typography.body, { marginTop: theme.spacing.md }]}>
@@ -65,7 +65,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
@@ -130,7 +130,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     marginRight: theme.spacing.md,
                   }}
                 >
-                  <Text style={{ color: theme.colors.onPrimary, fontWeight: 'bold', fontSize: 16 }}>
+                  <Text style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.button]}>
                     {index + 1}
                   </Text>
                 </View>
@@ -199,17 +199,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   stepTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     flex: 1,
   },
   stepDescription: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
     marginLeft: 48,
   },
   hijabLogItem: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
   },
 });

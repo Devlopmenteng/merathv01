@@ -95,7 +95,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           }}
         >
           <Text
-            style={{ fontSize: 16, lineHeight: 24, marginBottom: 8 }}
+            style={[{ marginBottom: 8 }, theme.typography.body]}
             writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
           >
             {item.text}
@@ -118,7 +118,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         style={{ padding: theme.spacing.md, marginBottom: theme.spacing.sm }}
       >
         <Text
-          style={{ color: theme.colors.primary, fontSize: 16 }}
+          style={[{ color: theme.colors.primary }, theme.typography.button]}
           writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
         >
           ← {t('back_to_home')}

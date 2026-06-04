@@ -54,7 +54,7 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
               alignItems: 'center',
             }}
           >
-            <Text style={{ fontSize: 32, marginEnd: 12 }}>{item.icon}</Text>
+            <Text style={[{ marginEnd: 12 }, theme.typography.h1]}>{item.icon}</Text>
             <View>
               <Text style={theme.typography.h2}>{item.title}</Text>
               <Text style={theme.typography.body}>{item.desc}</Text>

@@ -52,7 +52,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         accessibilityLabel={t('back_to_home')}
         accessibilityRole="button"
       >
-        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back_to_home')}</Text>
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('history_screen_title')}</Text>
       <TextInput
@@ -98,7 +98,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
               accessibilityHint={`${entry.shares.length} heirs. Tap to view calculation steps.`}
               accessibilityRole="button"
             >
-              <Text style={{ fontWeight: '600', fontSize: 16, marginBottom: theme.spacing.xs }}>
+              <Text style={[{ fontWeight: '600', marginBottom: theme.spacing.xs }, theme.typography.button]}>
                 {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
               </Text>
               <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>

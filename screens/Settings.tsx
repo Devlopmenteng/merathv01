@@ -218,7 +218,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityLabel={t('back_to_home')}
         accessibilityRole="button"
       >
-        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back_to_home')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back_to_home')}</Text>
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('settings')}</Text>
 

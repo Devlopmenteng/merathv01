@@ -200,7 +200,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         marginBottom: 16,
       }}
     >
-      <Text style={{ fontWeight: 'bold', marginBottom: 12, fontSize: 16 }}>
+      <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
         {t('comparison_summary')}
       </Text>
 
@@ -224,7 +224,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         <View style={{ marginTop: 12 }}>
           <Text style={{ fontWeight: 'bold', marginBottom: 8 }}>{t('special_cases')}:</Text>
           {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
-            <Text key={madhab} style={{ fontSize: 12, marginBottom: 4 }}>
+            <Text key={madhab} style={[{ marginBottom: 4 }, theme.typography.caption]}>
               • {MADHAB_NAMES[madhab as Madhab]}: {cases.join(', ')}
             </Text>
           ))}
@@ -263,7 +263,9 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           marginBottom: 16,
         }}
       >
-        <Text style={{ fontWeight: 'bold', marginBottom: 12, fontSize: 16 }}>
+        <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
+          {t('special_cases_title')}
+        </Text>
           {t('difference_analysis')}
         </Text>
 
@@ -277,15 +279,15 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             }}
           >
             <Text style={{ fontWeight: 'bold' }}>{diff.heirKey}</Text>
-            <Text style={{ fontSize: 12, color: theme.colors.outline }}>
+            <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
               {MADHAB_NAMES[diff.madhab1 as Madhab]} vs {MADHAB_NAMES[diff.madhab2 as Madhab]}
             </Text>
-            <Text style={{ fontSize: 12 }}>
+            <Text style={theme.typography.caption}>
               Difference: {formatCurrency(diff.amountDifference)} (
               {diff.percentageDifference.toFixed(1)}%)
             </Text>
             {diff.isSignificant && (
-              <Text style={{ fontSize: 11, color: 'orange', marginTop: 4 }}>
+              <Text style={[{ color: 'orange', marginTop: 4 }, theme.typography.caption]}>
                 ⚠️ {t('significant_difference')}
               </Text>
             )}
@@ -349,12 +351,12 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 <View key={index} style={{ width: isTablet ? 120 : 100, alignItems: 'center' }}>
                   {data ? (
                     <>
-                      <Text style={{ fontSize: 12 }}>{data.fraction}</Text>
-                      <Text style={{ fontSize: 10, color: theme.colors.outline }}>
+                      <Text style={theme.typography.caption}>{data.fraction}</Text>
+                      <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
                         {data.percentage}
                       </Text>
                       <Text
-                        style={{ fontSize: 10, fontWeight: 'bold', color: theme.colors.primary }}
+                        style={[{ fontWeight: 'bold', color: theme.colors.primary }, theme.typography.caption]}
                       >
                         {data.amount}
                       </Text>
@@ -412,11 +414,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             marginTop: 16,
           }}
         >
-          <Text style={{ textAlign: 'center', fontSize: 16 }}>{t('no_history')}</Text>
+          <Text style={[{ textAlign: 'center' }, theme.typography.button]}>{t('no_history')}</Text>
           <Text
             style={{
               textAlign: 'center',
-              fontSize: 14,
+              ...theme.typography.button,
               marginTop: 8,
               color: theme.colors.secondary,
             }}

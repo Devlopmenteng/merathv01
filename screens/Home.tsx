@@ -150,11 +150,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuItemTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 4,
   },
   menuItemDescription: {
-    fontSize: 14,
+    fontSize: 16,
   },
 });

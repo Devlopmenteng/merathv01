@@ -111,7 +111,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={{ color: theme.colors.primary, fontSize: 16 }}>← {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('test_cases')}</Text>
@@ -253,11 +253,13 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   }}
                 >
                   <Text
-                    style={{
-                      color: theme.colors.onPrimary,
-                      fontSize: 12,
-                      fontWeight: '600',
-                    }}
+                    style={[
+                      {
+                        color: theme.colors.onPrimary,
+                        fontWeight: '600',
+                      },
+                      theme.typography.caption,
+                    ]}
                   >
                     Popular
                   </Text>
@@ -330,12 +332,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   templateName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     marginBottom: 4,
   },
   templateDescription: {
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 8,
   },
   detailsRow: {
@@ -343,14 +345,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   detailLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
   },
   detailValue: {
-    fontSize: 14,
+    fontSize: 16,
   },
   templateNotes: {
     fontSize: 12,
+  },
     fontStyle: 'italic',
   },
 });
