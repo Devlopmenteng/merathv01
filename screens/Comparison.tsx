@@ -244,7 +244,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             marginBottom: 16,
           }}
         >
-          <Text style={{ color: 'green', textAlign: 'center' }} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
+          <Text
+            style={{ color: 'green', textAlign: 'center' }}
+            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
+          >
             ✅ {t('no_significant_differences')}
           </Text>
         </View>
@@ -440,7 +443,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   backgroundColor: selected === m ? MADHAB_COLORS[m] : theme.colors.surfaceVariant,
                 }}
               >
-                <Text style={{ color: selected === m ? '#fff' : theme.colors.onSurface }}>
+                <Text style={{ color: selected === m ? theme.colors.onPrimary : theme.colors.onSurface }}>
                   {MADHAB_NAMES[m]}
                 </Text>
               </TouchableOpacity>
@@ -458,7 +461,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
               }}
             >
-              <Text style={{ color: showAnalysis ? '#fff' : theme.colors.onSurface }}>
+              <Text style={{ color: showAnalysis ? theme.colors.onPrimary : theme.colors.onSurface }}>
                 {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
               </Text>
             </TouchableOpacity>
@@ -472,7 +475,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 backgroundColor: theme.colors.primary,
               }}
             >
-              <Text style={{ color: '#fff' }}>📥 Export</Text>
+              <Text style={{ color: theme.colors.onPrimary }}>📥 Export</Text>
             </TouchableOpacity>
           </View>
 

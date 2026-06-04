@@ -53,7 +53,9 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
             currentStep={2}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
           />
-          <Text style={theme.typography.h1} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>{t('select_heirs')}</Text>
+          <Text style={theme.typography.h1} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
+            {t('select_heirs')}
+          </Text>
           <HeirSelector
             heirs={state.heirs}
             onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })}

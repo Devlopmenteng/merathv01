@@ -95,14 +95,14 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
 
   const chartData = useMemo<ChartDataItem[]>(() => {
     const colors = [
-      '#FF6B6B',
-      '#4ECDC4',
-      '#45B7D1',
-      '#F7DC6F',
-      '#96CEB4',
-      '#FFB347',
-      '#6B5B95',
-      '#88B04B',
+      theme.colors.error,
+      theme.colors.primaryLight,
+      theme.colors.secondary,
+      theme.colors.success,
+      theme.colors.primary,
+      theme.colors.warning,
+      theme.colors.onBackground,
+      theme.colors.primaryDark || theme.colors.primary,
     ];
     if (!result) return [];
     return result.shares.map((s, idx) => ({
@@ -111,7 +111,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
       color: colors[idx % colors.length],
       fraction: s.fraction ? `${s.fraction.numerator}/${s.fraction.denominator}` : '',
     }));
-  }, [result]);
+  }, [result, theme.colors]);
 
   useEffect(() => {
     setLoading(true);
@@ -190,7 +190,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
     }
 
     const html = `
-      <html><head><style>body{font-family:Arial;padding:20px}h1{color:#1B6B4A}</style></head>
+      <html><head><style>body{font-family:Arial;padding:20px}h1{color:${theme.colors.primaryDark || theme.colors.primary}}</style></head>
       <body>
         <h1>Inheritance Report</h1>
         <p>Madhab: ${result.madhab}</p>
@@ -338,20 +338,20 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           {result.shares.some((s) => s.key === 'treasury') && (
             <View
               style={{
-                backgroundColor: theme.colors.warning || '#FFA500',
+                backgroundColor: theme.colors.warning,
                 padding: theme.spacing.md,
                 borderRadius: theme.radius.sm,
                 marginBottom: theme.spacing.md,
               }}
             >
-              <Text style={[theme.typography.body, { color: '#000', textAlign: 'center' }]}>
+              <Text style={[theme.typography.body, { color: theme.colors.onBackground, textAlign: 'center' }]}>
                 {t('treasury_notice')}
               </Text>
             </View>
           )}
 
           <LinearGradient
-            colors={[theme.colors.primary, theme.colors.primaryDark || '#0A5E4A']}
+            colors={[theme.colors.primary, theme.colors.primaryDark || theme.colors.primary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={{
