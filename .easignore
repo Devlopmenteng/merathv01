@@ -52,15 +52,30 @@ yarn-error.*
 *.md
 !README.md
 
+# Additional markdown documentation files
+IMPROVEMENT_PLAN.md
+CONTRIBUTING.md
+
+# GitHub workflows
+.github/
+
+# Git hooks
+.husky/
+
+# Test configuration (not needed for production build)
+vitest.config.ts
+
 # Unnecessary config files (EAS does not need them)
 .easignore
 .gitignore
 .eslintignore
 .eslintrc.json
+.prettierrc
+.prettierrc.json
 prettierrc
-eslint.config.js
-vitest.config.ts
 localize_merath_fixed.py
+
+# Note: metro.config.cjs and eslint.config.js are kept as they may be needed for bundling
 
 # Support / docs folder
 support-documents/
@@ -77,3 +92,24 @@ __tests__/
 
 # Git metadata
 .git/
+
+# Development workspace files
+.devin/
+
+# Documentation (not needed for build)
+docs/
+
+# Cache files
+.cache/
+*.cache
+
+# Lock files (not needed for build)
+package-lock.json
+yarn.lock
+
+# Husky git hooks
+.husky/
+
+# Development scripts
+scripts/
+*.sh
