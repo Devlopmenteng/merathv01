@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * Performance Monitoring Utilities
  * أدوات مراقبة الأداء
@@ -188,5 +190,3 @@ export function useRenderTime(componentName: string): void {
   }, [componentName]);
 }
 
-// Import React for the hook (will be tree-shaken if not used)
-import React from 'react';
