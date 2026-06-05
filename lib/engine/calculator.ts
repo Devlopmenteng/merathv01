@@ -163,10 +163,14 @@ export class EnhancedInheritanceCalculationEngine {
           specialCases: { awl: false, auled: 0, radd: false, hijabTypes: [] },
         };
       }
-      this.addStep('التحقق من البيانات: validate', '', null, 'info');
+      this.addStep('التحقق من البيانات: validate',
+        `Estate validated: total=${this.estate.total}, funeral=${this.estate.funeral}, debts=${this.estate.debts}, will=${this.estate.will}`,
+        { estate: this.estate }, 'info');
 
       const netEstate = this.calculateNetEstate();
-      this.addStep('حساب التركة الصافية: estate_calculation', '', null, 'info');
+      this.addStep('حساب التركة الصافية: estate_calculation',
+        `Net estate = ${this.estate.total} - ${this.estate.funeral} - ${this.estate.debts} - ${this.estate.will} = ${netEstate}`,
+        { netEstate }, 'info');
 
       const hijabResult = this.hijabSystem.applyHijab(
         this.heirs as Record<string, number | undefined>
@@ -174,7 +178,11 @@ export class EnhancedInheritanceCalculationEngine {
       const validHeirs = hijabResult.heirs;
       const hijabLog = (hijabResult as any).log || [];
       this.state.blockedHeirs = hijabLog;
-      this.addStep('تطبيق الحجب: hijab', '', null, 'info');
+      this.addStep('تطبيق الحجب: hijab',
+        hijabLog.length > 0
+          ? `Applied hijab rules: ${hijabLog.length} heir(s) blocked — ${hijabLog.join(', ')}`
+          : 'No heirs blocked by hijab rules',
+        { blockedHeirs: hijabLog, validHeirs: Object.keys(validHeirs).filter(k => (validHeirs as any)[k] > 0) }, 'info');
 
       let fixedShares: HeirShareObject[] = [];
 
@@ -185,7 +193,9 @@ export class EnhancedInheritanceCalculationEngine {
           name: 'المشتركة',
           description: 'الإخوة الأشقاء يشاركون الإخوة لأم في الثلث',
         });
-        this.addStep('المشتركة: musharraka', '', null, 'info');
+        this.addStep('المشتركة: musharraka',
+          'Special case: Full siblings share with maternal siblings in 1/3',
+          { shares: fixedShares.map(s => ({ key: s.key, fraction: `${s.fraction.getNumerator()}/${s.fraction.getDenominator()}` })) }, 'info');
       } else if (this.isAkdariyya()) {
         fixedShares = this.computeAkdariyya();
         this.state.specialCases.push({
@@ -193,10 +203,14 @@ export class EnhancedInheritanceCalculationEngine {
           name: 'الأكدرية',
           description: 'مسألة الأكدرية - للجد مع الأخت طريقة خاصة',
         });
-        this.addStep('الأكدرية: akdariyya', '', null, 'info');
+        this.addStep('الأكدرية: akdariyya',
+          'Special case: Akdariyya — grandfather with sister uses special distribution',
+          { shares: fixedShares.map(s => ({ key: s.key, fraction: `${s.fraction.getNumerator()}/${s.fraction.getDenominator()}` })) }, 'info');
       } else {
         fixedShares = this.computeFixedShares(validHeirs);
-        this.addStep('الفروض: fixed_shares', '', null, 'info');
+        this.addStep('الفروض: fixed_shares',
+          `Assigned fixed shares to ${fixedShares.length} heir(s)`,
+          { shares: fixedShares.map(s => ({ key: s.key, fraction: `${s.fraction.getNumerator()}/${s.fraction.getDenominator()}` })) }, 'info');
       }
 
       const totalFixed = this.sumFractions(fixedShares.map((s) => s.fraction));
@@ -205,7 +219,9 @@ export class EnhancedInheritanceCalculationEngine {
       if (totalFixed.toDecimal() > 1) {
         adjustedFixed = this.applyAwl(fixedShares, totalFixed);
         this.state.awlApplied = true;
-        this.addStep('الأول: awl', '', null, 'info');
+        this.addStep('الأول: awl',
+          `Awl applied: shares sum ${totalFixed.getNumerator()}/${totalFixed.getDenominator()} > 1. Proportionally reduced all shares.`,
+          { totalBeforeAwl: `${totalFixed.getNumerator()}/${totalFixed.getDenominator()}`, adjustedShares: adjustedFixed.length }, 'info');
       }
 
       // Edge case: if Akdariyya conditions are NOT met but we have a grandfather
@@ -220,27 +236,41 @@ export class EnhancedInheritanceCalculationEngine {
       ) {
         adjustedFixed = this.applyAwl(fixedShares, totalFixed);
         this.state.awlApplied = true;
-        this.addStep('الأول: awl (edge-case grandfather+multiple_sisters)', '', null, 'info');
+        this.addStep('الأول: awl (edge-case grandfather+multiple_sisters)',
+          `Awl applied for grandfather with multiple sisters edge case`,
+          { totalFixed: `${totalFixed.getNumerator()}/${totalFixed.getDenominator()}` }, 'info');
       }
 
       const remainder = new FractionClass(1, 1).subtract(totalFixed);
-      this.addStep('حساب الباقي: remainder', '', null, 'info');
+      this.addStep('حساب الباقي: remainder',
+        `Remainder after fixed shares: ${remainder.getNumerator()}/${remainder.getDenominator()} (${(remainder.toDecimal() * 100).toFixed(1)}%)`,
+        { remainder: `${remainder.getNumerator()}/${remainder.getDenominator()}`, pct: (remainder.toDecimal() * 100).toFixed(1) }, 'info');
 
       const asabaShares = this.computeAsaba(adjustedFixed, remainder, validHeirs);
-      this.addStep('العصبات: asaba', '', null, 'info');
+      this.addStep('العصبات: asaba',
+        asabaShares.length > 0
+          ? `Residuary (${asabaShares.length} heir(s)) receive remainder`
+          : 'No residuary heirs (asaba)',
+        { asabaCount: asabaShares.length, shares: asabaShares.map(s => ({ key: s.key, fraction: `${s.fraction.getNumerator()}/${s.fraction.getDenominator()}` })) }, 'info');
 
       const allShares = this.mergeShares(adjustedFixed, asabaShares);
-      this.addStep('دمج الفروض والعصبات: merge', '', null, 'info');
+      this.addStep('دمج الفروض والعصبات: merge',
+        `Merged ${adjustedFixed.length} fixed + ${asabaShares.length} residuary = ${allShares.length} total shares`,
+        { fixedCount: adjustedFixed.length, asabaCount: asabaShares.length, mergedCount: allShares.length }, 'info');
 
       const totalAllShares = this.sumFractions(allShares.map((s) => s.fraction));
       const finalRemainder = new FractionClass(1, 1).subtract(totalAllShares);
-      this.addStep('إعادة حساب الباقي: recalculate', '', null, 'info');
+      this.addStep('إعادة حساب الباقي: recalculate',
+        `Total distributed: ${totalAllShares.getNumerator()}/${totalAllShares.getDenominator()}. Remainder: ${finalRemainder.getNumerator()}/${finalRemainder.getDenominator()}`,
+        { total: `${totalAllShares.getNumerator()}/${totalAllShares.getDenominator()}`, remainder: `${finalRemainder.getNumerator()}/${finalRemainder.getDenominator()}` }, 'info');
 
       let finalShares = allShares;
       if (finalRemainder.toDecimal() > 0.0001 && asabaShares.length === 0) {
         finalShares = this.applyRadd(allShares, finalRemainder);
         this.state.raddApplied = true;
-        this.addStep('الرد: radd', '', null, 'info');
+        this.addStep('الرد: radd',
+          `Radd applied: surplus ${finalRemainder.getNumerator()}/${finalRemainder.getDenominator()} returned proportionally to eligible heirs`,
+          { surplus: `${finalRemainder.getNumerator()}/${finalRemainder.getDenominator()}`, raddHeirs: finalShares.length }, 'info');
       }
 
       // Recalculate remainder after radd
@@ -257,13 +287,17 @@ export class EnhancedInheritanceCalculationEngine {
             name: 'ذوو الأرحام',
             description: 'توزيع الباقي على ذوي الأرحام',
           });
-          this.addStep('ذوو الأرحام: blood_relatives', '', null, 'info');
+          this.addStep('ذوو الأرحام: blood_relatives',
+            `Blood relatives receive surplus: distributed to ${bloodDistribution.bloodRelatives.length} heir(s)`,
+            { bloodRelatives: bloodDistribution.bloodRelatives }, 'info');
         }
       }
 
       // Treasury (Bait al-Mal) - if no heirs, estate goes to treasury
       if (finalShares.length === 0) {
-        this.addStep('بيت المال: treasury', '', null, 'info');
+        this.addStep('بيت المال: treasury',
+          `No heirs found — entire estate (${netEstate}) goes to Bait al-Mal (Treasury)`,
+          { amount: netEstate }, 'info');
         this.state.specialCases.push({
           type: 'treasury',
           name: 'بيت المال',
@@ -280,10 +314,14 @@ export class EnhancedInheritanceCalculationEngine {
       }
 
       const results = this.calculateFinalAmounts(finalShares, netEstate);
-      this.addStep('تحويل للمبالغ: amounts', '', null, 'info');
+      this.addStep('تحويل للمبالغ: amounts',
+        `Converted fractions to monetary amounts based on net estate ${netEstate}`,
+        { netEstate, shareCount: results.length }, 'info');
 
       const confidence = this.calculateConfidence(results, validHeirs);
-      this.addStep('حساب مستوى الثقة: confidence', '', null, 'info');
+      this.addStep('حساب مستوى الثقة: confidence',
+        `Confidence score: ${confidence}% based on ${this.state.confidenceFactors.length} factor(s)`,
+        { confidence, factors: this.state.confidenceFactors }, 'info');
 
       const endTime = performance.now();
       const calcSteps = this.steps.map((stepObj, idx) => ({
