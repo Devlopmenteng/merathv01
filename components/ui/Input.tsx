@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   leftIcon: {
-    marginRight: 8,
+    marginEnd: 8,
   },
   rightIcon: {
-    marginLeft: 8,
+    marginStart: 8,
   },
   helperText: {
     fontSize: 12,

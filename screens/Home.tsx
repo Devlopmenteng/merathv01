@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 32,
-    marginRight: 16,
+    marginEnd: 16,
   },
   menuItemContent: {
     flex: 1,

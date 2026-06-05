@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    marginRight: 8,
+    marginEnd: 8,
     borderWidth: 1,
   },
   templateCard: {

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    marginLeft: 8,
+    marginStart: 8,
   },
   stepperContainer: {
     width: 100,

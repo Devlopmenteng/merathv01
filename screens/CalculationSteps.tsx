@@ -127,7 +127,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     backgroundColor: theme.colors.primary,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginRight: theme.spacing.md,
+                    marginEnd: theme.spacing.md,
                   }}
                 >
                   <Text style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.button]}>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   stepDescription: {
     fontSize: 16,
     lineHeight: 24,
-    marginLeft: 48,
+    marginStart: 48,
   },
   hijabLogItem: {
     fontSize: 16,

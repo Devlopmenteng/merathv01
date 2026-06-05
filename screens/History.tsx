@@ -120,7 +120,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                   key={i}
                   style={[
                     theme.typography.caption,
-                    { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary },
+                    { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
                   ]}
                 >
                   • {share.name}: {formatCurrency(share.amount)}
@@ -130,7 +130,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                 <Text
                   style={[
                     theme.typography.caption,
-                    { marginLeft: theme.spacing.sm, color: theme.colors.text.secondary },
+                    { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
                   ]}
                 >
                   ...

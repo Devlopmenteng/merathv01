@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
   },
   contentColumn: {
     flex: 1,
-    paddingLeft: 12,
+    paddingStart: 12,
   },
 });
