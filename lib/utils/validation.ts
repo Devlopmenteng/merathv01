@@ -7,6 +7,7 @@
  */
 
 import { APP_DEFAULTS } from '../constants/appDefaults';
+import { t } from '../i18n';
 
 /**
  * Validates a monetary value
@@ -14,15 +15,15 @@ import { APP_DEFAULTS } from '../constants/appDefaults';
  */
 export function validateMonetaryValue(value: number): { valid: boolean; error?: string } {
   if (isNaN(value)) {
-    return { valid: false, error: 'Invalid number format' };
+    return { valid: false, error: t('invalid_number') };
   }
 
   if (value < APP_DEFAULTS.MIN_ESTATE_VALUE) {
-    return { valid: false, error: 'Value cannot be negative' };
+    return { valid: false, error: t('value_negative') };
   }
 
   if (value > APP_DEFAULTS.MAX_ESTATE_VALUE) {
-    return { valid: false, error: `Value exceeds maximum of ${APP_DEFAULTS.MAX_ESTATE_VALUE}` };
+    return { valid: false, error: t('value_exceeds_max').replace('%{max}', String(APP_DEFAULTS.MAX_ESTATE_VALUE)) };
   }
 
   // Check decimal places
@@ -30,7 +31,7 @@ export function validateMonetaryValue(value: number): { valid: boolean; error?: 
   if (decimalPlaces > APP_DEFAULTS.MAX_DECIMAL_PLACES) {
     return {
       valid: false,
-      error: `Maximum ${APP_DEFAULTS.MAX_DECIMAL_PLACES} decimal places allowed`,
+      error: t('max_decimal_places').replace('%{count}', String(APP_DEFAULTS.MAX_DECIMAL_PLACES)),
     };
   }
 
@@ -46,20 +47,20 @@ export function validateHeirCount(
   heirType: string
 ): { valid: boolean; error?: string } {
   if (isNaN(count) || count < 0 || !Number.isInteger(count)) {
-    return { valid: false, error: 'Count must be a positive integer' };
+    return { valid: false, error: t('count_positive_integer') };
   }
 
   // Check against heir-specific limits
   if (heirType === 'wife' && count > APP_DEFAULTS.MAX_WIVES) {
-    return { valid: false, error: `Maximum ${APP_DEFAULTS.MAX_WIVES} wives allowed` };
+    return { valid: false, error: t('max_wives').replace('%{count}', String(APP_DEFAULTS.MAX_WIVES)) };
   }
 
   if (heirType === 'husband' && count > APP_DEFAULTS.MAX_HUSBANDS) {
-    return { valid: false, error: 'Only one husband allowed' };
+    return { valid: false, error: t('one_husband_only') };
   }
 
   if (count > APP_DEFAULTS.MAX_HEIR_COUNT) {
-    return { valid: false, error: `Maximum ${APP_DEFAULTS.MAX_HEIR_COUNT} heirs per type` };
+    return { valid: false, error: t('max_heirs_per_type').replace('%{count}', String(APP_DEFAULTS.MAX_HEIR_COUNT)) };
   }
 
   return { valid: true };
@@ -136,14 +137,14 @@ export function validateEstateInput(estate: {
   // Validate that deductions don't exceed total
   const totalDeductions = estate.funeral + estate.debts + estate.will;
   if (totalDeductions > estate.total) {
-    errors.push('Total deductions cannot exceed estate value');
+    errors.push(t('deductions_exceed_estate'));
   }
 
   // Validate will doesn't exceed 1/3 of net estate
   const netEstate = estate.total - estate.funeral - estate.debts;
   const maxWill = netEstate * APP_DEFAULTS.WILL_MAX_FRACTION;
   if (estate.will > maxWill && netEstate > 0) {
-    errors.push('Will cannot exceed one-third (1/3) of net estate');
+    errors.push(t('will_exceeds_third'));
   }
 
   return {
@@ -189,7 +190,7 @@ export function validateHeirsConfig(heirs: Record<string, number>): {
   const wife = heirs.wife || 0;
 
   if (husband > 0 && wife > 0) {
-    errors.push('Cannot have both husband and wife as heirs');
+    errors.push(t('heirs_conflict_error'));
   }
 
   // Validate each heir count
