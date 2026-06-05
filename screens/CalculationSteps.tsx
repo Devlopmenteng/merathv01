@@ -5,6 +5,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
 import { backArrow } from '../lib/utils/rtl';
+import { localizeStepTitle, localizeStepDesc } from '../lib/utils/shareLocalization';
 
 type CalculationStepsNavigation = {
   navigate: (screen: string) => void;
@@ -145,7 +146,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   </Text>
                 </View>
                 <Text style={[theme.typography.h3, { flex: 1, color: theme.colors.text.primary }]}>
-                  {step.title}
+                  {localizeStepTitle(step.title)}
                 </Text>
               </View>
 
@@ -155,7 +156,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   { marginStart: 48, color: theme.colors.text.secondary },
                 ]}
               >
-                {step.description}
+                {localizeStepDesc(step.description)}
               </Text>
             </View>
           ))

@@ -43,5 +43,5 @@ export function initI18n(locale?: string): boolean {
   return wasRTL !== I18nManager.isRTL;
 }
 
-export const t = (key: string) => i18n.t(key);
+export const t = (key: string, options?: Record<string, string | number>) => i18n.t(key, options);
 export { i18n };

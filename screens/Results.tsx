@@ -32,6 +32,13 @@ import * as Sharing from 'expo-sharing';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 import { calculateInheritanceWithCache } from '../lib/inheritance/calculateAdapter';
+import {
+  localizeShareType,
+  localizeHeirName,
+  localizeReason,
+  localizeStepTitle,
+  localizeStepDesc,
+} from '../lib/utils/shareLocalization';
 
 const ExportBar = React.lazy(() =>
   import('../components/ExportBar').then((module) => ({ default: module.ExportBar }))
@@ -106,7 +113,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
     ];
     if (!result) return [];
     return result.shares.map((s, idx) => ({
-      label: s.name,
+      label: localizeHeirName(s.key || '', s.name),
       value: s.amount,
       color: colors[idx % colors.length],
       fraction: s.fraction ? `${s.fraction.numerator}/${s.fraction.denominator}` : '',
@@ -252,51 +259,66 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
       const color = chartData[idx]?.color;
       const percentage = ((share.amount / (result.netEstate ?? 1)) * 100).toFixed(2);
       return (
-        <View
-          key={idx}
-          style={{
-            flexDirection: 'row',
-            backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
-            borderRadius: theme.borderRadius.sm,
-            paddingVertical: 8,
-            marginBottom: 4,
-          }}
-        >
+        <View key={idx} style={{ marginBottom: 4 }}>
           <View
             style={{
-              width: isTablet ? 130 : 100,
-              paddingHorizontal: 4,
               flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
+              backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
+              borderRadius: theme.borderRadius.sm,
+              paddingVertical: 8,
             }}
           >
-            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
-            <Text>{share.name}</Text>
+            <View
+              style={{
+                width: isTablet ? 130 : 100,
+                paddingHorizontal: 4,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: color }} />
+              <Text>{localizeHeirName(share.key || '', share.name)}</Text>
+            </View>
+            <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>{share.count}</Text>
+            <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{localizeShareType(share.type || '')}</Text>
+            <Text
+              style={{
+                width: isTablet ? 100 : 80,
+                textAlign: 'center',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
+              {share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ''}
+            </Text>
+            <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{percentage}%</Text>
+            <Text
+              style={{
+                width: isTablet ? 130 : 100,
+                textAlign: 'center',
+                fontWeight: 'bold',
+                color: theme.colors.primary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
+              {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
+            </Text>
           </View>
-          <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>{share.count}</Text>
-          <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{share.type}</Text>
-          <Text
-            style={{
-              width: isTablet ? 100 : 80,
-              textAlign: 'center',
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            }}
-          >
-            {share.fraction ? `${share.fraction.numerator}/${share.fraction.denominator}` : ''}
-          </Text>
-          <Text style={{ width: isTablet ? 100 : 80, textAlign: 'center' }}>{percentage}%</Text>
-          <Text
-            style={{
-              width: isTablet ? 130 : 100,
-              textAlign: 'center',
-              fontWeight: 'bold',
-              color: theme.colors.primary,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            }}
-          >
-            {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
-          </Text>
+          {share.reason ? (
+            <Text
+              style={[
+                theme.typography.caption,
+                {
+                  color: theme.colors.outline,
+                  paddingHorizontal: 22,
+                  paddingBottom: 4,
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {localizeReason(share.reason)}
+            </Text>
+          ) : null}
         </View>
       );
     });
@@ -506,8 +528,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             <View style={{ marginTop: theme.spacing.lg, marginBottom: theme.spacing.lg }}>
               <StepTimeline
                 steps={result.steps.map((step) => ({
-                  title: step.title,
-                  description: step.description,
+                  title: localizeStepTitle(step.title),
+                  description: localizeStepDesc(step.description),
                 }))}
               />
             </View>

@@ -79,6 +79,7 @@ export interface HeirShare {
   shareType?: string;
   madhab?: MadhhabType;
   type?: string;
+  reason?: string;
   shares?: {
     person: number;
     amount: number;

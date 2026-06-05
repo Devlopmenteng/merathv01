@@ -9,6 +9,7 @@ import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 import { showValidationError } from '../lib/utils/alerts';
 import { HeirRow } from './HeirRow';
 import { TemplatesModal } from './TemplatesModal';
+import { localizeHeirType } from '../lib/utils/shareLocalization';
 
 const CATEGORIES: { titleKey: string; types: HeirType[] }[] = [
   { titleKey: 'spouse', types: ['husband', 'wife'] },
@@ -162,7 +163,7 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
                     <HeirRow
                       key={type}
                       type={type}
-                      name={HEIR_NAMES[type]}
+                      name={localizeHeirType(type) || HEIR_NAMES[type]}
                       count={count}
                       isBlocked={isBlocked}
                       onIncrease={() => updateCount(type, 1)}
