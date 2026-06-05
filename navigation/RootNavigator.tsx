@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { t } from '../lib/i18n';
@@ -39,14 +39,14 @@ const TestCases = lazy(() =>
 const Stack = createNativeStackNavigator();
 
 const screenOptions = {
-  headerShown: true, // Show header to display titles
-  animation: 'slide_from_right' as any,
+  headerShown: true,
+  animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as any,
   animationDuration: 300,
 };
 
 const LoadingView = () => (
   <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#0D7C66" />
+    <ActivityIndicator size="large" color="#0A5E4A" />
   </View>
 );
 
@@ -59,44 +59,44 @@ export default function RootNavigator() {
           <Stack.Screen
             name="EstateSetup"
             component={EstateSetup}
-            options={{ title: t('estate_details') }}
+            options={() => ({ title: t('estate_details') })}
           />
           <Stack.Screen
             name="MadhabSelect"
             component={MadhabSelect}
-            options={{ title: t('select_madhab') }}
+            options={() => ({ title: t('select_madhab') })}
           />
           <Stack.Screen
             name="HeirSelection"
             component={HeirSelection}
-            options={{ title: t('select_heirs') }}
+            options={() => ({ title: t('select_heirs') })}
           />
           <Stack.Screen
             name="Results"
             component={Results}
-            options={{ title: t('inheritance_report') }}
+            options={() => ({ title: t('inheritance_report') })}
           />
           <Stack.Screen
             name="Comparison"
             component={Comparison}
-            options={{ title: t('compare') }}
+            options={() => ({ title: t('compare') })}
           />
-          <Stack.Screen name="Settings" component={Settings} options={{ title: t('settings') }} />
+          <Stack.Screen name="Settings" component={Settings} options={() => ({ title: t('settings') })} />
           <Stack.Screen
             name="History"
             component={History}
-            options={{ title: t('history_screen_title') }}
+            options={() => ({ title: t('history_screen_title') })}
           />
-          <Stack.Screen name="Glossary" component={Glossary} options={{ title: t('glossary') }} />
+          <Stack.Screen name="Glossary" component={Glossary} options={() => ({ title: t('glossary') })} />
           <Stack.Screen
             name="CalculationSteps"
             component={CalculationSteps as any}
-            options={{ title: t('calculation_steps') }}
+            options={() => ({ title: t('calculation_steps') })}
           />
           <Stack.Screen
             name="TestCases"
             component={TestCases}
-            options={{ title: t('test_cases') }}
+            options={() => ({ title: t('test_cases') })}
           />
         </Stack.Navigator>
       </Suspense>
