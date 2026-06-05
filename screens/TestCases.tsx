@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
+import { backArrow } from '../lib/utils/rtl';
 import {
   SCENARIO_TEMPLATES,
   getTemplatesByCategory,
@@ -111,7 +112,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('test_cases')}</Text>

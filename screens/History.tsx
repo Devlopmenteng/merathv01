@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency } from '../lib/utils/currency';
+import { backArrow } from '../lib/utils/rtl';
 
 type HistoryNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -52,7 +53,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         accessibilityLabel={t('back_to_home')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back_to_home')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back_to_home')}</Text>
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('history_screen_title')}</Text>
       <TextInput

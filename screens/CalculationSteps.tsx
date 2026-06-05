@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
+import { backArrow } from '../lib/utils/rtl';
 
 type CalculationStepsNavigation = {
   navigate: (screen: string) => void;
@@ -40,7 +41,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           accessibilityLabel={t('back')}
           accessibilityRole="button"
         >
-          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
+          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
         </TouchableOpacity>
         <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
         <Text style={[theme.typography.body, { marginTop: theme.spacing.md }]}>
@@ -65,7 +66,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>

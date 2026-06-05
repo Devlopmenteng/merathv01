@@ -17,6 +17,7 @@ import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useLanguage } from '../lib/context/LanguageContext';
 import { t } from '../lib/i18n';
+import { backArrow, forwardArrow } from '../lib/utils/rtl';
 import { showAlert } from '../lib/utils/alerts';
 
 const LANGUAGES = [
@@ -218,7 +219,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityLabel={t('back_to_home')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>← {t('back_to_home')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back_to_home')}</Text>
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('settings')}</Text>
 
@@ -293,7 +294,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
-        <Text style={{ fontSize: 18, color: theme.colors.primary }}>→</Text>
+        <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
       </TouchableOpacity>
 
       <View
@@ -371,7 +372,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
-        <Text style={{ fontSize: 18, color: theme.colors.primary }}>→</Text>
+        <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

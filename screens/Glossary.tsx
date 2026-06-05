@@ -6,6 +6,7 @@ import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
 import { t } from '../lib/i18n';
+import { backArrow } from '../lib/utils/rtl';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
 
@@ -121,7 +122,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={[{ color: theme.colors.primary }, theme.typography.button]}
           writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
         >
-          ← {t('back_to_home')}
+          {backArrow()} {t('back_to_home')}
         </Text>
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
