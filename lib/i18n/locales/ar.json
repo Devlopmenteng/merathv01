@@ -418,7 +418,6 @@
   "pdf_distribution_heading": "التوزيع",
   "pdf_footer": "تم إنشاء هذا التقرير بواسطة تطبيق ميراث - %{date}",
 
-
   "step_type_standard_title": "توزيع قياسي",
   "step_type_standard_desc": "توزيع التركة حسب الفروض والتعصيب",
   "step_type_awl_title": "العول",
@@ -433,7 +432,6 @@
   "step_type_treasury_desc": "لا يوجد ورثة - التركة لبيت المال",
   "step_type_blood_relatives_title": "ذوو الأرحام",
   "step_type_blood_relatives_desc": "توزيع الباقي على ذوي الأرحام",
-
 
   "a11y_current_language": "اللغة الحالية: %{language}. اضغط للتغيير.",
   "a11y_select_language": "%{language}. اضغط لاختيار هذه اللغة.",
