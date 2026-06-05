@@ -819,12 +819,6 @@ export class EnhancedInheritanceCalculationEngine {
       const shouldShare = this.getMadhabRule('grandfather_with_siblings') === 'musharak';
 
       if (siblingsCount > 0 && shouldShare) {
-        const totalHeadsCalc =
-          2 +
-          (heirs.full_brother || 0) * 2 +
-          (heirs.full_sister || 0) +
-          (heirs.half_brother_paternal || 0) * 2 +
-          (heirs.half_sister_paternal || 0);
         const totalHeads =
           2 +
           (heirs.full_brother || 0) * 2 +
@@ -835,15 +829,6 @@ export class EnhancedInheritanceCalculationEngine {
         const byMuqasamah = new FractionClass(2, totalHeads);
         const byThird = new FractionClass(1, 3);
         const bySixth = new FractionClass(1, 6);
-
-          totalHeads,
-          byMuqasamah: byMuqasamah.toString(),
-          byMuqasamahDecimal: byMuqasamah.toDecimal(),
-          byThird: byThird.toString(),
-          byThirdDecimal: byThird.toDecimal(),
-          bySixth: bySixth.toString(),
-          bySixthDecimal: bySixth.toDecimal(),
-        });
 
         let bestOption = byMuqasamah;
         let bestReason = 'muqasamah';
@@ -862,10 +847,6 @@ export class EnhancedInheritanceCalculationEngine {
           bestReason = 'sixth';
           bestValue = sixthValue;
         }
-
-          bestReason,
-          bestOption: bestOption.toString(),
-        });
 
         this.steps.push({
           step: 'اختيار الأفضل للجد مع الإخوة',
