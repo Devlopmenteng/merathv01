@@ -117,6 +117,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={{ padding: theme.spacing.md, marginBottom: theme.spacing.sm }}
+        accessibilityLabel={t('back_to_home')}
+        accessibilityRole="button"
       >
         <Text
           style={[{ color: theme.colors.primary }, theme.typography.button]}
@@ -136,6 +138,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             alignItems: 'center',
           }}
           onPress={() => setActiveTab('glossary')}
+          accessibilityLabel={t('tab_glossary')}
+          accessibilityRole="tab"
         >
           <Text
             style={{
@@ -156,6 +160,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             alignItems: 'center',
           }}
           onPress={() => setActiveTab('verses')}
+          accessibilityLabel={t('tab_verses')}
+          accessibilityRole="tab"
         >
           <Text
             style={{
@@ -176,6 +182,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             alignItems: 'center',
           }}
           onPress={() => setActiveTab('hadith')}
+          accessibilityLabel={t('tab_hadith')}
+          accessibilityRole="tab"
         >
           <Text
             style={{
@@ -196,6 +204,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             alignItems: 'center',
           }}
           onPress={() => setActiveTab('fiqh')}
+          accessibilityLabel={t('tab_fiqh')}
+          accessibilityRole="tab"
         >
           <Text
             style={{

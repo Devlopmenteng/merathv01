@@ -490,6 +490,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               marginTop: theme.spacing.lg,
               marginBottom: theme.spacing.md,
             }}
+            accessibilityLabel={t('steps')}
+            accessibilityRole="button"
           >
             <Text style={theme.typography.h2}>{t('steps')}</Text>
             <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{showSteps ? '▲' : '▼'}</Text>
