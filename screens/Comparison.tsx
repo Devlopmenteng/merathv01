@@ -245,8 +245,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           }}
         >
           <Text
-            style={{ color: 'green', textAlign: 'center' }}
-            writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
+            style={{ color: 'green', textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
           >
             ✅ {t('no_significant_differences')}
           </Text>
@@ -266,6 +265,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
           {t('special_cases_title')}
         </Text>
+        <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
           {t('difference_analysis')}
         </Text>
 

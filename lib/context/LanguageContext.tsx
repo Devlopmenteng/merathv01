@@ -74,9 +74,11 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     [forceUpdate, locale]
   );
 
+  const triggerUpdate = useCallback(() => forceUpdate({}), [forceUpdate]);
+
   const value = useMemo(
-    () => ({ locale, isReady, isRTL, changeLocale, forceUpdate }),
-    [locale, isReady, isRTL, changeLocale, forceUpdate]
+    () => ({ locale, isReady, isRTL, changeLocale, forceUpdate: triggerUpdate }),
+    [locale, isReady, isRTL, changeLocale, triggerUpdate]
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

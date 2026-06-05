@@ -112,12 +112,11 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityHint={`Current language: ${LANGUAGES.find((l) => l.code === locale)?.label || locale}. Tap to change.`}
         accessibilityRole="button"
       >
-        <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
+        <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
           {t('language__')}
         </Text>
         <Text
-          style={[theme.typography.body, { color: theme.colors.primary }]}
-          writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
+          style={[theme.typography.body, { color: theme.colors.primary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {LANGUAGES.find((l) => l.code === locale)?.label || locale}
         </Text>
@@ -147,8 +146,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             }}
           >
             <Text
-              style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}
-              writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
+              style={[theme.typography.h3, { marginBottom: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
             >
               {t('select_language')}
             </Text>
@@ -172,8 +170,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 accessibilityState={{ selected: locale === lang.code }}
               >
                 <Text
-                  style={theme.typography.body}
-                  writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}
+                  style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
                 >
                   {lang.label}
                 </Text>
@@ -241,7 +238,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             alignItems: 'center',
           }}
         >
-          <Text style={theme.typography.body} writingDirection={I18nManager.isRTL ? 'rtl' : 'ltr'}>
+          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
             {t('dark_mode')}
           </Text>
           <Switch
