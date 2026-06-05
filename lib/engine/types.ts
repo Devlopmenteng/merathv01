@@ -152,6 +152,9 @@ export interface MadhhabRules {
   mother_with_father_only: 'third' | 'sixth';
   spouse_radd: boolean;
   umariyyah_rule: 'first' | 'second';
+  blood_relatives_enabled: boolean;
+  musharraka_enabled: boolean;
+  akdariyya_enabled: boolean;
 }
 
 // ====== حالات الاختبار ======

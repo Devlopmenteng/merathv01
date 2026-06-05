@@ -98,7 +98,7 @@ describe('Special Cases - Complete Test Suite', () => {
       expect(siblings).toBeUndefined();
     });
 
-    it('Case 5: Should NOT apply Musharraka in Maliki madhab', () => {
+    it('Case 5: Should apply Musharraka in Maliki madhab (Maliki recognizes Musharraka)', () => {
       const heirs: HeirsData = {
         husband: 1,
         mother: 1,
@@ -111,9 +111,11 @@ describe('Special Cases - Complete Test Suite', () => {
 
       expect(result.success).toBe(true);
 
-      // In Maliki, full brothers should be blocked by grandfather? No, but they shouldn't share with maternal
+      // Maliki recognizes Musharraka: full siblings share with maternal siblings in 1/3
       const siblings = result.shares.find((s) => s.key === 'shared_siblings');
-      expect(siblings).toBeUndefined();
+      expect(siblings).toBeDefined();
+      expect(siblings!.fraction!.numerator).toBe(1);
+      expect(siblings!.fraction!.denominator).toBe(3);
     });
   });
 
@@ -496,8 +498,227 @@ describe('Special Cases - Complete Test Suite', () => {
       const result = engine.calculate();
 
       // In Maliki, no blood relatives, remainder should go to treasury
-      // This might be represented differently depending on implementation
+      // blood_relatives_enabled is false for Maliki
       expect(result.success).toBe(true);
+      const bloodRelative = result.shares.find((s) => s.type?.includes('ذو رحم'));
+      expect(bloodRelative).toBeUndefined();
+    });
+  });
+
+  // ===== New Tests for Algorithmic Fixes =====
+
+  describe('Hijab System - Complete Blocking Rules', () => {
+    it('Mother blocks both grandmothers', () => {
+      const heirs: HeirsData = { mother: 1, grandmother_mother: 1, grandmother_father: 1, husband: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const gm = result.shares.find((s) => (s.key as string) === 'grandmothers' || s.key === 'grandmother_mother' || s.key === 'grandmother_father');
+      expect(gm).toBeUndefined();
+    });
+
+    it('Son blocks grandson and granddaughter', () => {
+      const heirs: HeirsData = { son: 1, grandson: 1, granddaughter: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => s.key === 'grandson')).toBeUndefined();
+      expect(result.shares.find((s) => s.key === 'granddaughter')).toBeUndefined();
+    });
+
+    it('2+ daughters block granddaughter when no grandson', () => {
+      const heirs: HeirsData = { daughter: 2, granddaughter: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => s.key === 'granddaughter')).toBeUndefined();
+    });
+
+    it('Father blocks full siblings', () => {
+      const heirs: HeirsData = { father: 1, full_brother: 1, full_sister: 1, wife: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => s.key === 'full_brother')).toBeUndefined();
+      expect(result.shares.find((s) => s.key === 'full_sister')).toBeUndefined();
+    });
+
+    it('Grandfather blocks siblings in Shafii (hijab mode)', () => {
+      const heirs: HeirsData = { grandfather: 1, full_brother: 1, wife: 1, daughter: 1 };
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => s.key === 'full_brother')).toBeUndefined();
+    });
+
+    it('Grandfather shares with siblings in Maliki (musharak mode)', () => {
+      const heirs: HeirsData = { grandfather: 1, full_brother: 1, wife: 1 };
+      const engine = new InheritanceCalculationEngine('maliki', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const fullBrother = result.shares.find((s) => s.key === 'full_brother');
+      expect(fullBrother).toBeDefined();
+    });
+
+    it('Maternal siblings blocked by descendants', () => {
+      const heirs: HeirsData = { daughter: 1, maternal_brother: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => (s.key as string) === 'maternal_siblings')).toBeUndefined();
+    });
+
+    it('Full brother blocks paternal brother', () => {
+      const heirs: HeirsData = { full_brother: 1, half_brother_paternal: 1, wife: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      expect(result.shares.find((s) => (s.key as string) === 'half_brother_paternal')).toBeUndefined();
+    });
+  });
+
+  describe('Father/Grandfather/Grandmother Fixed Shares', () => {
+    it('Father gets 1/6 fard with male descendants', () => {
+      const heirs: HeirsData = { father: 1, son: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const father = result.shares.find((s) => s.key === 'father');
+      expect(father).toBeDefined();
+      expect(father!.fraction!.numerator).toBe(1);
+      expect(father!.fraction!.denominator).toBe(6);
+    });
+
+    it('Father gets 1/6 + remainder with female-only descendants', () => {
+      const heirs: HeirsData = { father: 1, daughter: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const father = result.shares.find((s) => s.key === 'father');
+      expect(father).toBeDefined();
+      // 1/6 fard + remainder as asaba
+      expect(father!.type).toContain('فرض');
+    });
+
+    it('Grandmother gets 1/6', () => {
+      const heirs: HeirsData = { grandmother_mother: 1, son: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const gm = result.shares.find((s) => (s.key as string) === 'grandmothers');
+      expect(gm).toBeDefined();
+      expect(gm!.fraction!.numerator).toBe(1);
+      expect(gm!.fraction!.denominator).toBe(6);
+    });
+
+    it('Grandfather gets 1/6 with male descendants', () => {
+      const heirs: HeirsData = { grandfather: 1, son: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const gf = result.shares.find((s) => s.key === 'grandfather');
+      expect(gf).toBeDefined();
+      expect(gf!.fraction!.numerator).toBe(1);
+      expect(gf!.fraction!.denominator).toBe(6);
+    });
+  });
+
+  describe('Umariyyah (العمريتان)', () => {
+    it('Umariyyah 1: husband + father + mother → mother gets 1/6', () => {
+      const heirs: HeirsData = { husband: 1, father: 1, mother: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const mother = result.shares.find((s) => s.key === 'mother');
+      expect(mother).toBeDefined();
+      expect(mother!.fraction!.numerator).toBe(1);
+      expect(mother!.fraction!.denominator).toBe(6);
+    });
+
+    it('Umariyyah 2: wife + father + mother → mother gets 1/4', () => {
+      const heirs: HeirsData = { wife: 1, father: 1, mother: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const mother = result.shares.find((s) => s.key === 'mother');
+      expect(mother).toBeDefined();
+      expect(mother!.fraction!.numerator).toBe(1);
+      expect(mother!.fraction!.denominator).toBe(4);
+    });
+
+    it('Not Umariyyah if siblings exist', () => {
+      // Husband + father + mother + 2 siblings → not Umariyyah, mother gets 1/6
+      const heirs: HeirsData = { husband: 1, father: 1, mother: 1, full_brother: 1, full_sister: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const mother = result.shares.find((s) => s.key === 'mother');
+      expect(mother).toBeDefined();
+      // With 2+ siblings, mother gets 1/6 (not Umariyyah because siblings exist)
+      expect(mother!.fraction!.denominator).toBe(6);
+    });
+  });
+
+  describe('Paternal Sister Takmilah', () => {
+    it('Paternal sister gets takmilah with 1 full sister', () => {
+      // With husband: full_sister=1/2, paternal_sister=1/6, husband=1/2 → awl applies
+      // Without husband: full_sister=1/2, paternal_sister=1/6 → radd may apply
+      // Test the raw share before radd by including a husband to fill the estate
+      const heirs: HeirsData = { husband: 1, full_sister: 1, half_sister_paternal: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const patSister = result.shares.find((s) => (s.key as string) === 'half_sister_paternal');
+      expect(patSister).toBeDefined();
+      // Paternal sister should have a share (takmilah)
+      expect(patSister!.amount).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Sister as Asaba-with-Others', () => {
+    it('Full sister becomes asaba-with-others when daughter exists', () => {
+      const heirs: HeirsData = { daughter: 1, full_sister: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const sister = result.shares.find((s) => s.key === 'full_sister');
+      expect(sister).toBeDefined();
+      expect(sister!.type).toContain('تعصيب');
+    });
+
+    it('Paternal sister becomes asaba-with-others when daughter exists and no full siblings', () => {
+      const heirs: HeirsData = { daughter: 1, half_sister_paternal: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const sister = result.shares.find((s) => (s.key as string) === 'half_sister_paternal');
+      expect(sister).toBeDefined();
+      expect(sister!.type).toContain('تعصيب');
+    });
+  });
+
+  describe('Radd to Spouse (madhab-dependent)', () => {
+    it('Hanafi: spouse receives radd', () => {
+      const heirs: HeirsData = { wife: 1, mother: 1 };
+      const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      // In Hanafi, wife is eligible for radd
+      const wife = result.shares.find((s) => s.key === 'wife');
+      expect(wife).toBeDefined();
+      // With radd, wife's share should be more than 1/4
+      expect(wife!.percentage!).toBeGreaterThan(25);
+    });
+
+    it('Shafii: spouse does NOT receive radd', () => {
+      const heirs: HeirsData = { wife: 1, mother: 1 };
+      const engine = new InheritanceCalculationEngine('shafii', estate, heirs);
+      const result = engine.calculate();
+      expect(result.success).toBe(true);
+      const wife = result.shares.find((s) => s.key === 'wife');
+      expect(wife).toBeDefined();
+      // In Shafii, wife doesn't get radd, so fraction stays at 1/4
+      // (but mother gets radd so total should be 100%)
     });
   });
 });

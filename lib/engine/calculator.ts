@@ -64,9 +64,13 @@ export class EnhancedInheritanceCalculationEngine {
   }> = [];
   private memo: {
     hasDescendants?: boolean;
+    hasMaleDescendants?: boolean;
+    hasFemaleDescendants?: boolean;
+    hasMaleAscendant?: boolean;
     fullSiblingsCount?: number;
     maternalSiblingsCount?: number;
     fullAndPaternalSiblingsCount?: number;
+    allSiblingsCount?: number;
     isMusharraka?: boolean;
     isAkdariyya?: boolean;
   } = {};
@@ -178,19 +182,21 @@ export class EnhancedInheritanceCalculationEngine {
         'info'
       );
 
+      const madhabRules = this.getMadhabConfig()?.rules;
       const hijabResult = this.hijabSystem.applyHijab(
-        this.heirs as Record<string, number | undefined>
+        this.heirs as Record<string, number | undefined>,
+        madhabRules
       );
       const validHeirs = hijabResult.heirs;
-      const hijabLog = (hijabResult as any).log || [];
-      this.state.blockedHeirs = hijabLog;
+      const blockedList = hijabResult.blocked;
+      this.state.blockedHeirs = blockedList.map((b) => b.heir);
       this.addStep(
         'تطبيق الحجب: hijab',
-        hijabLog.length > 0
-          ? `Applied hijab rules: ${hijabLog.length} heir(s) blocked — ${hijabLog.join(', ')}`
+        blockedList.length > 0
+          ? `Applied hijab rules: ${blockedList.length} heir(s) blocked — ${blockedList.map((b) => b.reason).join(', ')}`
           : 'No heirs blocked by hijab rules',
         {
-          blockedHeirs: hijabLog,
+          blockedHeirs: blockedList,
           validHeirs: Object.keys(validHeirs).filter((k) => (validHeirs as any)[k] > 0),
         },
         'info'
@@ -266,25 +272,8 @@ export class EnhancedInheritanceCalculationEngine {
         );
       }
 
-      // Edge case: if Akdariyya conditions are NOT met but we have a grandfather
-      // with multiple full sisters, some implementations treat this as an awl
-      // scenario because the fixed shares can effectively conflict. Ensure the
-      // `awlApplied` flag is set to match test expectations.
-      if (
-        !this.state.awlApplied &&
-        !this.isAkdariyya() &&
-        (this.heirs.full_sister || 0) > 1 &&
-        (this.heirs.grandfather || 0) > 0
-      ) {
-        adjustedFixed = this.applyAwl(fixedShares, totalFixed);
-        this.state.awlApplied = true;
-        this.addStep(
-          'الأول: awl (edge-case grandfather+multiple_sisters)',
-          `Awl applied for grandfather with multiple sisters edge case`,
-          { totalFixed: `${totalFixed.getNumerator()}/${totalFixed.getDenominator()}` },
-          'info'
-        );
-      }
+      // Removed spurious AWL hack for grandfather+multiple_sisters edge case
+      // Correct handling is via grandfather-with-siblings optimal selection in computeAsaba
 
       const remainder = new FractionClass(1, 1).subtract(totalFixed);
       this.addStep(
@@ -356,7 +345,9 @@ export class EnhancedInheritanceCalculationEngine {
       const totalAfterRadd = this.sumFractions(finalShares.map((s) => s.fraction));
       const remainderAfterRadd = new FractionClass(1, 1).subtract(totalAfterRadd);
 
-      if (remainderAfterRadd.toDecimal() > 0.0001 && asabaShares.length === 0) {
+      // Blood relatives: only distribute if madhab allows it
+      const bloodRelativesEnabled = this.getMadhabRule('blood_relatives_enabled') !== false;
+      if (remainderAfterRadd.toDecimal() > 0.0001 && asabaShares.length === 0 && bloodRelativesEnabled) {
         const bloodDistribution = this.distributeToBloodRelatives(finalShares, remainderAfterRadd);
         finalShares = bloodDistribution.shares;
         if (bloodDistribution.bloodRelatives.length > 0) {
@@ -428,7 +419,7 @@ export class EnhancedInheritanceCalculationEngine {
         awl: this.specialCases.some((sc) => sc.type === 'awl'),
         auled: 0,
         radd: this.specialCases.some((sc) => sc.type === 'radd'),
-        hijabTypes: hijabLog,
+        hijabTypes: blockedList.map((b) => b.reason),
       };
 
       return {
@@ -493,8 +484,9 @@ export class EnhancedInheritanceCalculationEngine {
       return this.memo.isMusharraka;
     }
 
-    // Musharraka is only recognized in Shafii madhab
-    if (this.madhab !== 'shafii') {
+    // Musharraka depends on madhab config flag
+    const musharrakaEnabled = this.getMadhabRule('musharraka_enabled');
+    if (!musharrakaEnabled) {
       this.memo.isMusharraka = false;
       return false;
     }
@@ -591,12 +583,18 @@ export class EnhancedInheritanceCalculationEngine {
       return this.memo.isAkdariyya;
     }
 
+    const akdariyyaEnabled = this.getMadhabRule('akdariyya_enabled');
+    if (!akdariyyaEnabled) {
+      this.memo.isAkdariyya = false;
+      return false;
+    }
+
     const h = this.heirs;
     const result =
       (h.husband || 0) > 0 &&
       (h.mother || 0) > 0 &&
       (h.grandfather || 0) > 0 &&
-      (h.full_sister || 0) === 1 &&
+      (h.full_sister || 0) > 0 &&
       !this.hasDescendants() &&
       (h.father || 0) === 0 &&
       (h.full_brother || 0) === 0;
@@ -697,12 +695,21 @@ export class EnhancedInheritanceCalculationEngine {
       let reason: string;
 
       if (isUmariyyah) {
-        fraction = new FractionClass(1, 6);
-        reason = 'ثلث الباقي (العمرية)';
+        if ((heirs.husband || 0) > 0) {
+          // Umariyyah 1: husband + father + mother → mother gets 1/6 (third of remainder after 1/2)
+          fraction = new FractionClass(1, 6);
+          reason = 'ثلث الباقي بعد نصيب الزوج (العُمَريَّة الأولى)';
+        } else {
+          // Umariyyah 2: wife + father + mother → mother gets 1/4 (third of remainder after 1/4)
+          fraction = new FractionClass(1, 4);
+          reason = 'ثلث الباقي بعد نصيب الزوجة (العُمَريَّة الثانية)';
+        }
       } else if (hasDescendants) {
         fraction = new FractionClass(1, 6);
         reason = '⅙ مع وجود فرع';
-      } else if (this.getSiblingsCount(heirs) >= 2) {
+      } else if (this.getSiblingsCount(this.heirs) >= 2) {
+        // Use original heirs (not post-hijab) because blocked siblings
+        // still reduce mother's share (حجب نقصان)
         fraction = new FractionClass(1, 6);
         reason = '⅙ مع جمع إخوة';
       } else {
@@ -720,6 +727,79 @@ export class EnhancedInheritanceCalculationEngine {
       });
     }
 
+    // ===== الأب =====
+    if ((heirs.father || 0) > 0) {
+      if (this.hasMaleDescendants()) {
+        // With male descendants: 1/6 fard only
+        shares.push({
+          key: 'father',
+          name: 'الأب',
+          type: 'فرض',
+          fraction: new FractionClass(1, 6),
+          count: 1,
+          reason: '⅙ فرضاً لوجود الفرع الوارث الذكر',
+        });
+      } else if (this.hasFemaleDescendants()) {
+        // With female-only descendants: 1/6 fard + remainder as ta'sib
+        shares.push({
+          key: 'father',
+          name: 'الأب',
+          type: 'فرض + تعصيب',
+          fraction: new FractionClass(1, 6),
+          count: 1,
+          reason: '⅙ فرضاً + الباقي تعصيباً لوجود فرع وارث أنثى فقط',
+        });
+      }
+      // Without descendants: pure asaba (handled in computeAsaba)
+    }
+
+    // ===== الجد =====
+    if ((heirs.grandfather || 0) > 0 && (heirs.father || 0) === 0) {
+      const siblingsExist = this.getFullAndPaternalSiblingsCount() > 0;
+      const grandfatherShares = this.getMadhabRule('grandfather_with_siblings') === 'musharak';
+
+      if (this.hasMaleDescendants()) {
+        shares.push({
+          key: 'grandfather',
+          name: 'الجد',
+          type: 'فرض',
+          fraction: new FractionClass(1, 6),
+          count: 1,
+          reason: '⅙ فرضاً لوجود الفرع الوارث الذكر',
+        });
+      } else if (this.hasFemaleDescendants()) {
+        shares.push({
+          key: 'grandfather',
+          name: 'الجد',
+          type: 'فرض + تعصيب',
+          fraction: new FractionClass(1, 6),
+          count: 1,
+          reason: '⅙ فرضاً + الباقي تعصيباً لوجود فرع وارث أنثى فقط',
+        });
+      } else if (siblingsExist && grandfatherShares) {
+        // Grandfather with siblings in Maliki/Hanbali: handled in computeAsaba
+      }
+      // Without descendants and without siblings: pure asaba (handled in computeAsaba)
+    }
+
+    // ===== الجدات =====
+    const grandmothersCount = (heirs.grandmother_mother || 0) + (heirs.grandmother_father || 0);
+    if (grandmothersCount > 0) {
+      const names = [];
+      if ((heirs.grandmother_mother || 0) > 0) names.push('الجدة لأم');
+      if ((heirs.grandmother_father || 0) > 0) names.push('الجدة لأب');
+
+      shares.push({
+        key: 'grandmothers',
+        name: grandmothersCount > 1 ? 'الجدات' : names[0],
+        type: 'فرض',
+        fraction: new FractionClass(1, 6),
+        count: grandmothersCount,
+        reason: grandmothersCount > 1 ? '⅙ يشتركن فيه' : '⅙',
+      });
+    }
+
+    // ===== البنات =====
     if (heirs.daughter && heirs.daughter > 0 && (!heirs.son || heirs.son === 0)) {
       const fraction = heirs.daughter === 1 ? new FractionClass(1, 2) : new FractionClass(2, 3);
       shares.push({
@@ -761,8 +841,10 @@ export class EnhancedInheritanceCalculationEngine {
       }
     }
 
+    // Full sister gets fard only if NOT acting as asaba-with-others (with female descendants)
     if ((heirs.full_sister || 0) > 0 && (!heirs.full_brother || heirs.full_brother === 0)) {
       if (!hasDescendants && !heirs.father && !heirs.grandfather) {
+        // No descendants, no father, no grandfather → pure fard
         const fraction =
           heirs.full_sister === 1 ? new FractionClass(1, 2) : new FractionClass(2, 3);
         shares.push({
@@ -774,6 +856,7 @@ export class EnhancedInheritanceCalculationEngine {
           reason: heirs.full_sister === 1 ? '½' : '⅔',
         });
       }
+      // If female descendants exist, sister becomes asaba-with-others (handled in computeAsaba)
     }
 
     if (
@@ -781,17 +864,31 @@ export class EnhancedInheritanceCalculationEngine {
       (!heirs.full_brother || heirs.full_brother === 0) &&
       (!heirs.half_brother_paternal || heirs.half_brother_paternal === 0)
     ) {
-      if (!hasDescendants && !heirs.father && !heirs.grandfather && !heirs.full_sister) {
-        const fraction =
-          heirs.half_sister_paternal === 1 ? new FractionClass(1, 2) : new FractionClass(2, 3);
-        shares.push({
-          key: 'half_sister_paternal',
-          name: (heirs.half_sister_paternal || 0) > 1 ? 'الأخوات لأب' : 'الأخت لأب',
-          type: 'فرض',
-          fraction,
-          count: heirs.half_sister_paternal || 0,
-          reason: heirs.half_sister_paternal === 1 ? '½' : '⅔',
-        });
+      if (!hasDescendants && !(heirs.father || 0) && !(heirs.grandfather || 0)) {
+        if (!(heirs.full_sister || 0)) {
+          // No full sister → paternal sister gets her own fard
+          const fraction =
+            heirs.half_sister_paternal === 1 ? new FractionClass(1, 2) : new FractionClass(2, 3);
+          shares.push({
+            key: 'half_sister_paternal',
+            name: (heirs.half_sister_paternal || 0) > 1 ? 'الأخوات لأب' : 'الأخت لأب',
+            type: 'فرض',
+            fraction,
+            count: heirs.half_sister_paternal || 0,
+            reason: heirs.half_sister_paternal === 1 ? '½' : '⅔',
+          });
+        } else if ((heirs.full_sister || 0) === 1) {
+          // Takmilah: 1/6 to complete 2/3 with the one full sister
+          shares.push({
+            key: 'half_sister_paternal',
+            name: (heirs.half_sister_paternal || 0) > 1 ? 'الأخوات لأب' : 'الأخت لأب',
+            type: 'فرض',
+            fraction: new FractionClass(1, 6),
+            count: heirs.half_sister_paternal || 0,
+            reason: '⅙ تكملة للثلثين مع الأخت الشقيقة',
+          });
+        }
+        // 2+ full sisters: paternal sister blocked (handled in hijab)
       }
     }
 
@@ -893,21 +990,56 @@ export class EnhancedInheritanceCalculationEngine {
     }
 
     if (heirs.father && heirs.father > 0) {
-      asabaShares.push({
-        key: 'father',
-        name: 'الأب',
-        type: 'تعصيب',
-        fraction: remainder,
-        count: 1,
-        reason: 'الأب يرث الباقي',
-        addToExisting: true,
-      });
+      // If father already has a fixed share, add remainder
+      const fatherHasFixed = _fixedShares.some((s) => s.key === 'father');
+      if (fatherHasFixed) {
+        asabaShares.push({
+          key: 'father',
+          name: 'الأب',
+          type: 'تعصيب',
+          fraction: remainder,
+          count: 1,
+          reason: 'الأب يرث الباقي تعصيباً',
+          addToExisting: true,
+        });
+      } else {
+        asabaShares.push({
+          key: 'father',
+          name: 'الأب',
+          type: 'تعصيب',
+          fraction: remainder,
+          count: 1,
+          reason: 'الأب يرث الباقي',
+        });
+      }
       return asabaShares;
     }
 
     if (heirs.grandfather && heirs.grandfather > 0 && !heirs.father) {
       const siblingsCount = this.getFullAndPaternalSiblingsCount();
       const shouldShare = this.getMadhabRule('grandfather_with_siblings') === 'musharak';
+      const grandfatherHasFixed = _fixedShares.some((s) => s.key === 'grandfather');
+
+      if (this.hasMaleDescendants()) {
+        // With male descendants: grandfather gets 1/6 as fard (already in fixed shares)
+        return asabaShares;
+      }
+
+      if (this.hasFemaleDescendants()) {
+        // With female descendants: grandfather gets 1/6 fard + remainder
+        if (grandfatherHasFixed) {
+          asabaShares.push({
+            key: 'grandfather',
+            name: 'الجد',
+            type: 'تعصيب',
+            fraction: remainder,
+            count: 1,
+            reason: 'الجد يرث الباقي تعصيباً',
+            addToExisting: true,
+          });
+          return asabaShares;
+        }
+      }
 
       if (siblingsCount > 0 && shouldShare) {
         const totalHeads =
@@ -917,8 +1049,9 @@ export class EnhancedInheritanceCalculationEngine {
           (heirs.half_brother_paternal || 0) * 2 +
           (heirs.half_sister_paternal || 0);
 
-        const byMuqasamah = new FractionClass(2, totalHeads);
-        const byThird = new FractionClass(1, 3);
+        // Muqasamah: grandfather's share OF remainder
+        const byMuqasamah = remainder.multiply(new FractionClass(2, totalHeads));
+        const byThird = remainder.multiply(new FractionClass(1, 3));
         const bySixth = new FractionClass(1, 6);
 
         let bestOption = byMuqasamah;
@@ -963,63 +1096,63 @@ export class EnhancedInheritanceCalculationEngine {
             bestReason === 'muqasamah'
               ? 'المقاسمة مع الإخوة'
               : bestReason === 'third'
-                ? 'ثلث المال'
+                ? 'ثلث الباقي'
                 : 'سدس المال'
           } (الأفضل)`,
-          addToExisting: true,
+          addToExisting: grandfatherHasFixed,
         });
 
-        if (bestReason === 'muqasamah') {
-          if (heirs.full_brother && heirs.full_brother > 0) {
-            const brotherFrac = remainder.multiply(
-              new FractionClass(heirs.full_brother * 2, totalHeads)
-            );
-            asabaShares.push({
-              key: 'full_brother',
-              name: 'الأخ الشقيق',
-              type: 'تعصيب',
-              fraction: brotherFrac,
-              count: heirs.full_brother || 0,
-              reason: 'مع الجد بالمقاسمة',
-            });
-          }
+        // Distribute remainder to siblings
+        const siblingRemainder = remainder.subtract(bestOption);
 
-          if (heirs.full_sister && heirs.full_sister > 0) {
-            const sisterFrac = remainder.multiply(new FractionClass(heirs.full_sister, totalHeads));
-            asabaShares.push({
-              key: 'full_sister',
-              name: 'الأخت الشقيقة',
-              type: 'تعصيب',
-              fraction: sisterFrac,
-              count: heirs.full_sister || 0,
-              reason: 'مع الجد بالمقاسمة',
-            });
-          }
+        if (siblingRemainder.toDecimal() > 0.0001) {
+          const fullBrothers = heirs.full_brother || 0;
+          const fullSisters = heirs.full_sister || 0;
+          const patBrothers = heirs.half_brother_paternal || 0;
+          const patSisters = heirs.half_sister_paternal || 0;
+          const siblingHeads = fullBrothers * 2 + fullSisters + patBrothers * 2 + patSisters;
 
-          if (heirs.half_brother_paternal && heirs.half_brother_paternal > 0) {
-            asabaShares.push({
-              key: 'half_brother_paternal',
-              name: 'الأخ لأب',
-              type: 'تعصيب',
-              fraction: remainder.multiply(
-                new FractionClass(heirs.half_brother_paternal * 2, totalHeads)
-              ),
-              count: heirs.half_brother_paternal || 0,
-              reason: 'مع الجد بالمقاسمة',
-            });
-          }
-
-          if (heirs.half_sister_paternal && heirs.half_sister_paternal > 0) {
-            asabaShares.push({
-              key: 'half_sister_paternal',
-              name: 'الأخت لأب',
-              type: 'تعصيب',
-              fraction: remainder.multiply(
-                new FractionClass(heirs.half_sister_paternal, totalHeads)
-              ),
-              count: heirs.half_sister_paternal || 0,
-              reason: 'مع الجد بالمقاسمة',
-            });
+          if (siblingHeads > 0) {
+            if (fullBrothers > 0) {
+              asabaShares.push({
+                key: 'full_brother',
+                name: 'الأخ الشقيق',
+                type: 'تعصيب',
+                fraction: siblingRemainder.multiply(new FractionClass(fullBrothers * 2, siblingHeads)),
+                count: fullBrothers,
+                reason: 'مع الجد بالمقاسمة',
+              });
+            }
+            if (fullSisters > 0) {
+              asabaShares.push({
+                key: 'full_sister',
+                name: 'الأخت الشقيقة',
+                type: 'تعصيب',
+                fraction: siblingRemainder.multiply(new FractionClass(fullSisters, siblingHeads)),
+                count: fullSisters,
+                reason: 'مع الجد بالمقاسمة',
+              });
+            }
+            if (patBrothers > 0) {
+              asabaShares.push({
+                key: 'half_brother_paternal',
+                name: 'الأخ لأب',
+                type: 'تعصيب',
+                fraction: siblingRemainder.multiply(new FractionClass(patBrothers * 2, siblingHeads)),
+                count: patBrothers,
+                reason: 'مع الجد بالمقاسمة',
+              });
+            }
+            if (patSisters > 0) {
+              asabaShares.push({
+                key: 'half_sister_paternal',
+                name: 'الأخت لأب',
+                type: 'تعصيب',
+                fraction: siblingRemainder.multiply(new FractionClass(patSisters, siblingHeads)),
+                count: patSisters,
+                reason: 'مع الجد بالمقاسمة',
+              });
+            }
           }
         }
 
@@ -1032,7 +1165,7 @@ export class EnhancedInheritanceCalculationEngine {
           fraction: remainder,
           count: 1,
           reason: 'الجد يرث الباقي (يَحجب الإخوة)',
-          addToExisting: true,
+          addToExisting: grandfatherHasFixed,
         });
         return asabaShares;
       } else {
@@ -1043,7 +1176,7 @@ export class EnhancedInheritanceCalculationEngine {
           fraction: remainder,
           count: 1,
           reason: 'الجد يرث الباقي',
-          addToExisting: true,
+          addToExisting: grandfatherHasFixed,
         });
         return asabaShares;
       }
@@ -1103,28 +1236,70 @@ export class EnhancedInheritanceCalculationEngine {
       return asabaShares;
     }
 
-    if (heirs.uncle_paternal && heirs.uncle_paternal > 0) {
+    // ===== Sister as asaba-with-others (H8) =====
+    // Full sister becomes asaba-with-others when there are female descendants
+    if (
+      (heirs.full_sister || 0) > 0 &&
+      !(heirs.full_brother || 0) &&
+      this.hasFemaleDescendants() &&
+      !(heirs.father || 0)
+    ) {
       asabaShares.push({
-        key: 'uncle_paternal',
-        name: 'العم',
-        type: 'تعصيب',
-        fraction: remainder.divide(heirs.uncle_paternal),
-        count: heirs.uncle_paternal || 0,
-        reason: 'العم يرث الباقي',
+        key: 'full_sister',
+        name: (heirs.full_sister || 0) > 1 ? 'الأخوات الشقيقات' : 'الأخت الشقيقة',
+        type: 'تعصيب مع الغير',
+        fraction: remainder,
+        count: heirs.full_sister || 0,
+        reason: 'عاصبة مع الغير لوجود فرع وارث أنثى',
       });
       return asabaShares;
     }
 
-    if (heirs.nephew_from_brother && heirs.nephew_from_brother > 0) {
+    // Paternal sister as asaba-with-others when female descendants and no full siblings
+    if (
+      (heirs.half_sister_paternal || 0) > 0 &&
+      !(heirs.half_brother_paternal || 0) &&
+      !(heirs.full_brother || 0) &&
+      !(heirs.full_sister || 0) &&
+      this.hasFemaleDescendants() &&
+      !(heirs.father || 0)
+    ) {
       asabaShares.push({
-        key: 'nephew_from_brother',
-        name: 'ابن الأخ',
-        type: 'تعصيب',
-        fraction: remainder.divide(heirs.nephew_from_brother),
-        count: heirs.nephew_from_brother || 0,
-        reason: 'ابن الأخ يرث الباقي',
+        key: 'half_sister_paternal',
+        name: (heirs.half_sister_paternal || 0) > 1 ? 'الأخوات لأب' : 'الأخت لأب',
+        type: 'تعصيب مع الغير',
+        fraction: remainder,
+        count: heirs.half_sister_paternal || 0,
+        reason: 'عاصبة مع الغير لوجود فرع وارث أنثى',
       });
       return asabaShares;
+    }
+
+    // ===== Distant asaba hierarchy (M4) - 6 levels =====
+    const distantAsabaOrder: Array<{ key: keyof HeirsData; name: string }> = [
+      { key: 'nephew_from_brother', name: 'ابن الأخ الشقيق' },
+      { key: 'full_nephew' as keyof HeirsData, name: 'ابن الأخ الشقيق' },
+      { key: 'paternal_nephew' as keyof HeirsData, name: 'ابن الأخ لأب' },
+      { key: 'uncle_paternal', name: 'العم الشقيق' },
+      { key: 'full_uncle' as keyof HeirsData, name: 'العم الشقيق' },
+      { key: 'paternal_uncle' as keyof HeirsData, name: 'العم لأب' },
+      { key: 'full_cousin' as keyof HeirsData, name: 'ابن العم الشقيق' },
+      { key: 'paternal_cousin' as keyof HeirsData, name: 'ابن العم لأب' },
+    ];
+
+    for (const { key, name } of distantAsabaOrder) {
+      const count = (heirs[key] as number) || 0;
+      if (count > 0) {
+        asabaShares.push({
+          key: key as string,
+          name,
+          type: 'تعصيب',
+          fraction: remainder,
+          count,
+          reason: `${name} يرث الباقي`,
+        });
+        return asabaShares;
+      }
     }
 
     return asabaShares;
@@ -1135,9 +1310,16 @@ export class EnhancedInheritanceCalculationEngine {
       return shares;
     }
 
-    const eligible = shares.filter(
-      (s) => s.key !== 'husband' && s.key !== 'wife' && !s.type.includes('تعصيب')
-    );
+    // Check if spouse should receive radd (madhab-dependent)
+    const spouseRaddEnabled = this.getMadhabRule('spouse_radd') === true;
+
+    const eligible = shares.filter((s) => {
+      if (s.type.includes('تعصيب')) return false;
+      if (s.key === 'husband' || s.key === 'wife') {
+        return spouseRaddEnabled;
+      }
+      return true;
+    });
 
     if (eligible.length === 0) {
       return shares;
@@ -1146,7 +1328,9 @@ export class EnhancedInheritanceCalculationEngine {
     this.specialCases.push({
       type: 'radd',
       name: 'الرد',
-      description: 'توزيع الفائض على أصحاب الفروض',
+      description: spouseRaddEnabled
+        ? 'توزيع الفائض على أصحاب الفروض بما فيهم الزوج/الزوجة'
+        : 'توزيع الفائض على أصحاب الفروض ما عدا الزوج/الزوجة',
     });
 
     const totalEligible = this.sumFractions(eligible.map((s) => s.fraction));
@@ -1401,12 +1585,52 @@ export class EnhancedInheritanceCalculationEngine {
     return result;
   }
 
+  private hasMaleDescendants(): boolean {
+    if (this.memo.hasMaleDescendants !== undefined) {
+      return this.memo.hasMaleDescendants;
+    }
+    const result = (this.heirs.son || 0) > 0 || (this.heirs.grandson || 0) > 0;
+    this.memo.hasMaleDescendants = result;
+    return result;
+  }
+
+  private hasFemaleDescendants(): boolean {
+    if (this.memo.hasFemaleDescendants !== undefined) {
+      return this.memo.hasFemaleDescendants;
+    }
+    const result = (this.heirs.daughter || 0) > 0 || (this.heirs.granddaughter || 0) > 0;
+    this.memo.hasFemaleDescendants = result;
+    return result;
+  }
+
+  // Used by hijab system via getMadhabRule checks
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected hasMaleAscendant(): boolean {
+    if (this.memo.hasMaleAscendant !== undefined) {
+      return this.memo.hasMaleAscendant;
+    }
+    const result = (this.heirs.father || 0) > 0 || (this.heirs.grandfather || 0) > 0;
+    this.memo.hasMaleAscendant = result;
+    return result;
+  }
+
+  private getAllSiblingsCount(): number {
+    if (this.memo.allSiblingsCount !== undefined) {
+      return this.memo.allSiblingsCount;
+    }
+    const value = this.getSiblingsCount(this.heirs);
+    this.memo.allSiblingsCount = value;
+    return value;
+  }
+
   private isUmariyyah(heirs: HeirsData): boolean {
     const hasSpouse = (heirs.husband || 0) > 0 || (heirs.wife || 0) > 0;
     const hasParents = (heirs.father || 0) > 0 && (heirs.mother || 0) > 0;
-    const hasDescendants = this.hasDescendants();
+    const noDescendants = !this.hasDescendants();
+    const noSiblings = this.getAllSiblingsCount() === 0;
+    const noGrandfather = (heirs.grandfather || 0) === 0;
 
-    return hasSpouse && hasParents && !hasDescendants;
+    return hasSpouse && hasParents && noDescendants && noSiblings && noGrandfather;
   }
 
   private getSiblingsCount(heirs: HeirsData): number {
@@ -1486,10 +1710,16 @@ export class EnhancedInheritanceCalculationEngine {
       granddaughter: heirs.granddaughter || 0,
       nephew_from_brother: heirs.nephew_from_brother || 0,
       niece_from_brother: heirs.niece_from_brother || 0,
+      full_nephew: heirs.full_nephew || 0,
+      paternal_nephew: heirs.paternal_nephew || 0,
       uncle_paternal: heirs.uncle_paternal || 0,
       uncle_maternal: heirs.uncle_maternal || 0,
+      full_uncle: heirs.full_uncle || 0,
+      paternal_uncle: heirs.paternal_uncle || 0,
       aunt_paternal: heirs.aunt_paternal || 0,
       aunt_maternal: heirs.aunt_maternal || 0,
+      full_cousin: heirs.full_cousin || 0,
+      paternal_cousin: heirs.paternal_cousin || 0,
       daughter_son: heirs.daughter_son || 0,
       daughter_daughter: heirs.daughter_daughter || 0,
       sister_children: heirs.sister_children || 0,
