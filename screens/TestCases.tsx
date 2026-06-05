@@ -166,7 +166,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               color: selectedCategory === null ? theme.colors.onPrimary : theme.colors.text.primary,
             }}
           >
-            All
+            {t('all')}
           </Text>
         </TouchableOpacity>
         {categories.map((category) => (
@@ -261,7 +261,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                       theme.typography.caption,
                     ]}
                   >
-                    Popular
+                    {t('popular')}
                   </Text>
                 </View>
               )}
@@ -287,7 +287,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   {t('heirs')}:{' '}
                 </Text>
                 <Text style={[styles.detailValue, { color: theme.colors.text.primary }]}>
-                  {template.heirs.length} {template.heirs.length === 1 ? 'heir' : 'heirs'}
+                  {template.heirs.length === 1 ? t('heir_count_one') : t('heir_count_other').replace('%{count}', String(template.heirs.length))}
                 </Text>
               </View>
 
@@ -309,7 +309,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                     { color: theme.colors.text.secondary, marginTop: theme.spacing.sm },
                   ]}
                 >
-                  Note: {template.notes}
+                  {t('note')}: {template.notes}
                 </Text>
               )}
             </TouchableOpacity>
