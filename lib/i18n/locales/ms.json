@@ -401,7 +401,6 @@
   "currency_symbol": "$",
 
   "pdf_report_title": "Laporan Pusaka",
-  "export_error_title": "Ralat",
   "export_error_data_required": "Data harta pusaka dan waris diperlukan untuk eksport Excel",
   "export_success_csv": "Fail CSV berjaya dieksport",
   "export_error_csv": "Gagal mengeksport ke format CSV",
@@ -419,7 +418,10 @@
   "pdf_distribution_heading": "Pengagihan",
   "pdf_footer": "Dihasilkan oleh Aplikasi Merath - %{date}",
 
-  "feedback_email_subject": "Maklum Balas Merath",
+  "fiqh_hanafi_radd": "Mazhab Hanafi menggunakan Radd (pulangan) kepada pasangan jika ada lebihan harta.",
+  "fiqh_maliki_radd": "Mazhab Maliki menggunakan Radd kepada pasangan.",
+  "fiqh_shafii_radd": "Mazhab Syafii TIDAK menggunakan Radd kepada pasangan; lebihan pergi ke perbendaharaan.",
+  "fiqh_hanbali_radd": "Hanbali TIDAK menggunakan Radd kepada pasangan.",
 
   "step_type_standard_title": "Agihan Standard",
   "step_type_standard_desc": "Mengagihkan harta mengikut bahagian tetap dan asabah",
@@ -436,10 +438,6 @@
   "step_type_blood_relatives_title": "Kerabat Darah",
   "step_type_blood_relatives_desc": "Mengagihkan baki kepada saudara sedarah (Dhawu al-Arham)",
 
-  "verse_arabic_label": "Teks Arab",
-  "verse_translation_label": "Terjemahan (%{language})",
-  "verse_source_label": "Sumber: %{source}",
-
   "a11y_current_language": "Bahasa semasa: %{language}. Ketik untuk tukar.",
   "a11y_select_language": "%{language}. Ketik untuk pilih bahasa ini.",
   "a11y_dark_mode_enabled": "Mod gelap diaktifkan. Ketik untuk nyahaktif.",
@@ -455,8 +453,7 @@
   "a11y_apply_template": "%{description}. Ketik untuk gunakan templat ini.",
   "a11y_history_entry": "%{caseName} – mazhab %{madhab}.",
   "a11y_history_hint": "%{count} waris. Ketik untuk melihat langkah pengiraan.",
-  "a11y_dismiss_button": "Faham",
-  "a11y_heir_name_fallback": "Tidak tersedia",
+  "a11y_dismiss_tooltip": "Faham",
   "a11y_decrease": "Kurangkan",
   "a11y_decrease_hint": "Kurangkan nilai dari %{value} ke %{next}. Minimum adalah %{min}.",
   "a11y_current_value": "Nilai semasa: %{value}",

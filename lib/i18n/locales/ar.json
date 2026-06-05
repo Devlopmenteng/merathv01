@@ -401,7 +401,6 @@
   "currency_symbol": "$",
 
   "pdf_report_title": "تقرير الميراث",
-  "export_error_title": "خطأ",
   "export_error_data_required": "بيانات التركة والورثة مطلوبة للتصدير إلى Excel",
   "export_success_csv": "تم تصدير ملف CSV بنجاح",
   "export_error_csv": "فشل تصدير الملف إلى صيغة CSV",
@@ -419,7 +418,6 @@
   "pdf_distribution_heading": "التوزيع",
   "pdf_footer": "تم إنشاء هذا التقرير بواسطة تطبيق ميراث - %{date}",
 
-  "feedback_email_subject": "ملاحظات ميراث",
 
   "step_type_standard_title": "توزيع قياسي",
   "step_type_standard_desc": "توزيع التركة حسب الفروض والتعصيب",
@@ -436,9 +434,6 @@
   "step_type_blood_relatives_title": "ذوو الأرحام",
   "step_type_blood_relatives_desc": "توزيع الباقي على ذوي الأرحام",
 
-  "verse_arabic_label": "النص العربي",
-  "verse_translation_label": "الترجمة (%{language})",
-  "verse_source_label": "المصدر: %{source}",
 
   "a11y_current_language": "اللغة الحالية: %{language}. اضغط للتغيير.",
   "a11y_select_language": "%{language}. اضغط لاختيار هذه اللغة.",
@@ -455,8 +450,11 @@
   "a11y_apply_template": "%{description}. اضغط لتطبيق هذا القالب.",
   "a11y_history_entry": "%{caseName} – مذهب %{madhab}.",
   "a11y_history_hint": "%{count} ورثة. اضغط لعرض خطوات الحساب.",
-  "a11y_dismiss_button": "فهمت",
-  "a11y_heir_name_fallback": "غير متاح",
+  "a11y_dismiss_tooltip": "فهمت",
+  "fiqh_hanafi_radd": "المذهب الحنفي يطبق الرد على الزوج/الزوجة إذا بقي فائض.",
+  "fiqh_maliki_radd": "المذهب المالكي يطبق الرد على الزوج/الزوجة.",
+  "fiqh_shafii_radd": "المذهب الشافعي لا يطبق الرد على الزوج/الزوجة؛ الفائض يذهب لبيت المال.",
+  "fiqh_hanbali_radd": "المذهب الحنبلي لا يطبق الرد على الزوج/الزوجة.",
   "a11y_decrease": "تقليل",
   "a11y_decrease_hint": "تقليل القيمة من %{value} إلى %{next}. الحد الأدنى %{min}.",
   "a11y_current_value": "القيمة الحالية: %{value}",

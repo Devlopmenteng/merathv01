@@ -401,7 +401,6 @@
   "currency_symbol": "$",
 
   "pdf_report_title": "وراثت کی رپورٹ",
-  "export_error_title": "خرابی",
   "export_error_data_required": "ایکسل ایکسپورٹ کے لیے جائیداد اور وارثوں کا ڈیٹا درکار ہے",
   "export_success_csv": "CSV فائل کامیابی سے ایکسپورٹ ہو گئی",
   "export_error_csv": "CSV فارمیٹ میں ایکسپورٹ ناکام",
@@ -419,8 +418,6 @@
   "pdf_distribution_heading": "تقسیم",
   "pdf_footer": "میراث ایپ نے تیار کیا - %{date}",
 
-  "feedback_email_subject": "میراث فیڈ بیک",
-
   "step_type_standard_title": "معیاری تقسیم",
   "step_type_standard_desc": "فروض اور عصبہ کے مطابق جائیداد کی تقسیم",
   "step_type_awl_title": "عول (اضافہ)",
@@ -435,10 +432,6 @@
   "step_type_treasury_desc": "کوئی وارث نہیں – ترکہ بیت المال کو جاتا ہے",
   "step_type_blood_relatives_title": "ذوی الارحام",
   "step_type_blood_relatives_desc": "باقی ذوی الارحام میں تقسیم",
-
-  "verse_arabic_label": "عربی متن",
-  "verse_translation_label": "ترجمہ (%{language})",
-  "verse_source_label": "ماخذ: %{source}",
 
   "a11y_current_language": "موجودہ زبان: %{language}۔ تبدیل کرنے کے لیے تھپتھپائیں۔",
   "a11y_select_language": "%{language}۔ اس زبان کو منتخب کرنے کے لیے تھپتھپائیں۔",
@@ -455,8 +448,11 @@
   "a11y_apply_template": "%{description}۔ اس ٹیمپلیٹ کو لاگو کرنے کے لیے تھپتھپائیں۔",
   "a11y_history_entry": "%{caseName} – %{madhab} مذہب۔",
   "a11y_history_hint": "%{count} ورثاء۔ حسابی مراحل دیکھنے کے لیے تھپتھپائیں۔",
-  "a11y_dismiss_button": "سمجھ گیا",
-  "a11y_heir_name_fallback": "دستیاب نہیں",
+  "a11y_dismiss_tooltip": "سمجھ گیا",
+  "fiqh_hanafi_radd": "حنفی مذہب میں اگر فاضل جائیداد ہو تو شریک حیات پر رد لاگو ہوتا ہے۔",
+  "fiqh_maliki_radd": "مالکی مذہب شریک حیات پر رد لاگو کرتا ہے۔",
+  "fiqh_shafii_radd": "شافعی مذہب شریک حیات پر رد نہیں لاگو کرتا؛ فاضل بیت المال میں جاتا ہے۔",
+  "fiqh_hanbali_radd": "حنبلی مذہب شریک حیات پر رد نہیں لاگو کرتا۔",
   "a11y_decrease": "کم کریں",
   "a11y_decrease_hint": "%{value} سے %{next} تک قیمت کم کریں۔ کم از کم %{min} ہے۔",
   "a11y_current_value": "موجودہ قیمت: %{value}",
