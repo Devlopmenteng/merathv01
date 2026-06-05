@@ -41,7 +41,9 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           accessibilityLabel={t('back')}
           accessibilityRole="button"
         >
-          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
+          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+            {backArrow()} {t('back')}
+          </Text>
         </TouchableOpacity>
         <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
         <Text style={[theme.typography.body, { marginTop: theme.spacing.md }]}>
@@ -66,7 +68,9 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+          {backArrow()} {t('back')}
+        </Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
@@ -131,7 +135,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     marginEnd: theme.spacing.md,
                   }}
                 >
-                  <Text style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.button]}>
+                  <Text
+                    style={[
+                      { color: theme.colors.onPrimary, fontWeight: 'bold' },
+                      theme.typography.button,
+                    ]}
+                  >
                     {index + 1}
                   </Text>
                 </View>
@@ -140,7 +149,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                 </Text>
               </View>
 
-              <Text style={[theme.typography.body, { marginStart: 48, color: theme.colors.text.secondary }]}>
+              <Text
+                style={[
+                  theme.typography.body,
+                  { marginStart: 48, color: theme.colors.text.secondary },
+                ]}
+              >
                 {step.description}
               </Text>
             </View>

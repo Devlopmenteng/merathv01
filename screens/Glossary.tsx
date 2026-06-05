@@ -60,18 +60,34 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           }}
         >
           <Text
-            style={[theme.typography.h3, { color: theme.colors.secondary, marginBottom: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+            style={[
+              theme.typography.h3,
+              {
+                color: theme.colors.secondary,
+                marginBottom: 4,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
           >
             {item.surah} {item.verseNumber}
           </Text>
           <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8, writingDirection: 'rtl' }}>
             {item.arabic}
           </Text>
-          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
             {item.translation}
           </Text>
           <Text
-            style={[theme.typography.caption, { marginTop: 8, color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+            style={[
+              theme.typography.caption,
+              {
+                marginTop: 8,
+                color: theme.colors.outline,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
           >
             {t('topic')}: {item.topic}
           </Text>
@@ -94,12 +110,18 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           }}
         >
           <Text
-            style={[{ marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.body]}
+            style={[
+              { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              theme.typography.body,
+            ]}
           >
             {item.text}
           </Text>
           <Text
-            style={[theme.typography.caption, { color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+            style={[
+              theme.typography.caption,
+              { color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
           >
             {item.reference}
           </Text>
@@ -117,7 +139,10 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         accessibilityRole="button"
       >
         <Text
-          style={[{ color: theme.colors.primary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.button]}
+          style={[
+            { color: theme.colors.primary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            theme.typography.button,
+          ]}
         >
           {backArrow()} {t('back_to_home')}
         </Text>

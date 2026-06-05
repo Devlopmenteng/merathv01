@@ -245,7 +245,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           }}
         >
           <Text
-            style={{ color: 'green', textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
+            style={{
+              color: 'green',
+              textAlign: 'center',
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            }}
           >
             ✅ {t('no_significant_differences')}
           </Text>
@@ -356,7 +360,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                         {data.percentage}
                       </Text>
                       <Text
-                        style={[{ fontWeight: 'bold', color: theme.colors.primary }, theme.typography.caption]}
+                        style={[
+                          { fontWeight: 'bold', color: theme.colors.primary },
+                          theme.typography.caption,
+                        ]}
                       >
                         {data.amount}
                       </Text>

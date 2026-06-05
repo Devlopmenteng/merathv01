@@ -237,7 +237,9 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               borderRadius: 20,
             }}
           >
-            <Text style={[{ color: theme.colors.primary }, theme.typography.caption]}>{c.name}</Text>
+            <Text style={[{ color: theme.colors.primary }, theme.typography.caption]}>
+              {c.name}
+            </Text>
           </View>
         ))}
       </View>
@@ -366,7 +368,9 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               marginBottom: theme.spacing.lg,
             }}
           >
-            <Text style={[{ color: theme.colors.onPrimary, marginBottom: 4 }, theme.typography.button]}>
+            <Text
+              style={[{ color: theme.colors.onPrimary, marginBottom: 4 }, theme.typography.button]}
+            >
               {t('netEstate')}
             </Text>
             <AnimatedNumber
@@ -494,7 +498,9 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             accessibilityRole="button"
           >
             <Text style={theme.typography.h2}>{t('steps')}</Text>
-            <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{showSteps ? '▲' : '▼'}</Text>
+            <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+              {showSteps ? '▲' : '▼'}
+            </Text>
           </TouchableOpacity>
           {showSteps && (
             <View style={{ marginTop: theme.spacing.lg, marginBottom: theme.spacing.lg }}>

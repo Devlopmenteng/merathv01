@@ -2,7 +2,10 @@
  * @deprecated Use formatCurrency from '../currency' for display.
  * This formatter is kept for Input component currency masking.
  */
-export const formatCurrencyInput = (value: string | number, currencySymbol: string = '$'): string => {
+export const formatCurrencyInput = (
+  value: string | number,
+  currencySymbol: string = '$'
+): string => {
   if (value === '' || value === undefined || value === null) return '';
   const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]/g, '')) : value;
   if (isNaN(num)) return '';

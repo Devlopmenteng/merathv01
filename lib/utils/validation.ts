@@ -23,7 +23,10 @@ export function validateMonetaryValue(value: number): { valid: boolean; error?: 
   }
 
   if (value > APP_DEFAULTS.MAX_ESTATE_VALUE) {
-    return { valid: false, error: t('value_exceeds_max').replace('%{max}', String(APP_DEFAULTS.MAX_ESTATE_VALUE)) };
+    return {
+      valid: false,
+      error: t('value_exceeds_max').replace('%{max}', String(APP_DEFAULTS.MAX_ESTATE_VALUE)),
+    };
   }
 
   // Check decimal places
@@ -52,7 +55,10 @@ export function validateHeirCount(
 
   // Check against heir-specific limits
   if (heirType === 'wife' && count > APP_DEFAULTS.MAX_WIVES) {
-    return { valid: false, error: t('max_wives').replace('%{count}', String(APP_DEFAULTS.MAX_WIVES)) };
+    return {
+      valid: false,
+      error: t('max_wives').replace('%{count}', String(APP_DEFAULTS.MAX_WIVES)),
+    };
   }
 
   if (heirType === 'husband' && count > APP_DEFAULTS.MAX_HUSBANDS) {
@@ -60,7 +66,10 @@ export function validateHeirCount(
   }
 
   if (count > APP_DEFAULTS.MAX_HEIR_COUNT) {
-    return { valid: false, error: t('max_heirs_per_type').replace('%{count}', String(APP_DEFAULTS.MAX_HEIR_COUNT)) };
+    return {
+      valid: false,
+      error: t('max_heirs_per_type').replace('%{count}', String(APP_DEFAULTS.MAX_HEIR_COUNT)),
+    };
   }
 
   return { valid: true };

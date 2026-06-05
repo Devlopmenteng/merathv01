@@ -81,13 +81,21 @@ export default function RootNavigator() {
             component={Comparison}
             options={() => ({ title: t('compare') })}
           />
-          <Stack.Screen name="Settings" component={Settings} options={() => ({ title: t('settings') })} />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={() => ({ title: t('settings') })}
+          />
           <Stack.Screen
             name="History"
             component={History}
             options={() => ({ title: t('history_screen_title') })}
           />
-          <Stack.Screen name="Glossary" component={Glossary} options={() => ({ title: t('glossary') })} />
+          <Stack.Screen
+            name="Glossary"
+            component={Glossary}
+            options={() => ({ title: t('glossary') })}
+          />
           <Stack.Screen
             name="CalculationSteps"
             component={CalculationSteps as any}

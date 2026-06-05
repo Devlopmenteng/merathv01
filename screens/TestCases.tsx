@@ -112,7 +112,9 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>{backArrow()} {t('back')}</Text>
+        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+          {backArrow()} {t('back')}
+        </Text>
       </TouchableOpacity>
 
       <Text style={theme.typography.h1}>{t('test_cases')}</Text>
@@ -267,15 +269,30 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                 </View>
               )}
 
-              <Text style={[theme.typography.h3, { color: theme.colors.text.primary, marginBottom: theme.spacing.xs }]}>
+              <Text
+                style={[
+                  theme.typography.h3,
+                  { color: theme.colors.text.primary, marginBottom: theme.spacing.xs },
+                ]}
+              >
                 {template.name}
               </Text>
-              <Text style={[theme.typography.body, { color: theme.colors.text.secondary, marginBottom: theme.spacing.sm }]}>
+              <Text
+                style={[
+                  theme.typography.body,
+                  { color: theme.colors.text.secondary, marginBottom: theme.spacing.sm },
+                ]}
+              >
                 {template.description}
               </Text>
 
               <View style={styles.detailsRow}>
-                <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
+                <Text
+                  style={[
+                    theme.typography.body,
+                    { fontWeight: '500', color: theme.colors.text.secondary },
+                  ]}
+                >
                   {t('estate')}:{' '}
                 </Text>
                 <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
@@ -284,17 +301,29 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               </View>
 
               <View style={styles.detailsRow}>
-                <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
+                <Text
+                  style={[
+                    theme.typography.body,
+                    { fontWeight: '500', color: theme.colors.text.secondary },
+                  ]}
+                >
                   {t('heirs')}:{' '}
                 </Text>
                 <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
-                  {template.heirs.length === 1 ? t('heir_count_one') : t('heir_count_other').replace('%{count}', String(template.heirs.length))}
+                  {template.heirs.length === 1
+                    ? t('heir_count_one')
+                    : t('heir_count_other').replace('%{count}', String(template.heirs.length))}
                 </Text>
               </View>
 
               {template.recommendedMadhab && (
                 <View style={styles.detailsRow}>
-                  <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
+                  <Text
+                    style={[
+                      theme.typography.body,
+                      { fontWeight: '500', color: theme.colors.text.secondary },
+                    ]}
+                  >
                     {t('recommended_madhab')}:{' '}
                   </Text>
                   <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
@@ -307,7 +336,11 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                 <Text
                   style={[
                     theme.typography.caption,
-                    { fontStyle: 'italic', color: theme.colors.text.secondary, marginTop: theme.spacing.sm },
+                    {
+                      fontStyle: 'italic',
+                      color: theme.colors.text.secondary,
+                      marginTop: theme.spacing.sm,
+                    },
                   ]}
                 >
                   {t('note')}: {template.notes}
@@ -328,7 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginEnd: 8,
     borderWidth: 1,
-  },  // chip uses fixed values intentionally for pill-shape design
+  }, // chip uses fixed values intentionally for pill-shape design
   templateCard: {
     overflow: 'hidden',
   },

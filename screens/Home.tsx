@@ -108,7 +108,10 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               <Text
                 style={[
                   theme.typography.h3,
-                  { color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface, marginBottom: theme.spacing.xs },
+                  {
+                    color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface,
+                    marginBottom: theme.spacing.xs,
+                  },
                 ]}
               >
                 {item.title}
