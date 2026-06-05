@@ -135,12 +135,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     {index + 1}
                   </Text>
                 </View>
-                <Text style={[styles.stepTitle, { color: theme.colors.text.primary }]}>
+                <Text style={[theme.typography.h3, { flex: 1, color: theme.colors.text.primary }]}>
                   {step.title}
                 </Text>
               </View>
 
-              <Text style={[styles.stepDescription, { color: theme.colors.text.secondary }]}>
+              <Text style={[theme.typography.body, { marginStart: 48, color: theme.colors.text.secondary }]}>
                 {step.description}
               </Text>
             </View>
@@ -181,7 +181,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
               <Text
                 key={index}
                 style={[
-                  styles.hijabLogItem,
+                  theme.typography.body,
                   { color: theme.colors.text.secondary, marginBottom: theme.spacing.xs },
                 ]}
               >
@@ -198,19 +198,5 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
 const styles = StyleSheet.create({
   stepCard: {
     overflow: 'hidden',
-  },
-  stepTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    flex: 1,
-  },
-  stepDescription: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginStart: 48,
-  },
-  hijabLogItem: {
-    fontSize: 16,
-    lineHeight: 24,
   },
 });

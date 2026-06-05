@@ -87,32 +87,35 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
         {menuItems.map((item) => (
           <TouchableOpacity
             key={item.screen}
-            style={[
-              styles.menuItem,
-              {
-                backgroundColor: item.primary ? theme.colors.primary : theme.colors.surface,
-                borderColor: theme.colors.outline,
-                ...theme.elevation.small,
-              },
-            ]}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              padding: theme.spacing.md,
+              borderRadius: theme.borderRadius.md,
+              marginBottom: theme.spacing.md,
+              borderWidth: 1,
+              backgroundColor: item.primary ? theme.colors.primary : theme.colors.surface,
+              borderColor: theme.colors.outline,
+              ...theme.elevation.small,
+            }}
             onPress={() => navigation.navigate(item.screen)}
             accessibilityLabel={item.title}
             accessibilityHint={item.description}
             accessibilityRole="button"
           >
-            <Text style={styles.icon}>{item.icon}</Text>
+            <Text style={{ fontSize: 32, marginEnd: theme.spacing.md }}>{item.icon}</Text>
             <View style={styles.menuItemContent}>
               <Text
                 style={[
-                  styles.menuItemTitle,
-                  { color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface },
+                  theme.typography.h3,
+                  { color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface, marginBottom: theme.spacing.xs },
                 ]}
               >
                 {item.title}
               </Text>
               <Text
                 style={[
-                  styles.menuItemDescription,
+                  theme.typography.body,
                   {
                     color: item.primary
                       ? theme.colors.onPrimary + 'CC'
@@ -134,27 +137,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-  },
-  icon: {
-    fontSize: 32,
-    marginEnd: 16,
-  },
   menuItemContent: {
     flex: 1,
-  },
-  menuItemTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  menuItemDescription: {
-    fontSize: 16,
   },
 });

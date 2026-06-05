@@ -267,37 +267,37 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                 </View>
               )}
 
-              <Text style={[styles.templateName, { color: theme.colors.text.primary }]}>
+              <Text style={[theme.typography.h3, { color: theme.colors.text.primary, marginBottom: theme.spacing.xs }]}>
                 {template.name}
               </Text>
-              <Text style={[styles.templateDescription, { color: theme.colors.text.secondary }]}>
+              <Text style={[theme.typography.body, { color: theme.colors.text.secondary, marginBottom: theme.spacing.sm }]}>
                 {template.description}
               </Text>
 
               <View style={styles.detailsRow}>
-                <Text style={[styles.detailLabel, { color: theme.colors.text.secondary }]}>
+                <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
                   {t('estate')}:{' '}
                 </Text>
-                <Text style={[styles.detailValue, { color: theme.colors.text.primary }]}>
+                <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
                   ${template.estate.total.toLocaleString()}
                 </Text>
               </View>
 
               <View style={styles.detailsRow}>
-                <Text style={[styles.detailLabel, { color: theme.colors.text.secondary }]}>
+                <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
                   {t('heirs')}:{' '}
                 </Text>
-                <Text style={[styles.detailValue, { color: theme.colors.text.primary }]}>
+                <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
                   {template.heirs.length === 1 ? t('heir_count_one') : t('heir_count_other').replace('%{count}', String(template.heirs.length))}
                 </Text>
               </View>
 
               {template.recommendedMadhab && (
                 <View style={styles.detailsRow}>
-                  <Text style={[styles.detailLabel, { color: theme.colors.text.secondary }]}>
+                  <Text style={[theme.typography.body, { fontWeight: '500', color: theme.colors.text.secondary }]}>
                     {t('recommended_madhab')}:{' '}
                   </Text>
-                  <Text style={[styles.detailValue, { color: theme.colors.primary }]}>
+                  <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
                     {template.recommendedMadhab}
                   </Text>
                 </View>
@@ -306,8 +306,8 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               {template.notes && (
                 <Text
                   style={[
-                    styles.templateNotes,
-                    { color: theme.colors.text.secondary, marginTop: theme.spacing.sm },
+                    theme.typography.caption,
+                    { fontStyle: 'italic', color: theme.colors.text.secondary, marginTop: theme.spacing.sm },
                   ]}
                 >
                   {t('note')}: {template.notes}
@@ -328,32 +328,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginEnd: 8,
     borderWidth: 1,
-  },
+  },  // chip uses fixed values intentionally for pill-shape design
   templateCard: {
     overflow: 'hidden',
-  },
-  templateName: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  templateDescription: {
-    fontSize: 16,
-    marginBottom: 8,
   },
   detailsRow: {
     flexDirection: 'row',
     marginBottom: 4,
-  },
-  detailLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  detailValue: {
-    fontSize: 16,
-  },
-  templateNotes: {
-    fontSize: 12,
-    fontStyle: 'italic',
   },
 });
