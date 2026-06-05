@@ -3,6 +3,7 @@ import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { t } from '../lib/i18n';
+import { lightTheme } from '../lib/constants/theme';
 
 const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
 const EstateSetup = lazy(() =>
@@ -46,7 +47,7 @@ const screenOptions = {
 
 const LoadingView = () => (
   <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#0A5E4A" />
+    <ActivityIndicator size="large" color={lightTheme.colors.primary} />
   </View>
 );
 

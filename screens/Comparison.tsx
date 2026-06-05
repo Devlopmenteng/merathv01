@@ -205,7 +205,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
       </Text>
 
       {comparisonSummary.totalMadhhabsDiffering === 0 ? (
-        <Text style={{ color: 'green' }}>✅ {t('all_madhhabs_consistent')}</Text>
+        <Text style={{ color: theme.colors.success }}>✅ {t('all_madhhabs_consistent')}</Text>
       ) : (
         <View>
           <Text style={{ marginBottom: 8 }}>
@@ -246,7 +246,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         >
           <Text
             style={{
-              color: 'green',
+              color: theme.colors.success,
               textAlign: 'center',
               writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
             }}
@@ -291,7 +291,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               {diff.percentageDifference.toFixed(1)}%)
             </Text>
             {diff.isSignificant && (
-              <Text style={[{ color: 'orange', marginTop: 4 }, theme.typography.caption]}>
+              <Text style={[{ color: theme.colors.warning, marginTop: 4 }, theme.typography.caption]}>
                 ⚠️ {t('significant_difference')}
               </Text>
             )}
@@ -449,7 +449,8 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   paddingVertical: 8,
                   paddingHorizontal: 16,
                   borderRadius: 20,
-                  backgroundColor: selected === m ? theme.colors.madhab[m] : theme.colors.surfaceVariant,
+                  backgroundColor:
+                    selected === m ? theme.colors.madhab[m] : theme.colors.surfaceVariant,
                 }}
               >
                 <Text

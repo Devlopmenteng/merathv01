@@ -59,7 +59,7 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, { backgroundColor: theme.colors.backdrop }]}>
         <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
           <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('quick_templates')}</Text>
           <FlatList
@@ -93,7 +93,7 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    // backgroundColor set dynamically via theme.colors.backdrop
     justifyContent: 'center',
     alignItems: 'center',
   },

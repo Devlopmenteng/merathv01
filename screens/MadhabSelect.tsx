@@ -45,7 +45,7 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
             }}
             style={{
               backgroundColor: theme.colors.surface,
-              borderRadius: theme.radius.md,
+              borderRadius: theme.borderRadius.md,
               padding: theme.spacing.md,
               marginBottom: theme.spacing.md,
               borderLeftWidth: 6,

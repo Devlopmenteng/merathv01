@@ -80,7 +80,7 @@ export const FiqhRules = () => {
           key={madhab}
           style={{
             backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             padding: theme.spacing.md,
             marginBottom: theme.spacing.md,
             borderLeftWidth: 4,
@@ -106,7 +106,7 @@ export const FiqhRules = () => {
           key={idx}
           style={{
             backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             padding: theme.spacing.md,
             marginBottom: theme.spacing.md,
           }}

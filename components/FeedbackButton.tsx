@@ -4,8 +4,11 @@ import * as StoreReview from 'expo-store-review';
 import * as MailComposer from 'expo-mail-composer';
 import { showConfirm } from '../lib/utils/alerts';
 import { t } from '../lib/i18n';
+import { useAppTheme } from '../hooks/useAppTheme';
 
 export const FeedbackButton = () => {
+  const theme = useAppTheme();
+
   const handlePress = async () => {
     const can = await StoreReview.hasAction();
     if (can) {
@@ -23,9 +26,16 @@ export const FeedbackButton = () => {
   return (
     <TouchableOpacity
       onPress={handlePress}
-      style={{ padding: 12, backgroundColor: '#C5A04E', borderRadius: 8, marginVertical: 8 }}
+      style={{
+        padding: theme.spacing.md,
+        backgroundColor: theme.colors.secondary,
+        borderRadius: theme.borderRadius.sm,
+        marginVertical: theme.spacing.sm,
+      }}
     >
-      <Text style={{ color: 'white', textAlign: 'center' }}>{t('rate_us_send_feedback')}</Text>
+      <Text style={{ color: theme.colors.onSecondary, textAlign: 'center' }}>
+        {t('rate_us_send_feedback')}
+      </Text>
     </TouchableOpacity>
   );
 };

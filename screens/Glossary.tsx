@@ -27,7 +27,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         <View
           style={{
             backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             padding: theme.spacing.md,
             marginBottom: theme.spacing.md,
             borderLeftWidth: 4,
@@ -54,7 +54,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         <View
           style={{
             backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             padding: theme.spacing.md,
             marginBottom: theme.spacing.md,
           }}
@@ -104,7 +104,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
         <View
           style={{
             backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             padding: theme.spacing.md,
             marginBottom: theme.spacing.md,
           }}
@@ -152,7 +152,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             backgroundColor:
               activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -174,7 +174,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             backgroundColor:
               activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -196,7 +196,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             backgroundColor:
               activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -218,7 +218,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.borderRadius.md,
             backgroundColor:
               activeTab === 'fiqh' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',

@@ -39,7 +39,7 @@ export const EducationalTutorial = () => {
 
   return (
     <Modal transparent animationType="fade" visible={visible}>
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, { backgroundColor: theme.colors.backdrop }]}>
         <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
           <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 16 }]}>
             {t(slides[step].titleKey)}
@@ -66,7 +66,7 @@ export const EducationalTutorial = () => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    // backgroundColor set dynamically via theme.colors.backdrop
     justifyContent: 'center',
     alignItems: 'center',
   },

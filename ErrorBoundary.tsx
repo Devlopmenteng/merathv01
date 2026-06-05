@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showAlert } from './lib/utils/alerts';
 import { isInheritanceCalculationError, getUserFriendlyError } from './lib/engine/errors';
+import { lightTheme } from './lib/constants/theme';
 
 interface Props {
   children: ReactNode;
@@ -16,6 +17,8 @@ interface State {
   errorInfo: React.ErrorInfo | null;
 }
 
+const colors = lightTheme.colors;
+
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { hasError: false, error: null, errorInfo: null };
 
@@ -26,16 +29,13 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({ errorInfo });
 
-    // Log error details
     console.error('[ErrorBoundary]', error.message, error.stack);
     console.error('[ErrorBoundary] Component Stack:', errorInfo.componentStack);
 
-    // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
 
-    // Store error for debugging
     this.logErrorToStorage(error, errorInfo);
   }
 
@@ -53,7 +53,6 @@ export class ErrorBoundary extends Component<Props, State> {
       const logs = existingLogs ? JSON.parse(existingLogs) : [];
       logs.unshift(errorLog);
 
-      // Keep only last 10 errors
       if (logs.length > 10) logs.pop();
 
       await AsyncStorage.setItem('error_logs', JSON.stringify(logs));
@@ -73,7 +72,6 @@ export class ErrorBoundary extends Component<Props, State> {
     try {
       await AsyncStorage.clear();
       showAlert('تم إعادة التعيين', 'سيتم إعادة تشغيل التطبيق. اضغط موافق.');
-      // Reload the app (works in Expo)
       // @ts-ignore
       if (global?.Expo?.reloadApp) global.Expo.reloadApp();
       else if (typeof window !== 'undefined') window.location.reload();
@@ -90,13 +88,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      // Use custom fallback if provided
       if (this.props.fallback) {
         return this.props.fallback;
       }
 
       return (
-        <View style={{ flex: 1, backgroundColor: '#FFF5F5', padding: 20 }}>
+        <View style={{ flex: 1, backgroundColor: colors.errorLight, padding: 20 }}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
             <View style={{ alignItems: 'center', padding: 20 }}>
               <Text style={{ fontSize: 48, marginBottom: 16 }}>⚠️</Text>
@@ -104,7 +101,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 style={{
                   fontSize: 22,
                   fontWeight: 'bold',
-                  color: '#C53030',
+                  color: colors.error,
                   marginBottom: 12,
                   textAlign: 'center',
                 }}
@@ -112,7 +109,12 @@ export class ErrorBoundary extends Component<Props, State> {
                 حدث خطأ
               </Text>
               <Text
-                style={{ textAlign: 'center', marginBottom: 20, color: '#4A5568', lineHeight: 24 }}
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 20,
+                  color: colors.text.secondary,
+                  lineHeight: 24,
+                }}
               >
                 {this.getUserMessage()}
               </Text>
@@ -120,7 +122,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {__DEV__ && this.state.error && (
                 <View
                   style={{
-                    backgroundColor: '#EDF2F7',
+                    backgroundColor: colors.surfaceVariant,
                     padding: 12,
                     borderRadius: 8,
                     marginBottom: 20,
@@ -128,18 +130,29 @@ export class ErrorBoundary extends Component<Props, State> {
                   }}
                 >
                   <Text
-                    style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 8, color: '#2D3748' }}
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      marginBottom: 8,
+                      color: colors.text.primary,
+                    }}
                   >
                     Error Details (Development Mode):
                   </Text>
-                  <Text style={{ fontSize: 11, color: '#4A5568', fontFamily: 'monospace' }}>
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      color: colors.text.secondary,
+                      fontFamily: 'monospace',
+                    }}
+                  >
                     {this.state.error.message}
                   </Text>
                   {this.state.error.stack && (
                     <Text
                       style={{
                         fontSize: 10,
-                        color: '#718096',
+                        color: colors.text.disabled,
                         marginTop: 8,
                         fontFamily: 'monospace',
                       }}
@@ -155,12 +168,12 @@ export class ErrorBoundary extends Component<Props, State> {
                   onPress={this.handleReset}
                   style={{
                     padding: 14,
-                    backgroundColor: '#1B6B4A',
+                    backgroundColor: colors.primary,
                     borderRadius: 8,
                     alignItems: 'center',
                   }}
                 >
-                  <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>
+                  <Text style={{ color: colors.onPrimary, fontWeight: '600', fontSize: 16 }}>
                     إعادة تشغيل التطبيق
                   </Text>
                 </TouchableOpacity>
@@ -173,10 +186,10 @@ export class ErrorBoundary extends Component<Props, State> {
                     borderRadius: 8,
                     alignItems: 'center',
                     borderWidth: 1,
-                    borderColor: '#1B6B4A',
+                    borderColor: colors.primary,
                   }}
                 >
-                  <Text style={{ color: '#1B6B4A', fontWeight: '600', fontSize: 16 }}>
+                  <Text style={{ color: colors.primary, fontWeight: '600', fontSize: 16 }}>
                     تجاهل والمتابعة
                   </Text>
                 </TouchableOpacity>

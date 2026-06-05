@@ -23,7 +23,7 @@ export const OnboardingTooltip = () => {
   if (!visible) return null;
 
   return (
-    <View style={styles.overlay}>
+    <View style={[styles.overlay, { backgroundColor: theme.colors.backdrop }]}>
       <View style={[styles.tooltip, { backgroundColor: theme.colors.surface }]}>
         <Text style={theme.typography.body}>
           {t('tap_the_categories_to_add_family_members_use_the_steppers_to_set_their_count')}
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     start: 0,
     end: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    // backgroundColor set dynamically via theme.colors.backdrop
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 999,

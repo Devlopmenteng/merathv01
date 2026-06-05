@@ -96,11 +96,11 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
           onPress={captureAndShare}
           style={{
             padding: 12,
-            backgroundColor: theme.colors.success || '#4CAF50',
+            backgroundColor: theme.colors.success,
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: '#FFF' }}>{t('share_image')}</Text>
+          <Text style={{ color: theme.colors.onPrimary }}>{t('share_image')}</Text>
         </TouchableOpacity>
       </View>
     </View>

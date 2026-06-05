@@ -137,7 +137,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           style={{
             flex: 1,
             justifyContent: 'flex-end',
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: theme.colors.backdrop,
           }}
           onPress={() => setLanguageModalVisible(false)}
         >

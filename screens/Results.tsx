@@ -257,7 +257,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           style={{
             flexDirection: 'row',
             backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
-            borderRadius: theme.radius.sm,
+            borderRadius: theme.borderRadius.sm,
             paddingVertical: 8,
             marginBottom: 4,
           }}
@@ -307,7 +307,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
     theme.colors.surface,
     theme.colors.surfaceVariant,
     theme.colors.primary,
-    theme.radius.sm,
+    theme.borderRadius.sm,
   ]);
 
   if (loading || !result) return <ResultsSkeleton />;
@@ -342,7 +342,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               style={{
                 backgroundColor: theme.colors.warning,
                 padding: theme.spacing.md,
-                borderRadius: theme.radius.sm,
+                borderRadius: theme.borderRadius.sm,
                 marginBottom: theme.spacing.md,
               }}
             >
@@ -362,7 +362,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={{
-              borderRadius: theme.radius.lg,
+              borderRadius: theme.borderRadius.lg,
               padding: theme.spacing.lg,
               alignItems: 'center',
               marginBottom: theme.spacing.lg,

@@ -20,29 +20,12 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-// Color-blind friendly palette
-const COLOR_PALETTE = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#F7DC6F',
-  '#96CEB4',
-  '#FFB347',
-  '#6B5B95',
-  '#88B04B',
-  '#D4A5A5',
-  '#9B59B6',
-  '#3498DB',
-  '#E67E22',
-  '#2ECC71',
-  '#E74C3C',
-  '#1ABC9C',
-  '#F39C12',
-];
+
 
 export const PieChart = React.memo(
   ({ data, size = APP_DEFAULTS.CHART_SIZE }: { data: PieData[]; size?: number }) => {
     const theme = useAppTheme();
+    const chartPalette = theme.colors.chart;
     const total = useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
     const animValue = useRef(new Animated.Value(0)).current;
 
@@ -63,14 +46,14 @@ export const PieChart = React.memo(
         const valueAngle = total > 0 ? (item.value / total) * 360 : 0;
         const segment = {
           ...item,
-          color: item.color || COLOR_PALETTE[idx % COLOR_PALETTE.length],
+          color: item.color || chartPalette[idx % chartPalette.length],
           startAngle: cumulativeAngle,
           endAngle: cumulativeAngle + valueAngle,
         };
         cumulativeAngle += valueAngle;
         return segment;
       });
-    }, [data, total]);
+    }, [data, total, chartPalette]);
 
     if (total === 0) return null;
 
@@ -98,7 +81,7 @@ export const PieChart = React.memo(
                   <SvgText
                     x={labelPos.x}
                     y={labelPos.y}
-                    fill="#fff"
+                    fill={theme.colors.onPrimary}
                     fontSize={10}
                     fontWeight="bold"
                     textAnchor="middle"
