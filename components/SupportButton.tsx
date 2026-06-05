@@ -17,9 +17,7 @@ export const SupportButton = () => {
         marginVertical: theme.spacing.sm,
       }}
     >
-      <Text style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>
-        {t('_support_us')}
-      </Text>
+      <Text style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>{t('_support_us')}</Text>
     </TouchableOpacity>
   );
 };

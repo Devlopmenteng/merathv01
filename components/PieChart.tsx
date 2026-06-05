@@ -20,8 +20,6 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-
-
 export const PieChart = React.memo(
   ({ data, size = APP_DEFAULTS.CHART_SIZE }: { data: PieData[]; size?: number }) => {
     const theme = useAppTheme();

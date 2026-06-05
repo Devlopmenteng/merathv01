@@ -291,7 +291,9 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               {diff.percentageDifference.toFixed(1)}%)
             </Text>
             {diff.isSignificant && (
-              <Text style={[{ color: theme.colors.warning, marginTop: 4 }, theme.typography.caption]}>
+              <Text
+                style={[{ color: theme.colors.warning, marginTop: 4 }, theme.typography.caption]}
+              >
                 ⚠️ {t('significant_difference')}
               </Text>
             )}
