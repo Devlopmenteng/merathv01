@@ -1,15 +1,18 @@
-// Professional 8px grid spacing system
+// Unified Islamic-inspired design system for Merath
+// ─────────────────────────────────────────────────
+
+// ── 8px grid spacing ──
 export const spacing = {
-  xs: 4, // 0.5 grid units
-  sm: 8, // 1 grid unit
-  md: 16, // 2 grid units
-  lg: 24, // 3 grid units
-  xl: 32, // 4 grid units
-  xxl: 48, // 6 grid units
-  xxxl: 64, // 8 grid units
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+  xxxl: 64,
 };
 
-// Consistent border radius scale
+// ── Border radius scale ──
 export const borderRadius = {
   xs: 4,
   sm: 8,
@@ -20,7 +23,7 @@ export const borderRadius = {
   full: 9999,
 };
 
-// Enhanced typography with better hierarchy and readability
+// ── Typography scale ──
 export const typography = {
   h1: { fontSize: 28, fontWeight: '700' as const, lineHeight: 36, letterSpacing: -0.5 },
   h2: { fontSize: 24, fontWeight: '600' as const, lineHeight: 32, letterSpacing: -0.25 },
@@ -39,96 +42,140 @@ export const typography = {
   },
 };
 
-// Enhanced elevation system with color-tinted shadows
+// ── Elevation system ──
 export const elevation = {
   none: {},
   small: {
-    shadowColor: '#000',
+    shadowColor: '#1A1612',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.06,
     shadowRadius: 2,
     elevation: 1,
   },
   medium: {
-    shadowColor: '#000',
+    shadowColor: '#1A1612',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   large: {
-    shadowColor: '#000',
+    shadowColor: '#1A1612',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.14,
     shadowRadius: 8,
     elevation: 6,
   },
 };
 
-// Professional light theme with refined colors
+// ── Chart palette (16 harmonious colors for PieChart) ──
+const chartColors = [
+  '#1B5E3B',
+  '#C8923C',
+  '#1A6B7A',
+  '#A93545',
+  '#B87D3A',
+  '#2E6B8A',
+  '#4A7C59',
+  '#7B5EA7',
+  '#C46B50',
+  '#3A8B7C',
+  '#8B6B4A',
+  '#5C7BA8',
+  '#9B7B5A',
+  '#6B8A5C',
+  '#A8707C',
+  '#5A7B8A',
+];
+
+// ── Madhab accent colors ──
+const madhabColors = {
+  hanafi: '#A93545',
+  maliki: '#B87D3A',
+  shafii: '#2E6B8A',
+  hanbali: '#4A7C59',
+};
+
+// ── Light Theme — Parchment & Paradise Green ──
 export const lightTheme = {
   colors: {
-    primary: '#0A5E4A', // Deeper, more professional teal
-    primaryDark: '#084A3A',
-    primaryLight: '#E8F5F1', // Softer accent
-    secondary: '#C49A2A', // More refined gold
-    secondaryLight: '#FEF5E6',
-    success: '#10B981',
-    warning: '#F59E0B',
-    error: '#EF4444',
-    dangerLight: '#FEE2E2',
-    background: '#F8FAFC', // Light gray base
+    primary: '#1B5E3B',
+    primaryDark: '#0F3D26',
+    primaryLight: '#E6F2EC',
+    secondary: '#C8923C',
+    secondaryLight: '#FDF3E3',
+    accent: '#1A6B7A',
+    accentLight: '#E4F2F5',
+    success: '#2E7D32',
+    successLight: '#E8F5E9',
+    warning: '#E68A00',
+    warningLight: '#FFF8E1',
+    error: '#C62828',
+    errorLight: '#FFEBEE',
+    info: '#1565C0',
+    infoLight: '#E3F2FD',
+    background: '#FAF7F2',
     surface: '#FFFFFF',
-    surfaceVariant: '#F1F5F9',
-    outline: '#E2E8F0',
+    surfaceVariant: '#F0EBE3',
+    outline: '#C4B9A8',
+    backdrop: 'rgba(26, 20, 12, 0.55)',
     text: {
-      primary: '#0F172A',
-      secondary: '#475569',
-      disabled: '#94A3B8',
+      primary: '#1A1612',
+      secondary: '#5C5347',
+      disabled: '#9E9589',
     },
     onPrimary: '#FFFFFF',
     onSecondary: '#FFFFFF',
-    onBackground: '#0F172A',
-    onSurface: '#0F172A',
-    shadow: '#000000',
+    onBackground: '#1A1612',
+    onSurface: '#1A1612',
+    shadow: '#1A1612',
+    chart: chartColors,
+    madhab: madhabColors,
   },
   spacing,
   borderRadius,
-  radius: borderRadius,
   typography,
   elevation,
 };
 
-// Professional dark theme with better contrast
+// ── Dark Theme — Warm Charcoal & Luminous Green ──
 export const darkTheme = {
   colors: {
-    primary: '#2DD4BF',
-    primaryDark: '#0F766E',
-    primaryLight: '#134E4A',
-    secondary: '#FBBF24',
-    secondaryLight: '#422006',
-    success: '#34D399',
-    warning: '#FBBF24',
-    error: '#F87171',
-    dangerLight: '#7f1d1d',
-    background: '#0F172A',
-    surface: '#1E293B',
-    surfaceVariant: '#334155',
-    outline: '#475569',
+    primary: '#6FCF97',
+    primaryDark: '#1B5E3B',
+    primaryLight: '#1A3A2A',
+    secondary: '#F0C75E',
+    secondaryLight: '#3D2E10',
+    accent: '#5ABCC9',
+    accentLight: '#132D32',
+    success: '#66BB6A',
+    successLight: '#1B3A1B',
+    warning: '#FFB74D',
+    warningLight: '#3D2E0A',
+    error: '#EF5350',
+    errorLight: '#4A1616',
+    info: '#42A5F5',
+    infoLight: '#0D2744',
+    background: '#121210',
+    surface: '#1E1C18',
+    surfaceVariant: '#2D2A24',
+    outline: '#4A4640',
+    backdrop: 'rgba(0, 0, 0, 0.65)',
     text: {
-      primary: '#F1F5F9',
-      secondary: '#CBD5E1',
-      disabled: '#64748B',
+      primary: '#EDE8E0',
+      secondary: '#B5AFA6',
+      disabled: '#6B665F',
     },
-    onPrimary: '#0F172A',
-    onSecondary: '#0F172A',
-    onBackground: '#F1F5F9',
-    onSurface: '#F1F5F9',
+    onPrimary: '#0A2A16',
+    onSecondary: '#2A1E05',
+    onBackground: '#EDE8E0',
+    onSurface: '#EDE8E0',
     shadow: '#000000',
+    chart: chartColors,
+    madhab: madhabColors,
   },
   spacing,
   borderRadius,
-  radius: borderRadius,
   typography,
   elevation,
 };

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, I18nManager } from 're
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
-import { MADHAB_NAMES, MADHAB_COLORS } from '../lib/engine/constants';
+import { MADHAB_NAMES } from '../lib/engine/constants';
 import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
@@ -449,7 +449,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   paddingVertical: 8,
                   paddingHorizontal: 16,
                   borderRadius: 20,
-                  backgroundColor: selected === m ? MADHAB_COLORS[m] : theme.colors.surfaceVariant,
+                  backgroundColor: selected === m ? theme.colors.madhab[m] : theme.colors.surfaceVariant,
                 }}
               >
                 <Text

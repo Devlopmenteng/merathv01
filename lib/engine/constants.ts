@@ -18,16 +18,6 @@ interface HijabRule {
  */
 
 /**
- * ألوان المذاهب
- */
-export const MADHAB_COLORS: Record<MadhhabType, string> = {
-  shafii: '#FF6B6B',
-  hanafi: '#4ECDC4',
-  maliki: '#45B7D1',
-  hanbali: '#F7DC6F',
-};
-
-/**
  * أيقونات المذاهب
  */
 export const MADHAB_ICONS: Record<MadhhabType, string> = {
@@ -203,13 +193,6 @@ export function sortHeirsByPriority(heirs: HeirType[]): HeirType[] {
  */
 export function getHeirName(heir: HeirType): string {
   return HEIR_NAMES[heir] || heir;
-}
-
-/**
- * الحصول على لون المذهب
- */
-export function getMadhhabColor(madhab: MadhhabType): string {
-  return MADHAB_COLORS[madhab];
 }
 
 /**
