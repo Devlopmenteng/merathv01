@@ -354,7 +354,6 @@ const styles = StyleSheet.create({
   },
   templateNotes: {
     fontSize: 12,
-  },
     fontStyle: 'italic',
   },
 });
