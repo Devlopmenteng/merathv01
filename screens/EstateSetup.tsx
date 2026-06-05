@@ -107,7 +107,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         value={total}
         onChangeText={setTotal}
         keyboardType="numeric"
-        leftIcon={<Text>$</Text>}
+        leftIcon={<Text>{t('currency_symbol')}</Text>}
       />
       <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
         <Input
@@ -133,7 +133,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         value={will}
         onChangeText={setWill}
         keyboardType="numeric"
-        helper={maxWill > 0 ? `${t('max_allowed')}: $${maxWill.toFixed(2)}` : ''}
+        helper={
+          maxWill > 0 ? `${t('max_allowed')}: ${t('currency_symbol')}${maxWill.toFixed(2)}` : ''
+        }
         error={willError}
       />
       <Button

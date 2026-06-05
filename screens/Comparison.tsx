@@ -10,6 +10,7 @@ import { useResponsive } from '../hooks/useResponsive';
 import { formatCurrency } from '../lib/utils/currency';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { t } from '../lib/i18n';
+import { localizeHeirName } from '../lib/utils/shareLocalization';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -137,8 +138,8 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         const madhab = TABS[index];
         const cases: string[] = [];
 
-        if (result.specialCases.awl) cases.push('Awl (عول)');
-        if (result.specialCases.radd) cases.push('Radd (رد)');
+        if (result.specialCases.awl) cases.push(t('special_case_awl'));
+        if (result.specialCases.radd) cases.push(t('special_case_radd'));
         if (result.specialCases.hijabTypes?.length > 0) {
           cases.push(...result.specialCases.hijabTypes);
         }
@@ -151,7 +152,8 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
 
     const differingMadhhabs = differenceAnalysis.length > 0 ? TABS : [];
     const maxDiff = differenceAnalysis.length > 0 ? differenceAnalysis[0].amountDifference : 0;
-    const mostDiff = differenceAnalysis.length > 0 ? differenceAnalysis[0].heirKey : 'None';
+    const mostDiff =
+      differenceAnalysis.length > 0 ? differenceAnalysis[0].heirKey : t('none_fallback');
 
     return {
       totalMadhhabsDiffering: differingMadhhabs.length,
@@ -184,11 +186,9 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
     const jsonString = JSON.stringify(exportData, null, 2);
     console.log('Export data:', jsonString);
 
-    Alert.alert(
-      'Export Complete',
-      'Comparison data has been logged to console for development. Full export functionality coming soon.',
-      [{ text: 'OK', onPress: () => {} }]
-    );
+    Alert.alert(t('export_complete_title'), t('export_complete_message'), [
+      { text: t('ok'), onPress: () => {} },
+    ]);
   }, [state, comparisonSummary, differenceAnalysis, results]);
 
   const renderSummary = () => (
@@ -214,7 +214,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           {comparisonSummary.maxDifference > 0 && (
             <Text style={{ marginBottom: 8 }}>
               {t('max_difference')}: {formatCurrency(comparisonSummary.maxDifference)} (
-              {comparisonSummary.mostDifferentHeir})
+              {localizeHeirName(
+                comparisonSummary.mostDifferentHeir,
+                comparisonSummary.mostDifferentHeir
+              )}
+              )
             </Text>
           )}
         </View>
@@ -225,7 +229,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           <Text style={{ fontWeight: 'bold', marginBottom: 8 }}>{t('special_cases')}:</Text>
           {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
             <Text key={madhab} style={[{ marginBottom: 4 }, theme.typography.caption]}>
-              • {MADHAB_NAMES[madhab as Madhab]}: {cases.join(', ')}
+              • {t('madhab_name_' + madhab, { defaultValue: madhab })}: {cases.join(', ')}
             </Text>
           ))}
         </View>
@@ -282,9 +286,12 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               borderColor: theme.colors.outline,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>{diff.heirKey}</Text>
+            <Text style={{ fontWeight: 'bold' }}>
+              {localizeHeirName(diff.heirKey, diff.heirKey)}
+            </Text>
             <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
-              {MADHAB_NAMES[diff.madhab1 as Madhab]} vs {MADHAB_NAMES[diff.madhab2 as Madhab]}
+              {t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs{' '}
+              {t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}
             </Text>
             <Text style={theme.typography.caption}>
               Difference: {formatCurrency(diff.amountDifference)} (
@@ -315,7 +322,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             paddingBottom: 8,
           }}
         >
-          <Text style={{ width: isTablet ? 180 : 140, fontWeight: 'bold', paddingHorizontal: 8 }}>
+          <Text
+            style={{ width: isTablet ? 180 : 140, fontWeight: 'bold', paddingHorizontal: 8 }}
+            numberOfLines={1}
+          >
             {t('heir')}
           </Text>
           <Text style={{ width: isTablet ? 80 : 60, fontWeight: 'bold', textAlign: 'center' }}>
@@ -324,6 +334,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           {TABS.map((m) => (
             <Text
               key={m}
+              numberOfLines={1}
               style={{
                 width: isTablet ? 120 : 100,
                 textAlign: 'center',
@@ -331,54 +342,54 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 paddingHorizontal: 4,
               }}
             >
-              {MADHAB_NAMES[m]}
+              {t('madhab_name_' + m, { defaultValue: m })}
             </Text>
           ))}
         </View>
-        {comparisonRows.map((row) => {
-          if (!row) return null;
-          return (
-            <View
-              key={row.heirKey}
-              style={{
-                flexDirection: 'row',
-                borderBottomWidth: 1,
-                borderColor: theme.colors.outline,
-                paddingVertical: 12,
-              }}
-            >
-              <Text style={{ width: isTablet ? 180 : 140, paddingHorizontal: 8 }}>
-                {row.heirKey}
-              </Text>
-              <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>
-                {getCount(row.heirKey)}
-              </Text>
-              {row.sharesByMadhab.map((data, index) => (
-                <View key={index} style={{ width: isTablet ? 120 : 100, alignItems: 'center' }}>
-                  {data ? (
-                    <>
-                      <Text style={theme.typography.caption}>{data.fraction}</Text>
-                      <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
-                        {data.percentage}
-                      </Text>
-                      <Text
-                        style={[
-                          { fontWeight: 'bold', color: theme.colors.primary },
-                          theme.typography.caption,
-                        ]}
-                      >
-                        {data.amount}
-                      </Text>
-                    </>
-                  ) : (
-                    <Text style={{ color: theme.colors.outline }}>—</Text>
-                  )}
-                </View>
-              ))}
-            </View>
-          );
-        })}
       </View>
+      {comparisonRows.map((row) => {
+        if (!row) return null;
+        return (
+          <View
+            key={row.heirKey}
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderColor: theme.colors.outline,
+              paddingVertical: 12,
+            }}
+          >
+            <Text style={{ width: isTablet ? 180 : 140, paddingHorizontal: 8 }} numberOfLines={1}>
+              {localizeHeirName(row.heirKey, row.heirKey)}
+            </Text>
+            <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>
+              {getCount(row.heirKey)}
+            </Text>
+            {row.sharesByMadhab.map((data, index) => (
+              <View key={index} style={{ width: isTablet ? 120 : 100, alignItems: 'center' }}>
+                {data ? (
+                  <>
+                    <Text style={theme.typography.caption}>{data.fraction}</Text>
+                    <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
+                      {data.percentage}
+                    </Text>
+                    <Text
+                      style={[
+                        { fontWeight: 'bold', color: theme.colors.primary },
+                        theme.typography.caption,
+                      ]}
+                    >
+                      {data.amount}
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={{ color: theme.colors.outline }}>—</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        );
+      })}
     </ScrollView>
   );
 
@@ -460,7 +471,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                     color: selected === m ? theme.colors.onPrimary : theme.colors.onSurface,
                   }}
                 >
-                  {MADHAB_NAMES[m]}
+                  {t('madhab_name_' + m, { defaultValue: m })}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -480,7 +491,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               <Text
                 style={{ color: showAnalysis ? theme.colors.onPrimary : theme.colors.onSurface }}
               >
-                {showAnalysis ? '📊 Hide Analysis' : '📊 Show Analysis'}
+                {showAnalysis ? `📊 ${t('hide_analysis')}` : `📊 ${t('show_analysis')}`}
               </Text>
             </TouchableOpacity>
 
@@ -493,7 +504,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 backgroundColor: theme.colors.primary,
               }}
             >
-              <Text style={{ color: theme.colors.onPrimary }}>📥 Export</Text>
+              <Text style={{ color: theme.colors.onPrimary }}>📥 {t('export_button')}</Text>
             </TouchableOpacity>
           </View>
 

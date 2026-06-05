@@ -88,7 +88,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
       showAlert(
         t('template_applied'),
-        `${t('template_name')}: ${template.name}\n${t('recommended_madhab')}: ${recommendedMadhab || 'Any'}`
+        `${t('template_name')}: ${template.name}\n${t('recommended_madhab')}: ${recommendedMadhab ? t('madhab_name_' + recommendedMadhab, { defaultValue: recommendedMadhab }) : t('any_fallback')}`
       );
 
       // Navigate to Results to show the calculation
@@ -160,7 +160,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             },
           ]}
           onPress={() => handleCategoryFilter(null)}
-          accessibilityLabel="All categories"
+          accessibilityLabel={t('a11y_all_categories')}
           accessibilityRole="button"
           accessibilityState={{ selected: selectedCategory === null }}
         >
@@ -240,7 +240,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               ]}
               onPress={() => applyTestCase(template)}
               accessibilityLabel={template.name}
-              accessibilityHint={`${template.description}. Tap to apply this template.`}
+              accessibilityHint={t('a11y_apply_template', { description: template.description })}
               accessibilityRole="button"
             >
               {template.popular && (
@@ -296,7 +296,8 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   {t('estate')}:{' '}
                 </Text>
                 <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
-                  ${template.estate.total.toLocaleString()}
+                  {t('currency_symbol')}
+                  {template.estate.total.toLocaleString()}
                 </Text>
               </View>
 
@@ -327,7 +328,9 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                     {t('recommended_madhab')}:{' '}
                   </Text>
                   <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
-                    {template.recommendedMadhab}
+                    {t('madhab_name_' + template.recommendedMadhab, {
+                      defaultValue: template.recommendedMadhab,
+                    })}
                   </Text>
                 </View>
               )}

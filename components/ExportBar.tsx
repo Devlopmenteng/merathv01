@@ -22,10 +22,10 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
 
   const generatePDF = async () => {
     const html = `
-      <h1>Inheritance Report</h1>
-      <p>Net Estate: $${resultData.netEstate ?? resultData.netEstate ?? 0}</p>
+      <h1>${t('pdf_report_title')}</h1>
+      <p>${t('pdf_estate_label', { amount: t('currency_symbol') + (resultData.netEstate ?? 0) })}</p>
       <ul>${resultData.shares
-        .map((s) => `<li>${s.name}: $${s.amount.toFixed(2)}</li>`)
+        .map((s) => `<li>${s.name}: ${t('currency_symbol')}${s.amount.toFixed(2)}</li>`)
         .join('')}</ul>
     `;
     const { uri } = await Print.printToFileAsync({ html });
@@ -36,18 +36,18 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
   const captureAndShare = async () => {
     if (!viewShotRef.current) return;
     const uri = await (viewShotRef.current as any).capture();
-    await Share.share({ message: 'Inheritance Report', url: uri });
+    await Share.share({ message: t('pdf_report_title'), url: uri });
   };
 
   const exportToExcel = async () => {
     if (!estate || !heirs) {
-      Alert.alert('Error', 'Estate and heirs data required for Excel export');
+      Alert.alert(t('error'), t('export_error_data_required'));
       return;
     }
 
     try {
       const { content, filename } = exportCalculation(estate, heirs, resultData, 'csv', {
-        currencySymbol: '$',
+        currencySymbol: t('currency_symbol'),
       });
 
       if (Platform.OS === 'web') {
@@ -62,15 +62,15 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
       } else {
         // On mobile, just share the content as text for now
         await Share.share({
-          message: `Inheritance Report (CSV)\n\n${content}`,
+          message: `${t('share_message_prefix')}\n\n${content}`,
           title: filename,
         });
       }
 
-      Alert.alert('Success', 'CSV file exported successfully');
+      Alert.alert(t('success'), t('export_success_csv'));
     } catch (error) {
       console.error('Export error:', error);
-      Alert.alert('Error', 'Failed to export to CSV format');
+      Alert.alert(t('error'), t('export_error_csv'));
     }
   };
 

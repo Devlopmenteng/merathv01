@@ -97,8 +97,11 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                 borderColor: theme.colors.outline,
               }}
               onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
-              accessibilityLabel={`${entry.caseName || t('no_name')}, ${entry.caseDate || t('no_date')}, ${entry.madhab} madhab, ${formatCurrency(entry.netTotal)}`}
-              accessibilityHint={`${entry.shares.length} heirs. Tap to view calculation steps.`}
+              accessibilityLabel={t('a11y_history_entry', {
+                caseName: entry.caseName || t('no_name'),
+                madhab: t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab }),
+              })}
+              accessibilityHint={t('a11y_history_hint', { count: entry.shares.length })}
               accessibilityRole="button"
             >
               <Text
@@ -110,7 +113,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                 {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
               </Text>
               <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                {t('madhab')}: {entry.madhab}
+                {t('madhab')}: {t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}
               </Text>
               <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
                 {t('netEstate')}: {formatCurrency(entry.netTotal)}

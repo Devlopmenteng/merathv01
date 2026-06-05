@@ -17,7 +17,7 @@ export const FeedbackButton = () => {
       showConfirm('feedback_title', 'feedback_prompt', () => {
         MailComposer.composeAsync({
           recipients: ['support@merath.app'],
-          subject: 'Merath Feedback',
+          subject: t('feedback_subject'),
         });
       });
     }

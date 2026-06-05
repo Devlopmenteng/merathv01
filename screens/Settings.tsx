@@ -27,6 +27,12 @@ const LANGUAGES = [
   { code: 'ur', label: 'اردو' },
 ];
 
+const getLanguageLabel = (lang: { code: string; label: string }) => {
+  if (lang.code === 'en') return t('language_english');
+  if (lang.code === 'ms') return t('language_malay');
+  return lang.label;
+};
+
 type SettingsNavigation = {
   navigate: (screen: string) => void;
 };
@@ -109,7 +115,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={() => setLanguageModalVisible(true)}
         accessibilityLabel={t('language__')}
-        accessibilityHint={`Current language: ${LANGUAGES.find((l) => l.code === locale)?.label || locale}. Tap to change.`}
+        accessibilityHint={t('a11y_current_language', {
+          language: getLanguageLabel(LANGUAGES.find((l) => l.code === locale) || LANGUAGES[0]),
+        })}
         accessibilityRole="button"
       >
         <Text
@@ -173,10 +181,8 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                   borderBottomColor: theme.colors.outline,
                 }}
                 onPress={() => changeLanguage(lang.code)}
-                accessibilityLabel={lang.label}
-                accessibilityHint={
-                  locale === lang.code ? 'Currently selected' : 'Tap to select this language'
-                }
+                accessibilityLabel={getLanguageLabel(lang)}
+                accessibilityHint={t('a11y_select_language', { language: getLanguageLabel(lang) })}
                 accessibilityRole="button"
                 accessibilityState={{ selected: locale === lang.code }}
               >
@@ -186,7 +192,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                     { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
                   ]}
                 >
-                  {lang.label}
+                  {getLanguageLabel(lang)}
                 </Text>
                 {locale === lang.code && (
                   <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>✓</Text>
@@ -263,11 +269,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             value={isDark}
             onValueChange={toggleTheme}
             accessibilityLabel={t('dark_mode')}
-            accessibilityHint={
-              isDark
-                ? 'Dark mode is enabled. Tap to disable.'
-                : 'Dark mode is disabled. Tap to enable.'
-            }
+            accessibilityHint={isDark ? t('a11y_dark_mode_enabled') : t('a11y_dark_mode_disabled')}
             accessibilityRole="switch"
           />
         </View>
@@ -305,7 +307,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={() => navigation.navigate('Glossary')}
         accessibilityLabel={t('glossary_and_education')}
-        accessibilityHint="Tap to view glossary and educational content"
+        accessibilityHint={t('a11y_view_glossary')}
         accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
@@ -352,7 +354,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           }}
           onPress={handleRateUs}
           accessibilityLabel={t('rate_us_send_feedback')}
-          accessibilityHint="Tap to rate us on Google Play"
+          accessibilityHint={t('a11y_rate_us')}
           accessibilityRole="button"
         >
           <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
@@ -361,7 +363,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           style={{ paddingVertical: theme.spacing.sm }}
           onPress={handleEmailFeedback}
           accessibilityLabel={t('feedback_title')}
-          accessibilityHint="Tap to send feedback via email"
+          accessibilityHint={t('a11y_send_feedback')}
           accessibilityRole="button"
         >
           <Text style={theme.typography.body}>{t('feedback_title')}</Text>
@@ -383,7 +385,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={handlePrivacyPolicy}
         accessibilityLabel={t('privacy_policy')}
-        accessibilityHint="Tap to view privacy policy"
+        accessibilityHint={t('a11y_privacy_policy')}
         accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
@@ -405,7 +407,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={handleClearCache}
         accessibilityLabel={t('clear_cache_reset')}
-        accessibilityHint="Tap to clear all cached data. This action cannot be undone."
+        accessibilityHint={t('a11y_clear_cache')}
         accessibilityRole="button"
       >
         <Text style={[theme.typography.body, { color: theme.colors.error }]}>
@@ -429,7 +431,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         }}
         onPress={handleLegalNotices}
         accessibilityLabel={t('legal_notices')}
-        accessibilityHint="Tap to view legal notices"
+        accessibilityHint={t('a11y_legal_notices')}
         accessibilityRole="button"
       >
         <Text style={theme.typography.body}>{t('legal_notices')}</Text>

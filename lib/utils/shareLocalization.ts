@@ -81,12 +81,9 @@ const STEP_TITLE_MAP: Record<string, string> = {
 };
 
 const STEP_DESC_MAP: Record<string, string> = {
-  'الإخوة الأشقاء يشاركون الإخوة لأم في الثلث':
-    'step_musharraka_desc',
-  'مسألة الأكدرية - للجد مع الأخت طريقة خاصة':
-    'step_akdariyya_desc',
-  'تقليل الأنصباء بنسبة متساوية عند زيادة الفروض على التركة':
-    'step_awl_desc',
+  'الإخوة الأشقاء يشاركون الإخوة لأم في الثلث': 'step_musharraka_desc',
+  'مسألة الأكدرية - للجد مع الأخت طريقة خاصة': 'step_akdariyya_desc',
+  'تقليل الأنصباء بنسبة متساوية عند زيادة الفروض على التركة': 'step_awl_desc',
   'توزيع الباقي على ذوي الأرحام': 'step_blood_relatives_desc',
   'لا يوجد ورثة - التركة لبيت المال': 'step_treasury_desc',
 };
@@ -138,9 +135,7 @@ export function localizeShareType(arabicType: string): string {
   // Handle dynamic types like "فرض + رد"
   if (arabicType.includes(' + رد')) {
     const base = arabicType.replace(' + رد', '');
-    const localizedBase = SHARE_TYPE_MAP[base]
-      ? t(SHARE_TYPE_MAP[base])
-      : base;
+    const localizedBase = SHARE_TYPE_MAP[base] ? t(SHARE_TYPE_MAP[base]) : base;
     return `${localizedBase} + ${t('share_type_radd')}`;
   }
   const key = SHARE_TYPE_MAP[arabicType];
@@ -183,9 +178,37 @@ export function localizeReason(arabicReason: string): string {
 }
 
 /**
- * Returns a localized step title.
+ * Maps StepType enum values → i18n keys for title and description.
  */
-export function localizeStepTitle(arabicTitle: string): string {
+const STEP_TYPE_MAP: Record<string, { titleKey: string; descKey: string }> = {
+  standard: { titleKey: 'step_type_standard_title', descKey: 'step_type_standard_desc' },
+  awl: { titleKey: 'step_type_awl_title', descKey: 'step_type_awl_desc' },
+  radd: { titleKey: 'step_type_radd_title', descKey: 'step_type_radd_desc' },
+  musharraka: { titleKey: 'step_type_musharraka_title', descKey: 'step_type_musharraka_desc' },
+  akdariyya: { titleKey: 'step_type_akdariyya_title', descKey: 'step_type_akdariyya_desc' },
+  treasury: { titleKey: 'step_type_treasury_title', descKey: 'step_type_treasury_desc' },
+  blood_relatives: {
+    titleKey: 'step_type_blood_relatives_title',
+    descKey: 'step_type_blood_relatives_desc',
+  },
+  grandfather_optimal: {
+    titleKey: 'step_grandfather_optimal_title',
+    descKey: 'step_akdariyya_desc',
+  },
+};
+
+/**
+ * Returns a localized step title using StepType if available,
+ * falling back to the Arabic→key map, then the raw Arabic string.
+ */
+export function localizeStepTitle(arabicTitle: string, stepType?: string): string {
+  if (stepType) {
+    const mapping = STEP_TYPE_MAP[stepType];
+    if (mapping) {
+      const translated = t(mapping.titleKey);
+      if (translated && translated !== mapping.titleKey) return translated;
+    }
+  }
   const key = STEP_TITLE_MAP[arabicTitle];
   if (key) {
     const translated = t(key);
@@ -195,9 +218,17 @@ export function localizeStepTitle(arabicTitle: string): string {
 }
 
 /**
- * Returns a localized step description.
+ * Returns a localized step description using StepType if available,
+ * falling back to the Arabic→key map, then the raw Arabic string.
  */
-export function localizeStepDesc(arabicDesc: string): string {
+export function localizeStepDesc(arabicDesc: string, stepType?: string): string {
+  if (stepType) {
+    const mapping = STEP_TYPE_MAP[stepType];
+    if (mapping) {
+      const translated = t(mapping.descKey);
+      if (translated && translated !== mapping.descKey) return translated;
+    }
+  }
   const key = STEP_DESC_MAP[arabicDesc];
   if (key) {
     const translated = t(key);

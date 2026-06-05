@@ -22,8 +22,16 @@ export const StepTimeline: React.FC<StepTimelineProps> = ({ steps }) => {
             )}
           </View>
           <View style={styles.contentColumn}>
-            <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>{step.title}</Text>
-            <Text style={[theme.typography.body, { color: theme.colors.onSurface }]}>
+            <Text
+              style={[theme.typography.h3, { color: theme.colors.primary, flexShrink: 1 }]}
+              numberOfLines={2}
+            >
+              {step.title}
+            </Text>
+            <Text
+              style={[theme.typography.body, { color: theme.colors.onSurface, flexShrink: 1 }]}
+              numberOfLines={3}
+            >
               {step.description}
             </Text>
           </View>

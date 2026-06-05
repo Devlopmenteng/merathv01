@@ -29,7 +29,7 @@ export const OnboardingTooltip = () => {
           {t('tap_the_categories_to_add_family_members_use_the_steppers_to_set_their_count')}
         </Text>
         <TouchableOpacity
-          accessibilityLabel="Button"
+          accessibilityLabel={t('a11y_dismiss_tooltip')}
           onPress={dismiss}
           style={{ marginTop: 12, alignSelf: 'flex-end' }}
         >

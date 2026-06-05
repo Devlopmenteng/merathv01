@@ -9,8 +9,9 @@ type Template = {
   heirs: HeirEntry[];
 };
 
-const TEMPLATES: Template[] = [
+const TEMPLATES: (Template & { nameKey: string })[] = [
   {
+    nameKey: 'template_nuclear_family',
     name: 'Nuclear Family',
     heirs: [
       { type: 'husband' as HeirType, count: 1 },
@@ -20,6 +21,7 @@ const TEMPLATES: Template[] = [
     ],
   },
   {
+    nameKey: 'template_parents_plus_son',
     name: 'Parents + 1 Son',
     heirs: [
       { type: 'father' as HeirType, count: 1 },
@@ -28,6 +30,7 @@ const TEMPLATES: Template[] = [
     ],
   },
   {
+    nameKey: 'template_husband_plus_daughter',
     name: 'Husband + 1 Daughter',
     heirs: [
       { type: 'husband' as HeirType, count: 1 },
@@ -35,6 +38,7 @@ const TEMPLATES: Template[] = [
     ],
   },
   {
+    nameKey: 'template_wife_plus_parents',
     name: 'Wife + Parents',
     heirs: [
       { type: 'wife' as HeirType, count: 1 },
@@ -73,7 +77,9 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({
                   onClose();
                 }}
               >
-                <Text style={theme.typography.body}>{item.name}</Text>
+                <Text style={theme.typography.body} numberOfLines={1}>
+                  {t(item.nameKey, { defaultValue: item.name })}
+                </Text>
                 <Text style={{ color: theme.colors.primary }}>→</Text>
               </TouchableOpacity>
             )}

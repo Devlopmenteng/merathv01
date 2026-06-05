@@ -127,6 +127,18 @@ export interface CalculationResult {
 }
 
 // ====== خطوات الحساب ======
+export type StepType =
+  | 'standard'
+  | 'awl'
+  | 'radd'
+  | 'musharraka'
+  | 'akdariyya'
+  | 'treasury'
+  | 'blood_relatives'
+  | 'grandfather_optimal'
+  | 'verification'
+  | 'distribution';
+
 export interface CalculationStep {
   stepNumber: number;
   title: string;
@@ -134,6 +146,7 @@ export interface CalculationStep {
   action: string;
   details: Record<string, any>;
   timestamp: string;
+  stepType?: StepType;
 }
 
 // ====== معلومات المذهب ======

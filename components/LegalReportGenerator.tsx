@@ -55,7 +55,7 @@ export async function generateLegalReport(result: CalculationResult, madhab: str
             <tr>
               <td>${s.name}</td>
               <td>${formatCurrency(s.amount)}</td>
-              <td>${s.fraction?.numerator}/${s.fraction?.denominator || 'N/A'}</td>
+              <td>${s.fraction?.numerator}/${s.fraction?.denominator || t('not_applicable')}</td>
             </tr>
           `
             )

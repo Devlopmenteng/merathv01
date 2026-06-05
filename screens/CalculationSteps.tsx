@@ -94,7 +94,8 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           {t('date')}: {auditEntry.caseDate || t('no_date')}
         </Text>
         <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-          {t('madhab')}: {auditEntry.madhab}
+          {t('madhab')}:{' '}
+          {t('madhab_name_' + auditEntry.madhab, { defaultValue: auditEntry.madhab })}
         </Text>
       </View>
 
@@ -116,7 +117,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                 },
               ]}
               accessible
-              accessibilityLabel={`Step ${index + 1}: ${step.title}`}
+              accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
               <View
                 style={{

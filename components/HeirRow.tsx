@@ -45,8 +45,10 @@ export const HeirRow: React.FC<HeirRowProps> = ({
       </View>
       <View style={styles.infoContainer}>
         <Text
+          numberOfLines={2}
           style={[
             theme.typography.body,
+            { flexShrink: 1 },
             isBlocked && { textDecorationLine: 'line-through', color: theme.colors.outline },
           ]}
         >

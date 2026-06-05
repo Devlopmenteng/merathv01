@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { t } from '../../lib/i18n';
 
 type Props = {
   value: number;
@@ -61,8 +62,8 @@ export const Stepper: React.FC<Props> = ({
         onPressIn={() => setPressedDecrease(true)}
         onPressOut={() => setPressedDecrease(false)}
         disabled={!canDecrease}
-        accessibilityLabel="Decrease"
-        accessibilityHint={`Decrease value from ${value} to ${value - 1}. Minimum is ${min}.`}
+        accessibilityLabel={t('a11y_decrease')}
+        accessibilityHint={t('a11y_decrease_hint', { value, next: value - 1, min })}
         accessibilityState={{ disabled: !canDecrease }}
         accessibilityRole="button"
         style={[
@@ -93,7 +94,7 @@ export const Stepper: React.FC<Props> = ({
       <View
         style={[styles.valueContainer, { marginHorizontal: spacing }]}
         accessible
-        accessibilityLabel={`Current value: ${value}`}
+        accessibilityLabel={t('a11y_current_value', { value })}
       >
         <Text
           style={[
@@ -113,8 +114,8 @@ export const Stepper: React.FC<Props> = ({
         onPressIn={() => setPressedIncrease(true)}
         onPressOut={() => setPressedIncrease(false)}
         disabled={!canIncrease}
-        accessibilityLabel="Increase"
-        accessibilityHint={`Increase value from ${value} to ${value + 1}. Maximum is ${max}.`}
+        accessibilityLabel={t('a11y_increase')}
+        accessibilityHint={t('a11y_increase_hint', { value, next: value + 1, max })}
         accessibilityState={{ disabled: !canIncrease }}
         accessibilityRole="button"
         style={[

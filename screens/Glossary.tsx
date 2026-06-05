@@ -5,7 +5,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
-import { t } from '../lib/i18n';
+import { t, i18n } from '../lib/i18n';
 import { backArrow } from '../lib/utils/rtl';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
@@ -77,7 +77,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           <Text
             style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
           >
-            {item.translation}
+            {item.translations[i18n.locale as keyof typeof item.translations] || item.translation}
           </Text>
           <Text
             style={[

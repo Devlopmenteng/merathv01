@@ -6,7 +6,7 @@ import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
-import { showValidationError } from '../lib/utils/alerts';
+import { showValidationError, showAlert } from '../lib/utils/alerts';
 import { HeirRow } from './HeirRow';
 import { TemplatesModal } from './TemplatesModal';
 import { localizeHeirType } from '../lib/utils/shareLocalization';
@@ -80,26 +80,26 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
       const newCount = Math.max(0, current + delta);
 
       if (type === 'husband' && newCount > 0 && (counts.get('wife') || 0) > 0) {
-        showValidationError('Husband', 'cannot_add_with_wife');
+        showValidationError(t('husband'), 'cannot_add_with_wife');
         return;
       }
       if (type === 'wife' && newCount > 0 && (counts.get('husband') || 0) > 0) {
-        showValidationError('Wife', 'cannot_add_with_husband');
+        showValidationError(t('wife'), 'cannot_add_with_husband');
         return;
       }
       if (type === 'husband' && newCount > APP_DEFAULTS.MAX_HUSBANDS) {
-        showValidationError('Husband', 'only_one_allowed');
+        showValidationError(t('husband'), 'only_one_allowed');
         return;
       }
       if (type === 'wife' && newCount > APP_DEFAULTS.MAX_WIVES) {
-        showValidationError('Wife', `maximum_allowed_${APP_DEFAULTS.MAX_WIVES}`);
+        showAlert(t('validation_error'), t('max_wives', { count: APP_DEFAULTS.MAX_WIVES }));
         return;
       }
       if (
         ['father', 'mother', 'grandfather'].includes(type) &&
         newCount > APP_DEFAULTS.MAX_SINGLE_HEIRS
       ) {
-        showValidationError(HEIR_NAMES[type], 'only_one_allowed');
+        showAlert(t('validation_error'), `${localizeHeirType(type)}: ${t('only_one_allowed')}`);
         return;
       }
       const newHeirs = heirs.filter((h) => h.type !== type);
