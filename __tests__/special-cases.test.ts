@@ -509,11 +509,21 @@ describe('Special Cases - Complete Test Suite', () => {
 
   describe('Hijab System - Complete Blocking Rules', () => {
     it('Mother blocks both grandmothers', () => {
-      const heirs: HeirsData = { mother: 1, grandmother_mother: 1, grandmother_father: 1, husband: 1 };
+      const heirs: HeirsData = {
+        mother: 1,
+        grandmother_mother: 1,
+        grandmother_father: 1,
+        husband: 1,
+      };
       const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
       const result = engine.calculate();
       expect(result.success).toBe(true);
-      const gm = result.shares.find((s) => (s.key as string) === 'grandmothers' || s.key === 'grandmother_mother' || s.key === 'grandmother_father');
+      const gm = result.shares.find(
+        (s) =>
+          (s.key as string) === 'grandmothers' ||
+          s.key === 'grandmother_mother' ||
+          s.key === 'grandmother_father'
+      );
       expect(gm).toBeUndefined();
     });
 
@@ -573,7 +583,9 @@ describe('Special Cases - Complete Test Suite', () => {
       const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
       const result = engine.calculate();
       expect(result.success).toBe(true);
-      expect(result.shares.find((s) => (s.key as string) === 'half_brother_paternal')).toBeUndefined();
+      expect(
+        result.shares.find((s) => (s.key as string) === 'half_brother_paternal')
+      ).toBeUndefined();
     });
   });
 
@@ -648,7 +660,13 @@ describe('Special Cases - Complete Test Suite', () => {
 
     it('Not Umariyyah if siblings exist', () => {
       // Husband + father + mother + 2 siblings → not Umariyyah, mother gets 1/6
-      const heirs: HeirsData = { husband: 1, father: 1, mother: 1, full_brother: 1, full_sister: 1 };
+      const heirs: HeirsData = {
+        husband: 1,
+        father: 1,
+        mother: 1,
+        full_brother: 1,
+        full_sister: 1,
+      };
       const engine = new InheritanceCalculationEngine('hanafi', estate, heirs);
       const result = engine.calculate();
       expect(result.success).toBe(true);

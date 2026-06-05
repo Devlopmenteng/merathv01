@@ -65,8 +65,7 @@ export class HijabSystem {
     }
 
     // 6. Male descendants or father block full & paternal siblings
-    const blockedByMaleFuruOrFather =
-      val('son') > 0 || val('grandson') > 0 || val('father') > 0;
+    const blockedByMaleFuruOrFather = val('son') > 0 || val('grandson') > 0 || val('father') > 0;
     if (blockedByMaleFuruOrFather) {
       const blocker = val('father') > 0 ? 'الأب' : 'الابن/ابن الابن';
       const siblingsToBlock = [
@@ -99,10 +98,7 @@ export class HijabSystem {
 
     // 8. Maternal siblings blocked by any descendant or male ascendant
     const hasDescendants =
-      val('son') > 0 ||
-      val('daughter') > 0 ||
-      val('grandson') > 0 ||
-      val('granddaughter') > 0;
+      val('son') > 0 || val('daughter') > 0 || val('grandson') > 0 || val('granddaughter') > 0;
     const hasMaleAscendant = val('father') > 0 || val('grandfather') > 0;
     if (hasDescendants || hasMaleAscendant) {
       const blocker = hasDescendants ? 'الفرع الوارث' : 'الأصل الذكر';
@@ -113,11 +109,7 @@ export class HijabSystem {
     // 9. Full brother blocks paternal brother
     if (val('full_brother') > 0) {
       block('paternal_brother', 'full_brother', 'الأخ لأب محجوب بالأخ الشقيق لقوة القرابة');
-      block(
-        'half_brother_paternal',
-        'full_brother',
-        'الأخ لأب محجوب بالأخ الشقيق لقوة القرابة'
-      );
+      block('half_brother_paternal', 'full_brother', 'الأخ لأب محجوب بالأخ الشقيق لقوة القرابة');
     }
 
     // 10. Full sister as asaba-with-others blocks paternal siblings

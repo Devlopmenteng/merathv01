@@ -347,7 +347,11 @@ export class EnhancedInheritanceCalculationEngine {
 
       // Blood relatives: only distribute if madhab allows it
       const bloodRelativesEnabled = this.getMadhabRule('blood_relatives_enabled') !== false;
-      if (remainderAfterRadd.toDecimal() > 0.0001 && asabaShares.length === 0 && bloodRelativesEnabled) {
+      if (
+        remainderAfterRadd.toDecimal() > 0.0001 &&
+        asabaShares.length === 0 &&
+        bloodRelativesEnabled
+      ) {
         const bloodDistribution = this.distributeToBloodRelatives(finalShares, remainderAfterRadd);
         finalShares = bloodDistribution.shares;
         if (bloodDistribution.bloodRelatives.length > 0) {
@@ -1118,7 +1122,9 @@ export class EnhancedInheritanceCalculationEngine {
                 key: 'full_brother',
                 name: 'الأخ الشقيق',
                 type: 'تعصيب',
-                fraction: siblingRemainder.multiply(new FractionClass(fullBrothers * 2, siblingHeads)),
+                fraction: siblingRemainder.multiply(
+                  new FractionClass(fullBrothers * 2, siblingHeads)
+                ),
                 count: fullBrothers,
                 reason: 'مع الجد بالمقاسمة',
               });
@@ -1138,7 +1144,9 @@ export class EnhancedInheritanceCalculationEngine {
                 key: 'half_brother_paternal',
                 name: 'الأخ لأب',
                 type: 'تعصيب',
-                fraction: siblingRemainder.multiply(new FractionClass(patBrothers * 2, siblingHeads)),
+                fraction: siblingRemainder.multiply(
+                  new FractionClass(patBrothers * 2, siblingHeads)
+                ),
                 count: patBrothers,
                 reason: 'مع الجد بالمقاسمة',
               });
