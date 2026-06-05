@@ -17,7 +17,5 @@ export const showToast = (
     showAlert(t('error'), message);
   } else if (type === 'success') {
     showAlert(t('success'), message);
-  } else {
-    console.log(`[${type.toUpperCase()}] ${message} (displayed for ${duration}ms)`);
   }
 };

@@ -45,9 +45,9 @@ class PerformanceMonitor {
         timestamp: Date.now(),
       });
 
-      // Log slow operations (> 100ms)
+      // Track slow operations internally (> 100ms)
       if (duration > 100) {
-        console.warn(`[Performance] ${name} took ${duration.toFixed(2)}ms`);
+        this.metrics.push({ name: `SLOW: ${name}`, duration, timestamp: Date.now() });
       }
     };
   }
@@ -182,8 +182,7 @@ export function useRenderTime(componentName: string): void {
       });
 
       if (duration > 16) {
-        // > 1 frame at 60fps
-        console.warn(`[Performance] ${componentName} render took ${duration.toFixed(2)}ms`);
+        // > 1 frame at 60fps — tracked internally
       }
     };
   }, [componentName]);
