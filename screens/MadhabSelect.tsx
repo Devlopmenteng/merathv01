@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
 import { t } from '../lib/i18n';
@@ -38,28 +39,21 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
         data={madhabs}
         keyExtractor={(i) => i.key}
         renderItem={({ item }) => (
-          <TouchableOpacity
+          <Card
+            variant="outlined"
+            leftBorder={theme.colors.primary}
             onPress={() => {
               dispatch({ type: 'SET_MADHAB', payload: item.key });
               navigation.navigate('HeirSelection');
             }}
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.borderRadius.md,
-              padding: theme.spacing.md,
-              marginBottom: theme.spacing.md,
-              borderLeftWidth: 6,
-              borderLeftColor: theme.colors.primary,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
           >
             <Text style={[{ marginEnd: 12 }, theme.typography.h1]}>{item.icon}</Text>
             <View>
               <Text style={theme.typography.h2}>{item.title}</Text>
               <Text style={theme.typography.body}>{item.desc}</Text>
             </View>
-          </TouchableOpacity>
+          </Card>
         )}
       />
     </View>

@@ -12,8 +12,8 @@ export interface ResponsiveProps {
 
 export const useResponsive = (): ResponsiveProps => {
   const { width, height, scale, fontScale } = useWindowDimensions();
-  // Tablet threshold: width >= 768 (typical iPad mini width)
-  const isTablet = width >= 768;
+  // Tablet threshold: width >= 600 (Material Design compact/medium breakpoint)
+  const isTablet = width >= 600;
   const isLandscape = width > height;
   const isPortrait = !isLandscape;
 

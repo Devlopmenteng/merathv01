@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
 import { backArrow } from '../lib/utils/rtl';
@@ -76,17 +77,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
 
       <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
 
-      <View
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
-      >
+      <Card variant="outlined">
         <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
           {t('case_name')}: {auditEntry.caseName || t('no_name')}
         </Text>
@@ -97,25 +88,15 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           {t('madhab')}:{' '}
           {t('madhab_name_' + auditEntry.madhab, { defaultValue: auditEntry.madhab })}
         </Text>
-      </View>
+      </Card>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {auditEntry.steps && auditEntry.steps.length > 0 ? (
           auditEntry.steps.map((step, index) => (
-            <View
+            <Card
               key={index}
-              style={[
-                styles.stepCard,
-                {
-                  backgroundColor: theme.colors.surface,
-                  borderRadius: theme.borderRadius.lg,
-                  padding: theme.spacing.md,
-                  marginBottom: theme.spacing.md,
-                  ...theme.elevation.small,
-                  borderWidth: 1,
-                  borderColor: theme.colors.outline,
-                },
-              ]}
+              variant="outlined"
+              style={{ overflow: 'hidden' }}
               accessible
               accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
@@ -157,39 +138,20 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   { marginStart: 48, color: theme.colors.text.secondary },
                 ]}
               >
-                {localizeStepDesc(step.description)}
-              </Text>
-            </View>
+              {localizeStepDesc(step.description)}
+            </Text>
+            </Card>
           ))
         ) : (
-          <View
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.borderRadius.lg,
-              padding: theme.spacing.lg,
-              ...theme.elevation.small,
-              borderWidth: 1,
-              borderColor: theme.colors.outline,
-            }}
-          >
+          <Card variant="outlined" padding="lg">
             <Text style={[theme.typography.body, { textAlign: 'center' }]}>
               {t('no_steps_available')}
             </Text>
-          </View>
+          </Card>
         )}
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
-          <View
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.borderRadius.lg,
-              padding: theme.spacing.md,
-              marginTop: theme.spacing.md,
-              ...theme.elevation.small,
-              borderWidth: 1,
-              borderColor: theme.colors.outline,
-            }}
-          >
+          <Card variant="outlined" style={{ marginTop: theme.spacing.md }}>
             <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>
               {t('hijab_log')}
             </Text>
@@ -201,18 +163,14 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   { color: theme.colors.text.secondary, marginBottom: theme.spacing.xs },
                 ]}
               >
-                • {log}
-              </Text>
+              • {log}
+            </Text>
             ))}
-          </View>
+          </Card>
         )}
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  stepCard: {
-    overflow: 'hidden',
-  },
-});
+

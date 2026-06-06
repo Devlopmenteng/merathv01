@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 
 type HomeNavigation = {
@@ -85,51 +86,28 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
         </View>
 
         {menuItems.map((item) => (
-          <TouchableOpacity
+          <Card
             key={item.screen}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: theme.spacing.md,
-              borderRadius: theme.borderRadius.md,
-              marginBottom: theme.spacing.md,
-              borderWidth: 1,
-              backgroundColor: item.primary ? theme.colors.primary : theme.colors.surface,
-              borderColor: theme.colors.outline,
-              ...theme.elevation.small,
-            }}
             onPress={() => navigation.navigate(item.screen)}
-            accessibilityLabel={item.title}
-            accessibilityHint={item.description}
-            accessibilityRole="button"
+            style={{ flexDirection: 'row', alignItems: 'center' }}
           >
             <Text style={{ fontSize: 32, marginEnd: theme.spacing.md }}>{item.icon}</Text>
             <View style={styles.menuItemContent}>
               <Text
                 style={[
                   theme.typography.h3,
-                  {
-                    color: item.primary ? theme.colors.onPrimary : theme.colors.onSurface,
-                    marginBottom: theme.spacing.xs,
-                  },
+                  { color: theme.colors.onSurface, marginBottom: theme.spacing.xs },
                 ]}
               >
                 {item.title}
               </Text>
               <Text
-                style={[
-                  theme.typography.body,
-                  {
-                    color: item.primary
-                      ? theme.colors.onPrimary + 'CC'
-                      : theme.colors.text.secondary,
-                  },
-                ]}
+                style={[theme.typography.body, { color: theme.colors.text.secondary }]}
               >
                 {item.description}
               </Text>
             </View>
-          </TouchableOpacity>
+          </Card>
         ))}
       </ScrollView>
     </LinearGradient>

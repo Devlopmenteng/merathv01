@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 import { backArrow } from '../lib/utils/rtl';
 import {
@@ -206,20 +207,11 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredTemplates.length === 0 ? (
-          <View
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.borderRadius.lg,
-              padding: theme.spacing.lg,
-              ...theme.elevation.small,
-              borderWidth: 1,
-              borderColor: theme.colors.outline,
-            }}
-          >
+          <Card variant="outlined" padding="lg">
             <Text style={[theme.typography.body, { textAlign: 'center' }]}>
               {t('no_templates_found')}
             </Text>
-          </View>
+          </Card>
         ) : (
           filteredTemplates.map((template) => (
             <TouchableOpacity

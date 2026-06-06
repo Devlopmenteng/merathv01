@@ -42,7 +42,7 @@ export const APP_DEFAULTS = {
   TOAST_DURATION: 3000,
 
   // Chart display
-  CHART_SIZE: 200,
+  CHART_SIZE: 250,
   MIN_SLICE_ANGLE_FOR_LABEL: 15,
 
   // UI spacing values (already in theme, but defined here for reference)

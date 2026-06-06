@@ -1,21 +1,29 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
-type Props = {
+type CardVariant = 'elevated' | 'outlined' | 'filled' | 'tonal';
+
+type CardProps = {
   children: React.ReactNode;
-  style?: object;
-  noShadow?: boolean;
-  elevation?: 'none' | 'small' | 'medium' | 'large';
+  variant?: CardVariant;
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  leftBorder?: string;
+  onPress?: () => void;
+  style?: ViewStyle;
+  accessible?: boolean;
+  accessibilityLabel?: string;
 };
 
-export const Card: React.FC<Props> = ({
+export const Card: React.FC<CardProps> = ({
   children,
+  variant = 'elevated',
+  padding = 'md',
+  leftBorder,
+  onPress,
   style,
-  noShadow = false,
-  elevation = 'medium',
-  padding = 'lg',
+  accessible,
+  accessibilityLabel,
 }) => {
   const theme = useAppTheme();
 
@@ -30,48 +38,72 @@ export const Card: React.FC<Props> = ({
       case 'lg':
         return theme.spacing.lg;
       default:
-        return theme.spacing.lg;
+        return theme.spacing.md;
     }
   };
 
-  const getElevation = () => {
-    if (noShadow) return {};
-    switch (elevation) {
-      case 'none':
-        return theme.elevation.none;
-      case 'small':
-        return theme.elevation.small;
-      case 'large':
-        return theme.elevation.large;
-      case 'medium':
-      default:
-        return theme.elevation.medium;
-    }
-  };
-
-  return (
-    <View
-      style={[
-        styles.card,
-        {
+  const variantStyles = (): ViewStyle => {
+    switch (variant) {
+      case 'elevated':
+        return {
           backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: getPadding(),
-          marginBottom: theme.spacing.md,
+          ...theme.elevation.medium,
+          borderWidth: 0,
+        };
+      case 'outlined':
+        return {
+          backgroundColor: theme.colors.surface,
           borderWidth: 1,
           borderColor: theme.colors.outline,
-          ...getElevation(),
-        },
-        style,
-      ]}
-    >
-      {children}
-    </View>
-  );
-};
+          ...theme.elevation.none,
+        };
+      case 'filled':
+        return {
+          backgroundColor: theme.colors.surfaceVariant,
+          borderWidth: 0,
+          ...theme.elevation.none,
+        };
+      case 'tonal':
+        return {
+          backgroundColor: theme.colors.primaryContainer,
+          borderWidth: 0,
+          ...theme.elevation.none,
+        };
+      default:
+        return {
+          backgroundColor: theme.colors.surface,
+          ...theme.elevation.medium,
+          borderWidth: 0,
+        };
+    }
+  };
 
-const styles = StyleSheet.create({
-  card: {
-    overflow: 'hidden',
-  },
-});
+  const containerStyle: ViewStyle = {
+    borderRadius: theme.borderRadius.lg,
+    padding: getPadding(),
+    marginBottom: theme.spacing.md,
+    ...(leftBorder
+      ? {
+          borderLeftWidth: 4,
+          borderLeftColor: leftBorder,
+          overflow: 'hidden' as const,
+        }
+      : {}),
+    ...variantStyles(),
+  };
+
+  if (onPress) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={onPress}
+        style={[containerStyle, style]}
+        accessibilityRole="button"
+      >
+        {children}
+      </TouchableOpacity>
+    );
+  }
+
+  return <View style={[containerStyle, style]} accessible={accessible} accessibilityLabel={accessibilityLabel}>{children}</View>;
+};

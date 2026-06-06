@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, FlatList, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
@@ -24,16 +25,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
       data={GLOSSARY}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.borderRadius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-            borderLeftWidth: 4,
-            borderLeftColor: theme.colors.primary,
-          }}
-        >
+        <Card variant="outlined" leftBorder={theme.colors.primary}>
           <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
             {item.term} – {item.termAr}
           </Text>
@@ -41,7 +33,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           <Text style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}>
             {item.definitionAr}
           </Text>
-        </View>
+        </Card>
       )}
     />
   );
@@ -51,14 +43,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
       data={INHERITANCE_VERSES}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.borderRadius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <Card variant="outlined">
           <Text
             style={[
               theme.typography.h3,
@@ -91,7 +76,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           >
             {t('topic')}: {item.topic}
           </Text>
-        </View>
+        </Card>
       )}
     />
   );
@@ -101,14 +86,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
       data={HADITH}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => (
-        <View
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.borderRadius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <Card variant="outlined">
           <Text
             style={[
               { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
@@ -125,7 +103,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           >
             {item.reference}
           </Text>
-        </View>
+        </Card>
       )}
     />
   );

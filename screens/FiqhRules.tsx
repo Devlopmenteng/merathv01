@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';
 import { t } from '../lib/i18n';
@@ -76,17 +77,7 @@ export const FiqhRules = () => {
         {t('madhab_notes')}
       </Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
-        <View
-          key={madhab}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.borderRadius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-            borderLeftWidth: 4,
-            borderLeftColor: theme.colors.primary,
-          }}
-        >
+        <Card key={madhab} variant="outlined" leftBorder={theme.colors.primary}>
           <Text style={[theme.typography.h3, { color: theme.colors.primary, marginBottom: 4 }]}>
             {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
           </Text>
@@ -95,27 +86,19 @@ export const FiqhRules = () => {
               • {val as string}
             </Text>
           ))}
-        </View>
+        </Card>
       ))}
 
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
         {t('special_cases_title')}
       </Text>
       {SPECIAL_CASES.map((caseItem) => (
-        <View
-          key={caseItem.nameKey}
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.borderRadius.md,
-            padding: theme.spacing.md,
-            marginBottom: theme.spacing.md,
-          }}
-        >
+        <Card key={caseItem.nameKey} variant="filled">
           <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>
             {t(caseItem.nameKey)}
           </Text>
           <Text style={theme.typography.body}>{t(caseItem.descKey)}</Text>
-        </View>
+        </Card>
       ))}
 
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>

@@ -12,10 +12,13 @@ type Props = {
   helper?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  prefix?: string;
+  suffix?: string;
   style?: object;
   currency?: boolean;
   currencySymbol?: string;
   disabled?: boolean;
+  maxLength?: number;
 };
 
 export const Input: React.FC<Props> = ({
@@ -27,10 +30,13 @@ export const Input: React.FC<Props> = ({
   helper,
   leftIcon,
   rightIcon,
+  prefix,
+  suffix,
   style,
   currency = false,
   currencySymbol = '$',
   disabled = false,
+  maxLength,
 }) => {
   const theme = useAppTheme();
   const [focused, setFocused] = useState(false);
@@ -49,7 +55,7 @@ export const Input: React.FC<Props> = ({
   useEffect(() => {
     Animated.timing(animatedLabel, {
       toValue: focused || localValue ? 1 : 0,
-      duration: 200, // Fast animation for better UX
+      duration: 200,
       useNativeDriver: false,
     }).start();
   }, [focused, localValue]);
@@ -66,6 +72,7 @@ export const Input: React.FC<Props> = ({
   const handleBlur = () => setFocused(false);
 
   const handleChange = (text: string) => {
+    if (maxLength && text.length > maxLength) return;
     if (currency) {
       const raw = parseCurrency(text);
       setLocalValue(formatCurrency(raw.toString(), currencySymbol));
@@ -124,7 +131,10 @@ export const Input: React.FC<Props> = ({
         ]}
       >
         <Animated.Text style={labelStyle}>{label}</Animated.Text>
-        {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+        {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
+        {prefix && (
+          <Text style={[styles.affix, { color: theme.colors.text.secondary }]}>{prefix}</Text>
+        )}
         <TextInput
           value={localValue}
           onChangeText={handleChange}
@@ -134,7 +144,7 @@ export const Input: React.FC<Props> = ({
           editable={!disabled}
           accessibilityLabel={label}
           accessibilityHint={helper || error}
-          accessibilityState={{ disabled: disabled }}
+          accessibilityState={{ disabled }}
           style={[
             styles.input,
             {
@@ -143,13 +153,21 @@ export const Input: React.FC<Props> = ({
           ]}
           placeholderTextColor={theme.colors.outline}
         />
-        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+        {suffix && (
+          <Text style={[styles.affix, { color: theme.colors.text.secondary }]}>{suffix}</Text>
+        )}
+        {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
       </View>
       {error ? (
         <Text style={[styles.helperText, { color: theme.colors.error }]}>{error}</Text>
       ) : helper ? (
         <Text style={[styles.helperText, { color: theme.colors.text.secondary }]}>{helper}</Text>
       ) : null}
+      {maxLength && (
+        <Text style={[styles.charCount, { color: theme.colors.text.disabled }]}>
+          {localValue.length}/{maxLength}
+        </Text>
+      )}
     </View>
   );
 };
@@ -174,15 +192,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
   },
-  leftIcon: {
-    marginEnd: 8,
+  affix: {
+    fontSize: 14,
+    marginHorizontal: 4,
+    fontWeight: '500',
   },
-  rightIcon: {
-    marginStart: 8,
+  icon: {
+    marginHorizontal: 4,
   },
   helperText: {
     fontSize: 12,
     marginTop: 4,
     fontWeight: '400',
+  },
+  charCount: {
+    fontSize: 11,
+    marginTop: 2,
+    textAlign: 'right',
   },
 });

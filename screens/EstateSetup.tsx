@@ -1,14 +1,16 @@
 import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
 import React, { useState, useCallback } from 'react';
-import { ScrollView, View, Text, TextInput } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { validateEstateInput, sanitizeInput } from '../lib/utils/validation';
 import { showAlert } from '../lib/utils/alerts';
+import { formatCurrency } from '../lib/utils/currency';
 
 type EstateSetupNavigation = {
   navigate: (screen: string) => void;
@@ -68,79 +70,84 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
       <Text style={theme.typography.h1}>{t('estate_details')}</Text>
-      <TextInput
-        placeholder={t('case_name_optional')}
-        value={caseName}
-        onChangeText={(text) =>
-          dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })
-        }
-        style={{
-          borderWidth: 2,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.borderRadius.md,
-          padding: theme.spacing.sm,
-          marginBottom: theme.spacing.md,
-          color: theme.colors.onSurface,
-          backgroundColor: theme.colors.surface,
-          ...theme.elevation.small,
-        }}
-        placeholderTextColor={theme.colors.outline}
-      />
-      <TextInput
-        placeholder={t('date_format')}
-        value={caseDate}
-        onChangeText={(text) =>
-          dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })
-        }
-        style={{
-          borderWidth: 2,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.borderRadius.md,
-          padding: theme.spacing.sm,
-          marginBottom: theme.spacing.md,
-          color: theme.colors.onSurface,
-          backgroundColor: theme.colors.surface,
-          ...theme.elevation.small,
-        }}
-        placeholderTextColor={theme.colors.outline}
-      />
-      <Input
-        label={t('total_estate')}
-        currency={true}
-        value={total}
-        onChangeText={setTotal}
-        keyboardType="numeric"
-        leftIcon={<Text>{t('currency_symbol')}</Text>}
-      />
-      <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+
+      <Card variant="outlined">
+        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
+          {t('case_info')}
+        </Text>
         <Input
-          style={{ flex: 1 }}
-          label={t('funeral_costs')}
-          currency={true}
-          value={funeral}
-          onChangeText={setFuneral}
-          keyboardType="numeric"
+          label={t('case_name_optional')}
+          value={caseName}
+          onChangeText={(text) =>
+            dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })
+          }
+          maxLength={100}
         />
         <Input
-          style={{ flex: 1 }}
-          label={t('debts')}
-          currency={true}
-          value={debts}
-          onChangeText={setDebts}
+          label={t('date')}
+          value={caseDate}
+          onChangeText={(text) =>
+            dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })
+          }
+        />
+      </Card>
+
+      <Card variant="outlined">
+        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
+          {t('estate')}
+        </Text>
+        <Input
+          label={t('total_estate')}
+          currency
+          value={total}
+          onChangeText={setTotal}
           keyboardType="numeric"
         />
-      </View>
-      <Input
-        label={t('will_optional')}
-        currency={true}
-        value={will}
-        onChangeText={setWill}
-        keyboardType="numeric"
-        helper={
-          maxWill > 0 ? `${t('max_allowed')}: ${t('currency_symbol')}${maxWill.toFixed(2)}` : ''
-        }
-        error={willError}
-      />
+        <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+          <Input
+            style={{ flex: 1 }}
+            label={t('funeral_costs')}
+            currency
+            value={funeral}
+            onChangeText={setFuneral}
+            keyboardType="numeric"
+          />
+          <Input
+            style={{ flex: 1 }}
+            label={t('debts')}
+            currency
+            value={debts}
+            onChangeText={setDebts}
+            keyboardType="numeric"
+          />
+        </View>
+        <Input
+          label={t('will_optional')}
+          currency
+          value={will}
+          onChangeText={setWill}
+          keyboardType="numeric"
+          helper={
+            maxWill > 0 ? `${t('max_allowed')}: ${t('currency_symbol')}${maxWill.toFixed(2)}` : ''
+          }
+          error={willError}
+        />
+      </Card>
+
+      {(parseFloat(total) > 0 || parseFloat(funeral) > 0 || parseFloat(debts) > 0) && (
+        <Card variant="tonal">
+          <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
+            {t('net_estate')}
+          </Text>
+          <Text style={theme.typography.display}>
+            {formatCurrency(Math.max(0, net - (parseFloat(will) || 0)))}
+          </Text>
+          <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+            {t('total_estate')}: {formatCurrency(parseFloat(total) || 0)} — {t('deductions')}:&nbsp;
+            {formatCurrency((parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0))}
+          </Text>
+        </Card>
+      )}
       <Button
         title={t('next_select_school')}
         onPress={onNext}

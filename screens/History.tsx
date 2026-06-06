@@ -4,6 +4,7 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-nativ
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { formatCurrency } from '../lib/utils/currency';
 import { backArrow } from '../lib/utils/rtl';
 
@@ -83,26 +84,11 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           </Text>
         ) : (
           filtered.map((entry, idx) => (
-            <TouchableOpacity
+            <Card
               key={idx}
-              style={{
-                backgroundColor: theme.colors.surface,
-                padding: theme.spacing.md,
-                marginBottom: theme.spacing.sm,
-                borderRadius: theme.borderRadius.md,
-                borderLeftWidth: 4,
-                borderLeftColor: theme.colors.primary,
-                ...theme.elevation.small,
-                borderWidth: 1,
-                borderColor: theme.colors.outline,
-              }}
+              variant="outlined"
+              leftBorder={theme.colors.primary}
               onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
-              accessibilityLabel={t('a11y_history_entry', {
-                caseName: entry.caseName || t('no_name'),
-                madhab: t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab }),
-              })}
-              accessibilityHint={t('a11y_history_hint', { count: entry.shares.length })}
-              accessibilityRole="button"
             >
               <Text
                 style={[
@@ -147,7 +133,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
                   ...
                 </Text>
               )}
-            </TouchableOpacity>
+            </Card>
           ))
         )}
       </ScrollView>

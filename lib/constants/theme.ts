@@ -1,15 +1,18 @@
 // Unified Islamic-inspired design system for Merath
 // ─────────────────────────────────────────────────
 
-// ── 8px grid spacing ──
+// ── 8px grid spacing (with 2px/4px micro steps) ──
 export const spacing = {
+  xxxs: 2,
+  xxs: 4,
   xs: 4,
   sm: 8,
   md: 16,
   lg: 24,
   xl: 32,
-  xxl: 48,
-  xxxl: 64,
+  xxl: 40,
+  xxxl: 48,
+  huge: 64,
 };
 
 // ── Border radius scale ──
@@ -25,13 +28,18 @@ export const borderRadius = {
 
 // ── Typography scale ──
 export const typography = {
+  display: { fontSize: 28, fontWeight: '700' as const, lineHeight: 40, letterSpacing: -0.5 },
   h1: { fontSize: 28, fontWeight: '700' as const, lineHeight: 36, letterSpacing: -0.5 },
   h2: { fontSize: 24, fontWeight: '600' as const, lineHeight: 32, letterSpacing: -0.25 },
   h3: { fontSize: 20, fontWeight: '600' as const, lineHeight: 28 },
-  h4: { fontSize: 18, fontWeight: '600' as const, lineHeight: 26 },
+  h4: { fontSize: 18, fontWeight: '500' as const, lineHeight: 26 },
   body: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
   bodySmall: { fontSize: 14, fontWeight: '400' as const, lineHeight: 20 },
   caption: { fontSize: 12, fontWeight: '400' as const, lineHeight: 16 },
+  label: { fontSize: 14, fontWeight: '500' as const, lineHeight: 20, letterSpacing: 0.1 },
+  labelSmall: { fontSize: 11, fontWeight: '500' as const, lineHeight: 16, letterSpacing: 0.5 },
+  mono: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
+  monoSmall: { fontSize: 14, fontWeight: '400' as const, lineHeight: 20 },
   button: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24, letterSpacing: 0.5 },
   overline: {
     fontSize: 11,
@@ -40,6 +48,16 @@ export const typography = {
     textTransform: 'uppercase' as const,
     letterSpacing: 0.5,
   },
+};
+
+// ── Elevation surface levels (MD3 tonal layering for dark mode) ──
+const darkElevationLevels = {
+  level0: '#1A1814',
+  level1: '#22201C',
+  level2: '#262420',
+  level3: '#2A2723',
+  level4: '#2C2925',
+  level5: '#2E2B27',
 };
 
 // ── Elevation system ──
@@ -68,24 +86,16 @@ export const elevation = {
   },
 };
 
-// ── Chart palette (16 harmonious colors for PieChart) ──
+// ── Chart palette (8 color‑blind safe colors, verified via Machado 2009) ──
 const chartColors = [
   '#1B5E3B',
   '#C8923C',
-  '#1A6B7A',
   '#A93545',
-  '#B87D3A',
   '#2E6B8A',
-  '#4A7C59',
-  '#7B5EA7',
-  '#C46B50',
-  '#3A8B7C',
-  '#8B6B4A',
-  '#5C7BA8',
-  '#9B7B5A',
-  '#6B8A5C',
-  '#A8707C',
-  '#5A7B8A',
+  '#CC79A7',
+  '#6B8E7B',
+  '#B87D3A',
+  '#7799BB',
 ];
 
 // ── Madhab accent colors ──
@@ -102,23 +112,31 @@ export const lightTheme = {
     primary: '#1B5E3B',
     primaryDark: '#0F3D26',
     primaryLight: '#E6F2EC',
+    primaryContainer: '#E6F2EC',
     secondary: '#C8923C',
     secondaryLight: '#FDF3E3',
+    secondaryContainer: '#FDF3E3',
+    tertiary: '#CC79A7',
+    tertiaryContainer: '#F9ECF3',
     accent: '#1A6B7A',
     accentLight: '#E4F2F5',
     success: '#2E7D32',
     successLight: '#E8F5E9',
     warning: '#E68A00',
     warningLight: '#FFF8E1',
-    error: '#C62828',
+    error: '#BA1A1A',
     errorLight: '#FFEBEE',
+    errorContainer: '#FFDAD6',
     info: '#1565C0',
     infoLight: '#E3F2FD',
     background: '#FAF7F2',
     surface: '#FFFFFF',
     surfaceVariant: '#F0EBE3',
-    outline: '#C4B9A8',
+    surfaceTint: '#1B5E3B',
+    outline: '#7A766C',
+    outlineVariant: '#CBC4B8',
     backdrop: 'rgba(26, 20, 12, 0.55)',
+    scrim: 'rgba(0, 0, 0, 0.32)',
     text: {
       primary: '#1A1612',
       secondary: '#5C5347',
@@ -126,11 +144,20 @@ export const lightTheme = {
     },
     onPrimary: '#FFFFFF',
     onSecondary: '#FFFFFF',
-    onBackground: '#1A1612',
-    onSurface: '#1A1612',
+    onBackground: '#1C1B16',
+    onSurface: '#1C1B16',
+    onSurfaceVariant: '#49473E',
     shadow: '#1A1612',
     chart: chartColors,
     madhab: madhabColors,
+    elevationLevels: {
+      level0: '#FAF7F2',
+      level1: '#FFFFFF',
+      level2: '#FFFFFF',
+      level3: '#FFFFFF',
+      level4: '#FFFFFF',
+      level5: '#FFFFFF',
+    },
   },
   spacing,
   borderRadius,
@@ -144,8 +171,12 @@ export const darkTheme = {
     primary: '#6FCF97',
     primaryDark: '#1B5E3B',
     primaryLight: '#1A3A2A',
+    primaryContainer: '#1A3A2A',
     secondary: '#F0C75E',
     secondaryLight: '#3D2E10',
+    secondaryContainer: '#3D2E10',
+    tertiary: '#D6B48A',
+    tertiaryContainer: '#3D2E20',
     accent: '#5ABCC9',
     accentLight: '#132D32',
     success: '#66BB6A',
@@ -154,25 +185,31 @@ export const darkTheme = {
     warningLight: '#3D2E0A',
     error: '#EF5350',
     errorLight: '#4A1616',
+    errorContainer: '#4A1616',
     info: '#42A5F5',
     infoLight: '#0D2744',
-    background: '#1E1C18',
-    surface: '#2D2A24',
-    surfaceVariant: '#3A3630',
-    outline: '#5C5750',
+    background: '#1A1814',
+    surface: '#22201C',
+    surfaceVariant: '#2D2A24',
+    surfaceTint: '#6FCF97',
+    outline: '#8D887E',
+    outlineVariant: '#44413A',
     backdrop: 'rgba(0, 0, 0, 0.7)',
+    scrim: 'rgba(0, 0, 0, 0.6)',
     text: {
-      primary: '#F5F0E8',
+      primary: '#E3E0D8',
       secondary: '#C4BDB2',
       disabled: '#7A746C',
     },
     onPrimary: '#0A2A16',
     onSecondary: '#2A1E05',
-    onBackground: '#F5F0E8',
-    onSurface: '#F5F0E8',
+    onBackground: '#E3E0D8',
+    onSurface: '#E3E0D8',
+    onSurfaceVariant: '#C4BDB2',
     shadow: '#000000',
     chart: chartColors,
     madhab: madhabColors,
+    elevationLevels: darkElevationLevels,
   },
   spacing,
   borderRadius,

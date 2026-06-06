@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { useState } from 'react';
@@ -11,6 +11,8 @@ type Props = {
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   loading?: boolean;
+  icon?: React.ReactNode;
+  fullWidth?: boolean;
   style?: object;
 };
 
@@ -21,6 +23,8 @@ export const Button: React.FC<Props> = ({
   size = 'medium',
   disabled,
   loading,
+  icon,
+  fullWidth,
   style,
 }) => {
   const theme = useAppTheme();
@@ -42,7 +46,7 @@ export const Button: React.FC<Props> = ({
           paddingVertical: theme.spacing.lg,
           paddingHorizontal: theme.spacing.xl,
         };
-      default: // medium
+      default:
         return {
           paddingVertical: theme.spacing.md,
           paddingHorizontal: theme.spacing.lg,
@@ -61,27 +65,27 @@ export const Button: React.FC<Props> = ({
     }
   };
 
+  const textColor = isOutlined || isGhost ? theme.colors.primary : theme.colors.onPrimary;
+
   const content = (
-    <Text
-      style={[
-        {
-          color: isOutlined || isGhost ? theme.colors.primary : theme.colors.onPrimary,
-          textAlign: 'center',
-          fontSize: getFontSize(),
-          fontWeight: '600',
-          letterSpacing: 0.5,
-        },
-      ]}
-    >
+    <View style={styles.contentRow}>
+      {icon && !loading && <View style={styles.icon}>{icon}</View>}
       {loading ? (
-        <ActivityIndicator
-          color={isOutlined || isGhost ? theme.colors.primary : theme.colors.onPrimary}
-          size="small"
-        />
+        <ActivityIndicator color={textColor} size="small" />
       ) : (
-        title
+        <Text
+          style={{
+            color: textColor,
+            textAlign: 'center',
+            fontSize: getFontSize(),
+            fontWeight: '600',
+            letterSpacing: 0.5,
+          }}
+        >
+          {title}
+        </Text>
       )}
-    </Text>
+    </View>
   );
 
   const buttonStyle = [
@@ -93,10 +97,11 @@ export const Button: React.FC<Props> = ({
       borderColor: theme.colors.primary,
       borderRadius: theme.borderRadius.md,
       alignItems: 'center',
-      opacity: disabled ? 0.5 : 1,
-      transform: [{ scale: pressed && !disabled ? 0.98 : 1 }],
+      opacity: disabled ? 0.38 : 1,
+      transform: [{ scale: pressed && !disabled ? 0.97 : 1 }],
       ...theme.elevation.small,
     },
+    fullWidth && styles.fullWidth,
     style,
   ];
 
@@ -150,5 +155,17 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     minWidth: 120,
+  },
+  fullWidth: {
+    minWidth: 'auto',
+    width: '100%',
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    marginEnd: 8,
   },
 });

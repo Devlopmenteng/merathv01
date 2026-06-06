@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { Card } from '../components/ui/Card';
 import { useLanguage } from '../lib/context/LanguageContext';
 import { t } from '../lib/i18n';
 import { backArrow, forwardArrow } from '../lib/utils/rtl';
@@ -242,17 +243,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('settings')}</Text>
 
-      <View
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
-      >
+      <Card variant="outlined">
         <View
           style={{
             flexDirection: 'row',
@@ -273,58 +264,25 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityRole="switch"
           />
         </View>
-      </View>
+      </Card>
 
-      <View
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
-      >
+      <Card variant="outlined">
         <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>
           {t('language__')}
         </Text>
         {LanguageDropdown()}
-      </View>
+      </Card>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
+      <Card
+        variant="outlined"
         onPress={() => navigation.navigate('Glossary')}
-        accessibilityLabel={t('glossary_and_education')}
-        accessibilityHint={t('a11y_view_glossary')}
-        accessibilityRole="button"
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
-      </TouchableOpacity>
+      </Card>
 
-      <View
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
-      >
+      <Card variant="outlined">
         <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>{t('about')}</Text>
         <Text style={theme.typography.body}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
         <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
@@ -333,19 +291,9 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
           {t('version')} {appVersion}
         </Text>
-      </View>
+      </Card>
 
-      <View
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
-      >
+      <Card variant="outlined">
         <TouchableOpacity
           style={{
             paddingVertical: theme.spacing.sm,
@@ -368,75 +316,36 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <Text style={theme.typography.body}>{t('feedback_title')}</Text>
         </TouchableOpacity>
-      </View>
+      </Card>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
+      <Card
+        variant="outlined"
         onPress={handlePrivacyPolicy}
-        accessibilityLabel={t('privacy_policy')}
-        accessibilityHint={t('a11y_privacy_policy')}
-        accessibilityRole="button"
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
-      </TouchableOpacity>
+      </Card>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
+      <Card
+        variant="outlined"
         onPress={handleClearCache}
-        accessibilityLabel={t('clear_cache_reset')}
-        accessibilityHint={t('a11y_clear_cache')}
-        accessibilityRole="button"
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Text style={[theme.typography.body, { color: theme.colors.error }]}>
           {t('clear_cache_reset')}
         </Text>
         <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
-      </TouchableOpacity>
+      </Card>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing.md,
-          marginBottom: theme.spacing.md,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ...theme.elevation.small,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
-        }}
+      <Card
+        variant="outlined"
         onPress={handleLegalNotices}
-        accessibilityLabel={t('legal_notices')}
-        accessibilityHint={t('a11y_legal_notices')}
-        accessibilityRole="button"
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
       >
         <Text style={theme.typography.body}>{t('legal_notices')}</Text>
         <Text style={{ fontSize: 18, color: theme.colors.primary }}>⚖️</Text>
-      </TouchableOpacity>
+      </Card>
     </ScrollView>
   );
 };
