@@ -71,7 +71,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       <TextInput
         placeholder={t('case_name_optional')}
         value={caseName}
-        onChangeText={(text) => dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })}
+        onChangeText={(text) =>
+          dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })
+        }
         style={{
           borderWidth: 2,
           borderColor: theme.colors.outline,
@@ -87,7 +89,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       <TextInput
         placeholder={t('date_format')}
         value={caseDate}
-        onChangeText={(text) => dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })}
+        onChangeText={(text) =>
+          dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })
+        }
         style={{
           borderWidth: 2,
           borderColor: theme.colors.outline,

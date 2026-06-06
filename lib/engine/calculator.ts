@@ -124,15 +124,8 @@ export class EnhancedInheritanceCalculationEngine {
       this.steps,
       <K extends keyof MadhhabRules>(key: K) => this.getMadhabRule(key)
     );
-    this.bloodRelCalc = new BloodRelativesCalculator(
-      this.heirs,
-      this.steps,
-      this.specialCases
-    );
-    this.confidenceCalc = new ConfidenceCalculator(
-      this.state,
-      this.specialCases
-    );
+    this.bloodRelCalc = new BloodRelativesCalculator(this.heirs, this.steps, this.specialCases);
+    this.confidenceCalc = new ConfidenceCalculator(this.state, this.specialCases);
   }
 
   private addStep(title: string, description: string, details: unknown, type: string) {
@@ -384,7 +377,10 @@ export class EnhancedInheritanceCalculationEngine {
         asabaShares.length === 0 &&
         bloodRelativesEnabled
       ) {
-        const bloodDistribution = this.bloodRelCalc.distributeToBloodRelatives(finalShares, remainderAfterRadd);
+        const bloodDistribution = this.bloodRelCalc.distributeToBloodRelatives(
+          finalShares,
+          remainderAfterRadd
+        );
         finalShares = bloodDistribution.shares;
         if (bloodDistribution.bloodRelatives.length > 0) {
           this.state.bloodRelativesApplied = true;

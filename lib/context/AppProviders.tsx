@@ -8,9 +8,7 @@ export const AppProviders = React.memo(({ children }: { children: React.ReactNod
   <PremiumProvider>
     <ThemeProvider>
       <LanguageProvider>
-        <CalcProvider>
-          {children}
-        </CalcProvider>
+        <CalcProvider>{children}</CalcProvider>
       </LanguageProvider>
     </ThemeProvider>
   </PremiumProvider>

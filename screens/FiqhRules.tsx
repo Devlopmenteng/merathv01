@@ -136,7 +136,10 @@ export const FiqhRules = () => {
             <Text style={{ flex: 2, fontWeight: 'bold' }}>{t('heirs')}</Text>
           </View>
           {FIXED_SHARES.map((item) => (
-            <View key={item.shareKey} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
+            <View
+              key={item.shareKey}
+              style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}
+            >
               <Text style={{ flex: 1 }}>{t(item.shareKey)}</Text>
               <Text style={{ flex: 2 }}>{t(item.heirsKey)}</Text>
             </View>
@@ -163,7 +166,10 @@ export const FiqhRules = () => {
             <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('hijab_type')}</Text>
           </View>
           {HIJAB_RULES.map((item) => (
-            <View key={item.blockedKey} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
+            <View
+              key={item.blockedKey}
+              style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}
+            >
               <Text style={{ flex: 1 }}>{t(item.blockedKey)}</Text>
               <Text style={{ flex: 1 }}>{t(item.blockerKey)}</Text>
               <Text style={{ flex: 1 }}>{t(item.typeKey)}</Text>

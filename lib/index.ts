@@ -8,7 +8,12 @@ export { usePremium } from './context/PremiumContext';
 export { useTheme } from './context/ThemeContext';
 export { useLanguage } from './context/LanguageContext';
 export { formatCurrency } from './utils/currency';
-export { validateEstateInput, validateHeirCount, validateHeirsConfig, sanitizeInput } from './utils/validation';
+export {
+  validateEstateInput,
+  validateHeirCount,
+  validateHeirsConfig,
+  sanitizeInput,
+} from './utils/validation';
 export { showAlert, showConfirm, showError } from './utils/alerts';
 export { saveAuditTrail, getAuditTrail, clearAuditTrail } from './services/AuditTrailService';
 export { logger } from './utils/logger';
@@ -16,7 +21,11 @@ export {
   calculateInheritance,
   calculateInheritanceWithCache,
 } from './inheritance/calculateAdapter';
-export { InheritanceCalculationError, EstateValidationError, HeirsValidationError } from './engine/errors';
+export {
+  InheritanceCalculationError,
+  EstateValidationError,
+  HeirsValidationError,
+} from './engine/errors';
 export type {
   EstateData,
   EstateInput,

@@ -4,9 +4,7 @@ import type { HeirShareObject } from './types';
 export class AwlCalculator {
   private specialCases: Array<{ type: string; name: string; description: string }>;
 
-  constructor(
-    specialCases: Array<{ type: string; name: string; description: string }>
-  ) {
+  constructor(specialCases: Array<{ type: string; name: string; description: string }>) {
     this.specialCases = specialCases;
   }
 
