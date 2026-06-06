@@ -1,11 +1,12 @@
 import { getLocales } from 'expo-localization';
+import { i18n } from '../i18n';
 
 export const formatCurrency = (
   amount: number,
   locale?: string,
-  currency: string = 'USD'
+  currency: string = 'SAR'
 ): string => {
-  const userLocale = locale || getLocales()[0]?.languageCode || 'en-US';
+  const userLocale = locale || i18n.locale || getLocales()[0]?.languageCode || 'en-US';
   return new Intl.NumberFormat(userLocale, {
     style: 'currency',
     currency,

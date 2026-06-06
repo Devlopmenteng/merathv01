@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { StackAnimationTypes } from 'react-native-screens';
 import { t } from '../lib/i18n';
 import { lightTheme } from '../lib/constants/theme';
 
@@ -41,7 +42,7 @@ const Stack = createNativeStackNavigator();
 
 const screenOptions = {
   headerShown: true,
-  animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as any,
+  animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as StackAnimationTypes,
   animationDuration: 300,
 };
 
@@ -99,7 +100,7 @@ export default function RootNavigator() {
           />
           <Stack.Screen
             name="CalculationSteps"
-            component={CalculationSteps as any}
+            component={CalculationSteps as React.ComponentType<unknown>}
             options={() => ({ title: t('calculation_steps') })}
           />
           <Stack.Screen

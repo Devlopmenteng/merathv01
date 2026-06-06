@@ -67,24 +67,37 @@ export interface FractionData {
 }
 
 // ====== حصة الوارث (Enhanced) ======
-export interface HeirShare {
-  heir?: string;
+export interface HeirShareBase {
   key?: HeirType;
   name: string;
   count?: number;
   fraction?: FractionData;
-  share?: number;
-  percentage?: number;
   amount: number;
+}
+
+export interface EngineHeirShare extends HeirShareBase {
+  share?: number;
   shareType?: string;
-  madhab?: MadhhabType;
-  type?: string;
+  madhab?: Madhab;
   reason?: string;
+}
+
+export interface UIHeirShare extends EngineHeirShare {
+  heir?: string;
+  percentage?: number;
+  type?: string;
   shares?: {
     person: number;
     amount: number;
   }[];
 }
+
+export interface ReportHeirShare extends EngineHeirShare {
+  percentage?: number;
+  madhab?: Madhab;
+}
+
+export interface HeirShare extends UIHeirShare {}
 
 export interface HeirShareObject {
   key: string;
@@ -94,6 +107,16 @@ export interface HeirShareObject {
   count: number;
   reason: string;
   addToExisting?: boolean;
+}
+
+export interface EngineState {
+  blockedHeirs: string[];
+  hijabTypes: string[];
+  awlApplied: boolean;
+  raddApplied: boolean;
+  bloodRelativesApplied: boolean;
+  confidenceFactors: string[];
+  specialCases: Array<{ type: string; name: string; description: string }>;
 }
 
 // ====== الحالات الخاصة ======
@@ -107,7 +130,7 @@ export interface SpecialCases {
 // ====== نتيجة الحساب (Enhanced) ======
 export interface CalculationResult {
   success: boolean;
-  madhab: MadhhabType;
+  madhab: Madhab;
   madhhabName: string;
   shares: HeirShare[];
   netEstate?: number;
@@ -144,14 +167,14 @@ export interface CalculationStep {
   title: string;
   description: string;
   action: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   timestamp: string;
   stepType?: StepType;
 }
 
 // ====== معلومات المذهب ======
 export interface MadhhabConfig {
-  code: MadhhabType;
+  code: Madhab;
   name: string;
   description: string;
   color: string;
@@ -177,14 +200,14 @@ export interface TestCase {
   heirs: HeirsData;
   expected: Record<string, number>;
   tolerance?: number;
-  madhab?: MadhhabType;
+  madhab?: Madhab;
   description: string;
 }
 
 // ====== نتائج الاختبار ======
 export interface TestResult {
   name: string;
-  madhab: MadhhabType;
+  madhab: Madhab;
   passed: boolean;
   skipped: boolean;
   error?: string;
@@ -199,7 +222,7 @@ export interface AuditEntry {
   action: string;
   type: 'success' | 'error' | 'warning' | 'info' | 'calculation';
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   component?: string;
 }
 export interface HeirEntry {

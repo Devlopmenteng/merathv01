@@ -26,7 +26,7 @@ module.exports = [
           varsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/explicit-function-return-types': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   },

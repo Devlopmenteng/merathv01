@@ -298,10 +298,10 @@ describe('Phase 6: Integration Tests', () => {
 
   describe('Error Handling', () => {
     it('should handle navigation errors gracefully', () => {
-      const handleError = (error: any) => {
+      const handleError = (err: unknown) => {
         return {
           success: false,
-          error: error.message,
+          error: err instanceof Error ? err.message : String(err),
         };
       };
 

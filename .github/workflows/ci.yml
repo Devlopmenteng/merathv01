@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,6 +11,8 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
+      - run: npm run lint
+      - run: npm run type-check
       - run: npm test
   build:
     runs-on: ubuntu-latest

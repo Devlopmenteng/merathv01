@@ -17,7 +17,7 @@ type ExportBarProps = {
 };
 
 export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs, children }) => {
-  const viewShotRef = useRef(null);
+  const viewShotRef = useRef<ViewShot>(null);
   const theme = useAppTheme();
 
   const generatePDF = async () => {
@@ -35,7 +35,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
 
   const captureAndShare = async () => {
     if (!viewShotRef.current) return;
-    const uri = await (viewShotRef.current as any).capture();
+    const uri = await viewShotRef.current?.capture?.();
     await Share.share({ message: t('pdf_report_title'), url: uri });
   };
 

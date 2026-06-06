@@ -15,7 +15,7 @@ import {
   type ScenarioCategory,
 } from '../lib/templates/ScenarioTemplates';
 import { useCalc } from '../lib/context/CalcContext';
-import { showAlert } from '../lib/utils/alerts';
+import { Alert } from 'react-native';
 
 type TestCasesNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -86,7 +86,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         });
       }
 
-      showAlert(
+      Alert.alert(
         t('template_applied'),
         `${t('template_name')}: ${template.name}\n${t('recommended_madhab')}: ${recommendedMadhab ? t('madhab_name_' + recommendedMadhab, { defaultValue: recommendedMadhab }) : t('any_fallback')}`
       );

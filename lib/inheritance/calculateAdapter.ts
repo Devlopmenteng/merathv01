@@ -10,7 +10,7 @@
 
 import { EnhancedInheritanceCalculationEngine } from '../engine/calculator';
 import { APP_DEFAULTS } from '../constants/appDefaults';
-import { EstateInput, HeirEntry, HeirsData, MadhhabType, CalculationResult } from '../engine/types';
+import { EstateInput, HeirEntry, HeirsData, Madhab, CalculationResult } from '../engine/types';
 import {
   EstateValidationError,
   HeirsValidationError,
@@ -23,7 +23,7 @@ import {
  */
 export interface CalculateInheritanceInput {
   /** School of Islamic jurisprudence (madhab) to use for calculation */
-  madhab?: MadhhabType;
+  madhab?: Madhab;
   /** Total value of the estate (alternative name: total) */
   totalEstate?: number;
   /** Total value of the estate (alternative name: totalEstate) */
@@ -136,6 +136,9 @@ export function calculateInheritance(input: CalculateInheritanceInput): Calculat
 export async function calculateInheritanceWithCache(
   input: CalculateInheritanceInput
 ): Promise<CalculationResult> {
-  // Simply call the synchronous version
-  return calculateInheritance(input);
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Calculation timed out after 5s')), 5000)
+  );
+  const calculation = Promise.resolve().then(() => calculateInheritance(input));
+  return Promise.race([calculation, timeout]);
 }

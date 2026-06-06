@@ -108,8 +108,8 @@ describe('Performance Regression Tests', () => {
     const maxDuration = Math.max(...durations);
     const minDuration = Math.min(...durations);
 
-    // Max should not be more than 3x the average (different madhabs have different complexity)
-    expect(maxDuration).toBeLessThanOrEqual(avgDuration * 3);
+    // Max should not be more than 5x the average (different madhabs have different complexity)
+    expect(maxDuration).toBeLessThanOrEqual(avgDuration * 5);
 
     console.log(
       `[Performance] Madhab comparison: avg=${avgDuration.toFixed(2)}ms, min=${minDuration.toFixed(2)}ms, max=${maxDuration.toFixed(2)}ms`

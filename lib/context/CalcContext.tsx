@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import type { HeirEntry } from '../engine/types';
 
 type State = {
@@ -8,6 +8,8 @@ type State = {
   debts: number;
   will: number;
   heirs: HeirEntry[];
+  caseName: string;
+  caseDate: string;
 };
 
 const initialState: State = {
@@ -17,6 +19,8 @@ const initialState: State = {
   debts: 0,
   will: 0,
   heirs: [],
+  caseName: '',
+  caseDate: new Date().toISOString().split('T')[0],
 };
 
 type CalcPayload = Partial<
@@ -26,7 +30,8 @@ type CalcPayload = Partial<
 type Action =
   | { type: 'SET_MADHAB'; payload: string }
   | { type: 'SET_ESTATE'; payload: CalcPayload }
-  | { type: 'SET_HEIRS'; payload: HeirEntry[] };
+  | { type: 'SET_HEIRS'; payload: HeirEntry[] }
+  | { type: 'SET_CASE'; payload: { caseName: string; caseDate: string } };
 
 const calcReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -36,6 +41,8 @@ const calcReducer = (state: State, action: Action): State => {
       return { ...state, ...action.payload };
     case 'SET_HEIRS':
       return { ...state, heirs: action.payload };
+    case 'SET_CASE':
+      return { ...state, caseName: action.payload.caseName, caseDate: action.payload.caseDate };
     default:
       return state;
   }
@@ -44,23 +51,14 @@ const calcReducer = (state: State, action: Action): State => {
 type CalcContextType = {
   state: State;
   dispatch: React.Dispatch<Action>;
-  caseName: string;
-  setCaseName: (name: string) => void;
-  caseDate: string;
-  setCaseDate: (date: string) => void;
 };
 
 const CalcContext = createContext<CalcContextType | undefined>(undefined);
 
 export const CalcProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(calcReducer, initialState);
-  const [caseName, setCaseName] = useState('');
-  const [caseDate, setCaseDate] = useState(new Date().toISOString().split('T')[0]);
 
-  const value = React.useMemo(
-    () => ({ state, dispatch, caseName, setCaseName, caseDate, setCaseDate }),
-    [state, dispatch, caseName, caseDate]
-  );
+  const value = React.useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return <CalcContext.Provider value={value}>{children}</CalcContext.Provider>;
 };

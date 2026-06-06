@@ -3,7 +3,7 @@
  * Helper Functions and Inheritance System Constants
  */
 
-import { MadhhabType, HeirType, MadhhabConfig } from './types';
+import { Madhab, HeirType, MadhhabConfig } from './types';
 
 interface HijabRule {
   hijabber: HeirType;
@@ -20,7 +20,7 @@ interface HijabRule {
 /**
  * أيقونات المذاهب
  */
-export const MADHAB_ICONS: Record<MadhhabType, string> = {
+export const MADHAB_ICONS: Record<Madhab, string> = {
   shafii: '🕌',
   hanafi: '📖',
   maliki: '⚖️',
@@ -30,7 +30,7 @@ export const MADHAB_ICONS: Record<MadhhabType, string> = {
 /**
  * أسماء المذاهب
  */
-export const MADHAB_NAMES: Record<MadhhabType, string> = {
+export const MADHAB_NAMES: Record<Madhab, string> = {
   shafii: 'المذهب الشافعي',
   hanafi: 'المذهب الحنفي',
   maliki: 'المذهب المالكي',
@@ -198,14 +198,14 @@ export function getHeirName(heir: HeirType): string {
 /**
  * الحصول على أيقونة المذهب
  */
-export function getMadhhabIcon(madhab: MadhhabType): string {
+export function getMadhhabIcon(madhab: Madhab): string {
   return MADHAB_ICONS[madhab];
 }
 
 /**
  * الحصول على اسم المذهب
  */
-export function getMadhhabName(madhab: MadhhabType): string {
+export function getMadhhabName(madhab: Madhab): string {
   return MADHAB_NAMES[madhab];
 }
 export const HEIR_NAMES: Record<HeirType, string> = {

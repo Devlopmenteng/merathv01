@@ -101,9 +101,9 @@ export const FiqhRules = () => {
       <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
         {t('special_cases_title')}
       </Text>
-      {SPECIAL_CASES.map((caseItem, idx) => (
+      {SPECIAL_CASES.map((caseItem) => (
         <View
-          key={idx}
+          key={caseItem.nameKey}
           style={{
             backgroundColor: theme.colors.surface,
             borderRadius: theme.borderRadius.md,
@@ -122,7 +122,7 @@ export const FiqhRules = () => {
         {t('fixed_shares_title')}
       </Text>
       <ScrollView horizontal>
-        <View style={{ minWidth: '100%' }}>
+        <View style={{ minWidth: 300 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -132,13 +132,13 @@ export const FiqhRules = () => {
               marginBottom: 8,
             }}
           >
-            <Text style={{ width: 100, fontWeight: 'bold' }}>{t('share')}</Text>
-            <Text style={{ width: 200, fontWeight: 'bold' }}>{t('heirs')}</Text>
+            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('share')}</Text>
+            <Text style={{ flex: 2, fontWeight: 'bold' }}>{t('heirs')}</Text>
           </View>
-          {FIXED_SHARES.map((item, idx) => (
-            <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 100 }}>{t(item.shareKey)}</Text>
-              <Text style={{ width: 200 }}>{t(item.heirsKey)}</Text>
+          {FIXED_SHARES.map((item) => (
+            <View key={item.shareKey} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
+              <Text style={{ flex: 1 }}>{t(item.shareKey)}</Text>
+              <Text style={{ flex: 2 }}>{t(item.heirsKey)}</Text>
             </View>
           ))}
         </View>
@@ -148,7 +148,7 @@ export const FiqhRules = () => {
         {t('hijab_rules_title')}
       </Text>
       <ScrollView horizontal>
-        <View style={{ minWidth: '100%' }}>
+        <View style={{ minWidth: 340 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -158,15 +158,15 @@ export const FiqhRules = () => {
               marginBottom: 8,
             }}
           >
-            <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocked')}</Text>
-            <Text style={{ width: 120, fontWeight: 'bold' }}>{t('blocker')}</Text>
-            <Text style={{ width: 100, fontWeight: 'bold' }}>{t('hijab_type')}</Text>
+            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('blocked')}</Text>
+            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('blocker')}</Text>
+            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('hijab_type')}</Text>
           </View>
-          {HIJAB_RULES.map((item, idx) => (
-            <View key={idx} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
-              <Text style={{ width: 120 }}>{t(item.blockedKey)}</Text>
-              <Text style={{ width: 120 }}>{t(item.blockerKey)}</Text>
-              <Text style={{ width: 100 }}>{t(item.typeKey)}</Text>
+          {HIJAB_RULES.map((item) => (
+            <View key={item.blockedKey} style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}>
+              <Text style={{ flex: 1 }}>{t(item.blockedKey)}</Text>
+              <Text style={{ flex: 1 }}>{t(item.blockerKey)}</Text>
+              <Text style={{ flex: 1 }}>{t(item.typeKey)}</Text>
             </View>
           ))}
         </View>

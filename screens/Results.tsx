@@ -46,7 +46,7 @@ const ExportBar = React.lazy(() =>
 const PieChart = React.lazy(() =>
   import('../components/PieChart').then((module) => ({ default: module.PieChart }))
 );
-import type { CalculationResult, EstateInput } from '../lib/engine/types';
+import type { CalculationResult, EstateInput, Madhab } from '../lib/engine/types';
 
 type ResultsNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -80,7 +80,7 @@ const AnimatedNumber = ({ value, style }: { value: number; style?: StyleProp<Tex
 
 export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   const { isPremium } = usePremium();
-  const { state, caseName, caseDate } = useCalc();
+  const { state } = useCalc();
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
   const { isTablet } = useResponsive();
@@ -134,7 +134,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
       try {
         // Use cached calculation for better performance
         const res = await calculateInheritanceWithCache({
-          madhab: state.madhab as any,
+          madhab: state.madhab as Madhab,
           totalEstate: estate.total,
           funeralExpenses: estate.funeral,
           debts: estate.debts,
@@ -163,8 +163,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             madhab: state.madhab,
             netTotal: safeResult.netEstate ?? 0,
             shares: safeResult.shares,
-            caseName: caseName,
-            caseDate: caseDate,
+            caseName: state.caseName,
+            caseDate: state.caseDate,
             steps: safeResult.steps.map(({ title, description }) => ({ title, description })),
           }).catch(() => {});
         }
@@ -185,8 +185,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
     state.will,
     heirsObject,
     hasNoHeirs,
-    caseName,
-    caseDate,
+    state.caseName,
+    state.caseDate,
   ]);
 
   const generatePDF = useCallback(async () => {
@@ -352,6 +352,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
         heirs={state.heirs}
       >
         <ScrollView
+          accessibilityLiveRegion="polite"
           contentContainerStyle={{
             padding: theme.spacing.lg,
             paddingBottom: 200 + insets.bottom,

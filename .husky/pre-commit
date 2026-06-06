@@ -24,7 +24,11 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "⚠️  Skipping TypeScript type-check (existing errors in codebase)"
-echo "⚠️  Run 'npm run type-check' manually to check for new type errors"
+echo "🔎 Running TypeScript type-check..."
+npm run type-check
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript type-check failed. Please fix type errors before committing."
+  exit 1
+fi
 
 echo "✅ Quality gates passed!"

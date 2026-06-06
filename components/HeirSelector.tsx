@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { HeirType, HeirEntry } from '../lib/engine/types';
 import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
-import { showValidationError, showAlert } from '../lib/utils/alerts';
+import { showValidationError } from '../lib/utils/alerts';
 import { HeirRow } from './HeirRow';
 import { TemplatesModal } from './TemplatesModal';
 import { localizeHeirType } from '../lib/utils/shareLocalization';
@@ -92,14 +92,14 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
         return;
       }
       if (type === 'wife' && newCount > APP_DEFAULTS.MAX_WIVES) {
-        showAlert(t('validation_error'), t('max_wives', { count: APP_DEFAULTS.MAX_WIVES }));
+        Alert.alert(t('validation_error'), t('max_wives', { count: APP_DEFAULTS.MAX_WIVES }));
         return;
       }
       if (
         ['father', 'mother', 'grandfather'].includes(type) &&
         newCount > APP_DEFAULTS.MAX_SINGLE_HEIRS
       ) {
-        showAlert(t('validation_error'), `${localizeHeirType(type)}: ${t('only_one_allowed')}`);
+        Alert.alert(t('validation_error'), `${localizeHeirType(type)}: ${t('only_one_allowed')}`);
         return;
       }
       const newHeirs = heirs.filter((h) => h.type !== type);

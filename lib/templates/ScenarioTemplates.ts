@@ -9,7 +9,7 @@
  */
 
 import type { HeirEntry, EstateInput } from '../engine/types';
-import type { MadhhabType } from '../engine/types';
+import type { Madhab } from '../engine/types';
 
 /**
  * Scenario template interface
@@ -28,7 +28,7 @@ export interface ScenarioTemplate {
   /** Heirs configuration for this template */
   heirs: HeirEntry[];
   /** Recommended madhab (optional - user can override) */
-  recommendedMadhab?: MadhhabType;
+  recommendedMadhab?: Madhab;
   /** Notes about this specific scenario */
   notes?: string;
   /** Whether this is a commonly used template */
@@ -551,7 +551,7 @@ export function getCategoryDisplayName(category: ScenarioCategory): string {
 export function applyTemplate(template: ScenarioTemplate): {
   estate: EstateInput;
   heirs: HeirEntry[];
-  recommendedMadhab?: MadhhabType | undefined;
+  recommendedMadhab?: Madhab | undefined;
 } {
   return {
     estate: { ...template.estate },

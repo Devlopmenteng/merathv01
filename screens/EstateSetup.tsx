@@ -17,7 +17,8 @@ type EstateSetupNavigation = {
 export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { dispatch, caseName, setCaseName, caseDate, setCaseDate } = useCalc();
+  const { state, dispatch } = useCalc();
+  const { caseName, caseDate } = state;
   const [total, setTotal] = useState('');
   const [funeral, setFuneral] = useState('');
   const [debts, setDebts] = useState('');
@@ -42,11 +43,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
     }
 
     // Sanitize case name
-    if (caseName) {
-      const sanitized = sanitizeInput(caseName);
-      if (sanitized !== caseName) {
-        setCaseName(sanitized);
-      }
+    const sanitized = caseName ? sanitizeInput(caseName) : '';
+    if (sanitized !== caseName) {
+      dispatch({ type: 'SET_CASE', payload: { caseName: sanitized, caseDate } });
     }
 
     dispatch({
@@ -54,7 +53,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       payload: estate,
     });
     navigation.navigate('MadhabSelect');
-  }, [total, funeral, debts, will, caseName, dispatch, navigation]);
+  }, [total, funeral, debts, will, caseName, caseDate, dispatch, navigation]);
 
   return (
     <ScrollView
@@ -72,7 +71,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       <TextInput
         placeholder={t('case_name_optional')}
         value={caseName}
-        onChangeText={setCaseName}
+        onChangeText={(text) => dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })}
         style={{
           borderWidth: 2,
           borderColor: theme.colors.outline,
@@ -88,7 +87,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       <TextInput
         placeholder={t('date_format')}
         value={caseDate}
-        onChangeText={setCaseDate}
+        onChangeText={(text) => dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })}
         style={{
           borderWidth: 2,
           borderColor: theme.colors.outline,

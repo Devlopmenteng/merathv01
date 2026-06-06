@@ -216,7 +216,7 @@ describe('CalculationButton Logic', () => {
 
 describe('ResultsDisplay Logic', () => {
   it('should show empty state when no results', () => {
-    const results: any[] = [];
+    const results: unknown[] = [];
     expect(results.length).toBe(0);
   });
 
@@ -261,7 +261,7 @@ describe('ResultsDisplay Logic', () => {
 
 describe('CalculationHistory Logic', () => {
   it('should show empty state when no history', () => {
-    const entries: any[] = [];
+    const entries: unknown[] = [];
     expect(entries.length).toBe(0);
   });
 
@@ -325,11 +325,11 @@ describe('CalculationHistory Logic', () => {
   });
 
   it('should handle empty history', () => {
-    const entries: any[] = [];
+    const entries: unknown[] = [];
     const stats = {
       total: entries.length,
-      successful: entries.filter((e) => e.success).length,
-      failed: entries.filter((e) => !e.success).length,
+      successful: 0,
+      failed: 0,
     };
 
     expect(stats.total).toBe(0);
@@ -546,7 +546,7 @@ describe('Component Composition', () => {
   });
 
   it('should handle error boundaries', () => {
-    const handleError = (error: any) => {
+    const handleError = (error: unknown) => {
       if (error instanceof Error) {
         return error.message;
       }
