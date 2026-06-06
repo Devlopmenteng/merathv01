@@ -101,9 +101,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               >
                 {item.title}
               </Text>
-              <Text
-                style={[theme.typography.body, { color: theme.colors.text.secondary }]}
-              >
+              <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>
                 {item.description}
               </Text>
             </View>

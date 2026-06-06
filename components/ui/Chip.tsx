@@ -66,7 +66,8 @@ export const Chip: React.FC<ChipProps> = ({
         style={[
           styles.label,
           {
-            color: selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface,
+            color:
+              selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface,
           },
         ]}
       >

@@ -138,8 +138,8 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   { marginStart: 48, color: theme.colors.text.secondary },
                 ]}
               >
-              {localizeStepDesc(step.description)}
-            </Text>
+                {localizeStepDesc(step.description)}
+              </Text>
             </Card>
           ))
         ) : (
@@ -163,8 +163,8 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                   { color: theme.colors.text.secondary, marginBottom: theme.spacing.xs },
                 ]}
               >
-              • {log}
-            </Text>
+                • {log}
+              </Text>
             ))}
           </Card>
         )}
@@ -172,5 +172,3 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
     </View>
   );
 };
-
-

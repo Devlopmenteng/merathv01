@@ -14,17 +14,14 @@ type TabsProps = {
   variant?: 'primary' | 'underlined';
 };
 
-export const Tabs: React.FC<TabsProps> = ({
-  tabs,
-  activeTab,
-  onChange,
-  variant = 'primary',
-}) => {
+export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, variant = 'primary' }) => {
   const theme = useAppTheme();
 
   if (variant === 'underlined') {
     return (
-      <View style={[styles.underlinedContainer, { borderBottomColor: theme.colors.outlineVariant }]}>
+      <View
+        style={[styles.underlinedContainer, { borderBottomColor: theme.colors.outlineVariant }]}
+      >
         {tabs.map((tab) => {
           const isActive = tab.key === activeTab;
           return (
@@ -48,10 +45,7 @@ export const Tabs: React.FC<TabsProps> = ({
               </Text>
               {isActive && (
                 <View
-                  style={[
-                    styles.underlinedIndicator,
-                    { backgroundColor: theme.colors.primary },
-                  ]}
+                  style={[styles.underlinedIndicator, { backgroundColor: theme.colors.primary }]}
                 />
               )}
             </TouchableOpacity>

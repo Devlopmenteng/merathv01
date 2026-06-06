@@ -10,12 +10,7 @@ type TopBarProps = {
   rightAction?: React.ReactNode;
 };
 
-export const TopBar: React.FC<TopBarProps> = ({
-  title,
-  showBack,
-  onBack,
-  rightAction,
-}) => {
+export const TopBar: React.FC<TopBarProps> = ({ title, showBack, onBack, rightAction }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
 
@@ -50,10 +45,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           </TouchableOpacity>
         )}
       </View>
-      <Text
-        style={[theme.typography.h2, styles.title]}
-        numberOfLines={1}
-      >
+      <Text style={[theme.typography.h2, styles.title]} numberOfLines={1}>
         {title}
       </Text>
       <View style={styles.side}>{rightAction || null}</View>

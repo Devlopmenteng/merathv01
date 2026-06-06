@@ -30,12 +30,7 @@ export const Modal: React.FC<ModalProps> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <RNModal
-      animationType="slide"
-      transparent
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <RNModal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
         <View
           style={[

@@ -72,7 +72,9 @@ export const Stepper: React.FC<Props> = ({
             width: buttonSize,
             height: buttonSize,
             borderRadius: buttonSize / 2,
-            backgroundColor: canDecrease ? theme.colors.surfaceVariant : theme.colors.surfaceVariant,
+            backgroundColor: canDecrease
+              ? theme.colors.surfaceVariant
+              : theme.colors.surfaceVariant,
             opacity: canDecrease ? 1 : 0.38,
             transform: [{ scale: pressedDecrease && canDecrease ? 0.95 : 1 }],
             ...theme.elevation.small,

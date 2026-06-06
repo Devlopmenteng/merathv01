@@ -93,9 +93,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       </Card>
 
       <Card variant="outlined">
-        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
-          {t('estate')}
-        </Text>
+        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>{t('estate')}</Text>
         <Input
           label={t('total_estate')}
           currency
@@ -144,7 +142,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           </Text>
           <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
             {t('total_estate')}: {formatCurrency(parseFloat(total) || 0)} — {t('deductions')}:&nbsp;
-            {formatCurrency((parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0))}
+            {formatCurrency(
+              (parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0)
+            )}
           </Text>
         </Card>
       )}

@@ -105,5 +105,13 @@ export const Card: React.FC<CardProps> = ({
     );
   }
 
-  return <View style={[containerStyle, style]} accessible={accessible} accessibilityLabel={accessibilityLabel}>{children}</View>;
+  return (
+    <View
+      style={[containerStyle, style]}
+      accessible={accessible}
+      accessibilityLabel={accessibilityLabel}
+    >
+      {children}
+    </View>
+  );
 };
