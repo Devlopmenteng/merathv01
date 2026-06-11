@@ -76,11 +76,7 @@ export default function RootNavigator() {
   const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      linking={linking}
-      fallback={<LoadingView />}
-    >
+    <NavigationContainer ref={navigationRef} linking={linking} fallback={<LoadingView />}>
       <Suspense fallback={<LoadingView />}>
         <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
