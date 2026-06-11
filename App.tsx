@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import * as Linking from 'expo-linking';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import RootNavigator from './navigation/RootNavigator';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -11,15 +10,6 @@ import { useLanguage } from './lib/context/LanguageContext';
 function AppContent() {
   const { isDark } = useTheme();
   const { locale } = useLanguage();
-
-  useEffect(() => {
-    const handleDeepLink = ({ url }: { url: string }) => {
-      Linking.parse(url);
-      // TODO: Implement route parsing and navigation based on parsed.path
-    };
-    const subscription = Linking.addEventListener('url', handleDeepLink);
-    return () => subscription.remove();
-  }, []);
 
   return (
     <>

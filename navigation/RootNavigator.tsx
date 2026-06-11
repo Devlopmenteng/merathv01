@@ -1,6 +1,6 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useRef } from 'react';
 import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { StackAnimationTypes } from 'react-native-screens';
 import { t } from '../lib/i18n';
@@ -40,6 +40,26 @@ const TestCases = lazy(() =>
 
 const Stack = createNativeStackNavigator();
 
+// Deep linking configuration
+const linking = {
+  prefixes: ['merath://', 'https://merath.app'],
+  config: {
+    screens: {
+      Home: '',
+      EstateSetup: 'estate',
+      MadhabSelect: 'madhab',
+      HeirSelection: 'heirs',
+      Results: 'results',
+      Comparison: 'compare',
+      Settings: 'settings',
+      History: 'history',
+      Glossary: 'glossary',
+      CalculationSteps: 'steps',
+      TestCases: 'tests',
+    },
+  },
+};
+
 const screenOptions = {
   headerShown: true,
   animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as StackAnimationTypes,
@@ -53,8 +73,14 @@ const LoadingView = () => (
 );
 
 export default function RootNavigator() {
+  const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      linking={linking}
+      fallback={<LoadingView />}
+    >
       <Suspense fallback={<LoadingView />}>
         <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
