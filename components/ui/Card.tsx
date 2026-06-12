@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
@@ -18,7 +18,7 @@ type CardProps = {
   accessibilityState?: { selected?: boolean; disabled?: boolean; expanded?: boolean };
 };
 
-export const Card: React.FC<CardProps> = ({
+export const Card: React.FC<CardProps> = memo(({
   children,
   variant = 'elevated',
   padding = 'md',
@@ -33,7 +33,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   const theme = useAppTheme();
 
-  const getPadding = () => {
+  const paddingValue = useMemo(() => {
     switch (padding) {
       case 'none':
         return 0;
@@ -46,9 +46,9 @@ export const Card: React.FC<CardProps> = ({
       default:
         return theme.spacing.md;
     }
-  };
+  }, [padding, theme.spacing.sm, theme.spacing.md, theme.spacing.lg]);
 
-  const variantStyles = (): ViewStyle => {
+  const variantStyle = useMemo((): ViewStyle => {
     switch (variant) {
       case 'elevated':
         return {
@@ -82,11 +82,11 @@ export const Card: React.FC<CardProps> = ({
           borderWidth: 0,
         };
     }
-  };
+  }, [variant, theme.colors.surface, theme.colors.surfaceVariant, theme.colors.primaryContainer, theme.colors.outline, theme.elevation.medium, theme.elevation.none]);
 
-  const containerStyle: ViewStyle = {
+  const containerStyle = useMemo((): ViewStyle => ({
     borderRadius: theme.borderRadius.lg,
-    padding: getPadding(),
+    padding: paddingValue,
     marginBottom: theme.spacing.md,
     ...(leftBorder
       ? {
@@ -95,8 +95,8 @@ export const Card: React.FC<CardProps> = ({
           overflow: 'hidden' as const,
         }
       : {}),
-    ...variantStyles(),
-  };
+    ...variantStyle,
+  }), [theme.borderRadius.lg, paddingValue, theme.spacing.md, leftBorder, variantStyle]);
 
   if (onPress) {
     return (
@@ -123,4 +123,6 @@ export const Card: React.FC<CardProps> = ({
       {children}
     </View>
   );
-};
+});
+
+Card.displayName = 'Card';

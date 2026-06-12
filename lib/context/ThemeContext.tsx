@@ -43,12 +43,21 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       h3: { ...baseTypography.h3, fontSize: baseTypography.h3.fontSize * scale },
       h4: { ...baseTypography.h4, fontSize: baseTypography.h4.fontSize * scale },
       body: { ...baseTypography.body, fontSize: baseTypography.body.fontSize * scale },
-      bodySmall: { ...baseTypography.bodySmall, fontSize: baseTypography.bodySmall.fontSize * scale },
+      bodySmall: {
+        ...baseTypography.bodySmall,
+        fontSize: baseTypography.bodySmall.fontSize * scale,
+      },
       caption: { ...baseTypography.caption, fontSize: baseTypography.caption.fontSize * scale },
       label: { ...baseTypography.label, fontSize: baseTypography.label.fontSize * scale },
-      labelSmall: { ...baseTypography.labelSmall, fontSize: baseTypography.labelSmall.fontSize * scale },
+      labelSmall: {
+        ...baseTypography.labelSmall,
+        fontSize: baseTypography.labelSmall.fontSize * scale,
+      },
       mono: { ...baseTypography.mono, fontSize: baseTypography.mono.fontSize * scale },
-      monoSmall: { ...baseTypography.monoSmall, fontSize: baseTypography.monoSmall.fontSize * scale },
+      monoSmall: {
+        ...baseTypography.monoSmall,
+        fontSize: baseTypography.monoSmall.fontSize * scale,
+      },
       button: { ...baseTypography.button, fontSize: baseTypography.button.fontSize * scale },
       overline: { ...baseTypography.overline, fontSize: baseTypography.overline.fontSize * scale },
     };

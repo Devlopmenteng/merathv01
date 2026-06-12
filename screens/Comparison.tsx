@@ -432,57 +432,55 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         {comparisonRows.map((row) => {
           if (!row) return null;
           return (
-          <View
-            key={row.heirKey}
-            style={{
-              flexDirection: 'row',
-              borderBottomWidth: 1,
-              borderColor: theme.colors.outline,
-              paddingVertical: 12,
-            }}
-          >
-            <Text
-              style={{ width: isLandscape ? 200 : isTablet ? 180 : 140, paddingHorizontal: 8 }}
-              numberOfLines={1}
+            <View
+              key={row.heirKey}
+              style={{
+                flexDirection: 'row',
+                borderBottomWidth: 1,
+                borderColor: theme.colors.outline,
+                paddingVertical: 12,
+              }}
             >
-              {localizeHeirName(row.heirKey, row.heirKey)}
-            </Text>
-            <Text
-              style={{ width: isLandscape ? 100 : isTablet ? 80 : 60, textAlign: 'center' }}
-            >
-              {getCount(row.heirKey)}
-            </Text>
-            {row.sharesByMadhab.map((data, index) => (
-              <View
-                key={index}
-                style={{
-                  width: isLandscape ? 150 : isTablet ? 120 : 100,
-                  alignItems: 'center',
-                }}
+              <Text
+                style={{ width: isLandscape ? 200 : isTablet ? 180 : 140, paddingHorizontal: 8 }}
+                numberOfLines={1}
               >
-                {data ? (
-                  <>
-                    <Text style={theme.typography.caption}>{data.fraction}</Text>
-                    <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
-                      {data.percentage}
-                    </Text>
-                    <Text
-                      style={[
-                        { fontWeight: 'bold', color: theme.colors.primary },
-                        theme.typography.caption,
-                      ]}
-                    >
-                      {data.amount}
-                    </Text>
-                  </>
-                ) : (
-                  <Text style={{ color: theme.colors.outline }}>—</Text>
-                )}
-              </View>
-            ))}
-          </View>
-        );
-      })}
+                {localizeHeirName(row.heirKey, row.heirKey)}
+              </Text>
+              <Text style={{ width: isLandscape ? 100 : isTablet ? 80 : 60, textAlign: 'center' }}>
+                {getCount(row.heirKey)}
+              </Text>
+              {row.sharesByMadhab.map((data, index) => (
+                <View
+                  key={index}
+                  style={{
+                    width: isLandscape ? 150 : isTablet ? 120 : 100,
+                    alignItems: 'center',
+                  }}
+                >
+                  {data ? (
+                    <>
+                      <Text style={theme.typography.caption}>{data.fraction}</Text>
+                      <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
+                        {data.percentage}
+                      </Text>
+                      <Text
+                        style={[
+                          { fontWeight: 'bold', color: theme.colors.primary },
+                          theme.typography.caption,
+                        ]}
+                      >
+                        {data.amount}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text style={{ color: theme.colors.outline }}>—</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          );
+        })}
       </ScrollView>
     </Card>
   );

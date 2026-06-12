@@ -445,13 +445,19 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             }}
           >
             <Text
-              style={[{ color: theme.colors.onPrimary, marginBottom: theme.spacing.xs }, theme.typography.button]}
+              style={[
+                { color: theme.colors.onPrimary, marginBottom: theme.spacing.xs },
+                theme.typography.button,
+              ]}
             >
               {t('netEstate')}
             </Text>
             <AnimatedNumber
               value={result.netEstate ?? 0}
-              style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.display]}
+              style={[
+                { color: theme.colors.onPrimary, fontWeight: 'bold' },
+                theme.typography.display,
+              ]}
             />
           </LinearGradient>
 
@@ -478,12 +484,16 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                 }}
               />
             </View>
-            <Text style={{ marginStart: 12, color: confidenceColor, fontWeight: '600', fontSize: 14 }}>
+            <Text
+              style={{ marginStart: 12, color: confidenceColor, fontWeight: '600', fontSize: 14 }}
+            >
               {result.confidence}%
             </Text>
           </View>
 
-          <Text style={[theme.typography.caption, { marginBottom: theme.spacing.md }]}>{t('confidence')}</Text>
+          <Text style={[theme.typography.caption, { marginBottom: theme.spacing.md }]}>
+            {t('confidence')}
+          </Text>
 
           {specialCaseElements}
 
@@ -516,71 +526,82 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               <Text
                 style={[
                   theme.typography.h2,
-                  { marginTop: useGridLayout ? 0 : theme.spacing.xl, marginBottom: theme.spacing.md },
+                  {
+                    marginTop: useGridLayout ? 0 : theme.spacing.xl,
+                    marginBottom: theme.spacing.md,
+                  },
                 ]}
               >
                 {t('distribution')}
               </Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-            <View style={{ minWidth: '100%' }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  borderBottomWidth: 2,
-                  borderColor: theme.colors.primary,
-                  paddingBottom: 8,
-                  marginBottom: 8,
-                }}
-              >
-                <Text
-                  style={{ width: isTablet ? 130 : 100, fontWeight: 'bold', paddingHorizontal: 4 }}
-                >
-                  {t('heir')}
-                </Text>
-                <Text
-                  style={{ width: isTablet ? 80 : 60, fontWeight: 'bold', textAlign: 'center' }}
-                >
-                  {t('count')}
-                </Text>
-                <Text
-                  style={{
-                    width: isTablet ? 100 : 80,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  }}
-                >
-                  {t('type')}
-                </Text>
-                <Text
-                  style={{
-                    width: isTablet ? 100 : 80,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  }}
-                >
-                  {t('share')}
-                </Text>
-                <Text
-                  style={{ width: isTablet ? 100 : 80, fontWeight: 'bold', textAlign: 'center' }}
-                >
-                  {t('percentage')}
-                </Text>
-                <Text
-                  style={{
-                    width: isTablet ? 130 : 100,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  }}
-                >
-                  {t('amount')}
-                </Text>
-              </View>
-              {distributionRows}
-            </View>
-          </ScrollView>
+              <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+                <View style={{ minWidth: '100%' }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      borderBottomWidth: 2,
+                      borderColor: theme.colors.primary,
+                      paddingBottom: 8,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        width: isTablet ? 130 : 100,
+                        fontWeight: 'bold',
+                        paddingHorizontal: 4,
+                      }}
+                    >
+                      {t('heir')}
+                    </Text>
+                    <Text
+                      style={{ width: isTablet ? 80 : 60, fontWeight: 'bold', textAlign: 'center' }}
+                    >
+                      {t('count')}
+                    </Text>
+                    <Text
+                      style={{
+                        width: isTablet ? 100 : 80,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                      }}
+                    >
+                      {t('type')}
+                    </Text>
+                    <Text
+                      style={{
+                        width: isTablet ? 100 : 80,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                      }}
+                    >
+                      {t('share')}
+                    </Text>
+                    <Text
+                      style={{
+                        width: isTablet ? 100 : 80,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {t('percentage')}
+                    </Text>
+                    <Text
+                      style={{
+                        width: isTablet ? 130 : 100,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                      }}
+                    >
+                      {t('amount')}
+                    </Text>
+                  </View>
+                  {distributionRows}
+                </View>
+              </ScrollView>
             </View>
           </View>
           <TouchableOpacity
@@ -602,7 +623,9 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             accessibilityRole="button"
             accessibilityState={{ expanded: showSteps }}
           >
-            <Text style={[theme.typography.h2, { color: theme.colors.onSurface }]}>{t('steps')}</Text>
+            <Text style={[theme.typography.h2, { color: theme.colors.onSurface }]}>
+              {t('steps')}
+            </Text>
             <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
               {showSteps ? '▲' : '▼'}
             </Text>

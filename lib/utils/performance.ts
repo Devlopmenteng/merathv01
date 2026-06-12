@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 /**
  * Performance Monitoring Utilities
@@ -25,11 +25,79 @@ interface PerformanceMetric {
 }
 
 /**
+ * App performance metrics
+ */
+interface AppMetrics {
+  /** Current FPS (frames per second) */
+  fps?: number;
+  /** Average FPS over the last minute */
+  avgFps?: number;
+  /** Memory usage in MB */
+  memoryUsage?: number;
+  /** Screen render time in ms */
+  renderTime?: number;
+  /** Total calculation time for last calculation */
+  lastCalcTime?: number;
+  /** App startup time in ms */
+  startupTime?: number;
+}
+
+/**
  * Performance monitor class
  */
 class PerformanceMonitor {
   private metrics: PerformanceMetric[] = [];
   private maxMetrics = 100; // Keep last 100 metrics
+  private appMetrics: AppMetrics = {};
+  private fpsHistory: number[] = [];
+
+  /**
+   * Initialize performance monitoring
+   */
+  initialize() {
+    // Record startup time
+    if (!this.appMetrics.startupTime) {
+      this.appMetrics.startupTime = performance.now();
+    }
+
+    // Start FPS monitoring
+    this.startFpsMonitoring();
+  }
+
+  /**
+   * Start FPS monitoring
+   */
+  private startFpsMonitoring() {
+    let lastTime = performance.now();
+    let frames = 0;
+
+    const measureFps = () => {
+      const currentTime = performance.now();
+      frames++;
+
+      if (currentTime >= lastTime + 1000) {
+        const fps = Math.round((frames * 1000) / (currentTime - lastTime));
+        this.fpsHistory.push(fps);
+
+        // Keep only last 60 seconds of FPS data
+        if (this.fpsHistory.length > 60) {
+          this.fpsHistory.shift();
+        }
+
+        this.appMetrics.fps = fps;
+        this.appMetrics.avgFps = Math.round(
+          this.fpsHistory.reduce((sum, f) => sum + f, 0) / this.fpsHistory.length
+        );
+
+        frames = 0;
+        lastTime = currentTime;
+      }
+
+      requestAnimationFrame(measureFps);
+    };
+
+    requestAnimationFrame(measureFps);
+  }
 
   /**
    * Start measuring a named operation
@@ -63,6 +131,11 @@ class PerformanceMonitor {
     // Keep only the most recent metrics
     if (this.metrics.length > this.maxMetrics) {
       this.metrics.shift();
+    }
+
+    // Update app-specific metrics
+    if (metric.name === 'calculation') {
+      this.appMetrics.lastCalcTime = metric.duration;
     }
   }
 
@@ -129,6 +202,20 @@ class PerformanceMonitor {
 
     return summary;
   }
+
+  /**
+   * Get current app metrics
+   */
+  getAppMetrics(): AppMetrics {
+    return { ...this.appMetrics };
+  }
+
+  /**
+   * Update app metric
+   */
+  updateAppMetric(key: keyof AppMetrics, value: number): void {
+    this.appMetrics[key] = value;
+  }
 }
 
 // Singleton instance
@@ -183,9 +270,52 @@ export function useRenderTime(componentName: string): void {
         timestamp: Date.now(),
       });
 
+      performanceMonitor.updateAppMetric('renderTime', duration);
+
       if (duration > 16) {
         // > 1 frame at 60fps — tracked internally
+        console.warn(`Slow render: ${componentName} took ${duration.toFixed(2)}ms`);
       }
     };
   }, [componentName]);
+}
+
+/**
+ * React hook for monitoring app performance metrics
+ */
+export function usePerformanceMetrics(): AppMetrics {
+  const [metrics, setMetrics] = React.useState<AppMetrics>(performanceMonitor.getAppMetrics());
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    performanceMonitor.initialize();
+
+    // Update metrics every second
+    intervalRef.current = setInterval(() => {
+      setMetrics(performanceMonitor.getAppMetrics());
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  return metrics;
+}
+
+/**
+ * React hook for measuring function execution time
+ */
+export function useMeasurePerformance() {
+  const measure = useCallback(<T>(name: string, fn: () => T): T => {
+    return measurePerformance(name, fn);
+  }, []);
+
+  const measureAsync = useCallback(async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
+    return measurePerformanceAsync(name, fn);
+  }, []);
+
+  return { measure, measureAsync };
 }

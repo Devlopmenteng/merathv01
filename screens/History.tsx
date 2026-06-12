@@ -1,13 +1,6 @@
 import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -51,6 +44,57 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
       setFiltered(results);
     }
   };
+
+  const renderItem = ({ item }: { item: AuditEntry }) => (
+    <Card
+      variant="outlined"
+      leftBorder={theme.colors.primary}
+      onPress={() => navigation.navigate('CalculationSteps', { auditEntry: item })}
+      accessibilityLabel={`${item.caseName || t('no_name')} – ${item.caseDate || t('no_date')}. ${t('madhab')}: ${t('madhab_name_' + item.madhab, { defaultValue: item.madhab })}. ${t('netEstate')}: ${formatCurrency(item.netTotal)}`}
+      accessibilityHint={t('a11y_view_calculation_details')}
+      accessibilityRole="button"
+    >
+      <Text
+        style={[{ fontWeight: '600', marginBottom: theme.spacing.xs }, theme.typography.button]}
+      >
+        {item.caseName || t('no_name')} – {item.caseDate || t('no_date')}
+      </Text>
+      <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+        {t('madhab')}: {t('madhab_name_' + item.madhab, { defaultValue: item.madhab })}
+      </Text>
+      <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+        {t('netEstate')}: {formatCurrency(item.netTotal)}
+      </Text>
+      <Text
+        style={[theme.typography.bodySmall, { fontWeight: '600', marginTop: theme.spacing.sm }]}
+      >
+        {t('heirs')}:
+      </Text>
+      {item.shares.slice(0, 3).map((share, i) => (
+        <Text
+          key={i}
+          style={[
+            theme.typography.caption,
+            { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
+          ]}
+        >
+          • {share.name}: {formatCurrency(share.amount)}
+        </Text>
+      ))}
+      {item.shares.length > 3 && (
+        <Text
+          style={[
+            theme.typography.caption,
+            { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
+          ]}
+        >
+          ...
+        </Text>
+      )}
+    </Card>
+  );
+
+  const keyExtractor = (item: AuditEntry, index: number) => `${item.timestamp}-${index}`;
 
   return (
     <View
@@ -101,72 +145,18 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
             {t('loading')}
           </Text>
         </View>
+      ) : filtered.length === 0 ? (
+        <Text style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}>
+          {t('no_history')}
+        </Text>
       ) : (
-        <ScrollView>
-          {filtered.length === 0 ? (
-            <Text
-              style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}
-            >
-              {t('no_history')}
-            </Text>
-          ) : (
-            filtered.map((entry, idx) => (
-              <Card
-                key={idx}
-                variant="outlined"
-                leftBorder={theme.colors.primary}
-                onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
-                accessibilityLabel={`${entry.caseName || t('no_name')} – ${entry.caseDate || t('no_date')}. ${t('madhab')}: ${t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}. ${t('netEstate')}: ${formatCurrency(entry.netTotal)}`}
-                accessibilityHint={t('a11y_view_calculation_details')}
-                accessibilityRole="button"
-              >
-                <Text
-                  style={[
-                    { fontWeight: '600', marginBottom: theme.spacing.xs },
-                    theme.typography.button,
-                  ]}
-                >
-                  {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
-                </Text>
-                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                  {t('madhab')}: {t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}
-                </Text>
-                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                  {t('netEstate')}: {formatCurrency(entry.netTotal)}
-                </Text>
-                <Text
-                  style={[
-                    theme.typography.bodySmall,
-                    { fontWeight: '600', marginTop: theme.spacing.sm },
-                  ]}
-                >
-                  {t('heirs')}:
-                </Text>
-                {entry.shares.slice(0, 3).map((share, i) => (
-                  <Text
-                    key={i}
-                    style={[
-                      theme.typography.caption,
-                      { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
-                    ]}
-                  >
-                    • {share.name}: {formatCurrency(share.amount)}
-                  </Text>
-                ))}
-                {entry.shares.length > 3 && (
-                  <Text
-                    style={[
-                      theme.typography.caption,
-                      { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
-                    ]}
-                  >
-                    ...
-                  </Text>
-                )}
-              </Card>
-            ))
-          )}
-        </ScrollView>
+        <FlatList
+          data={filtered}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={{ gap: theme.spacing.md }}
+          showsVerticalScrollIndicator={true}
+        />
       )}
     </View>
   );

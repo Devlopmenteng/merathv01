@@ -1,5 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet, Animated } from 'react-native';
+import React, { useState, useRef, useMemo, memo } from 'react';
+import {
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  Animated,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
@@ -18,7 +25,7 @@ type Props = {
   accessibilityState?: { disabled?: boolean };
 };
 
-export const Button: React.FC<Props> = ({
+export const Button: React.FC<Props> = memo(({
   title,
   onPress,
   mode = 'filled',
@@ -60,7 +67,7 @@ export const Button: React.FC<Props> = ({
   const isGradient = mode === 'gradient';
   const isGhost = mode === 'ghost';
 
-  const getSizeStyles = () => {
+  const sizeStyles = useMemo(() => {
     switch (size) {
       case 'small':
         return {
@@ -78,9 +85,9 @@ export const Button: React.FC<Props> = ({
           paddingHorizontal: theme.spacing.lg,
         };
     }
-  };
+  }, [size, theme.spacing.sm, theme.spacing.md, theme.spacing.lg, theme.spacing.xl]);
 
-  const getFontSize = () => {
+  const fontSize = useMemo(() => {
     switch (size) {
       case 'small':
         return 14;
@@ -89,7 +96,7 @@ export const Button: React.FC<Props> = ({
       default:
         return 16;
     }
-  };
+  }, [size]);
 
   const textColor = isOutlined || isGhost ? theme.colors.primary : theme.colors.onPrimary;
 
@@ -103,7 +110,7 @@ export const Button: React.FC<Props> = ({
           style={{
             color: textColor,
             textAlign: 'center',
-            fontSize: getFontSize(),
+            fontSize: fontSize,
             fontWeight: '600',
             letterSpacing: 0.5,
           }}
@@ -116,7 +123,7 @@ export const Button: React.FC<Props> = ({
 
   const buttonStyle = [
     styles.button,
-    getSizeStyles(),
+    sizeStyles,
     {
       backgroundColor: isOutlined || isGhost ? 'transparent' : theme.colors.primary,
       borderWidth: isOutlined || isGhost ? 2 : 0,
@@ -146,19 +153,19 @@ export const Button: React.FC<Props> = ({
           activeOpacity={1}
           style={[buttonStyle, { overflow: 'hidden', borderWidth: 0 }]}
         >
-        <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={[
-            StyleSheet.absoluteFillObject,
-            getSizeStyles(),
-            { alignItems: 'center', justifyContent: 'center' },
-          ]}
-        >
-          {content}
-        </LinearGradient>
-      </TouchableOpacity>
+          <LinearGradient
+            colors={[theme.colors.primary, theme.colors.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              StyleSheet.absoluteFillObject,
+              sizeStyles,
+              { alignItems: 'center', justifyContent: 'center' },
+            ]}
+          >
+            {content}
+          </LinearGradient>
+        </TouchableOpacity>
       </Animated.View>
     );
   }
@@ -181,7 +188,9 @@ export const Button: React.FC<Props> = ({
       </TouchableOpacity>
     </Animated.View>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 const styles = StyleSheet.create({
   button: {

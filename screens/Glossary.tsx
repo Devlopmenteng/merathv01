@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList, I18nManager } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from '../components/ui/Card';
@@ -19,94 +19,6 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<Tab>('glossary');
-
-  const renderGlossary = () => (
-    <FlatList
-      data={GLOSSARY}
-      keyExtractor={(_, idx) => idx.toString()}
-      renderItem={({ item }) => (
-        <Card variant="outlined" leftBorder={theme.colors.primary}>
-          <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
-            {item.term} – {item.termAr}
-          </Text>
-          <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
-          <Text style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}>
-            {item.definitionAr}
-          </Text>
-        </Card>
-      )}
-    />
-  );
-
-  const renderVerses = () => (
-    <FlatList
-      data={INHERITANCE_VERSES}
-      keyExtractor={(_, idx) => idx.toString()}
-      renderItem={({ item }) => (
-        <Card variant="outlined">
-          <Text
-            style={[
-              theme.typography.h3,
-              {
-                color: theme.colors.secondary,
-                marginBottom: 4,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              },
-            ]}
-          >
-            {item.surah} {item.verseNumber}
-          </Text>
-          <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8, writingDirection: 'rtl' }}>
-            {item.arabic}
-          </Text>
-          <Text
-            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
-          >
-            {item.translations[i18n.locale as keyof typeof item.translations] || item.translation}
-          </Text>
-          <Text
-            style={[
-              theme.typography.caption,
-              {
-                marginTop: 8,
-                color: theme.colors.outline,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              },
-            ]}
-          >
-            {t('topic')}: {item.topic}
-          </Text>
-        </Card>
-      )}
-    />
-  );
-
-  const renderHadith = () => (
-    <FlatList
-      data={HADITH}
-      keyExtractor={(_, idx) => idx.toString()}
-      renderItem={({ item }) => (
-        <Card variant="outlined">
-          <Text
-            style={[
-              { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-              theme.typography.body,
-            ]}
-          >
-            {item.text}
-          </Text>
-          <Text
-            style={[
-              theme.typography.caption,
-              { color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-            ]}
-          >
-            {item.reference}
-          </Text>
-        </Card>
-      )}
-    />
-  );
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -229,18 +141,104 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
-        contentContainerStyle={{
+      <View
+        style={{
+          flex: 1,
           padding: theme.spacing.md,
           paddingTop: insets.top + theme.spacing.md,
           paddingBottom: insets.bottom,
         }}
       >
-        {activeTab === 'glossary' && renderGlossary()}
-        {activeTab === 'verses' && renderVerses()}
-        {activeTab === 'hadith' && renderHadith()}
+        {activeTab === 'glossary' && (
+          <FlatList
+            data={GLOSSARY}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => (
+              <Card variant="outlined" leftBorder={theme.colors.primary} style={{ marginBottom: theme.spacing.md }}>
+                <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
+                  {item.term} – {item.termAr}
+                </Text>
+                <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
+                <Text style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}>
+                  {item.definitionAr}
+                </Text>
+              </Card>
+            )}
+            contentContainerStyle={{ gap: theme.spacing.md }}
+          />
+        )}
+        {activeTab === 'verses' && (
+          <FlatList
+            data={INHERITANCE_VERSES}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => (
+              <Card variant="outlined" style={{ marginBottom: theme.spacing.md }}>
+                <Text
+                  style={[
+                    theme.typography.h3,
+                    {
+                      color: theme.colors.secondary,
+                      marginBottom: 4,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
+                  {item.surah} {item.verseNumber}
+                </Text>
+                <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8, writingDirection: 'rtl' }}>
+                  {item.arabic}
+                </Text>
+                <Text
+                  style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+                >
+                  {item.translations[i18n.locale as keyof typeof item.translations] || item.translation}
+                </Text>
+                <Text
+                  style={[
+                    theme.typography.caption,
+                    {
+                      marginTop: 8,
+                      color: theme.colors.outline,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
+                  {t('topic')}: {item.topic}
+                </Text>
+              </Card>
+            )}
+            contentContainerStyle={{ gap: theme.spacing.md }}
+          />
+        )}
+        {activeTab === 'hadith' && (
+          <FlatList
+            data={HADITH}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => (
+              <Card variant="outlined" style={{ marginBottom: theme.spacing.md }}>
+                <Text
+                  style={[
+                    { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                    theme.typography.body,
+                  ]}
+                >
+                  {item.text}
+                </Text>
+                <Text
+                  style={[
+                    theme.typography.caption,
+                    { color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                  ]}
+                >
+                  {item.reference}
+                </Text>
+              </Card>
+            )}
+            contentContainerStyle={{ gap: theme.spacing.md }}
+          />
+        )}
         {activeTab === 'fiqh' && <FiqhRules />}
-      </ScrollView>
+      </View>
     </View>
   );
 };

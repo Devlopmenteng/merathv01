@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +17,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const { breakpoint } = useResponsive();
   const isGrid = breakpoint === 'lg' || breakpoint === 'xl';
 
-  const menuItems = [
+  const menuItems = useMemo(() => [
     {
       title: t('calculate_inheritance'),
       description: t('start_new_calculation'),
@@ -60,7 +60,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
       screen: 'TestCases',
       primary: false,
     },
-  ];
+  ], []);
 
   return (
     <LinearGradient
@@ -93,10 +93,12 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
             <Card
               key={item.screen}
               onPress={() => navigation.navigate(item.screen)}
-              style={[
-                isGrid ? styles.gridItem : { flexDirection: 'row', alignItems: 'center' },
-                item.primary && styles.primaryMenuItem,
-              ] as any}
+              style={
+                [
+                  isGrid ? styles.gridItem : { flexDirection: 'row', alignItems: 'center' },
+                  item.primary && styles.primaryMenuItem,
+                ] as any
+              }
               accessibilityLabel={`${item.title}. ${item.description}`}
               accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
               accessibilityRole="button"
