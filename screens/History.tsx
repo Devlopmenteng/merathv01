@@ -1,6 +1,13 @@
 import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -84,9 +91,13 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         accessibilityHint={t('a11y_search_history')}
       />
       {loading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 40 }}>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 40 }}
+        >
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary }]}>
+          <Text
+            style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary }]}
+          >
             {t('loading')}
           </Text>
         </View>

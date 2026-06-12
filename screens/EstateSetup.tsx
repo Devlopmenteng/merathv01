@@ -1,7 +1,7 @@
 import { StepIndicator } from '../components/StepIndicator';
 import { t } from '../lib/i18n';
 import React, { useState, useCallback } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -103,9 +103,11 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         currentStep={0}
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
-      <Text style={theme.typography.h1}>{t('estate_details')}</Text>
+      <Text style={[theme.typography.h1, { marginBottom: theme.spacing.lg }]}>
+        {t('estate_details')}
+      </Text>
 
-      <Card variant="outlined">
+      <Card variant="outlined" style={styles.sectionCard}>
         <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
           {t('case_info')}
         </Text>
@@ -130,7 +132,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         />
       </Card>
 
-      <Card variant="outlined">
+      <Card variant="outlined" style={styles.sectionCard}>
         <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>{t('estate')}</Text>
         <Input
           label={t('total_estate')}
@@ -177,7 +179,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           }
           error={willError}
           accessibilityLabel={t('will_optional')}
-          accessibilityHint={willError ? t('a11y_will_exceeds_limit') : t('a11y_enter_will_optional')}
+          accessibilityHint={
+            willError ? t('a11y_will_exceeds_limit') : t('a11y_enter_will_optional')
+          }
           accessibilityState={{ error: !!willError }}
         />
       </Card>
@@ -211,9 +215,19 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         disabled={!total || parseFloat(total) <= 0}
         style={{ marginTop: theme.spacing.lg }}
         accessibilityLabel={t('next_select_school')}
-        accessibilityHint={!total || parseFloat(total) <= 0 ? t('a11y_enter_total_estate_first') : t('a11y_proceed_to_madhab_selection')}
+        accessibilityHint={
+          !total || parseFloat(total) <= 0
+            ? t('a11y_enter_total_estate_first')
+            : t('a11y_proceed_to_madhab_selection')
+        }
         accessibilityState={{ disabled: !total || parseFloat(total) <= 0 }}
       />
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  sectionCard: {
+    marginBottom: 24,
+  },
+});

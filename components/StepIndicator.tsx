@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
@@ -10,6 +10,26 @@ interface StepIndicatorProps {
 
 export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
   const theme = useAppTheme();
+  const circleAnims = useRef(steps.map(() => new Animated.Value(0))).current;
+  const lineAnims = useRef(steps.map(() => new Animated.Value(0))).current;
+
+  useEffect(() => {
+    steps.forEach((_, index) => {
+      Animated.timing(circleAnims[index], {
+        toValue: currentStep >= index ? 1 : 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+
+      if (index < steps.length - 1) {
+        Animated.timing(lineAnims[index], {
+          toValue: currentStep > index ? 1 : 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      }
+    });
+  }, [currentStep, steps, circleAnims, lineAnims]);
 
   return (
     <View
@@ -24,9 +44,22 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
             <Animated.View
               style={[
                 styles.circle,
-                { borderColor: theme.colors.primary },
+                {
+                  borderColor: theme.colors.primary,
+                  backgroundColor: circleAnims[index].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['transparent', theme.colors.primary],
+                  }),
+                  transform: [
+                    {
+                      scale: circleAnims[index].interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [1, 1.1],
+                      }),
+                    },
+                  ],
+                },
                 currentStep >= index && styles.activeCircle,
-                currentStep >= index && { backgroundColor: theme.colors.primary },
               ]}
             >
               <Text
@@ -45,21 +78,29 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               <Animated.View
                 style={[
                   styles.line,
-                  { backgroundColor: theme.colors.outline },
-                  currentStep > index && styles.activeLine,
-                  currentStep > index && { backgroundColor: theme.colors.primary },
+                  {
+                    backgroundColor: lineAnims[index].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [theme.colors.outline, theme.colors.primary],
+                    }),
+                  },
                 ]}
               />
             )}
           </View>
-          <Text
+          <Animated.Text
             style={[
               styles.stepLabel,
-              { color: currentStep >= index ? theme.colors.primary : theme.colors.text.secondary },
+              {
+                color: circleAnims[index].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [theme.colors.text.secondary, theme.colors.primary],
+                }),
+              },
             ]}
           >
             {t(stepKey)}
-          </Text>
+          </Animated.Text>
         </View>
       ))}
     </View>

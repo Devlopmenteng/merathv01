@@ -1,8 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
-import { useState } from 'react';
 
 type Props = {
   title: string;
@@ -35,6 +34,27 @@ export const Button: React.FC<Props> = ({
 }) => {
   const theme = useAppTheme();
   const [pressed, setPressed] = useState(false);
+  const scaleValue = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    setPressed(true);
+    Animated.spring(scaleValue, {
+      toValue: 0.96,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    setPressed(false);
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 4,
+    }).start();
+  };
 
   const isOutlined = mode === 'outlined';
   const isGradient = mode === 'gradient';
@@ -113,18 +133,19 @@ export const Button: React.FC<Props> = ({
 
   if (isGradient) {
     return (
-      <TouchableOpacity
-        onPress={onPress}
-        onPressIn={() => setPressed(true)}
-        onPressOut={() => setPressed(false)}
-        disabled={disabled || loading}
-        accessibilityRole="button"
-        accessibilityLabel={accessibilityLabel || title}
-        accessibilityHint={accessibilityHint}
-        accessibilityState={accessibilityState || { disabled: disabled || loading }}
-        activeOpacity={1}
-        style={[buttonStyle, { overflow: 'hidden', borderWidth: 0 }]}
-      >
+      <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+        <TouchableOpacity
+          onPress={onPress}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          disabled={disabled || loading}
+          accessibilityRole="button"
+          accessibilityLabel={accessibilityLabel || title}
+          accessibilityHint={accessibilityHint}
+          accessibilityState={accessibilityState || { disabled: disabled || loading }}
+          activeOpacity={1}
+          style={[buttonStyle, { overflow: 'hidden', borderWidth: 0 }]}
+        >
         <LinearGradient
           colors={[theme.colors.primary, theme.colors.primaryDark]}
           start={{ x: 0, y: 0 }}
@@ -138,24 +159,27 @@ export const Button: React.FC<Props> = ({
           {content}
         </LinearGradient>
       </TouchableOpacity>
+      </Animated.View>
     );
   }
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      onPressIn={() => setPressed(true)}
-      onPressOut={() => setPressed(false)}
-      disabled={disabled || loading}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel || title}
-      accessibilityHint={accessibilityHint}
-      accessibilityState={accessibilityState || { disabled: disabled || loading }}
-      activeOpacity={1}
-      style={buttonStyle}
-    >
-      {content}
-    </TouchableOpacity>
+    <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+      <TouchableOpacity
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel || title}
+        accessibilityHint={accessibilityHint}
+        accessibilityState={accessibilityState || { disabled: disabled || loading }}
+        activeOpacity={1}
+        style={buttonStyle}
+      >
+        {content}
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 

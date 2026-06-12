@@ -7,6 +7,8 @@ import {
   Alert,
   I18nManager,
   ActivityIndicator,
+  StyleSheet,
+  Animated,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
@@ -19,6 +21,7 @@ import { formatCurrency } from '../lib/utils/currency';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { t } from '../lib/i18n';
 import { localizeHeirName } from '../lib/utils/shareLocalization';
+import { Card } from '../components/ui/Card';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -47,14 +50,31 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   const { state } = useCalc();
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { isTablet } = useResponsive();
+  const { isTablet, isLandscape } = useResponsive();
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tabAnimValues] = useState<Record<Madhab, Animated.Value>>({
+    hanafi: new Animated.Value(0),
+    maliki: new Animated.Value(0),
+    shafii: new Animated.Value(0),
+    hanbali: new Animated.Value(0),
+  });
 
   // Simple cache for calculation results
   const calculationCache = useRef<Map<string, CalculationResult[]>>(new Map());
+
+  // Animate tabs when selection changes
+  useEffect(() => {
+    TABS.forEach((m) => {
+      Animated.timing(tabAnimValues[m], {
+        toValue: selected === m ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    });
+  }, [selected, tabAnimValues]);
 
   const allHeirs = useMemo(() => {
     const heirSet = new Set<string>();
@@ -362,45 +382,56 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   };
 
   const renderComparisonTable = () => (
-    <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-      <View style={{ marginTop: 16, minWidth: 700 }}>
-        {/* Header row */}
-        <View
-          style={{
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderColor: theme.colors.outline,
-            paddingBottom: 8,
-          }}
-        >
-          <Text
-            style={{ width: isTablet ? 180 : 140, fontWeight: 'bold', paddingHorizontal: 8 }}
-            numberOfLines={1}
+    <Card variant="outlined" style={styles.comparisonTableCard}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+        <View style={{ minWidth: isLandscape ? 800 : 700 }}>
+          {/* Header row */}
+          <View
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderColor: theme.colors.outline,
+              paddingBottom: 8,
+            }}
           >
-            {t('heir')}
-          </Text>
-          <Text style={{ width: isTablet ? 80 : 60, fontWeight: 'bold', textAlign: 'center' }}>
-            {t('count')}
-          </Text>
-          {TABS.map((m) => (
             <Text
-              key={m}
-              numberOfLines={1}
               style={{
-                width: isTablet ? 120 : 100,
-                textAlign: 'center',
+                width: isLandscape ? 200 : isTablet ? 180 : 140,
                 fontWeight: 'bold',
-                paddingHorizontal: 4,
+                paddingHorizontal: 8,
+              }}
+              numberOfLines={1}
+            >
+              {t('heir')}
+            </Text>
+            <Text
+              style={{
+                width: isLandscape ? 100 : isTablet ? 80 : 60,
+                fontWeight: 'bold',
+                textAlign: 'center',
               }}
             >
-              {t('madhab_name_' + m, { defaultValue: m })}
+              {t('count')}
             </Text>
-          ))}
+            {TABS.map((m) => (
+              <Text
+                key={m}
+                numberOfLines={1}
+                style={{
+                  width: isLandscape ? 150 : isTablet ? 120 : 100,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  paddingHorizontal: 4,
+                }}
+              >
+                {t('madhab_name_' + m, { defaultValue: m })}
+              </Text>
+            ))}
+          </View>
         </View>
-      </View>
-      {comparisonRows.map((row) => {
-        if (!row) return null;
-        return (
+        {comparisonRows.map((row) => {
+          if (!row) return null;
+          return (
           <View
             key={row.heirKey}
             style={{
@@ -410,14 +441,25 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               paddingVertical: 12,
             }}
           >
-            <Text style={{ width: isTablet ? 180 : 140, paddingHorizontal: 8 }} numberOfLines={1}>
+            <Text
+              style={{ width: isLandscape ? 200 : isTablet ? 180 : 140, paddingHorizontal: 8 }}
+              numberOfLines={1}
+            >
               {localizeHeirName(row.heirKey, row.heirKey)}
             </Text>
-            <Text style={{ width: isTablet ? 80 : 60, textAlign: 'center' }}>
+            <Text
+              style={{ width: isLandscape ? 100 : isTablet ? 80 : 60, textAlign: 'center' }}
+            >
               {getCount(row.heirKey)}
             </Text>
             {row.sharesByMadhab.map((data, index) => (
-              <View key={index} style={{ width: isTablet ? 120 : 100, alignItems: 'center' }}>
+              <View
+                key={index}
+                style={{
+                  width: isLandscape ? 150 : isTablet ? 120 : 100,
+                  alignItems: 'center',
+                }}
+              >
                 {data ? (
                   <>
                     <Text style={theme.typography.caption}>{data.fraction}</Text>
@@ -441,7 +483,8 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           </View>
         );
       })}
-    </ScrollView>
+      </ScrollView>
+    </Card>
   );
 
   return (
@@ -532,8 +575,6 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                   borderRadius: 20,
-                  backgroundColor:
-                    selected === m ? theme.colors.madhab[m] : theme.colors.surfaceVariant,
                   minHeight: 44,
                 }}
                 accessibilityLabel={t('madhab_name_' + m, { defaultValue: m })}
@@ -547,13 +588,28 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 accessibilityRole="button"
                 accessibilityState={{ selected: selected === m }}
               >
-                <Text
+                <Animated.View
                   style={{
-                    color: selected === m ? theme.colors.onPrimary : theme.colors.onSurface,
+                    backgroundColor: tabAnimValues[m].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [theme.colors.surfaceVariant, theme.colors.madhab[m]],
+                    }),
+                    paddingVertical: 10,
+                    paddingHorizontal: 16,
+                    borderRadius: 20,
                   }}
                 >
-                  {t('madhab_name_' + m, { defaultValue: m })}
-                </Text>
+                  <Animated.Text
+                    style={{
+                      color: tabAnimValues[m].interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [theme.colors.onSurface, theme.colors.onPrimary],
+                      }),
+                    }}
+                  >
+                    {t('madhab_name_' + m, { defaultValue: m })}
+                  </Animated.Text>
+                </Animated.View>
               </TouchableOpacity>
             ))}
           </View>
@@ -612,4 +668,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
       )}
     </ScrollView>
   );
+});
+
+const styles = StyleSheet.create({
+  comparisonTableCard: {
+    marginTop: 16,
+    marginBottom: 16,
+  },
 });

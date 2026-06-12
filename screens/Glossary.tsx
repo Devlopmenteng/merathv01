@@ -138,7 +138,9 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           }}
           onPress={() => setActiveTab('glossary')}
           accessibilityLabel={t('tab_glossary')}
-          accessibilityHint={activeTab === 'glossary' ? t('a11y_tab_active') : t('a11y_view_glossary')}
+          accessibilityHint={
+            activeTab === 'glossary' ? t('a11y_tab_active') : t('a11y_view_glossary')
+          }
           accessibilityRole="tab"
           accessibilityState={{ selected: activeTab === 'glossary' }}
         >

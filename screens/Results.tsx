@@ -4,6 +4,7 @@ import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { incrementCalculationCount } from '../lib/services/UsageStats';
 import { usePremium } from '../lib/context/PremiumContext';
 import { generateLegalReport } from '../components/LegalReportGenerator';
+import { Card } from '../components/ui/Card';
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import {
   View,
@@ -16,6 +17,7 @@ import {
   StyleProp,
   TextStyle,
   I18nManager,
+  StyleSheet,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
@@ -83,12 +85,15 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   const { state } = useCalc();
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { isTablet } = useResponsive();
+  const { isTablet, breakpoint } = useResponsive();
+  const useGridLayout = breakpoint === 'lg' || breakpoint === 'xl';
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPercentage, setShowPercentage] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
   const savedRef = useRef(false);
+  const [successAnimValue] = useState(new Animated.Value(0));
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const heirsObject = useMemo(() => heirsArrayToObject(state.heirs), [state.heirs]);
   const hasSpouse = (heirsObject.husband || 0) > 0 || (heirsObject.wife || 0) > 0;
@@ -153,6 +158,21 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
         };
 
         setResult(safeResult);
+        setShowSuccessAnimation(true);
+
+        // Trigger success animation
+        Animated.sequence([
+          Animated.timing(successAnimValue, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(successAnimValue, {
+            toValue: 0,
+            duration: 400,
+            useNativeDriver: true,
+          }),
+        ]).start(() => setShowSuccessAnimation(false));
 
         incrementCalculationCount().catch(() => {});
         if (!savedRef.current) {
@@ -359,6 +379,31 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             paddingTop: insets.top + theme.spacing.lg,
           }}
         >
+          {/* Success Animation Overlay */}
+          {showSuccessAnimation && (
+            <Animated.View
+              style={[
+                styles.successOverlay,
+                {
+                  opacity: successAnimValue.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, 1, 0],
+                  }),
+                  transform: [
+                    {
+                      scale: successAnimValue.interpolate({
+                        inputRange: [0, 0.5, 1],
+                        outputRange: [0.5, 1.2, 1],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Animated.Text style={styles.successCheckmark}>✓</Animated.Text>
+            </Animated.View>
+          )}
+
           <StepIndicator
             currentStep={3}
             steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
@@ -393,19 +438,20 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             end={{ x: 1, y: 0 }}
             style={{
               borderRadius: theme.borderRadius.lg,
-              padding: theme.spacing.lg,
+              padding: theme.spacing.xl,
               alignItems: 'center',
               marginBottom: theme.spacing.lg,
+              ...theme.elevation.medium,
             }}
           >
             <Text
-              style={[{ color: theme.colors.onPrimary, marginBottom: 4 }, theme.typography.button]}
+              style={[{ color: theme.colors.onPrimary, marginBottom: theme.spacing.xs }, theme.typography.button]}
             >
               {t('netEstate')}
             </Text>
             <AnimatedNumber
               value={result.netEstate ?? 0}
-              style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.h1]}
+              style={[{ color: theme.colors.onPrimary, fontWeight: 'bold' }, theme.typography.display]}
             />
           </LinearGradient>
 
@@ -416,28 +462,28 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           >
             <View
               style={{
-                height: 10,
+                height: 8,
                 flex: 1,
                 backgroundColor: theme.colors.surfaceVariant,
-                borderRadius: 5,
+                borderRadius: 4,
                 overflow: 'hidden',
               }}
             >
               <View
                 style={{
-                  height: 10,
+                  height: 8,
                   width: `${result.confidence}%`,
                   backgroundColor: confidenceColor,
-                  borderRadius: 5,
+                  borderRadius: 4,
                 }}
               />
             </View>
-            <Text style={{ marginStart: 8, color: confidenceColor, fontWeight: '600' }}>
+            <Text style={{ marginStart: 12, color: confidenceColor, fontWeight: '600', fontSize: 14 }}>
               {result.confidence}%
             </Text>
           </View>
 
-          <Text style={theme.typography.caption}>{t('confidence')}</Text>
+          <Text style={[theme.typography.caption, { marginBottom: theme.spacing.md }]}>{t('confidence')}</Text>
 
           {specialCaseElements}
 
@@ -461,9 +507,20 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             <Text style={{ marginStart: 8 }}>{t('percentages')}</Text>
           </View>
 
-          <PieChart data={chartData} />
+          <View style={[useGridLayout ? styles.gridRow : {}]}>
+            <View style={[useGridLayout ? styles.gridItem : {}]}>
+              <PieChart data={chartData} />
+            </View>
 
-          <Text style={theme.typography.h2}>{t('distribution')}</Text>
+            <View style={[useGridLayout ? styles.gridItem : {}]}>
+              <Text
+                style={[
+                  theme.typography.h2,
+                  { marginTop: useGridLayout ? 0 : theme.spacing.xl, marginBottom: theme.spacing.md },
+                ]}
+              >
+                {t('distribution')}
+              </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={true}>
             <View style={{ minWidth: '100%' }}>
               <View
@@ -524,6 +581,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               {distributionRows}
             </View>
           </ScrollView>
+            </View>
+          </View>
           <TouchableOpacity
             onPress={() => setShowSteps(!showSteps)}
             style={{
@@ -532,25 +591,32 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               alignItems: 'center',
               marginTop: theme.spacing.lg,
               marginBottom: theme.spacing.md,
+              padding: theme.spacing.md,
+              backgroundColor: theme.colors.surfaceVariant,
+              borderRadius: theme.borderRadius.md,
             }}
             accessibilityLabel={showSteps ? t('a11y_hide_steps') : t('a11y_show_steps')}
-            accessibilityHint={showSteps ? t('a11y_hide_calculation_steps') : t('a11y_show_calculation_steps')}
+            accessibilityHint={
+              showSteps ? t('a11y_hide_calculation_steps') : t('a11y_show_calculation_steps')
+            }
             accessibilityRole="button"
             accessibilityState={{ expanded: showSteps }}
           >
-            <Text style={theme.typography.h2}>{t('steps')}</Text>
+            <Text style={[theme.typography.h2, { color: theme.colors.onSurface }]}>{t('steps')}</Text>
             <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
               {showSteps ? '▲' : '▼'}
             </Text>
           </TouchableOpacity>
           {showSteps && (
-            <View style={{ marginTop: theme.spacing.lg, marginBottom: theme.spacing.lg }}>
-              <StepTimeline
-                steps={result.steps.map((step) => ({
-                  title: localizeStepTitle(step.title, step.stepType),
-                  description: localizeStepDesc(step.description, step.stepType),
-                }))}
-              />
+            <View style={{ marginTop: theme.spacing.md, marginBottom: theme.spacing.lg }}>
+              <Card variant="outlined">
+                <StepTimeline
+                  steps={result.steps.map((step) => ({
+                    title: localizeStepTitle(step.title, step.stepType),
+                    description: localizeStepDesc(step.description, step.stepType),
+                  }))}
+                />
+              </Card>
             </View>
           )}
 
@@ -565,3 +631,38 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
     </React.Suspense>
   );
 };
+
+const styles = StyleSheet.create({
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+  },
+  tableCell: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+  },
+  successOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  successCheckmark: {
+    fontSize: 120,
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
+  gridRow: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  gridItem: {
+    flex: 1,
+  },
+});

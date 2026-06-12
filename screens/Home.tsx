@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useResponsive } from '../hooks/useResponsive';
 import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 
@@ -13,6 +14,8 @@ type HomeNavigation = {
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { breakpoint } = useResponsive();
+  const isGrid = breakpoint === 'lg' || breakpoint === 'xl';
 
   const menuItems = [
     {
@@ -85,31 +88,36 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
           </Text>
         </View>
 
-        {menuItems.map((item) => (
-          <Card
-            key={item.screen}
-            onPress={() => navigation.navigate(item.screen)}
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            accessibilityLabel={`${item.title}. ${item.description}`}
-            accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
-            accessibilityRole="button"
-          >
-            <Text style={{ fontSize: 32, marginEnd: theme.spacing.md }}>{item.icon}</Text>
-            <View style={styles.menuItemContent}>
-              <Text
-                style={[
-                  theme.typography.h3,
-                  { color: theme.colors.onSurface, marginBottom: theme.spacing.xs },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>
-                {item.description}
-              </Text>
-            </View>
-          </Card>
-        ))}
+        <View style={[isGrid ? styles.gridContainer : styles.listContainer]}>
+          {menuItems.map((item) => (
+            <Card
+              key={item.screen}
+              onPress={() => navigation.navigate(item.screen)}
+              style={[
+                isGrid ? styles.gridItem : { flexDirection: 'row', alignItems: 'center' },
+                item.primary && styles.primaryMenuItem,
+              ] as any}
+              accessibilityLabel={`${item.title}. ${item.description}`}
+              accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>{item.icon}</Text>
+              <View style={styles.menuItemContent}>
+                <Text
+                  style={[
+                    item.primary ? theme.typography.h2 : theme.typography.h3,
+                    { color: theme.colors.onSurface, marginBottom: theme.spacing.xs },
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>
+                  {item.description}
+                </Text>
+              </View>
+            </Card>
+          ))}
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -121,5 +129,29 @@ const styles = StyleSheet.create({
   },
   menuItemContent: {
     flex: 1,
+  },
+  menuIcon: {
+    fontSize: 32,
+    marginEnd: 16,
+  },
+  primaryMenuItem: {
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  primaryIcon: {
+    fontSize: 40,
+  },
+  listContainer: {
+    gap: 16,
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  gridItem: {
+    width: '48%',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 });

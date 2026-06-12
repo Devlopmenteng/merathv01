@@ -66,7 +66,6 @@ const linking = {
 const screenOptions = {
   headerShown: true,
   animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as StackAnimationTypes,
-  animationDuration: 300,
 };
 
 const LoadingView = () => (

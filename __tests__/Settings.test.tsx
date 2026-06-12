@@ -44,6 +44,7 @@ vi.mock('react-native', () => ({
   StyleSheet: { create: (styles: Record<string, unknown>) => styles },
   Alert: { alert: vi.fn() },
   useColorScheme: () => 'light',
+  useWindowDimensions: () => ({ width: 375, height: 812, scale: 1, fontScale: 1 }),
   Linking: { openURL: vi.fn() },
   I18nManager: { forceRTL: vi.fn(), allowRTL: vi.fn(), isRTL: false },
 }));

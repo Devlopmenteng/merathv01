@@ -194,7 +194,9 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             ]}
             onPress={() => handleCategoryFilter(category)}
             accessibilityLabel={getCategoryDisplayName(category)}
-            accessibilityHint={t('a11y_filter_by_category', { category: getCategoryDisplayName(category) })}
+            accessibilityHint={t('a11y_filter_by_category', {
+              category: getCategoryDisplayName(category),
+            })}
             accessibilityRole="button"
             accessibilityState={{ selected: selectedCategory === category }}
           >
