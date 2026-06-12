@@ -262,6 +262,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityLabel={t('dark_mode')}
             accessibilityHint={isDark ? t('a11y_dark_mode_enabled') : t('a11y_dark_mode_disabled')}
             accessibilityRole="switch"
+            accessibilityState={{ selected: isDark }}
           />
         </View>
       </Card>

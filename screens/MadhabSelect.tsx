@@ -47,6 +47,9 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
               navigation.navigate('HeirSelection');
             }}
             style={{ flexDirection: 'row', alignItems: 'center' }}
+            accessibilityLabel={`${item.title}. ${item.desc}`}
+            accessibilityHint={t('a11y_select_madhab', { madhab: item.title })}
+            accessibilityRole="button"
           >
             <Text style={[{ marginEnd: 12 }, theme.typography.h1]}>{item.icon}</Text>
             <View>

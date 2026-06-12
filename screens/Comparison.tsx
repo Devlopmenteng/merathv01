@@ -1,5 +1,13 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, I18nManager } from 'react-native';
+import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  I18nManager,
+  ActivityIndicator,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { calculateInheritance } from '../lib/engine/calculator';
@@ -43,6 +51,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   const [selected, setSelected] = useState<Madhab>('hanafi');
   const [results, setResults] = useState<CalculationResult[]>([]);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Simple cache for calculation results
+  const calculationCache = useRef<Map<string, CalculationResult[]>>(new Map());
 
   const allHeirs = useMemo(() => {
     const heirSet = new Set<string>();
@@ -63,14 +75,53 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   );
 
   useEffect(() => {
-    const estate: EstateInput = {
-      total: state.total,
-      funeral: state.funeral,
-      debts: state.debts,
-      will: state.will,
+    const performCalculations = async () => {
+      setLoading(true);
+      try {
+        const estate: EstateInput = {
+          total: state.total,
+          funeral: state.funeral,
+          debts: state.debts,
+          will: state.will,
+        };
+
+        // Create cache key from input parameters
+        const cacheKey = JSON.stringify({
+          estate,
+          heirs: state.heirs,
+        });
+
+        // Check cache first
+        if (calculationCache.current.has(cacheKey)) {
+          setResults(calculationCache.current.get(cacheKey)!);
+          setLoading(false);
+          return;
+        }
+
+        // Simulate async calculation for better UX
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const all = TABS.map((m) =>
+          calculateInheritance(m, estate, heirsArrayToObject(state.heirs))
+        );
+
+        // Cache the results
+        calculationCache.current.set(cacheKey, all);
+
+        // Limit cache size to prevent memory issues
+        if (calculationCache.current.size > 50) {
+          const firstKey = calculationCache.current.keys().next().value;
+          if (firstKey) {
+            calculationCache.current.delete(firstKey);
+          }
+        }
+
+        setResults(all);
+      } finally {
+        setLoading(false);
+      }
     };
-    const all = TABS.map((m) => calculateInheritance(m, estate, heirsArrayToObject(state.heirs)));
-    setResults(all);
+
+    performCalculations();
   }, [state.total, state.funeral, state.debts, state.will, state.heirs]);
 
   const comparisonRows = useMemo(() => {
@@ -425,7 +476,26 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         </TouchableOpacity>
       </View>
 
-      {!hasData && (
+      {loading && (
+        <View
+          style={{
+            backgroundColor: theme.colors.surfaceVariant,
+            padding: 16,
+            borderRadius: 12,
+            marginTop: 16,
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text
+            style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary }]}
+          >
+            {t('calculating')}
+          </Text>
+        </View>
+      )}
+
+      {!loading && !hasData && (
         <View
           style={{
             backgroundColor: theme.colors.surfaceVariant,
@@ -459,12 +529,23 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 key={m}
                 onPress={() => setSelected(m)}
                 style={{
-                  paddingVertical: 8,
+                  paddingVertical: 10,
                   paddingHorizontal: 16,
                   borderRadius: 20,
                   backgroundColor:
                     selected === m ? theme.colors.madhab[m] : theme.colors.surfaceVariant,
+                  minHeight: 44,
                 }}
+                accessibilityLabel={t('madhab_name_' + m, { defaultValue: m })}
+                accessibilityHint={
+                  selected === m
+                    ? t('a11y_madhab_selected')
+                    : t('a11y_select_madhab_view', {
+                        madhab: t('madhab_name_' + m, { defaultValue: m }),
+                      })
+                }
+                accessibilityRole="button"
+                accessibilityState={{ selected: selected === m }}
               >
                 <Text
                   style={{
@@ -482,11 +563,16 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             <TouchableOpacity
               onPress={() => setShowAnalysis(!showAnalysis)}
               style={{
-                paddingVertical: 8,
+                paddingVertical: 10,
                 paddingHorizontal: 16,
                 borderRadius: 8,
                 backgroundColor: showAnalysis ? theme.colors.primary : theme.colors.surfaceVariant,
+                minHeight: 44,
               }}
+              accessibilityLabel={showAnalysis ? t('hide_analysis') : t('show_analysis')}
+              accessibilityHint={showAnalysis ? t('a11y_hide_analysis') : t('a11y_show_analysis')}
+              accessibilityRole="button"
+              accessibilityState={{ selected: showAnalysis }}
             >
               <Text
                 style={{ color: showAnalysis ? theme.colors.onPrimary : theme.colors.onSurface }}
@@ -498,11 +584,15 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             <TouchableOpacity
               onPress={handleExportComparison}
               style={{
-                paddingVertical: 8,
+                paddingVertical: 10,
                 paddingHorizontal: 16,
                 borderRadius: 8,
                 backgroundColor: theme.colors.primary,
+                minHeight: 44,
               }}
+              accessibilityLabel={t('export_button')}
+              accessibilityHint={t('a11y_export_comparison')}
+              accessibilityRole="button"
             >
               <Text style={{ color: theme.colors.onPrimary }}>📥 {t('export_button')}</Text>
             </TouchableOpacity>

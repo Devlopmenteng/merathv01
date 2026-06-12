@@ -25,9 +25,43 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   const [funeral, setFuneral] = useState('');
   const [debts, setDebts] = useState('');
   const [will, setWill] = useState('');
+  const [totalError, setTotalError] = useState('');
+  const [funeralError, setFuneralError] = useState('');
+  const [debtsError, setDebtsError] = useState('');
   const net = parseFloat(total || '0') - parseFloat(funeral || '0') - parseFloat(debts || '0');
   const maxWill = net / 3;
   const willError = parseFloat(will) > maxWill && maxWill >= 0 ? t('will_exceeds') : '';
+
+  const validateTotal = (value: string) => {
+    const num = parseFloat(value);
+    if (value && (isNaN(num) || num < 0)) {
+      return t('invalid_positive_number');
+    }
+    return '';
+  };
+
+  const validateCurrency = (value: string) => {
+    const num = parseFloat(value);
+    if (value && (isNaN(num) || num < 0)) {
+      return t('invalid_positive_number');
+    }
+    return '';
+  };
+
+  const handleTotalChange = (text: string) => {
+    setTotal(text);
+    setTotalError(validateTotal(text));
+  };
+
+  const handleFuneralChange = (text: string) => {
+    setFuneral(text);
+    setFuneralError(validateCurrency(text));
+  };
+
+  const handleDebtsChange = (text: string) => {
+    setDebts(text);
+    setDebtsError(validateCurrency(text));
+  };
 
   const onNext = useCallback(() => {
     const estate = {
@@ -82,6 +116,8 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
             dispatch({ type: 'SET_CASE', payload: { caseName: text, caseDate } })
           }
           maxLength={100}
+          accessibilityLabel={t('case_name_optional')}
+          accessibilityHint={t('a11y_enter_case_name')}
         />
         <Input
           label={t('date')}
@@ -89,6 +125,8 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           onChangeText={(text) =>
             dispatch({ type: 'SET_CASE', payload: { caseName, caseDate: text } })
           }
+          accessibilityLabel={t('date')}
+          accessibilityHint={t('a11y_enter_case_date')}
         />
       </Card>
 
@@ -98,8 +136,11 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           label={t('total_estate')}
           currency
           value={total}
-          onChangeText={setTotal}
+          onChangeText={handleTotalChange}
           keyboardType="numeric"
+          accessibilityLabel={t('total_estate')}
+          accessibilityHint={t('a11y_enter_total_estate')}
+          error={totalError}
         />
         <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
           <Input
@@ -107,16 +148,22 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
             label={t('funeral_costs')}
             currency
             value={funeral}
-            onChangeText={setFuneral}
+            onChangeText={handleFuneralChange}
             keyboardType="numeric"
+            accessibilityLabel={t('funeral_costs')}
+            accessibilityHint={t('a11y_enter_funeral_costs')}
+            error={funeralError}
           />
           <Input
             style={{ flex: 1 }}
             label={t('debts')}
             currency
             value={debts}
-            onChangeText={setDebts}
+            onChangeText={handleDebtsChange}
             keyboardType="numeric"
+            accessibilityLabel={t('debts')}
+            accessibilityHint={t('a11y_enter_debts')}
+            error={debtsError}
           />
         </View>
         <Input
@@ -129,6 +176,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
             maxWill > 0 ? `${t('max_allowed')}: ${t('currency_symbol')}${maxWill.toFixed(2)}` : ''
           }
           error={willError}
+          accessibilityLabel={t('will_optional')}
+          accessibilityHint={willError ? t('a11y_will_exceeds_limit') : t('a11y_enter_will_optional')}
+          accessibilityState={{ error: !!willError }}
         />
       </Card>
 
@@ -137,10 +187,17 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
             {t('net_estate')}
           </Text>
-          <Text style={theme.typography.display}>
+          <Text
+            style={theme.typography.display}
+            accessibilityLiveRegion="polite"
+            accessibilityLabel={`${t('net_estate')}: ${formatCurrency(Math.max(0, net - (parseFloat(will) || 0)))}`}
+          >
             {formatCurrency(Math.max(0, net - (parseFloat(will) || 0)))}
           </Text>
-          <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+          <Text
+            style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}
+            accessibilityLiveRegion="polite"
+          >
             {t('total_estate')}: {formatCurrency(parseFloat(total) || 0)} — {t('deductions')}:&nbsp;
             {formatCurrency(
               (parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0)
@@ -153,6 +210,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         onPress={onNext}
         disabled={!total || parseFloat(total) <= 0}
         style={{ marginTop: theme.spacing.lg }}
+        accessibilityLabel={t('next_select_school')}
+        accessibilityHint={!total || parseFloat(total) <= 0 ? t('a11y_enter_total_estate_first') : t('a11y_proceed_to_madhab_selection')}
+        accessibilityState={{ disabled: !total || parseFloat(total) <= 0 }}
       />
     </ScrollView>
   );

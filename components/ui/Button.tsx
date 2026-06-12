@@ -14,6 +14,9 @@ type Props = {
   icon?: React.ReactNode;
   fullWidth?: boolean;
   style?: object;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityState?: { disabled?: boolean };
 };
 
 export const Button: React.FC<Props> = ({
@@ -26,6 +29,9 @@ export const Button: React.FC<Props> = ({
   icon,
   fullWidth,
   style,
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityState,
 }) => {
   const theme = useAppTheme();
   const [pressed, setPressed] = useState(false);
@@ -113,8 +119,9 @@ export const Button: React.FC<Props> = ({
         onPressOut={() => setPressed(false)}
         disabled={disabled || loading}
         accessibilityRole="button"
-        accessibilityLabel={title}
-        accessibilityState={{ disabled: disabled || loading }}
+        accessibilityLabel={accessibilityLabel || title}
+        accessibilityHint={accessibilityHint}
+        accessibilityState={accessibilityState || { disabled: disabled || loading }}
         activeOpacity={1}
         style={[buttonStyle, { overflow: 'hidden', borderWidth: 0 }]}
       >
@@ -141,8 +148,9 @@ export const Button: React.FC<Props> = ({
       onPressOut={() => setPressed(false)}
       disabled={disabled || loading}
       accessibilityRole="button"
-      accessibilityLabel={title}
-      accessibilityState={{ disabled: disabled || loading }}
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityHint={accessibilityHint}
+      accessibilityState={accessibilityState || { disabled: disabled || loading }}
       activeOpacity={1}
       style={buttonStyle}
     >
@@ -155,6 +163,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     minWidth: 120,
+    minHeight: 44,
   },
   fullWidth: {
     minWidth: 'auto',

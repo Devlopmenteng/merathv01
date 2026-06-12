@@ -134,10 +134,13 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             backgroundColor:
               activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
+            minHeight: 44,
           }}
           onPress={() => setActiveTab('glossary')}
           accessibilityLabel={t('tab_glossary')}
+          accessibilityHint={activeTab === 'glossary' ? t('a11y_tab_active') : t('a11y_view_glossary')}
           accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'glossary' }}
         >
           <Text
             style={{
@@ -156,10 +159,13 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             backgroundColor:
               activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
+            minHeight: 44,
           }}
           onPress={() => setActiveTab('verses')}
           accessibilityLabel={t('tab_verses')}
+          accessibilityHint={activeTab === 'verses' ? t('a11y_tab_active') : t('a11y_view_verses')}
           accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'verses' }}
         >
           <Text
             style={{
@@ -178,10 +184,13 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             backgroundColor:
               activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
+            minHeight: 44,
           }}
           onPress={() => setActiveTab('hadith')}
           accessibilityLabel={t('tab_hadith')}
+          accessibilityHint={activeTab === 'hadith' ? t('a11y_tab_active') : t('a11y_view_hadith')}
           accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'hadith' }}
         >
           <Text
             style={{
@@ -200,10 +209,13 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             backgroundColor:
               activeTab === 'fiqh' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
+            minHeight: 44,
           }}
           onPress={() => setActiveTab('fiqh')}
           accessibilityLabel={t('tab_fiqh')}
+          accessibilityHint={activeTab === 'fiqh' ? t('a11y_tab_active') : t('a11y_view_fiqh')}
           accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'fiqh' }}
         >
           <Text
             style={{

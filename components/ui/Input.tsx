@@ -19,6 +19,9 @@ type Props = {
   currencySymbol?: string;
   disabled?: boolean;
   maxLength?: number;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityState?: { disabled?: boolean; error?: boolean };
 };
 
 export const Input: React.FC<Props> = ({
@@ -37,6 +40,9 @@ export const Input: React.FC<Props> = ({
   currencySymbol = '$',
   disabled = false,
   maxLength,
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityState,
 }) => {
   const theme = useAppTheme();
   const [focused, setFocused] = useState(false);
@@ -142,9 +148,9 @@ export const Input: React.FC<Props> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           editable={!disabled}
-          accessibilityLabel={label}
-          accessibilityHint={helper || error}
-          accessibilityState={{ disabled }}
+          accessibilityLabel={accessibilityLabel || label}
+          accessibilityHint={accessibilityHint || helper || error}
+          accessibilityState={accessibilityState || { disabled, error: !!error }}
           style={[
             styles.input,
             {
@@ -185,6 +191,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 8,
     position: 'relative',
+    minHeight: 56,
   },
   input: {
     flex: 1,

@@ -13,6 +13,9 @@ type CardProps = {
   style?: ViewStyle;
   accessible?: boolean;
   accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityRole?: string;
+  accessibilityState?: { selected?: boolean; disabled?: boolean; expanded?: boolean };
 };
 
 export const Card: React.FC<CardProps> = ({
@@ -24,6 +27,9 @@ export const Card: React.FC<CardProps> = ({
   style,
   accessible,
   accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityState,
 }) => {
   const theme = useAppTheme();
 
@@ -97,8 +103,11 @@ export const Card: React.FC<CardProps> = ({
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={onPress}
-        style={[containerStyle, style]}
-        accessibilityRole="button"
+        style={[containerStyle, style, { minHeight: 44 }]}
+        accessibilityRole={accessibilityRole as any || 'button'}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}
+        accessibilityState={accessibilityState as any}
       >
         {children}
       </TouchableOpacity>

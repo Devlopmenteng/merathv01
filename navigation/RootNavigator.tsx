@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useRef } from 'react';
+import React, { Suspense, lazy, useRef, useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,6 +6,7 @@ import type { StackAnimationTypes } from 'react-native-screens';
 import { t } from '../lib/i18n';
 import { lightTheme } from '../lib/constants/theme';
 
+// Preload critical screens for better performance
 const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
 const EstateSetup = lazy(() =>
   import('../screens/EstateSetup').then((module) => ({ default: module.EstateSetup }))
@@ -19,6 +20,8 @@ const HeirSelection = lazy(() =>
 const Results = lazy(() =>
   import('../screens/Results').then((module) => ({ default: module.Results }))
 );
+
+// Less frequently used screens remain lazy loaded
 const Comparison = lazy(() =>
   import('../screens/Comparison').then((module) => ({ default: module.Comparison }))
 );
@@ -74,6 +77,25 @@ const LoadingView = () => (
 
 export default function RootNavigator() {
   const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
+
+  // Preload critical screens after initial mount
+  useEffect(() => {
+    // Preload the main flow screens
+    const preloadScreens = async () => {
+      try {
+        await import('../screens/EstateSetup');
+        await import('../screens/MadhabSelect');
+        await import('../screens/HeirSelection');
+        await import('../screens/Results');
+      } catch (error) {
+        console.warn('Failed to preload screens:', error);
+      }
+    };
+
+    // Delay preloading to avoid affecting initial render
+    const timer = setTimeout(preloadScreens, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef} linking={linking} fallback={<LoadingView />}>

@@ -60,40 +60,44 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
   const applyTestCase = useCallback(
     (template: ScenarioTemplate) => {
-      const { estate, heirs, recommendedMadhab } = applyTemplate(template);
-
-      // Dispatch estate setup
-      dispatch({
-        type: 'SET_ESTATE',
-        payload: {
-          total: estate.total,
-          funeral: estate.funeral,
-          debts: estate.debts,
-          will: estate.will,
-        },
-      });
-
-      // Dispatch heirs
-      dispatch({
-        type: 'SET_HEIRS',
-        payload: heirs,
-      });
-
-      // Dispatch madhab if recommended
-      if (recommendedMadhab) {
-        dispatch({
-          type: 'SET_MADHAB',
-          payload: recommendedMadhab,
-        });
-      }
-
+      // Show immediate feedback
       Alert.alert(
         t('template_applied'),
-        `${t('template_name')}: ${template.name}\n${t('recommended_madhab')}: ${recommendedMadhab ? t('madhab_name_' + recommendedMadhab, { defaultValue: recommendedMadhab }) : t('any_fallback')}`
+        `${t('template_name')}: ${template.name}\n${t('recommended_madhab')}: ${template.recommendedMadhab ? t('madhab_name_' + template.recommendedMadhab, { defaultValue: template.recommendedMadhab }) : t('any_fallback')}`
       );
 
-      // Navigate to Results to show the calculation
+      // Navigate immediately for optimistic feedback
       navigation.navigate('Results');
+
+      // Then apply the actual state updates
+      setTimeout(() => {
+        const { estate, heirs, recommendedMadhab } = applyTemplate(template);
+
+        // Dispatch estate setup
+        dispatch({
+          type: 'SET_ESTATE',
+          payload: {
+            total: estate.total,
+            funeral: estate.funeral,
+            debts: estate.debts,
+            will: estate.will,
+          },
+        });
+
+        // Dispatch heirs
+        dispatch({
+          type: 'SET_HEIRS',
+          payload: heirs,
+        });
+
+        // Dispatch madhab if recommended
+        if (recommendedMadhab) {
+          dispatch({
+            type: 'SET_MADHAB',
+            payload: recommendedMadhab,
+          });
+        }
+      }, 100);
     },
     [dispatch, navigation]
   );
@@ -144,6 +148,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         value={search}
         onChangeText={handleSearch}
         accessibilityLabel={t('search_templates')}
+        accessibilityHint={t('a11y_search_templates_hint')}
       />
 
       <ScrollView
@@ -161,7 +166,8 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             },
           ]}
           onPress={() => handleCategoryFilter(null)}
-          accessibilityLabel={t('a11y_all_categories')}
+          accessibilityLabel={t('all')}
+          accessibilityHint={t('a11y_filter_all_categories')}
           accessibilityRole="button"
           accessibilityState={{ selected: selectedCategory === null }}
         >
@@ -188,6 +194,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             ]}
             onPress={() => handleCategoryFilter(category)}
             accessibilityLabel={getCategoryDisplayName(category)}
+            accessibilityHint={t('a11y_filter_by_category', { category: getCategoryDisplayName(category) })}
             accessibilityRole="button"
             accessibilityState={{ selected: selectedCategory === category }}
           >
@@ -231,7 +238,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                 },
               ]}
               onPress={() => applyTestCase(template)}
-              accessibilityLabel={template.name}
+              accessibilityLabel={`${template.name}. ${template.description}`}
               accessibilityHint={t('a11y_apply_template', { description: template.description })}
               accessibilityRole="button"
             >
@@ -352,10 +359,11 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 const styles = StyleSheet.create({
   categoryChip: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 20,
     marginEnd: 8,
     borderWidth: 1,
+    minHeight: 44,
   }, // chip uses fixed values intentionally for pill-shape design
   templateCard: {
     overflow: 'hidden',

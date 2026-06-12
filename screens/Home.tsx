@@ -90,6 +90,9 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
             key={item.screen}
             onPress={() => navigation.navigate(item.screen)}
             style={{ flexDirection: 'row', alignItems: 'center' }}
+            accessibilityLabel={`${item.title}. ${item.description}`}
+            accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
+            accessibilityRole="button"
           >
             <Text style={{ fontSize: 32, marginEnd: theme.spacing.md }}>{item.icon}</Text>
             <View style={styles.menuItemContent}>

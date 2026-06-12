@@ -373,6 +373,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                 borderRadius: theme.borderRadius.sm,
                 marginBottom: theme.spacing.md,
               }}
+              accessibilityLiveRegion="assertive"
+              accessibilityRole="alert"
             >
               <Text
                 style={[
@@ -409,6 +411,8 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
 
           <View
             style={{ flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md }}
+            accessibilityLiveRegion="polite"
+            accessibilityLabel={`${t('confidence')}: ${result.confidence}%`}
           >
             <View
               style={{
@@ -446,7 +450,14 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             }}
           >
             <Text style={{ marginEnd: 8 }}>{t('fractions')}</Text>
-            <Switch value={showPercentage} onValueChange={setShowPercentage} />
+            <Switch
+              value={showPercentage}
+              onValueChange={setShowPercentage}
+              accessibilityLabel={showPercentage ? t('percentages') : t('fractions')}
+              accessibilityHint={t('a11y_toggle_fraction_percentage')}
+              accessibilityRole="switch"
+              accessibilityState={{ selected: showPercentage }}
+            />
             <Text style={{ marginStart: 8 }}>{t('percentages')}</Text>
           </View>
 
@@ -522,8 +533,10 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               marginTop: theme.spacing.lg,
               marginBottom: theme.spacing.md,
             }}
-            accessibilityLabel={t('steps')}
+            accessibilityLabel={showSteps ? t('a11y_hide_steps') : t('a11y_show_steps')}
+            accessibilityHint={showSteps ? t('a11y_hide_calculation_steps') : t('a11y_show_calculation_steps')}
             accessibilityRole="button"
+            accessibilityState={{ expanded: showSteps }}
           >
             <Text style={theme.typography.h2}>{t('steps')}</Text>
             <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>

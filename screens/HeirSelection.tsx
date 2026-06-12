@@ -66,6 +66,8 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
             title={t('calculate_inheritance')}
             onPress={onNext}
             style={{ marginTop: theme.spacing.lg }}
+            accessibilityLabel={t('calculate_inheritance')}
+            accessibilityHint={t('a11y_calculate_inheritance_hint')}
           />
         </ScrollView>
       </KeyboardAvoidingView>

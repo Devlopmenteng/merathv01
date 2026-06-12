@@ -1,6 +1,6 @@
 import { t } from '../lib/i18n';
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -18,15 +18,21 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
   const [trail, setTrail] = useState<AuditEntry[]>([]);
   const [filtered, setFiltered] = useState<AuditEntry[]>([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadEntries();
   }, []);
 
   const loadEntries = async () => {
-    const entries = await getAuditTrail();
-    setTrail(entries);
-    setFiltered(entries);
+    setLoading(true);
+    try {
+      const entries = await getAuditTrail();
+      setTrail(entries);
+      setFiltered(entries);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSearch = async (text: string) => {
@@ -74,69 +80,83 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         placeholderTextColor={theme.colors.outline}
         value={search}
         onChangeText={handleSearch}
+        accessibilityLabel={t('search_placeholder')}
+        accessibilityHint={t('a11y_search_history')}
       />
-      <ScrollView>
-        {filtered.length === 0 ? (
-          <Text
-            style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}
-          >
-            {t('no_history')}
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 40 }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary }]}>
+            {t('loading')}
           </Text>
-        ) : (
-          filtered.map((entry, idx) => (
-            <Card
-              key={idx}
-              variant="outlined"
-              leftBorder={theme.colors.primary}
-              onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
+        </View>
+      ) : (
+        <ScrollView>
+          {filtered.length === 0 ? (
+            <Text
+              style={[theme.typography.body, { textAlign: 'center', marginTop: theme.spacing.xl }]}
             >
-              <Text
-                style={[
-                  { fontWeight: '600', marginBottom: theme.spacing.xs },
-                  theme.typography.button,
-                ]}
+              {t('no_history')}
+            </Text>
+          ) : (
+            filtered.map((entry, idx) => (
+              <Card
+                key={idx}
+                variant="outlined"
+                leftBorder={theme.colors.primary}
+                onPress={() => navigation.navigate('CalculationSteps', { auditEntry: entry })}
+                accessibilityLabel={`${entry.caseName || t('no_name')} – ${entry.caseDate || t('no_date')}. ${t('madhab')}: ${t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}. ${t('netEstate')}: ${formatCurrency(entry.netTotal)}`}
+                accessibilityHint={t('a11y_view_calculation_details')}
+                accessibilityRole="button"
               >
-                {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
-              </Text>
-              <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                {t('madhab')}: {t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}
-              </Text>
-              <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                {t('netEstate')}: {formatCurrency(entry.netTotal)}
-              </Text>
-              <Text
-                style={[
-                  theme.typography.bodySmall,
-                  { fontWeight: '600', marginTop: theme.spacing.sm },
-                ]}
-              >
-                {t('heirs')}:
-              </Text>
-              {entry.shares.slice(0, 3).map((share, i) => (
-                <Text
-                  key={i}
-                  style={[
-                    theme.typography.caption,
-                    { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
-                  ]}
-                >
-                  • {share.name}: {formatCurrency(share.amount)}
-                </Text>
-              ))}
-              {entry.shares.length > 3 && (
                 <Text
                   style={[
-                    theme.typography.caption,
-                    { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
+                    { fontWeight: '600', marginBottom: theme.spacing.xs },
+                    theme.typography.button,
                   ]}
                 >
-                  ...
+                  {entry.caseName || t('no_name')} – {entry.caseDate || t('no_date')}
                 </Text>
-              )}
-            </Card>
-          ))
-        )}
-      </ScrollView>
+                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+                  {t('madhab')}: {t('madhab_name_' + entry.madhab, { defaultValue: entry.madhab })}
+                </Text>
+                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+                  {t('netEstate')}: {formatCurrency(entry.netTotal)}
+                </Text>
+                <Text
+                  style={[
+                    theme.typography.bodySmall,
+                    { fontWeight: '600', marginTop: theme.spacing.sm },
+                  ]}
+                >
+                  {t('heirs')}:
+                </Text>
+                {entry.shares.slice(0, 3).map((share, i) => (
+                  <Text
+                    key={i}
+                    style={[
+                      theme.typography.caption,
+                      { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
+                    ]}
+                  >
+                    • {share.name}: {formatCurrency(share.amount)}
+                  </Text>
+                ))}
+                {entry.shares.length > 3 && (
+                  <Text
+                    style={[
+                      theme.typography.caption,
+                      { marginStart: theme.spacing.sm, color: theme.colors.text.secondary },
+                    ]}
+                  >
+                    ...
+                  </Text>
+                )}
+              </Card>
+            ))
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 };
