@@ -17,50 +17,53 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const { breakpoint } = useResponsive();
   const isGrid = breakpoint === 'lg' || breakpoint === 'xl';
 
-  const menuItems = useMemo(() => [
-    {
-      title: t('calculate_inheritance'),
-      description: t('start_new_calculation'),
-      icon: '📊',
-      screen: 'EstateSetup',
-      primary: true,
-    },
-    {
-      title: t('compare'),
-      description: t('comparison_title'),
-      icon: '⚖️',
-      screen: 'Comparison',
-      primary: false,
-    },
-    {
-      title: t('history'),
-      description: t('view_previous_calculations'),
-      icon: '📜',
-      screen: 'History',
-      primary: false,
-    },
-    {
-      title: t('glossary'),
-      description: t('learn_terminology'),
-      icon: '📖',
-      screen: 'Glossary',
-      primary: false,
-    },
-    {
-      title: t('settings'),
-      description: t('configure_app'),
-      icon: '⚙️',
-      screen: 'Settings',
-      primary: false,
-    },
-    {
-      title: t('test_cases'),
-      description: t('test_cases_description'),
-      icon: '🧪',
-      screen: 'TestCases',
-      primary: false,
-    },
-  ], []);
+  const menuItems = useMemo(
+    () => [
+      {
+        title: t('calculate_inheritance'),
+        description: t('start_new_calculation'),
+        icon: '📊',
+        screen: 'EstateSetup',
+        primary: true,
+      },
+      {
+        title: t('compare'),
+        description: t('comparison_title'),
+        icon: '⚖️',
+        screen: 'Comparison',
+        primary: false,
+      },
+      {
+        title: t('history'),
+        description: t('view_previous_calculations'),
+        icon: '📜',
+        screen: 'History',
+        primary: false,
+      },
+      {
+        title: t('glossary'),
+        description: t('learn_terminology'),
+        icon: '📖',
+        screen: 'Glossary',
+        primary: false,
+      },
+      {
+        title: t('settings'),
+        description: t('configure_app'),
+        icon: '⚙️',
+        screen: 'Settings',
+        primary: false,
+      },
+      {
+        title: t('test_cases'),
+        description: t('test_cases_description'),
+        icon: '🧪',
+        screen: 'TestCases',
+        primary: false,
+      },
+    ],
+    []
+  );
 
   return (
     <LinearGradient

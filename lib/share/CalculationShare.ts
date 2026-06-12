@@ -251,7 +251,7 @@ export class CalculationShare {
   }
 
   /**
-   * Generate deep link for calculation
+   * Generate deep link for calculation (enhanced with compact format)
    *
    * @param estate - Estate input
    * @param heirs - Heirs array
@@ -267,17 +267,56 @@ export class CalculationShare {
   ): string {
     const base = baseUrl || 'https://merath.app/calculation';
 
-    // Encode calculation parameters
-    const params = new URLSearchParams({
-      madhab: result.madhab,
-      total: estate.total.toString(),
-      funeral: estate.funeral.toString(),
-      debts: estate.debts.toString(),
-      will: estate.will.toString(),
-      heirs: JSON.stringify(heirs),
-    });
+    // Create compact representation
+    const calcData = {
+      m: result.madhab,
+      t: estate.total,
+      f: estate.funeral,
+      d: estate.debts,
+      w: estate.will,
+      h: heirs.map((heir) => `${heir.type}:${heir.count || 1}`).join(','),
+    };
 
-    return `${base}?${params.toString()}`;
+    // Encode as base64 for compact URL
+    const encoded = btoa(JSON.stringify(calcData));
+    return `${base}#${encoded}`;
+  }
+
+  /**
+   * Parse deep link data
+   *
+   * @param hash - Hash portion of URL
+   * @returns Parsed calculation data or null
+   */
+  public static parseDeepLink(
+    hash: string
+  ): { estate: EstateInput; heirs: HeirEntry[]; madhab: string } | null {
+    try {
+      const decoded = atob(hash);
+      const data = JSON.parse(decoded);
+
+      // Parse heirs from compact format
+      const heirs: HeirEntry[] = data.h
+        ? data.h.split(',').map((h: string) => {
+            const [type, count] = h.split(':');
+            return { type, count: parseInt(count, 10) || 1 };
+          })
+        : [];
+
+      return {
+        estate: {
+          total: data.t || 0,
+          funeral: data.f || 0,
+          debts: data.d || 0,
+          will: data.w || 0,
+        },
+        heirs,
+        madhab: data.m || 'hanafi',
+      };
+    } catch (error) {
+      console.error('Failed to parse deep link:', error);
+      return null;
+    }
   }
 
   /**

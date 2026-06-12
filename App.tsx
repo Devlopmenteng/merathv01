@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import RootNavigator from './navigation/RootNavigator';
 import { ErrorBoundary } from './ErrorBoundary';
 import { EducationalTutorial } from './components/EducationalTutorial';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import { AppProviders } from './lib/context/AppProviders';
 import { useTheme } from './lib/context/ThemeContext';
 import { useLanguage } from './lib/context/LanguageContext';
@@ -14,6 +15,7 @@ function AppContent() {
   return (
     <>
       <StatusBar style={isDark ? 'light' : 'dark'} />
+      <OfflineIndicator />
       <RootNavigator key={locale} />
       <EducationalTutorial key={`tutorial-${locale}`} />
     </>

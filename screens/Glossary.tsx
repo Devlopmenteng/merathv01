@@ -154,12 +154,18 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={GLOSSARY}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <Card variant="outlined" leftBorder={theme.colors.primary} style={{ marginBottom: theme.spacing.md }}>
+              <Card
+                variant="outlined"
+                leftBorder={theme.colors.primary}
+                style={{ marginBottom: theme.spacing.md }}
+              >
                 <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
                   {item.term} – {item.termAr}
                 </Text>
                 <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
-                <Text style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}>
+                <Text
+                  style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}
+                >
                   {item.definitionAr}
                 </Text>
               </Card>
@@ -185,13 +191,19 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
                 >
                   {item.surah} {item.verseNumber}
                 </Text>
-                <Text style={{ fontSize: 18, lineHeight: 28, marginBottom: 8, writingDirection: 'rtl' }}>
+                <Text
+                  style={{ fontSize: 18, lineHeight: 28, marginBottom: 8, writingDirection: 'rtl' }}
+                >
                   {item.arabic}
                 </Text>
                 <Text
-                  style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+                  style={[
+                    theme.typography.body,
+                    { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                  ]}
                 >
-                  {item.translations[i18n.locale as keyof typeof item.translations] || item.translation}
+                  {item.translations[i18n.locale as keyof typeof item.translations] ||
+                    item.translation}
                 </Text>
                 <Text
                   style={[
@@ -227,7 +239,10 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
                 <Text
                   style={[
                     theme.typography.caption,
-                    { color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                    {
+                      color: theme.colors.outline,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
                   ]}
                 >
                   {item.reference}

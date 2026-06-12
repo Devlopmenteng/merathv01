@@ -11,6 +11,8 @@ import { useCalc } from '../lib/context/CalcContext';
 import { validateEstateInput, sanitizeInput } from '../lib/utils/validation';
 import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
+import { TemplateSelector } from '../components/TemplateSelector';
+import type { HeirEntry, EstateInput } from '../lib/engine/types';
 
 type EstateSetupNavigation = {
   navigate: (screen: string) => void;
@@ -28,9 +30,10 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   const [totalError, setTotalError] = useState('');
   const [funeralError, setFuneralError] = useState('');
   const [debtsError, setDebtsError] = useState('');
+  const [willError, setWillError] = useState('');
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const net = parseFloat(total || '0') - parseFloat(funeral || '0') - parseFloat(debts || '0');
   const maxWill = net / 3;
-  const willError = parseFloat(will) > maxWill && maxWill >= 0 ? t('will_exceeds') : '';
 
   const validateTotal = (value: string) => {
     const num = parseFloat(value);
@@ -90,6 +93,33 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
     });
     navigation.navigate('MadhabSelect');
   }, [total, funeral, debts, will, caseName, caseDate, dispatch, navigation]);
+
+  const handleApplyTemplate = useCallback(
+    (templateData: { estate: EstateInput; heirs: HeirEntry[]; recommendedMadhab?: string }) => {
+      // Apply estate values
+      setTotal(String(templateData.estate.total));
+      setFuneral(String(templateData.estate.funeral));
+      setDebts(String(templateData.estate.debts));
+      setWill(String(templateData.estate.will));
+
+      // Apply heirs and recommended madhab to context
+      dispatch({
+        type: 'SET_ESTATE',
+        payload: templateData.estate,
+      });
+      dispatch({
+        type: 'SET_HEIRS',
+        payload: templateData.heirs,
+      });
+      if (templateData.recommendedMadhab) {
+        dispatch({
+          type: 'SET_MADHAB',
+          payload: templateData.recommendedMadhab,
+        });
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <ScrollView
@@ -209,6 +239,15 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           </Text>
         </Card>
       )}
+
+      <Button
+        title="📋 Use Quick Setup Template"
+        onPress={() => setShowTemplateSelector(true)}
+        mode="outlined"
+        fullWidth
+        style={{ marginBottom: theme.spacing.md }}
+      />
+
       <Button
         title={t('next_select_school')}
         onPress={onNext}
@@ -221,6 +260,12 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
             : t('a11y_proceed_to_madhab_selection')
         }
         accessibilityState={{ disabled: !total || parseFloat(total) <= 0 }}
+      />
+
+      <TemplateSelector
+        visible={showTemplateSelector}
+        onClose={() => setShowTemplateSelector(false)}
+        onApply={handleApplyTemplate}
       />
     </ScrollView>
   );
