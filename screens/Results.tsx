@@ -26,6 +26,7 @@ import { showAlert } from '../lib/utils/alerts';
 import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
+import { useRTL } from '../hooks/useRTL';
 import { ResultsSkeleton } from '../components/SkeletonCard';
 import { StepTimeline } from '../components/StepTimeline';
 import { StickyBottomBar } from '../components/StickyBottomBar';

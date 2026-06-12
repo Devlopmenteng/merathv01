@@ -11,7 +11,7 @@ type LanguageContextType = {
   locale: string;
   isReady: boolean;
   isRTL: boolean;
-  changeLocale: (locale: string) => Promise<boolean>;
+  changeLocale: (locale: string) => Promise<void>;
   forceUpdate: () => void;
 };
 
@@ -19,7 +19,7 @@ const LanguageContext = createContext<LanguageContextType>({
   locale: APP_DEFAULTS.DEFAULT_LOCALE,
   isReady: false,
   isRTL: false,
-  changeLocale: async () => false,
+  changeLocale: async () => {},
   forceUpdate: () => {},
 });
 
@@ -38,12 +38,12 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
         setLocale(initialLocale);
 
         // Set RTL direction if needed
-        if (RTL_LOCALES.includes(initialLocale) && !I18nManager.isRTL) {
-          I18nManager.allowRTL(true);
-          I18nManager.forceRTL(true);
-        } else if (!RTL_LOCALES.includes(initialLocale) && I18nManager.isRTL) {
-          I18nManager.allowRTL(false);
-          I18nManager.forceRTL(false);
+        const shouldBeRTL = RTL_LOCALES.includes(initialLocale);
+        I18nManager.allowRTL(shouldBeRTL);
+        
+        // In React Native 0.71+, forceRTL works synchronously without restart
+        if (I18nManager.isRTL !== shouldBeRTL) {
+          I18nManager.forceRTL(shouldBeRTL);
         }
       })
       .finally(() => setIsReady(true));
@@ -51,27 +51,24 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
   const changeLocale = useCallback(
     async (nextLocale: string) => {
-      const previousLocale = locale;
       initI18n(nextLocale);
       setLocale(nextLocale);
 
-      // Force re-render of all components
+      // Force re-render of all components by updating state
       forceUpdate({});
 
-      // Update RTL direction if needed
+      // Update RTL direction
       const shouldBeRTL = RTL_LOCALES.includes(nextLocale);
       I18nManager.allowRTL(shouldBeRTL);
 
+      // In React Native 0.71+, this works synchronously without restart
       if (I18nManager.isRTL !== shouldBeRTL) {
         I18nManager.forceRTL(shouldBeRTL);
       }
 
       await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
-
-      // Return true if RTL changed (would need restart in older React Native versions)
-      return RTL_LOCALES.includes(previousLocale) !== RTL_LOCALES.includes(nextLocale);
     },
-    [forceUpdate, locale]
+    [forceUpdate]
   );
 
   const triggerUpdate = useCallback(() => forceUpdate({}), [forceUpdate]);
