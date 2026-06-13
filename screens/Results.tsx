@@ -1,10 +1,12 @@
 import { StepIndicator } from '../components/StepIndicator';
-import { t } from '../lib/i18n';
+import { t, i18n } from '../lib/i18n';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { incrementCalculationCount } from '../lib/services/UsageStats';
 import { usePremium } from '../lib/context/PremiumContext';
 import { generateLegalReport } from '../components/LegalReportGenerator';
 import { Card } from '../components/ui/Card';
+import { flipDirectionalIcon } from '../lib/utils/rtl';
+import { formatCurrency as formatCurrencyLocale, formatDate } from '../lib/utils/localeFormatting';
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import {
   View,
@@ -23,7 +25,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCalc } from '../lib/context/CalcContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '../lib/utils/alerts';
-import { formatCurrency } from '../lib/utils/currency';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
 import { ResultsSkeleton } from '../components/SkeletonCard';
@@ -230,7 +231,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               `<li>${s.name}: ${t('currency_symbol')}${s.amount.toFixed(2)} (${s.fraction?.numerator}/${s.fraction?.denominator})</li>`
           )
           .join('')}</ul>
-        <footer>${t('pdf_footer', { date: new Date().toLocaleDateString() })}</footer>
+        <footer>${t('pdf_footer', { date: formatDate(new Date(), i18n.locale) })}</footer>
       </body></html>
     `;
     const { uri } = await Print.printToFileAsync({ html });
@@ -326,7 +327,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                 writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
-              {showPercentage ? `${percentage}%` : formatCurrency(share.amount)}
+              {showPercentage ? `${percentage}%` : formatCurrencyLocale(share.amount, i18n.locale)}
             </Text>
           </View>
           {share.reason ? (
@@ -627,7 +628,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               {t('steps')}
             </Text>
             <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
-              {showSteps ? '▲' : '▼'}
+              {showSteps ? flipDirectionalIcon('▲') : flipDirectionalIcon('▼')}
             </Text>
           </TouchableOpacity>
           {showSteps && (

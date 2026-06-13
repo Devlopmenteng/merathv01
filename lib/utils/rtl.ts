@@ -4,6 +4,34 @@ export const backArrow = (): string => (I18nManager.isRTL ? '→' : '←');
 export const forwardArrow = (): string => (I18nManager.isRTL ? '←' : '→');
 
 /**
+ * Flip directional icons for RTL layouts
+ * Common directional characters that need flipping
+ */
+export const flipDirectionalIcon = (icon: string): string => {
+  const iconMap: Record<string, string> = {
+    '←': '→',
+    '→': '←',
+    '◀': '▶',
+    '▶': '◀',
+    '▲': '▼',
+    '▼': '▲',
+    '⬅': '➡',
+    '➡': '⬅',
+    '⬆': '⬇',
+    '⬇': '⬆',
+    '❮': '❯',
+    '❯': '❮',
+    '❰': '❱',
+    '❱': '❰',
+  };
+
+  if (I18nManager.isRTL && iconMap[icon]) {
+    return iconMap[icon];
+  }
+  return icon;
+};
+
+/**
  * Get row direction based on RTL setting
  * Returns 'row-reverse' in RTL, 'row' in LTR
  */

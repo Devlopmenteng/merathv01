@@ -44,4 +44,14 @@ export function initI18n(locale?: string): boolean {
 }
 
 export const t = (key: string, options?: Record<string, string | number>) => i18n.t(key, options);
+
+/**
+ * Simple pluralization helper for keys with _one and _other suffixes
+ * Automatically selects the correct plural form based on count
+ */
+export function tp(key: string, count: number, options?: Record<string, string | number>): string {
+  const pluralKey = count === 1 ? `${key}_one` : `${key}_other`;
+  return i18n.t(pluralKey, { ...options, count });
+}
+
 export { i18n };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, I18nManager } from 'react-native';
 import { HeirType } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Stepper } from './ui/Stepper';
@@ -32,7 +32,10 @@ export const HeirRow: React.FC<HeirRowProps> = ({
 
   const rowStyle = [
     styles.row,
-    { borderBottomColor: theme.colors.outline },
+    {
+      borderBottomColor: theme.colors.outline,
+      flexDirection: (I18nManager.isRTL ? 'row-reverse' : 'row') as 'row' | 'row-reverse',
+    },
     isBlocked && { backgroundColor: theme.colors.error + '20', opacity: 0.7 },
   ];
 
@@ -48,19 +51,34 @@ export const HeirRow: React.FC<HeirRowProps> = ({
           numberOfLines={2}
           style={[
             theme.typography.body,
-            { flexShrink: 1 },
+            { flexShrink: 1, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
             isBlocked && { textDecorationLine: 'line-through', color: theme.colors.outline },
           ]}
         >
           {name}
         </Text>
         {isBlocked && (
-          <Text style={{ fontSize: 10, color: theme.colors.error }}>⛔ {t('_blocked')}</Text>
+          <Text
+            style={{
+              fontSize: 10,
+              color: theme.colors.error,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            }}
+          >
+            ⛔ {t('_blocked')}
+          </Text>
         )}
       </View>
       <View style={styles.stepperContainer}>
         {isBlocked ? (
-          <Text style={{ color: theme.colors.error }}>—</Text>
+          <Text
+            style={{
+              color: theme.colors.error,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            }}
+          >
+            —
+          </Text>
         ) : (
           <Stepper
             value={count}
@@ -92,7 +110,8 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    marginStart: 8,
+    marginStart: I18nManager.isRTL ? undefined : 8,
+    marginEnd: I18nManager.isRTL ? 8 : undefined,
   },
   stepperContainer: {
     width: 100,

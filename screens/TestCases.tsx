@@ -1,10 +1,19 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  I18nManager,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from '../components/ui/Card';
-import { t } from '../lib/i18n';
+import { t, tp, i18n } from '../lib/i18n';
 import { backArrow } from '../lib/utils/rtl';
+import { formatNumber } from '../lib/utils/localeFormatting';
 import {
   SCENARIO_TEMPLATES,
   getTemplatesByCategory,
@@ -117,16 +126,28 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+        <Text
+          style={[
+            { color: theme.colors.primary },
+            theme.typography.button,
+            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
           {backArrow()} {t('back')}
         </Text>
       </TouchableOpacity>
 
-      <Text style={theme.typography.h1}>{t('test_cases')}</Text>
+      <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+        {t('test_cases')}
+      </Text>
       <Text
         style={[
           theme.typography.body,
-          { color: theme.colors.text.secondary, marginBottom: theme.spacing.md },
+          {
+            color: theme.colors.text.secondary,
+            marginBottom: theme.spacing.md,
+            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+          },
         ]}
       >
         {t('test_cases_description')}
@@ -142,6 +163,8 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
           color: theme.colors.onSurface,
           backgroundColor: theme.colors.surface,
           ...theme.elevation.small,
+          textAlign: I18nManager.isRTL ? 'right' : 'left',
+          writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
         }}
         placeholder={t('search_templates')}
         placeholderTextColor={theme.colors.outline}
@@ -155,6 +178,9 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{ marginBottom: theme.spacing.md }}
+        contentContainerStyle={{
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        }}
       >
         <TouchableOpacity
           style={[
@@ -174,6 +200,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
           <Text
             style={{
               color: selectedCategory === null ? theme.colors.onPrimary : theme.colors.text.primary,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
             }}
           >
             {t('all')}
@@ -206,6 +233,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   selectedCategory === category
                     ? theme.colors.onPrimary
                     : theme.colors.text.primary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
               {getCategoryDisplayName(category)}
@@ -217,7 +245,12 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredTemplates.length === 0 ? (
           <Card variant="outlined" padding="lg">
-            <Text style={[theme.typography.body, { textAlign: 'center' }]}>
+            <Text
+              style={[
+                theme.typography.body,
+                { textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
               {t('no_templates_found')}
             </Text>
           </Card>
@@ -249,7 +282,8 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   style={{
                     position: 'absolute',
                     top: theme.spacing.sm,
-                    right: theme.spacing.sm,
+                    right: I18nManager.isRTL ? undefined : theme.spacing.sm,
+                    left: I18nManager.isRTL ? theme.spacing.sm : undefined,
                     backgroundColor: theme.colors.primary,
                     paddingHorizontal: theme.spacing.sm,
                     paddingVertical: theme.spacing.xs,
@@ -261,6 +295,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                       {
                         color: theme.colors.onPrimary,
                         fontWeight: '600',
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
                       },
                       theme.typography.caption,
                     ]}
@@ -273,7 +308,11 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               <Text
                 style={[
                   theme.typography.h3,
-                  { color: theme.colors.text.primary, marginBottom: theme.spacing.xs },
+                  {
+                    color: theme.colors.text.primary,
+                    marginBottom: theme.spacing.xs,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  },
                 ]}
               >
                 {template.name}
@@ -281,54 +320,107 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
               <Text
                 style={[
                   theme.typography.body,
-                  { color: theme.colors.text.secondary, marginBottom: theme.spacing.sm },
+                  {
+                    color: theme.colors.text.secondary,
+                    marginBottom: theme.spacing.sm,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  },
                 ]}
               >
                 {template.description}
               </Text>
 
-              <View style={styles.detailsRow}>
+              <View
+                style={[
+                  styles.detailsRow,
+                  { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' },
+                ]}
+              >
                 <Text
                   style={[
                     theme.typography.body,
-                    { fontWeight: '500', color: theme.colors.text.secondary },
+                    {
+                      fontWeight: '500',
+                      color: theme.colors.text.secondary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
                   ]}
                 >
                   {t('estate')}:{' '}
                 </Text>
-                <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
-                  {t('currency_symbol')}
-                  {template.estate.total.toLocaleString()}
-                </Text>
-              </View>
-
-              <View style={styles.detailsRow}>
                 <Text
                   style={[
                     theme.typography.body,
-                    { fontWeight: '500', color: theme.colors.text.secondary },
+                    {
+                      color: theme.colors.text.primary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
+                  {t('currency_symbol')}
+                  {formatNumber(template.estate.total, i18n.locale)}
+                </Text>
+              </View>
+
+              <View
+                style={[
+                  styles.detailsRow,
+                  { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' },
+                ]}
+              >
+                <Text
+                  style={[
+                    theme.typography.body,
+                    {
+                      fontWeight: '500',
+                      color: theme.colors.text.secondary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
                   ]}
                 >
                   {t('heirs')}:{' '}
                 </Text>
-                <Text style={[theme.typography.body, { color: theme.colors.text.primary }]}>
-                  {template.heirs.length === 1
-                    ? t('heir_count_one')
-                    : t('heir_count_other').replace('%{count}', String(template.heirs.length))}
+                <Text
+                  style={[
+                    theme.typography.body,
+                    {
+                      color: theme.colors.text.primary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
+                  {tp('heir_count', template.heirs.length, { count: template.heirs.length })}
                 </Text>
               </View>
 
               {template.recommendedMadhab && (
-                <View style={styles.detailsRow}>
+                <View
+                  style={[
+                    styles.detailsRow,
+                    { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' },
+                  ]}
+                >
                   <Text
                     style={[
                       theme.typography.body,
-                      { fontWeight: '500', color: theme.colors.text.secondary },
+                      {
+                        fontWeight: '500',
+                        color: theme.colors.text.secondary,
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                      },
                     ]}
                   >
                     {t('recommended_madhab')}:{' '}
                   </Text>
-                  <Text style={[theme.typography.body, { color: theme.colors.primary }]}>
+                  <Text
+                    style={[
+                      theme.typography.body,
+                      {
+                        color: theme.colors.primary,
+                        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                      },
+                    ]}
+                  >
                     {t('madhab_name_' + template.recommendedMadhab, {
                       defaultValue: template.recommendedMadhab,
                     })}
@@ -344,6 +436,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                       fontStyle: 'italic',
                       color: theme.colors.text.secondary,
                       marginTop: theme.spacing.sm,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
                     },
                   ]}
                 >

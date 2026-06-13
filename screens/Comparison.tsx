@@ -17,9 +17,9 @@ import { MADHAB_NAMES } from '../lib/engine/constants';
 import type { Madhab, CalculationResult, EstateInput } from '../lib/engine/types';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
-import { formatCurrency } from '../lib/utils/currency';
+import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeFormatting';
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
-import { t } from '../lib/i18n';
+import { t, i18n } from '../lib/i18n';
 import { localizeHeirName } from '../lib/utils/shareLocalization';
 import { Card } from '../components/ui/Card';
 
@@ -157,7 +157,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         const percentage = share.fraction
           ? ((share.fraction.numerator / share.fraction.denominator) * 100).toFixed(1) + '%'
           : '—';
-        const amount = share.amount ? formatCurrency(share.amount) : '—';
+        const amount = share.amount ? formatCurrencyLocale(share.amount, i18n.locale) : '—';
         return { fraction: fractionStr, percentage, amount, amountValue: share.amount };
       });
       if (sharesByMadhab.every((s) => s === null)) return null;
@@ -284,7 +284,8 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           </Text>
           {comparisonSummary.maxDifference > 0 && (
             <Text style={{ marginBottom: 8 }}>
-              {t('max_difference')}: {formatCurrency(comparisonSummary.maxDifference)} (
+              {t('max_difference')}:{' '}
+              {formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (
               {localizeHeirName(
                 comparisonSummary.mostDifferentHeir,
                 comparisonSummary.mostDifferentHeir
@@ -365,7 +366,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               {t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}
             </Text>
             <Text style={theme.typography.caption}>
-              Difference: {formatCurrency(diff.amountDifference)} (
+              Difference: {formatCurrencyLocale(diff.amountDifference, i18n.locale)} (
               {diff.percentageDifference.toFixed(1)}%)
             </Text>
             {diff.isSignificant && (

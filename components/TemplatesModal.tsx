@@ -3,6 +3,7 @@ import { View, Text, Modal, TouchableOpacity, FlatList, StyleSheet } from 'react
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 import { HeirEntry, HeirType } from '../lib/engine/types';
+import { flipDirectionalIcon } from '../lib/utils/rtl';
 
 type Template = {
   name: string;
@@ -80,7 +81,7 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({
                 <Text style={theme.typography.body} numberOfLines={1}>
                   {t(item.nameKey, { defaultValue: item.name })}
                 </Text>
-                <Text style={{ color: theme.colors.primary }}>→</Text>
+                <Text style={{ color: theme.colors.primary }}>{flipDirectionalIcon('→')}</Text>
               </TouchableOpacity>
             )}
           />

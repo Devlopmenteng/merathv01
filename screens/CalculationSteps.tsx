@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from '../components/ui/Card';
@@ -43,12 +43,27 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           accessibilityLabel={t('back')}
           accessibilityRole="button"
         >
-          <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+          <Text
+            style={[
+              { color: theme.colors.primary },
+              theme.typography.button,
+              { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
+          >
             {backArrow()} {t('back')}
           </Text>
         </TouchableOpacity>
-        <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
-        <Text style={[theme.typography.body, { marginTop: theme.spacing.md }]}>
+        <Text
+          style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('calculation_steps')}
+        </Text>
+        <Text
+          style={[
+            theme.typography.body,
+            { marginTop: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
           {t('no_calculation_data')}
         </Text>
       </View>
@@ -70,21 +85,53 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         accessibilityLabel={t('back')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button]}>
+        <Text
+          style={[
+            { color: theme.colors.primary },
+            theme.typography.button,
+            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
           {backArrow()} {t('back')}
         </Text>
       </TouchableOpacity>
 
-      <Text style={theme.typography.h1}>{t('calculation_steps')}</Text>
+      <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+        {t('calculation_steps')}
+      </Text>
 
       <Card variant="outlined">
-        <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+        <Text
+          style={[
+            theme.typography.bodySmall,
+            {
+              color: theme.colors.text.secondary,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
+        >
           {t('case_name')}: {auditEntry.caseName || t('no_name')}
         </Text>
-        <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+        <Text
+          style={[
+            theme.typography.bodySmall,
+            {
+              color: theme.colors.text.secondary,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
+        >
           {t('date')}: {auditEntry.caseDate || t('no_date')}
         </Text>
-        <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+        <Text
+          style={[
+            theme.typography.bodySmall,
+            {
+              color: theme.colors.text.secondary,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
+        >
           {t('madhab')}:{' '}
           {t('madhab_name_' + auditEntry.madhab, { defaultValue: auditEntry.madhab })}
         </Text>
@@ -102,7 +149,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
             >
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
                   alignItems: 'center',
                   marginBottom: theme.spacing.sm,
                 }}
@@ -115,7 +162,8 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     backgroundColor: theme.colors.primary,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginEnd: theme.spacing.md,
+                    marginEnd: I18nManager.isRTL ? undefined : theme.spacing.md,
+                    marginStart: I18nManager.isRTL ? theme.spacing.md : undefined,
                   }}
                 >
                   <Text
@@ -127,7 +175,16 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                     {index + 1}
                   </Text>
                 </View>
-                <Text style={[theme.typography.h3, { flex: 1, color: theme.colors.text.primary }]}>
+                <Text
+                  style={[
+                    theme.typography.h3,
+                    {
+                      flex: 1,
+                      color: theme.colors.text.primary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
                   {localizeStepTitle(step.title)}
                 </Text>
               </View>
@@ -135,7 +192,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
               <Text
                 style={[
                   theme.typography.body,
-                  { marginStart: 48, color: theme.colors.text.secondary },
+                  {
+                    marginStart: I18nManager.isRTL ? undefined : 48,
+                    marginEnd: I18nManager.isRTL ? 48 : undefined,
+                    color: theme.colors.text.secondary,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  },
                 ]}
               >
                 {localizeStepDesc(step.description)}
@@ -144,7 +206,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           ))
         ) : (
           <Card variant="outlined" padding="lg">
-            <Text style={[theme.typography.body, { textAlign: 'center' }]}>
+            <Text
+              style={[
+                theme.typography.body,
+                { textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
               {t('no_steps_available')}
             </Text>
           </Card>
@@ -152,7 +219,15 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
           <Card variant="outlined" style={{ marginTop: theme.spacing.md }}>
-            <Text style={[theme.typography.h3, { marginBottom: theme.spacing.md }]}>
+            <Text
+              style={[
+                theme.typography.h3,
+                {
+                  marginBottom: theme.spacing.md,
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
               {t('hijab_log')}
             </Text>
             {auditEntry.hijabLog.map((log, index) => (
@@ -160,7 +235,11 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                 key={index}
                 style={[
                   theme.typography.body,
-                  { color: theme.colors.text.secondary, marginBottom: theme.spacing.xs },
+                  {
+                    color: theme.colors.text.secondary,
+                    marginBottom: theme.spacing.xs,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  },
                 ]}
               >
                 • {log}

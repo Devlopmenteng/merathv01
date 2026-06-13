@@ -1,7 +1,7 @@
 import { StepIndicator } from '../components/StepIndicator';
-import { t } from '../lib/i18n';
+import { t, i18n } from '../lib/i18n';
 import React, { useState, useCallback } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -10,7 +10,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { validateEstateInput, sanitizeInput } from '../lib/utils/validation';
 import { showAlert } from '../lib/utils/alerts';
-import { formatCurrency } from '../lib/utils/currency';
+import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeFormatting';
 import { TemplateSelector } from '../components/TemplateSelector';
 import type { HeirEntry, EstateInput } from '../lib/engine/types';
 
@@ -137,12 +137,22 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         currentStep={0}
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
-      <Text style={[theme.typography.h1, { marginBottom: theme.spacing.lg }]}>
+      <Text
+        style={[
+          theme.typography.h1,
+          { marginBottom: theme.spacing.lg, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+        ]}
+      >
         {t('estate_details')}
       </Text>
 
       <Card variant="outlined" style={styles.sectionCard}>
-        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
+        <Text
+          style={[
+            theme.typography.h4,
+            { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
           {t('case_info')}
         </Text>
         <Input
@@ -167,7 +177,14 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
       </Card>
 
       <Card variant="outlined" style={styles.sectionCard}>
-        <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>{t('estate')}</Text>
+        <Text
+          style={[
+            theme.typography.h4,
+            { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
+          {t('estate')}
+        </Text>
         <Input
           label={t('total_estate')}
           currency
@@ -178,7 +195,12 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           accessibilityHint={t('a11y_enter_total_estate')}
           error={totalError}
         />
-        <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+        <View
+          style={{
+            flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+            gap: theme.spacing.sm,
+          }}
+        >
           <Input
             style={{ flex: 1 }}
             label={t('funeral_costs')}
@@ -222,23 +244,42 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
 
       {(parseFloat(total) > 0 || parseFloat(funeral) > 0 || parseFloat(debts) > 0) && (
         <Card variant="tonal">
-          <Text style={[theme.typography.h4, { marginBottom: theme.spacing.sm }]}>
+          <Text
+            style={[
+              theme.typography.h4,
+              {
+                marginBottom: theme.spacing.sm,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
             {t('net_estate')}
           </Text>
           <Text
-            style={theme.typography.display}
+            style={[
+              theme.typography.display,
+              { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
             accessibilityLiveRegion="polite"
-            accessibilityLabel={`${t('net_estate')}: ${formatCurrency(Math.max(0, net - (parseFloat(will) || 0)))}`}
+            accessibilityLabel={`${t('net_estate')}: ${formatCurrencyLocale(Math.max(0, net - (parseFloat(will) || 0)), i18n.locale)}`}
           >
-            {formatCurrency(Math.max(0, net - (parseFloat(will) || 0)))}
+            {formatCurrencyLocale(Math.max(0, net - (parseFloat(will) || 0)), i18n.locale)}
           </Text>
           <Text
-            style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}
+            style={[
+              theme.typography.bodySmall,
+              {
+                color: theme.colors.text.secondary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
             accessibilityLiveRegion="polite"
           >
-            {t('total_estate')}: {formatCurrency(parseFloat(total) || 0)} — {t('deductions')}:&nbsp;
-            {formatCurrency(
-              (parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0)
+            {t('total_estate')}: {formatCurrencyLocale(parseFloat(total) || 0, i18n.locale)} —{' '}
+            {t('deductions')}:&nbsp;
+            {formatCurrencyLocale(
+              (parseFloat(funeral) || 0) + (parseFloat(debts) || 0) + (parseFloat(will) || 0),
+              i18n.locale
             )}
           </Text>
         </Card>

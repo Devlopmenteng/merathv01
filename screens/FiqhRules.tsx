@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, I18nManager } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from '../components/ui/Card';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
@@ -73,89 +73,214 @@ export const FiqhRules = () => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: theme.spacing.md }}>
-      <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>
+      <Text
+        style={[
+          theme.typography.h2,
+          { marginBottom: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+        ]}
+      >
         {t('madhab_notes')}
       </Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
         <Card key={madhab} variant="outlined" leftBorder={theme.colors.primary}>
-          <Text style={[theme.typography.h3, { color: theme.colors.primary, marginBottom: 4 }]}>
+          <Text
+            style={[
+              theme.typography.h3,
+              {
+                color: theme.colors.primary,
+                marginBottom: 4,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
             {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
           </Text>
           {Object.entries(notes).map(([key, val]) => (
-            <Text key={key} style={[theme.typography.caption, { marginTop: 4 }]}>
+            <Text
+              key={key}
+              style={[
+                theme.typography.caption,
+                { marginTop: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
               • {val as string}
             </Text>
           ))}
         </Card>
       ))}
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+      <Text
+        style={[
+          theme.typography.h2,
+          { marginVertical: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+        ]}
+      >
         {t('special_cases_title')}
       </Text>
       {SPECIAL_CASES.map((caseItem) => (
         <Card key={caseItem.nameKey} variant="filled">
-          <Text style={[theme.typography.h3, { color: theme.colors.secondary }]}>
+          <Text
+            style={[
+              theme.typography.h3,
+              {
+                color: theme.colors.secondary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
             {t(caseItem.nameKey)}
           </Text>
-          <Text style={theme.typography.body}>{t(caseItem.descKey)}</Text>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
+            {t(caseItem.descKey)}
+          </Text>
         </Card>
       ))}
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+      <Text
+        style={[
+          theme.typography.h2,
+          { marginVertical: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+        ]}
+      >
         {t('fixed_shares_title')}
       </Text>
-      <ScrollView horizontal>
+      <ScrollView
+        horizontal
+        contentContainerStyle={{
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        }}
+      >
         <View style={{ minWidth: 300 }}>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
               borderBottomWidth: 1,
               borderColor: theme.colors.outline,
               paddingBottom: 8,
               marginBottom: 8,
             }}
           >
-            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('share')}</Text>
-            <Text style={{ flex: 2, fontWeight: 'bold' }}>{t('heirs')}</Text>
+            <Text
+              style={[
+                {
+                  flex: 1,
+                  fontWeight: 'bold',
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('share')}
+            </Text>
+            <Text
+              style={[
+                {
+                  flex: 2,
+                  fontWeight: 'bold',
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('heirs')}
+            </Text>
           </View>
           {FIXED_SHARES.map((item) => (
             <View
               key={item.shareKey}
-              style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}
+              style={{
+                flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+                marginBottom: 8,
+                paddingVertical: 4,
+              }}
             >
-              <Text style={{ flex: 1 }}>{t(item.shareKey)}</Text>
-              <Text style={{ flex: 2 }}>{t(item.heirsKey)}</Text>
+              <Text style={[{ flex: 1, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t(item.shareKey)}
+              </Text>
+              <Text style={[{ flex: 2, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t(item.heirsKey)}
+              </Text>
             </View>
           ))}
         </View>
       </ScrollView>
 
-      <Text style={[theme.typography.h2, { marginVertical: theme.spacing.md }]}>
+      <Text
+        style={[
+          theme.typography.h2,
+          { marginVertical: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+        ]}
+      >
         {t('hijab_rules_title')}
       </Text>
-      <ScrollView horizontal>
+      <ScrollView
+        horizontal
+        contentContainerStyle={{
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        }}
+      >
         <View style={{ minWidth: 340 }}>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
               borderBottomWidth: 1,
               borderColor: theme.colors.outline,
               paddingBottom: 8,
               marginBottom: 8,
             }}
           >
-            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('blocked')}</Text>
-            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('blocker')}</Text>
-            <Text style={{ flex: 1, fontWeight: 'bold' }}>{t('hijab_type')}</Text>
+            <Text
+              style={[
+                {
+                  flex: 1,
+                  fontWeight: 'bold',
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('blocked')}
+            </Text>
+            <Text
+              style={[
+                {
+                  flex: 1,
+                  fontWeight: 'bold',
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('blocker')}
+            </Text>
+            <Text
+              style={[
+                {
+                  flex: 1,
+                  fontWeight: 'bold',
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('hijab_type')}
+            </Text>
           </View>
           {HIJAB_RULES.map((item) => (
             <View
               key={item.blockedKey}
-              style={{ flexDirection: 'row', marginBottom: 8, paddingVertical: 4 }}
+              style={{
+                flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+                marginBottom: 8,
+                paddingVertical: 4,
+              }}
             >
-              <Text style={{ flex: 1 }}>{t(item.blockedKey)}</Text>
-              <Text style={{ flex: 1 }}>{t(item.blockerKey)}</Text>
-              <Text style={{ flex: 1 }}>{t(item.typeKey)}</Text>
+              <Text style={[{ flex: 1, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t(item.blockedKey)}
+              </Text>
+              <Text style={[{ flex: 1, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t(item.blockerKey)}
+              </Text>
+              <Text style={[{ flex: 1, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t(item.typeKey)}
+              </Text>
             </View>
           ))}
         </View>

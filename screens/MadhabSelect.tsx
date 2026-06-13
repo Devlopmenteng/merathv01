@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from '../components/ui/Card';
@@ -46,15 +46,32 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
               dispatch({ type: 'SET_MADHAB', payload: item.key });
               navigation.navigate('HeirSelection');
             }}
-            style={{ flexDirection: 'row', alignItems: 'center' }}
+            style={{
+              flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+              alignItems: 'center',
+            }}
             accessibilityLabel={`${item.title}. ${item.desc}`}
             accessibilityHint={t('a11y_select_madhab', { madhab: item.title })}
             accessibilityRole="button"
           >
             <Text style={[{ marginEnd: 12 }, theme.typography.h1]}>{item.icon}</Text>
             <View>
-              <Text style={theme.typography.h2}>{item.title}</Text>
-              <Text style={theme.typography.body}>{item.desc}</Text>
+              <Text
+                style={[
+                  theme.typography.h2,
+                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                ]}
+              >
+                {item.title}
+              </Text>
+              <Text
+                style={[
+                  theme.typography.body,
+                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                ]}
+              >
+                {item.desc}
+              </Text>
             </View>
           </Card>
         )}

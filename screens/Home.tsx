@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, I18nManager } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -80,11 +80,19 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
         }}
       >
         <View style={{ marginBottom: theme.spacing.xxl }}>
-          <Text style={theme.typography.h1}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
+          <Text
+            style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
+            {t('merath_v10__islamic_inheritance_calculator')}
+          </Text>
           <Text
             style={[
               theme.typography.body,
-              { color: theme.colors.text.secondary, marginTop: theme.spacing.sm },
+              {
+                color: theme.colors.text.secondary,
+                marginTop: theme.spacing.sm,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
             ]}
           >
             {t('app_description')}
@@ -98,7 +106,12 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               onPress={() => navigation.navigate(item.screen)}
               style={
                 [
-                  isGrid ? styles.gridItem : { flexDirection: 'row', alignItems: 'center' },
+                  isGrid
+                    ? styles.gridItem
+                    : {
+                        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+                        alignItems: 'center',
+                      },
                   item.primary && styles.primaryMenuItem,
                 ] as any
               }
@@ -111,12 +124,24 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                 <Text
                   style={[
                     item.primary ? theme.typography.h2 : theme.typography.h3,
-                    { color: theme.colors.onSurface, marginBottom: theme.spacing.xs },
+                    {
+                      color: theme.colors.onSurface,
+                      marginBottom: theme.spacing.xs,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
                   ]}
                 >
                   {item.title}
                 </Text>
-                <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>
+                <Text
+                  style={[
+                    theme.typography.body,
+                    {
+                      color: theme.colors.text.secondary,
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    },
+                  ]}
+                >
                   {item.description}
                 </Text>
               </View>
@@ -150,7 +175,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   gridContainer: {
-    flexDirection: 'row',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     flexWrap: 'wrap',
     gap: 16,
   },

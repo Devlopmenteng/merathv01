@@ -8,6 +8,7 @@ import { applyHijab } from '../lib/engine/hijab';
 import { t } from '../lib/i18n';
 import { APP_DEFAULTS } from '../lib/constants/appDefaults';
 import { showValidationError } from '../lib/utils/alerts';
+import { flipDirectionalIcon } from '../lib/utils/rtl';
 import { HeirRow } from './HeirRow';
 import { TemplatesModal } from './TemplatesModal';
 import { localizeHeirType } from '../lib/utils/shareLocalization';
@@ -143,7 +144,9 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
               style={[styles.categoryHeader, { borderBottomColor: theme.colors.outline }]}
             >
               <Text style={theme.typography.h3}>{t(cat.titleKey)}</Text>
-              <Text style={{ fontSize: 18 }}>{open ? '▲' : '▼'}</Text>
+              <Text style={{ fontSize: 18 }}>
+                {open ? flipDirectionalIcon('▲') : flipDirectionalIcon('▼')}
+              </Text>
             </TouchableOpacity>
             {open && (
               <View>
