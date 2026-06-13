@@ -171,6 +171,11 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
               </Card>
             )}
             contentContainerStyle={{ gap: theme.spacing.md }}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={8}
+            updateCellsBatchingPeriod={50}
+            initialNumToRender={8}
+            windowSize={8}
           />
         )}
         {activeTab === 'verses' && (
@@ -220,6 +225,11 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
               </Card>
             )}
             contentContainerStyle={{ gap: theme.spacing.md }}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={8}
+            updateCellsBatchingPeriod={50}
+            initialNumToRender={8}
+            windowSize={8}
           />
         )}
         {activeTab === 'hadith' && (
@@ -250,6 +260,11 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
               </Card>
             )}
             contentContainerStyle={{ gap: theme.spacing.md }}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={8}
+            updateCellsBatchingPeriod={50}
+            initialNumToRender={8}
+            windowSize={8}
           />
         )}
         {activeTab === 'fiqh' && <FiqhRules />}

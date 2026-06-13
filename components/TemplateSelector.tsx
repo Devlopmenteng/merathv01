@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from './ui/Card';
@@ -33,7 +33,7 @@ interface TemplateSelectorProps {
   }) => void;
 }
 
-export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
+export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(({
   visible,
   onClose,
   onApply,
@@ -43,11 +43,13 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState<ScenarioTemplate | null>(null);
 
-  const displayedTemplates = selectedCategory
-    ? getTemplatesByCategory(selectedCategory)
-    : searchQuery
-      ? searchTemplates(searchQuery)
-      : getPopularTemplates();
+  const displayedTemplates = useMemo(() => {
+    return selectedCategory
+      ? getTemplatesByCategory(selectedCategory)
+      : searchQuery
+        ? searchTemplates(searchQuery)
+        : getPopularTemplates();
+  }, [selectedCategory, searchQuery]);
 
   const handleApply = () => {
     if (selectedTemplate) {
@@ -201,7 +203,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       </View>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

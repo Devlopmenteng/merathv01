@@ -13,6 +13,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,json}\"",
     "type-check": "tsc --noEmit",
     "analyze": "npx expo export --output-dir dist --platform web && npx @rollup/plugin-dynamic-import-vars",
+    "build:web": "expo export --platform web --output-dir dist",
+    "build:android": "eas build --platform android",
+    "build:ios": "eas build --platform ios",
+    "analyze:bundle": "node scripts/analyzeBundle.js dist",
     "prepare": "husky install"
   },
   "dependencies": {

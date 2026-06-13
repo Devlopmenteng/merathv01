@@ -16,7 +16,7 @@ type ExportBarProps = {
   children: React.ReactNode;
 };
 
-export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs, children }) => {
+export const ExportBar: React.FC<ExportBarProps> = React.memo(({ resultData, estate, heirs, children }) => {
   const viewShotRef = useRef<ViewShot>(null);
   const theme = useAppTheme();
 
@@ -105,4 +105,4 @@ export const ExportBar: React.FC<ExportBarProps> = ({ resultData, estate, heirs,
       </View>
     </View>
   );
-};
+});

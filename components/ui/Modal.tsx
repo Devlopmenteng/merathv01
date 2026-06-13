@@ -19,7 +19,7 @@ type ModalProps = {
   maxHeight?: number;
 };
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = React.memo(({
   visible,
   onClose,
   title,
@@ -64,7 +64,7 @@ export const Modal: React.FC<ModalProps> = ({
       </Pressable>
     </RNModal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   backdrop: {

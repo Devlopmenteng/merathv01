@@ -21,6 +21,17 @@ const Results = lazy(() =>
   import('../screens/Results').then((module) => ({ default: module.Results }))
 );
 
+// Preload critical screens after initial render
+const preloadCriticalScreens = () => {
+  Promise.all([
+    import('../screens/Home'),
+    import('../screens/EstateSetup'),
+    import('../screens/MadhabSelect'),
+    import('../screens/HeirSelection'),
+    import('../screens/Results'),
+  ]);
+};
+
 // Less frequently used screens remain lazy loaded
 const Comparison = lazy(() =>
   import('../screens/Comparison').then((module) => ({ default: module.Comparison }))
@@ -79,20 +90,10 @@ export default function RootNavigator() {
 
   // Preload critical screens after initial mount
   useEffect(() => {
-    // Preload the main flow screens
-    const preloadScreens = async () => {
-      try {
-        await import('../screens/EstateSetup');
-        await import('../screens/MadhabSelect');
-        await import('../screens/HeirSelection');
-        await import('../screens/Results');
-      } catch (error) {
-        console.warn('Failed to preload screens:', error);
-      }
-    };
-
     // Delay preloading to avoid affecting initial render
-    const timer = setTimeout(preloadScreens, 2000);
+    const timer = setTimeout(() => {
+      preloadCriticalScreens();
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 

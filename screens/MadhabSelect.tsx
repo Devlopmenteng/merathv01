@@ -38,6 +38,11 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
         }}
         data={madhabs}
         keyExtractor={(i) => i.key}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={50}
+        initialNumToRender={5}
+        windowSize={5}
         renderItem={({ item }) => (
           <Card
             variant="outlined"

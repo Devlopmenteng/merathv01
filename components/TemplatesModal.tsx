@@ -55,7 +55,7 @@ interface TemplatesModalProps {
   onSelectTemplate: (heirs: HeirEntry[]) => void;
 }
 
-export const TemplatesModal: React.FC<TemplatesModalProps> = ({
+export const TemplatesModal: React.FC<TemplatesModalProps> = React.memo(({
   visible,
   onClose,
   onSelectTemplate,
@@ -95,7 +95,7 @@ export const TemplatesModal: React.FC<TemplatesModalProps> = ({
       </View>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   overlay: {

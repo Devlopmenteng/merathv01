@@ -225,6 +225,16 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           keyExtractor={keyExtractor}
           contentContainerStyle={{ gap: theme.spacing.md }}
           showsVerticalScrollIndicator={true}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10}
+          updateCellsBatchingPeriod={50}
+          initialNumToRender={10}
+          windowSize={10}
+          getItemLayout={(_data, index) => ({
+            length: 100,
+            offset: 100 * index,
+            index,
+          })}
         />
       )}
     </View>

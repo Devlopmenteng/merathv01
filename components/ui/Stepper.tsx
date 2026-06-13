@@ -12,7 +12,7 @@ type Props = {
   size?: 'small' | 'medium' | 'large';
 };
 
-export const Stepper: React.FC<Props> = ({
+export const Stepper: React.FC<Props> = React.memo(({
   value,
   onIncrease,
   onDecrease,
@@ -147,7 +147,7 @@ export const Stepper: React.FC<Props> = ({
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -15,7 +15,7 @@ const slides = [
 
 const { width } = Dimensions.get('window');
 
-export const EducationalTutorial = () => {
+export const EducationalTutorial = React.memo(() => {
   const theme = useAppTheme();
   const [visible, setVisible] = useState(false);
   const [step, setStep] = useState(0);
@@ -61,7 +61,7 @@ export const EducationalTutorial = () => {
       </View>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   overlay: {
