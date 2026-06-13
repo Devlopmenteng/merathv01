@@ -19,52 +19,48 @@ type ModalProps = {
   maxHeight?: number;
 };
 
-export const Modal: React.FC<ModalProps> = React.memo(({
-  visible,
-  onClose,
-  title,
-  children,
-  maxHeight = 0.85,
-}) => {
-  const theme = useAppTheme();
-  const insets = useSafeAreaInsets();
+export const Modal: React.FC<ModalProps> = React.memo(
+  ({ visible, onClose, title, children, maxHeight = 0.85 }) => {
+    const theme = useAppTheme();
+    const insets = useSafeAreaInsets();
 
-  return (
-    <RNModal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose}>
-        <View
-          style={[
-            styles.sheet,
-            {
-              backgroundColor: theme.colors.surface,
-              maxHeight: maxHeight,
-              paddingBottom: insets.bottom + theme.spacing.md,
-              ...theme.elevation.large,
-            },
-          ]}
-        >
-          <Pressable onPress={() => {}} style={styles.content}>
-            <View style={styles.handleBar} />
-            {title && (
-              <View style={styles.header}>
-                <Text style={[theme.typography.h3, { flex: 1 }]}>{title}</Text>
-                <TouchableOpacity
-                  onPress={onClose}
-                  accessibilityLabel="Close"
-                  accessibilityRole="button"
-                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                >
-                  <Text style={[styles.closeButton, { color: theme.colors.primary }]}>✕</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <ScrollView>{children}</ScrollView>
-          </Pressable>
-        </View>
-      </Pressable>
-    </RNModal>
-  );
-});
+    return (
+      <RNModal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
+        <Pressable style={styles.backdrop} onPress={onClose}>
+          <View
+            style={[
+              styles.sheet,
+              {
+                backgroundColor: theme.colors.surface,
+                maxHeight: maxHeight,
+                paddingBottom: insets.bottom + theme.spacing.md,
+                ...theme.elevation.large,
+              },
+            ]}
+          >
+            <Pressable onPress={() => {}} style={styles.content}>
+              <View style={styles.handleBar} />
+              {title && (
+                <View style={styles.header}>
+                  <Text style={[theme.typography.h3, { flex: 1 }]}>{title}</Text>
+                  <TouchableOpacity
+                    onPress={onClose}
+                    accessibilityLabel="Close"
+                    accessibilityRole="button"
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  >
+                    <Text style={[styles.closeButton, { color: theme.colors.primary }]}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              <ScrollView>{children}</ScrollView>
+            </Pressable>
+          </View>
+        </Pressable>
+      </RNModal>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   backdrop: {

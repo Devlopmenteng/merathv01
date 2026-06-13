@@ -29,14 +29,14 @@ export const DEFAULT_RATE_LIMITS = {
     windowMs: 60 * 1000, // 1 minute
     blockDurationMs: 15 * 60 * 1000, // 15 minutes
   },
-  
+
   // Normal limits for regular operations
   normal: {
     maxRequests: 100,
     windowMs: 60 * 1000, // 1 minute
     blockDurationMs: 5 * 60 * 1000, // 5 minutes
   },
-  
+
   // Lenient limits for read operations
   lenient: {
     maxRequests: 1000,
@@ -100,7 +100,7 @@ class RateLimitServiceClass {
 
     // Remove expired requests from the window
     const windowStart = now - config.windowMs;
-    entry.requests = entry.requests.filter(timestamp => timestamp > windowStart);
+    entry.requests = entry.requests.filter((timestamp) => timestamp > windowStart);
 
     // Check if limit exceeded
     if (entry.requests.length >= config.maxRequests) {
@@ -131,7 +131,9 @@ class RateLimitServiceClass {
     // Calculate remaining requests and reset time
     const remaining = config.maxRequests - entry.requests.length;
     const oldestRequest = entry.requests[0];
-    const resetTime = oldestRequest ? new Date(oldestRequest + config.windowMs) : new Date(now + config.windowMs);
+    const resetTime = oldestRequest
+      ? new Date(oldestRequest + config.windowMs)
+      : new Date(now + config.windowMs);
 
     return {
       allowed: true,
@@ -169,11 +171,13 @@ class RateLimitServiceClass {
 
     // Remove expired requests
     const windowStart = now - config.windowMs;
-    entry.requests = entry.requests.filter(timestamp => timestamp > windowStart);
+    entry.requests = entry.requests.filter((timestamp) => timestamp > windowStart);
 
     const remaining = Math.max(0, config.maxRequests - entry.requests.length);
     const oldestRequest = entry.requests[0];
-    const resetTime = oldestRequest ? new Date(oldestRequest + config.windowMs) : new Date(now + config.windowMs);
+    const resetTime = oldestRequest
+      ? new Date(oldestRequest + config.windowMs)
+      : new Date(now + config.windowMs);
 
     return {
       allowed: remaining > 0,
@@ -191,10 +195,7 @@ class RateLimitServiceClass {
 
     for (const [identifier, entry] of this.limits.entries()) {
       // Remove entries with no recent requests and not blocked
-      if (
-        entry.requests.length === 0 &&
-        (!entry.blockedUntil || entry.blockedUntil < oneHourAgo)
-      ) {
+      if (entry.requests.length === 0 && (!entry.blockedUntil || entry.blockedUntil < oneHourAgo)) {
         this.limits.delete(identifier);
       }
     }

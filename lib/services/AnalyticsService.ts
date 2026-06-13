@@ -20,16 +20,16 @@ export enum AnalyticsEventType {
   SCREEN_VIEW = 'screen_view',
   BUTTON_CLICK = 'button_click',
   FEATURE_USAGE = 'feature_usage',
-  
+
   // Calculation events
   CALCULATION_STARTED = 'calculation_started',
   CALCULATION_COMPLETED = 'calculation_completed',
   TEMPLATE_USED = 'template_used',
-  
+
   // Performance events
   PERFORMANCE_METRIC = 'performance_metric',
   ERROR_OCCURRED = 'error_occurred',
-  
+
   // App lifecycle
   APP_OPENED = 'app_opened',
   APP_CLOSED = 'app_closed',
@@ -87,9 +87,7 @@ class AnalyticsServiceClass {
   async initialize(): Promise<void> {
     try {
       // Check user consent for analytics
-      const analyticsConsent = await ConsentService.getConsent(
-        'analytics' as any
-      );
+      const analyticsConsent = await ConsentService.getConsent('analytics' as any);
 
       this.config.enabled = analyticsConsent === 'granted';
 
@@ -199,7 +197,7 @@ class AnalyticsServiceClass {
   async enable(): Promise<void> {
     await ConsentService.grantConsent('analytics' as any);
     this.config.enabled = true;
-    
+
     await SecurityAuditService.logEvent(
       SecurityEventType.SETTINGS_CHANGE,
       'Analytics enabled',
@@ -213,10 +211,10 @@ class AnalyticsServiceClass {
   async disable(): Promise<void> {
     await ConsentService.revokeConsent('analytics' as any);
     this.config.enabled = false;
-    
+
     // Flush any remaining events
     await this.flushEvents();
-    
+
     await SecurityAuditService.logEvent(
       SecurityEventType.SETTINGS_CHANGE,
       'Analytics disabled',
@@ -255,11 +253,14 @@ class AnalyticsServiceClass {
 
       // In development, log events for debugging
       if (__DEV__) {
-        console.log('[Analytics] Flushed events:', eventsToFlush.map(e => ({
-          type: e.eventType,
-          screen: e.screenName,
-          properties: e.properties,
-        })));
+        console.log(
+          '[Analytics] Flushed events:',
+          eventsToFlush.map((e) => ({
+            type: e.eventType,
+            screen: e.screenName,
+            properties: e.properties,
+          }))
+        );
       }
     } catch (error) {
       console.error('Error flushing analytics events:', error);
@@ -291,7 +292,9 @@ class AnalyticsServiceClass {
   /**
    * Sanitize event properties to remove sensitive data
    */
-  private sanitizeProperties(properties?: Record<string, unknown>): Record<string, unknown> | undefined {
+  private sanitizeProperties(
+    properties?: Record<string, unknown>
+  ): Record<string, unknown> | undefined {
     if (!properties) {
       return undefined;
     }

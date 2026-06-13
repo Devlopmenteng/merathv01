@@ -33,177 +33,180 @@ interface TemplateSelectorProps {
   }) => void;
 }
 
-export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(({
-  visible,
-  onClose,
-  onApply,
-}) => {
-  const theme = useAppTheme();
-  const [selectedCategory, setSelectedCategory] = useState<ScenarioCategory | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState<ScenarioTemplate | null>(null);
+export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
+  ({ visible, onClose, onApply }) => {
+    const theme = useAppTheme();
+    const [selectedCategory, setSelectedCategory] = useState<ScenarioCategory | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedTemplate, setSelectedTemplate] = useState<ScenarioTemplate | null>(null);
 
-  const displayedTemplates = useMemo(() => {
-    return selectedCategory
-      ? getTemplatesByCategory(selectedCategory)
-      : searchQuery
-        ? searchTemplates(searchQuery)
-        : getPopularTemplates();
-  }, [selectedCategory, searchQuery]);
+    const displayedTemplates = useMemo(() => {
+      return selectedCategory
+        ? getTemplatesByCategory(selectedCategory)
+        : searchQuery
+          ? searchTemplates(searchQuery)
+          : getPopularTemplates();
+    }, [selectedCategory, searchQuery]);
 
-  const handleApply = () => {
-    if (selectedTemplate) {
-      const applied = applyTemplate(selectedTemplate);
-      onApply(applied);
-      onClose();
-    }
-  };
+    const handleApply = () => {
+      if (selectedTemplate) {
+        const applied = applyTemplate(selectedTemplate);
+        onApply(applied);
+        onClose();
+      }
+    };
 
-  const renderCategoryChip = (category: ScenarioCategory) => {
-    const isSelected = selectedCategory === category;
-    return (
-      <TouchableOpacity
-        key={category}
-        onPress={() => setSelectedCategory(category)}
-        style={[
-          styles.categoryChip,
-          {
-            backgroundColor: isSelected ? theme.colors.primary : theme.colors.surfaceVariant,
-            borderColor: isSelected ? theme.colors.primary : theme.colors.outline,
-          },
-        ]}
-      >
-        <Text
-          style={{
-            color: isSelected ? theme.colors.onPrimary : theme.colors.onSurface,
-            fontSize: 12,
-            fontWeight: '600',
-          }}
+    const renderCategoryChip = (category: ScenarioCategory) => {
+      const isSelected = selectedCategory === category;
+      return (
+        <TouchableOpacity
+          key={category}
+          onPress={() => setSelectedCategory(category)}
+          style={[
+            styles.categoryChip,
+            {
+              backgroundColor: isSelected ? theme.colors.primary : theme.colors.surfaceVariant,
+              borderColor: isSelected ? theme.colors.primary : theme.colors.outline,
+            },
+          ]}
         >
-          {getCategoryDisplayName(category)}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderTemplateCard = (template: ScenarioTemplate) => {
-    const isSelected = selectedTemplate?.id === template.id;
-    return (
-      <TouchableOpacity
-        key={template.id}
-        onPress={() => setSelectedTemplate(template)}
-        style={styles.templateCard}
-      >
-        <Card
-          variant={isSelected ? 'filled' : 'outlined'}
-          {...(template.popular ? { leftBorder: theme.colors.secondary } : {})}
-          style={
-            [
-              styles.card,
-              isSelected ? { borderColor: theme.colors.primary, borderWidth: 2 } : {},
-            ] as any
-          }
-        >
-          <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>
-          <Text style={[styles.templateDescription, { color: theme.colors.text.secondary }]}>
-            {template.description}
-          </Text>
-          {template.notes && (
-            <Text style={[styles.templateNotes, { color: theme.colors.outline }]}>
-              💡 {template.notes}
-            </Text>
-          )}
-          {template.popular && (
-            <Text style={[styles.popularBadge, { color: theme.colors.secondary }]}>⭐ Popular</Text>
-          )}
-          {template.recommendedMadhab && (
-            <Text style={[styles.recommendedMadhab, { color: theme.colors.primary }]}>
-              Recommended: {template.recommendedMadhab}
-            </Text>
-          )}
-        </Card>
-      </TouchableOpacity>
-    );
-  };
-
-  return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <View style={[styles.header, { borderBottomColor: theme.colors.outline }]}>
-          <Text style={[theme.typography.h3, { flex: 1 }]}>Quick Setup Templates</Text>
-          <TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 24, color: theme.colors.text.secondary }}>×</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchContainer}>
-          <Input label="Search templates" value={searchQuery} onChangeText={setSearchQuery} />
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesScroll}
-          style={styles.categoriesScrollView}
-        >
-          <TouchableOpacity
-            onPress={() => setSelectedCategory(null)}
-            style={[
-              styles.categoryChip,
-              {
-                backgroundColor:
-                  selectedCategory === null ? theme.colors.primary : theme.colors.surfaceVariant,
-                borderColor:
-                  selectedCategory === null ? theme.colors.primary : theme.colors.outline,
-              },
-            ]}
+          <Text
+            style={{
+              color: isSelected ? theme.colors.onPrimary : theme.colors.onSurface,
+              fontSize: 12,
+              fontWeight: '600',
+            }}
           >
-            <Text
-              style={{
-                color: selectedCategory === null ? theme.colors.onPrimary : theme.colors.onSurface,
-                fontSize: 12,
-                fontWeight: '600',
-              }}
-            >
-              All
+            {getCategoryDisplayName(category)}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+
+    const renderTemplateCard = (template: ScenarioTemplate) => {
+      const isSelected = selectedTemplate?.id === template.id;
+      return (
+        <TouchableOpacity
+          key={template.id}
+          onPress={() => setSelectedTemplate(template)}
+          style={styles.templateCard}
+        >
+          <Card
+            variant={isSelected ? 'filled' : 'outlined'}
+            {...(template.popular ? { leftBorder: theme.colors.secondary } : {})}
+            style={
+              [
+                styles.card,
+                isSelected ? { borderColor: theme.colors.primary, borderWidth: 2 } : {},
+              ] as any
+            }
+          >
+            <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>
+            <Text style={[styles.templateDescription, { color: theme.colors.text.secondary }]}>
+              {template.description}
             </Text>
-          </TouchableOpacity>
-          {getAllCategories().map(renderCategoryChip)}
-        </ScrollView>
-
-        <ScrollView style={styles.templatesScroll}>
-          {displayedTemplates.map(renderTemplateCard)}
-        </ScrollView>
-
-        <View style={[styles.footer, { borderTopColor: theme.colors.outline }]}>
-          <View style={styles.selectedTemplate}>
-            {selectedTemplate ? (
-              <>
-                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                  Selected:
-                </Text>
-                <Text style={[theme.typography.button, { color: theme.colors.primary }]}>
-                  {selectedTemplate.name}
-                </Text>
-              </>
-            ) : (
-              <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
-                Select a template to get started
+            {template.notes && (
+              <Text style={[styles.templateNotes, { color: theme.colors.outline }]}>
+                💡 {template.notes}
               </Text>
             )}
+            {template.popular && (
+              <Text style={[styles.popularBadge, { color: theme.colors.secondary }]}>
+                ⭐ Popular
+              </Text>
+            )}
+            {template.recommendedMadhab && (
+              <Text style={[styles.recommendedMadhab, { color: theme.colors.primary }]}>
+                Recommended: {template.recommendedMadhab}
+              </Text>
+            )}
+          </Card>
+        </TouchableOpacity>
+      );
+    };
+
+    return (
+      <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          <View style={[styles.header, { borderBottomColor: theme.colors.outline }]}>
+            <Text style={[theme.typography.h3, { flex: 1 }]}>Quick Setup Templates</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Text style={{ fontSize: 24, color: theme.colors.text.secondary }}>×</Text>
+            </TouchableOpacity>
           </View>
-          <Button
-            title="Apply Template"
-            onPress={handleApply}
-            disabled={!selectedTemplate}
-            mode="filled"
-            fullWidth
-          />
+
+          <View style={styles.searchContainer}>
+            <Input label="Search templates" value={searchQuery} onChangeText={setSearchQuery} />
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesScroll}
+            style={styles.categoriesScrollView}
+          >
+            <TouchableOpacity
+              onPress={() => setSelectedCategory(null)}
+              style={[
+                styles.categoryChip,
+                {
+                  backgroundColor:
+                    selectedCategory === null ? theme.colors.primary : theme.colors.surfaceVariant,
+                  borderColor:
+                    selectedCategory === null ? theme.colors.primary : theme.colors.outline,
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color:
+                    selectedCategory === null ? theme.colors.onPrimary : theme.colors.onSurface,
+                  fontSize: 12,
+                  fontWeight: '600',
+                }}
+              >
+                All
+              </Text>
+            </TouchableOpacity>
+            {getAllCategories().map(renderCategoryChip)}
+          </ScrollView>
+
+          <ScrollView style={styles.templatesScroll}>
+            {displayedTemplates.map(renderTemplateCard)}
+          </ScrollView>
+
+          <View style={[styles.footer, { borderTopColor: theme.colors.outline }]}>
+            <View style={styles.selectedTemplate}>
+              {selectedTemplate ? (
+                <>
+                  <Text
+                    style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}
+                  >
+                    Selected:
+                  </Text>
+                  <Text style={[theme.typography.button, { color: theme.colors.primary }]}>
+                    {selectedTemplate.name}
+                  </Text>
+                </>
+              ) : (
+                <Text style={[theme.typography.bodySmall, { color: theme.colors.text.secondary }]}>
+                  Select a template to get started
+                </Text>
+              )}
+            </View>
+            <Button
+              title="Apply Template"
+              onPress={handleApply}
+              disabled={!selectedTemplate}
+              mode="filled"
+              fullWidth
+            />
+          </View>
         </View>
-      </View>
-    </Modal>
-  );
-});
+      </Modal>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

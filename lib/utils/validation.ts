@@ -271,7 +271,7 @@ function maskSensitiveData(input: string): string {
   let masked = input;
 
   // Mask common sensitive patterns
-  SENSITIVE_PATTERNS.forEach(pattern => {
+  SENSITIVE_PATTERNS.forEach((pattern) => {
     masked = masked.replace(pattern, '[REDACTED]');
   });
 
@@ -296,24 +296,24 @@ export function sanitizeError(error: Error): { message: string; stack?: string |
  */
 export const safeConsole = {
   log: (...args: unknown[]) => {
-    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    const sanitized = args.map((arg) => sanitizeForLogging(arg));
     console.log(...sanitized);
   },
-  
+
   error: (...args: unknown[]) => {
-    const sanitized = args.map(arg => 
+    const sanitized = args.map((arg) =>
       arg instanceof Error ? sanitizeError(arg) : sanitizeForLogging(arg)
     );
     console.error(...sanitized);
   },
-  
+
   warn: (...args: unknown[]) => {
-    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    const sanitized = args.map((arg) => sanitizeForLogging(arg));
     console.warn(...sanitized);
   },
-  
+
   info: (...args: unknown[]) => {
-    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    const sanitized = args.map((arg) => sanitizeForLogging(arg));
     console.info(...sanitized);
   },
 };
@@ -322,6 +322,5 @@ export const safeConsole = {
  * Check if data contains sensitive information
  */
 export function containsSensitiveData(data: string): boolean {
-  return SENSITIVE_PATTERNS.some(pattern => pattern.test(data)) || 
-         /\b\d{5,}\b/.test(data); // Large numbers
+  return SENSITIVE_PATTERNS.some((pattern) => pattern.test(data)) || /\b\d{5,}\b/.test(data); // Large numbers
 }

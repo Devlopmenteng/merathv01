@@ -53,7 +53,7 @@ export async function saveAuditTrail(entry: AuditEntry) {
 
   // Generate unique ID for secure storage
   const secureId = `audit_${entry.id}`;
-  
+
   // Store sensitive data securely
   await SecureStorageService.setItem(secureId, secureData);
 
@@ -70,7 +70,7 @@ export async function saveAuditTrail(entry: AuditEntry) {
   const stored = await AsyncStorage.getItem(STORAGE_KEY);
   const trail: AuditEntryMetadata[] = stored ? JSON.parse(stored) : [];
   trail.unshift(metadata);
-  
+
   if (trail.length > APP_DEFAULTS.MAX_AUDIT_ENTRIES) {
     const removed = trail.pop();
     if (removed) {
@@ -78,7 +78,7 @@ export async function saveAuditTrail(entry: AuditEntry) {
       await SecureStorageService.removeItem(removed.secureId);
     }
   }
-  
+
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(trail));
 
   // Update cache with metadata only
@@ -88,9 +88,11 @@ export async function saveAuditTrail(entry: AuditEntry) {
 export async function getAuditTrail(): Promise<AuditEntry[]> {
   // Try cache first (metadata only)
   const cached = await offlineCacheService.get<AuditEntryMetadata[]>(CACHE_KEY);
-  const metadataList = cached || await AsyncStorage.getItem(STORAGE_KEY).then(stored => 
-    stored ? JSON.parse(stored) as AuditEntryMetadata[] : []
-  );
+  const metadataList =
+    cached ||
+    (await AsyncStorage.getItem(STORAGE_KEY).then((stored) =>
+      stored ? (JSON.parse(stored) as AuditEntryMetadata[]) : []
+    ));
 
   if (!metadataList || metadataList.length === 0) {
     return [];
@@ -114,20 +116,20 @@ export async function getAuditTrail(): Promise<AuditEntry[]> {
         shares: secureData.shares,
         steps: secureData.steps,
       };
-      
+
       // Only add optional properties if they exist
       if (secureData.hijabLog) {
         entry.hijabLog = secureData.hijabLog;
       }
-      
+
       if (metadata.caseName) {
         entry.caseName = metadata.caseName;
       }
-      
+
       if (metadata.caseDate) {
         entry.caseDate = metadata.caseDate;
       }
-      
+
       fullEntries.push(entry);
     }
   }
@@ -137,14 +139,14 @@ export async function getAuditTrail(): Promise<AuditEntry[]> {
 
 export async function clearAuditTrail() {
   // Clear all secure storage entries for audit trail
-  const metadataList = await AsyncStorage.getItem(STORAGE_KEY).then(stored => 
-    stored ? JSON.parse(stored) as AuditEntryMetadata[] : []
+  const metadataList = await AsyncStorage.getItem(STORAGE_KEY).then((stored) =>
+    stored ? (JSON.parse(stored) as AuditEntryMetadata[]) : []
   );
-  
+
   for (const metadata of metadataList) {
     await SecureStorageService.removeItem(metadata.secureId);
   }
-  
+
   await AsyncStorage.removeItem(STORAGE_KEY);
   await offlineCacheService.remove(CACHE_KEY);
 }

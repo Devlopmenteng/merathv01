@@ -69,9 +69,7 @@ class DataExportServiceClass {
   async exportAllData(format: ExportFormat = ExportFormat.JSON): Promise<DataExportResult> {
     try {
       // Check if user has consented to data processing
-      const processingConsent = await ConsentService.getConsent(
-        'data_processing' as any
-      );
+      const processingConsent = await ConsentService.getConsent('data_processing' as any);
 
       if (processingConsent !== 'granted') {
         throw new Error('User has not consented to data processing');
@@ -189,7 +187,7 @@ class DataExportServiceClass {
       const preferences = await ConsentService.getPreferences();
       const securityEvents = await SecurityAuditService.getEvents({ limit: 100 });
 
-      const totalDataSize = 
+      const totalDataSize =
         JSON.stringify(auditTrail).length +
         JSON.stringify(preferences).length +
         JSON.stringify(securityEvents).length;
@@ -277,9 +275,7 @@ class DataExportServiceClass {
    */
   private countRecords(data: UserDataPackage): number {
     return (
-      data.appData.auditTrail.length +
-      data.security.securityEvents.length +
-      1 // preferences
+      data.appData.auditTrail.length + data.security.securityEvents.length + 1 // preferences
     );
   }
 }

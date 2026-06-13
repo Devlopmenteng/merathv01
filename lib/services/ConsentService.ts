@@ -76,7 +76,7 @@ class ConsentServiceClass {
   async getConsent(consentType: ConsentType): Promise<ConsentStatus> {
     try {
       const preferences = await this.getPreferences();
-      
+
       switch (consentType) {
         case ConsentType.ANALYTICS:
           return preferences.analyticsEnabled ? ConsentStatus.GRANTED : ConsentStatus.DENIED;
@@ -124,7 +124,7 @@ class ConsentServiceClass {
       }
 
       preferences.lastUpdated = now;
-      
+
       await this.savePreferences(preferences);
 
       // Log consent grant
@@ -167,7 +167,7 @@ class ConsentServiceClass {
       }
 
       preferences.lastUpdated = now;
-      
+
       await this.savePreferences(preferences);
 
       // Log consent revocation
@@ -189,7 +189,7 @@ class ConsentServiceClass {
   async getPreferences(): Promise<UserConsentPreferences> {
     try {
       const stored = await SecureStorageService.getItem<UserConsentPreferences>(this.STORAGE_KEY);
-      
+
       if (stored) {
         // Check if consent version is up to date
         if (stored.consentVersion !== this.currentVersion) {

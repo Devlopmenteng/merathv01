@@ -55,47 +55,45 @@ interface TemplatesModalProps {
   onSelectTemplate: (heirs: HeirEntry[]) => void;
 }
 
-export const TemplatesModal: React.FC<TemplatesModalProps> = React.memo(({
-  visible,
-  onClose,
-  onSelectTemplate,
-}) => {
-  const theme = useAppTheme();
+export const TemplatesModal: React.FC<TemplatesModalProps> = React.memo(
+  ({ visible, onClose, onSelectTemplate }) => {
+    const theme = useAppTheme();
 
-  return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={[styles.overlay, { backgroundColor: theme.colors.backdrop }]}>
-        <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
-          <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('quick_templates')}</Text>
-          <FlatList
-            data={TEMPLATES}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[styles.templateItem, { borderBottomColor: theme.colors.outline }]}
-                onPress={() => {
-                  onSelectTemplate(item.heirs);
-                  onClose();
-                }}
-              >
-                <Text style={theme.typography.body} numberOfLines={1}>
-                  {t(item.nameKey, { defaultValue: item.name })}
-                </Text>
-                <Text style={{ color: theme.colors.primary }}>{flipDirectionalIcon('→')}</Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity
-            style={[styles.closeButton, { backgroundColor: theme.colors.primary }]}
-            onPress={onClose}
-          >
-            <Text style={{ color: theme.colors.onPrimary }}>{t('close')}</Text>
-          </TouchableOpacity>
+    return (
+      <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+        <View style={[styles.overlay, { backgroundColor: theme.colors.backdrop }]}>
+          <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
+            <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('quick_templates')}</Text>
+            <FlatList
+              data={TEMPLATES}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.templateItem, { borderBottomColor: theme.colors.outline }]}
+                  onPress={() => {
+                    onSelectTemplate(item.heirs);
+                    onClose();
+                  }}
+                >
+                  <Text style={theme.typography.body} numberOfLines={1}>
+                    {t(item.nameKey, { defaultValue: item.name })}
+                  </Text>
+                  <Text style={{ color: theme.colors.primary }}>{flipDirectionalIcon('→')}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity
+              style={[styles.closeButton, { backgroundColor: theme.colors.primary }]}
+              onPress={onClose}
+            >
+              <Text style={{ color: theme.colors.onPrimary }}>{t('close')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </Modal>
-  );
-});
+      </Modal>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   overlay: {
