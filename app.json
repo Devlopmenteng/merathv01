@@ -22,7 +22,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.merath_mobile.merath"
+      "package": "com.merath_mobile.merath",
+      "permissions": ["INTERNET", "USE_FINGERPRINT", "USE_BIOMETRIC"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
