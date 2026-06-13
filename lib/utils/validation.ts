@@ -217,3 +217,111 @@ export function validateHeirsConfig(heirs: Record<string, number>): {
     errors,
   };
 }
+
+/**
+ * Data Sanitization Utilities
+ * أدوات تعقيم البيانات
+ *
+ * Functions to sanitize data for safe logging and error reporting
+ */
+
+/**
+ * Sensitive data patterns that should be masked
+ */
+const SENSITIVE_PATTERNS = [
+  /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g, // Credit card numbers
+  /\b\d{3}-\d{2}-\d{4}\b/g, // SSN format
+  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Email addresses
+  /\b(?:\d{1,3}\.){3}\d{1,3}\b/g, // IP addresses
+  /\b[A-Z0-9]{20,}\b/g, // API keys/tokens
+];
+
+/**
+ * Sanitize data for safe logging by masking sensitive information
+ */
+export function sanitizeForLogging(data: unknown): string {
+  if (typeof data === 'string') {
+    return maskSensitiveData(data);
+  }
+
+  if (typeof data === 'object' && data !== null) {
+    try {
+      const jsonString = JSON.stringify(data);
+      return maskSensitiveData(jsonString);
+    } catch {
+      return '[Object]';
+    }
+  }
+
+  if (typeof data === 'number') {
+    // Don't log exact monetary values
+    if (data > 1000) {
+      return '[Large Number]';
+    }
+    return String(data);
+  }
+
+  return String(data);
+}
+
+/**
+ * Mask sensitive data patterns
+ */
+function maskSensitiveData(input: string): string {
+  let masked = input;
+
+  // Mask common sensitive patterns
+  SENSITIVE_PATTERNS.forEach(pattern => {
+    masked = masked.replace(pattern, '[REDACTED]');
+  });
+
+  // Mask large numbers (likely monetary values)
+  masked = masked.replace(/\b\d{5,}\b/g, '[REDACTED]');
+
+  return masked;
+}
+
+/**
+ * Sanitize error objects for safe error reporting
+ */
+export function sanitizeError(error: Error): { message: string; stack?: string | undefined } {
+  return {
+    message: sanitizeForLogging(error.message),
+    stack: error.stack ? sanitizeForLogging(error.stack) : undefined,
+  };
+}
+
+/**
+ * Safe console logging that sanitizes sensitive data
+ */
+export const safeConsole = {
+  log: (...args: unknown[]) => {
+    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    console.log(...sanitized);
+  },
+  
+  error: (...args: unknown[]) => {
+    const sanitized = args.map(arg => 
+      arg instanceof Error ? sanitizeError(arg) : sanitizeForLogging(arg)
+    );
+    console.error(...sanitized);
+  },
+  
+  warn: (...args: unknown[]) => {
+    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    console.warn(...sanitized);
+  },
+  
+  info: (...args: unknown[]) => {
+    const sanitized = args.map(arg => sanitizeForLogging(arg));
+    console.info(...sanitized);
+  },
+};
+
+/**
+ * Check if data contains sensitive information
+ */
+export function containsSensitiveData(data: string): boolean {
+  return SENSITIVE_PATTERNS.some(pattern => pattern.test(data)) || 
+         /\b\d{5,}\b/.test(data); // Large numbers
+}
