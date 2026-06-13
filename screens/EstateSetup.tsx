@@ -30,7 +30,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   const [totalError, setTotalError] = useState('');
   const [funeralError, setFuneralError] = useState('');
   const [debtsError, setDebtsError] = useState('');
-  const [willError, setWillError] = useState('');
+  const [willError] = useState('');
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const net = parseFloat(total || '0') - parseFloat(funeral || '0') - parseFloat(debts || '0');
   const maxWill = net / 3;
@@ -95,7 +95,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   }, [total, funeral, debts, will, caseName, caseDate, dispatch, navigation]);
 
   const handleApplyTemplate = useCallback(
-    (templateData: { estate: EstateInput; heirs: HeirEntry[]; recommendedMadhab?: string }) => {
+    (templateData: { estate: EstateInput; heirs: HeirEntry[]; recommendedMadhab?: string | undefined }) => {
       // Apply estate values
       setTotal(String(templateData.estate.total));
       setFuneral(String(templateData.estate.funeral));

@@ -94,7 +94,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       >
         <Card
           variant={isSelected ? 'filled' : 'outlined'}
-          leftBorder={template.popular ? theme.colors.secondary : undefined}
+          {...(template.popular ? { leftBorder: theme.colors.secondary } : {})}
           style={[styles.card, isSelected ? { borderColor: theme.colors.primary, borderWidth: 2 } : {}] as any}
         >
           <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>

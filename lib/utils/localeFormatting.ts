@@ -106,9 +106,9 @@ export function formatDate(
   locale: string,
   options?: Intl.DateTimeFormatOptions
 ): string {
-  try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
 
+  try {
     const localeMap: Record<string, string> = {
       ar: 'ar-SA',
       ur: 'ur-PK',

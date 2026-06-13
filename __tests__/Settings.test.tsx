@@ -78,7 +78,7 @@ describe('Settings screen', () => {
     // Test the actual language change functionality through the context
     // We'll create a minimal test to verify language persistence
     // by directly testing the LanguageProvider behavior
-    let capturedChangeLocale: ((locale: string) => Promise<boolean>) | undefined;
+    let capturedChangeLocale: ((locale: string) => Promise<void>) | undefined;
 
     const TestConsumer = () => {
       const { locale, changeLocale: ctxChangeLocale } = useLanguage();

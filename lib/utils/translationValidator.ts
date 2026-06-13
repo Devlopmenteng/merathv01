@@ -9,10 +9,10 @@
  */
 
 import { i18n } from '../i18n';
-import { en } from '../i18n/locales/en.json';
-import { ar } from '../i18n/locales/ar.json';
-import { ms } from '../i18n/locales/ms.json';
-import { ur } from '../i18n/locales/ur.json';
+import en from '../i18n/locales/en.json';
+import ar from '../i18n/locales/ar.json';
+import ms from '../i18n/locales/ms.json';
+import ur from '../i18n/locales/ur.json';
 
 /**
  * Translation validation result
