@@ -43,7 +43,7 @@ function getAllKeys(obj: Record<string, unknown>, prefix = ''): string[] {
 
   for (const key in obj) {
     const newPrefix = prefix ? `${prefix}.${key}` : key;
-    
+
     if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
       keys = keys.concat(getAllKeys(obj[key] as Record<string, unknown>, newPrefix));
     } else {
@@ -134,7 +134,10 @@ export function getMissingKeysForLocale(locale: string, referenceLocale: string 
 /**
  * Get translation statistics
  */
-export function getTranslationStats(): Record<string, { total: number; missing: number; coverage: number }> {
+export function getTranslationStats(): Record<
+  string,
+  { total: number; missing: number; coverage: number }
+> {
   const stats: Record<string, { total: number; missing: number; coverage: number }> = {};
   const validation = validateTranslations();
 
@@ -168,7 +171,7 @@ export function printValidationReport(referenceLocale: string = 'en'): void {
     const total = result.totalKeys[locale];
     const coverage = total > 0 ? Math.round(((total - missing) / total) * 100) : 0;
     console.log(`  ${locale}: ${coverage}% (${total} total, ${missing} missing)`);
-    
+
     if (result.missingKeys[locale]?.length > 0) {
       console.log(`    Missing keys: ${result.missingKeys[locale].slice(0, 5).join(', ')}...`);
     }

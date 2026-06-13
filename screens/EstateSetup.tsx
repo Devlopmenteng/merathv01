@@ -95,7 +95,11 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   }, [total, funeral, debts, will, caseName, caseDate, dispatch, navigation]);
 
   const handleApplyTemplate = useCallback(
-    (templateData: { estate: EstateInput; heirs: HeirEntry[]; recommendedMadhab?: string | undefined }) => {
+    (templateData: {
+      estate: EstateInput;
+      heirs: HeirEntry[];
+      recommendedMadhab?: string | undefined;
+    }) => {
       // Apply estate values
       setTotal(String(templateData.estate.total));
       setFuneral(String(templateData.estate.funeral));

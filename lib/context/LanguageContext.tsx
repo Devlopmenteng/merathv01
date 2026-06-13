@@ -40,7 +40,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
         // Set RTL direction if needed
         const shouldBeRTL = RTL_LOCALES.includes(initialLocale);
         I18nManager.allowRTL(shouldBeRTL);
-        
+
         // In React Native 0.71+, forceRTL works synchronously without restart
         if (I18nManager.isRTL !== shouldBeRTL) {
           I18nManager.forceRTL(shouldBeRTL);

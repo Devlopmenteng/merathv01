@@ -36,11 +36,7 @@ export function formatNumber(
 /**
  * Format currency according to locale
  */
-export function formatCurrency(
-  value: number,
-  locale: string,
-  currency: string = 'USD'
-): string {
+export function formatCurrency(value: number, locale: string, currency: string = 'USD'): string {
   try {
     // Currency symbol mapping
     const currencyMap: Record<string, string> = {

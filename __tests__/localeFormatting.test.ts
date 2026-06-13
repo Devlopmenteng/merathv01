@@ -36,7 +36,10 @@ describe('Locale Formatting Utilities', () => {
     });
 
     it('should format numbers with minimum/maximum fraction digits', () => {
-      const result = formatNumber(1234.5, 'en', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+      const result = formatNumber(1234.5, 'en', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 4,
+      });
       expect(result).toBe('1,234.50');
     });
 
