@@ -237,14 +237,26 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         accessibilityLabel={t('back_to_home')}
         accessibilityRole="button"
       >
-        <Text style={[{ color: theme.colors.primary }, theme.typography.button, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+        <Text
+          style={[
+            { color: theme.colors.primary },
+            theme.typography.button,
+            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+          ]}
+        >
           {backArrow()} {t('back_to_home')}
         </Text>
       </TouchableOpacity>
-      <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('settings')}</Text>
+      <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+        {t('settings')}
+      </Text>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('appearance')}</Text>
+        <Text
+          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('appearance')}
+        </Text>
         <View style={styles.settingItem}>
           <Text
             style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
@@ -261,7 +273,15 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           />
         </View>
         <View style={styles.settingItem}>
-          <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              theme.typography.body,
+              {
+                marginBottom: theme.spacing.sm,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
             {t('language__')}
           </Text>
           {LanguageDropdown()}
@@ -269,7 +289,11 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('resources')}</Text>
+        <Text
+          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('resources')}
+        </Text>
         <TouchableOpacity
           style={styles.settingItem}
           onPress={() => navigation.navigate('Glossary')}
@@ -277,31 +301,63 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           accessibilityHint={t('a11y_view_glossary')}
           accessibilityRole="button"
         >
-          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('glossary_and_education')}</Text>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
+            {t('glossary_and_education')}
+          </Text>
           <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('about')}</Text>
+        <Text
+          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('about')}
+        </Text>
         <View style={styles.aboutCard}>
-          <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              theme.typography.h3,
+              {
+                marginBottom: theme.spacing.sm,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
             {t('about')}
           </Text>
-          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
             {t('merath_v10__islamic_inheritance_calculator')}
           </Text>
-          <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              theme.typography.caption,
+              { marginTop: theme.spacing.xs, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
+          >
             {t('built_with_expo__typescript')}
           </Text>
-          <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              theme.typography.caption,
+              { marginTop: theme.spacing.xs, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
+          >
             {t('version')} {appVersion}
           </Text>
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('support')}</Text>
+        <Text
+          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('support')}
+        </Text>
         <View style={styles.card}>
           <TouchableOpacity
             style={styles.cardItem}
@@ -310,7 +366,14 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityHint={t('a11y_rate_us')}
             accessibilityRole="button"
           >
-            <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('rate_us_send_feedback')}</Text>
+            <Text
+              style={[
+                theme.typography.body,
+                { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
+              {t('rate_us_send_feedback')}
+            </Text>
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity
@@ -320,13 +383,24 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityHint={t('a11y_send_feedback')}
             accessibilityRole="button"
           >
-            <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('feedback_title')}</Text>
+            <Text
+              style={[
+                theme.typography.body,
+                { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
+              {t('feedback_title')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('legal')}</Text>
+        <Text
+          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
+          {t('legal')}
+        </Text>
         <TouchableOpacity
           style={styles.settingItem}
           onPress={handlePrivacyPolicy}
@@ -334,7 +408,11 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           accessibilityHint={t('a11y_view_privacy_policy')}
           accessibilityRole="button"
         >
-          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('privacy_policy')}</Text>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
+            {t('privacy_policy')}
+          </Text>
           <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -344,7 +422,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           accessibilityHint={t('a11y_clear_cache')}
           accessibilityRole="button"
         >
-          <Text style={[theme.typography.body, { color: theme.colors.error, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              theme.typography.body,
+              { color: theme.colors.error, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
+          >
             {t('clear_cache_reset')}
           </Text>
           <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
@@ -356,7 +439,11 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           accessibilityHint={t('a11y_view_legal_notices')}
           accessibilityRole="button"
         >
-          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('legal_notices')}</Text>
+          <Text
+            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          >
+            {t('legal_notices')}
+          </Text>
           <Text style={{ fontSize: 18, color: theme.colors.primary }}>⚖️</Text>
         </TouchableOpacity>
       </View>
