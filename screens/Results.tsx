@@ -4,7 +4,6 @@ import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { incrementCalculationCount } from '../lib/services/UsageStats';
 import { usePremium } from '../lib/context/PremiumContext';
 import { generateLegalReport } from '../components/LegalReportGenerator';
-import { Card } from '../components/ui/Card';
 import { flipDirectionalIcon } from '../lib/utils/rtl';
 import { formatCurrency as formatCurrencyLocale, formatDate } from '../lib/utils/localeFormatting';
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
@@ -633,14 +632,14 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           </TouchableOpacity>
           {showSteps && (
             <View style={{ marginTop: theme.spacing.md, marginBottom: theme.spacing.lg }}>
-              <Card variant="outlined">
+              <View style={styles.stepCard}>
                 <StepTimeline
                   steps={result.steps.map((step) => ({
                     title: localizeStepTitle(step.title, step.stepType),
                     description: localizeStepDesc(step.description, step.stepType),
                   }))}
                 />
-              </Card>
+              </View>
             </View>
           )}
 
@@ -665,6 +664,13 @@ const styles = StyleSheet.create({
   tableCell: {
     paddingVertical: 8,
     paddingHorizontal: 8,
+  },
+  stepCard: {
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   successOverlay: {
     position: 'absolute',
