@@ -10,12 +10,12 @@ import {
   Linking,
   Alert,
   I18nManager,
+  StyleSheet,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { useLanguage } from '../lib/context/LanguageContext';
 import { t } from '../lib/i18n';
 import { backArrow, forwardArrow } from '../lib/utils/rtl';
@@ -243,17 +243,10 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </TouchableOpacity>
       <Text style={theme.typography.h1}>{t('settings')}</Text>
 
-      <Card variant="outlined">
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Text
-            style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
-          >
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>{t('appearance')}</Text>
+        <View style={styles.settingItem}>
+          <Text style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
             {t('dark_mode')}
           </Text>
           <Switch
@@ -265,88 +258,154 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityState={{ selected: isDark }}
           />
         </View>
-      </Card>
+        <View style={styles.settingItem}>
+          <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>
+            {t('language__')}
+          </Text>
+          {LanguageDropdown()}
+        </View>
+      </View>
 
-      <Card variant="outlined">
-        <Text style={[theme.typography.body, { marginBottom: theme.spacing.sm }]}>
-          {t('language__')}
-        </Text>
-        {LanguageDropdown()}
-      </Card>
-
-      <Card
-        variant="outlined"
-        onPress={() => navigation.navigate('Glossary')}
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
-        <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
-      </Card>
-
-      <Card variant="outlined">
-        <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>{t('about')}</Text>
-        <Text style={theme.typography.body}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
-        <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
-          {t('built_with_expo__typescript')}
-        </Text>
-        <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
-          {t('version')} {appVersion}
-        </Text>
-      </Card>
-
-      <Card variant="outlined">
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>{t('resources')}</Text>
         <TouchableOpacity
-          style={{
-            paddingVertical: theme.spacing.sm,
-            borderBottomWidth: 1,
-            borderBottomColor: theme.colors.outline,
-          }}
-          onPress={handleRateUs}
-          accessibilityLabel={t('rate_us_send_feedback')}
-          accessibilityHint={t('a11y_rate_us')}
+          style={styles.settingItem}
+          onPress={() => navigation.navigate('Glossary')}
+          accessibilityLabel={t('glossary_and_education')}
+          accessibilityHint={t('a11y_view_glossary')}
           accessibilityRole="button"
         >
-          <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
+          <Text style={theme.typography.body}>{t('glossary_and_education')}</Text>
+          <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>{t('about')}</Text>
+        <View style={styles.aboutCard}>
+          <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>{t('about')}</Text>
+          <Text style={theme.typography.body}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
+          <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
+            {t('built_with_expo__typescript')}
+          </Text>
+          <Text style={[theme.typography.caption, { marginTop: theme.spacing.xs }]}>
+            {t('version')} {appVersion}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>{t('support')}</Text>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.cardItem}
+            onPress={handleRateUs}
+            accessibilityLabel={t('rate_us_send_feedback')}
+            accessibilityHint={t('a11y_rate_us')}
+            accessibilityRole="button"
+          >
+            <Text style={theme.typography.body}>{t('rate_us_send_feedback')}</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity
+            style={styles.cardItem}
+            onPress={handleEmailFeedback}
+            accessibilityLabel={t('feedback_title')}
+            accessibilityHint={t('a11y_send_feedback')}
+            accessibilityRole="button"
+          >
+            <Text style={theme.typography.body}>{t('feedback_title')}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>{t('legal')}</Text>
         <TouchableOpacity
-          style={{ paddingVertical: theme.spacing.sm }}
-          onPress={handleEmailFeedback}
-          accessibilityLabel={t('feedback_title')}
-          accessibilityHint={t('a11y_send_feedback')}
+          style={styles.settingItem}
+          onPress={handlePrivacyPolicy}
+          accessibilityLabel={t('privacy_policy')}
+          accessibilityHint={t('a11y_view_privacy_policy')}
           accessibilityRole="button"
         >
-          <Text style={theme.typography.body}>{t('feedback_title')}</Text>
+          <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
+          <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
-      </Card>
-
-      <Card
-        variant="outlined"
-        onPress={handlePrivacyPolicy}
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <Text style={theme.typography.body}>{t('privacy_policy')}</Text>
-        <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
-      </Card>
-
-      <Card
-        variant="outlined"
-        onPress={handleClearCache}
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <Text style={[theme.typography.body, { color: theme.colors.error }]}>
-          {t('clear_cache_reset')}
-        </Text>
-        <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
-      </Card>
-
-      <Card
-        variant="outlined"
-        onPress={handleLegalNotices}
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <Text style={theme.typography.body}>{t('legal_notices')}</Text>
-        <Text style={{ fontSize: 18, color: theme.colors.primary }}>⚖️</Text>
-      </Card>
+        <TouchableOpacity
+          style={[styles.settingItem, styles.dangerItem]}
+          onPress={handleClearCache}
+          accessibilityLabel={t('clear_cache_reset')}
+          accessibilityHint={t('a11y_clear_cache')}
+          accessibilityRole="button"
+        >
+          <Text style={[theme.typography.body, { color: theme.colors.error }]}>
+            {t('clear_cache_reset')}
+          </Text>
+          <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.settingItem}
+          onPress={handleLegalNotices}
+          accessibilityLabel={t('legal_notices')}
+          accessibilityHint={t('a11y_view_legal_notices')}
+          accessibilityRole="button"
+        >
+          <Text style={theme.typography.body}>{t('legal_notices')}</Text>
+          <Text style={{ fontSize: 18, color: theme.colors.primary }}>⚖️</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  section: {
+    marginBottom: 24,
+  },
+  sectionHeader: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#6B7280',
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    letterSpacing: 0.5,
+  },
+  settingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  aboutCard: {
+    padding: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  card: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  cardItem: {
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    marginHorizontal: 16,
+  },
+  dangerItem: {
+    borderLeftWidth: 3,
+    borderLeftColor: '#EF4444',
+  },
+});
