@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, ScrollView, I18nManager } from 'react-native';
+import { View, Text, ScrollView, I18nManager, StyleSheet } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';
 import { t } from '../lib/i18n';
@@ -82,31 +81,34 @@ export const FiqhRules = () => {
         {t('madhab_notes')}
       </Text>
       {Object.entries(FIQH_NOTES).map(([madhab, notes]) => (
-        <Card key={madhab} variant="outlined" leftBorder={theme.colors.primary}>
-          <Text
-            style={[
-              theme.typography.h3,
-              {
-                color: theme.colors.primary,
-                marginBottom: 4,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              },
-            ]}
-          >
-            {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
-          </Text>
-          {Object.entries(notes).map(([key, val]) => (
+        <View key={madhab} style={styles.madhabNote}>
+          <View style={[styles.leftBorder, { backgroundColor: theme.colors.primary }]} />
+          <View style={styles.content}>
             <Text
-              key={key}
               style={[
-                theme.typography.caption,
-                { marginTop: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                theme.typography.h3,
+                {
+                  color: theme.colors.primary,
+                  marginBottom: 4,
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
               ]}
             >
-              • {val as string}
+              {MADHAB_NAMES[madhab as keyof typeof MADHAB_NAMES] || madhab}
             </Text>
-          ))}
-        </Card>
+            {Object.entries(notes).map(([key, val]) => (
+              <Text
+                key={key}
+                style={[
+                  theme.typography.caption,
+                  { marginTop: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                ]}
+              >
+                • {val as string}
+              </Text>
+            ))}
+          </View>
+        </View>
       ))}
 
       <Text
@@ -118,7 +120,7 @@ export const FiqhRules = () => {
         {t('special_cases_title')}
       </Text>
       {SPECIAL_CASES.map((caseItem) => (
-        <Card key={caseItem.nameKey} variant="filled">
+        <View key={caseItem.nameKey} style={styles.specialCase}>
           <Text
             style={[
               theme.typography.h3,
@@ -135,7 +137,7 @@ export const FiqhRules = () => {
           >
             {t(caseItem.descKey)}
           </Text>
-        </Card>
+        </View>
       ))}
 
       <Text
@@ -288,3 +290,39 @@ export const FiqhRules = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  madhabNote: {
+    flexDirection: 'row',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  leftBorder: {
+    position: 'absolute',
+    left: I18nManager.isRTL ? undefined : 0,
+    right: I18nManager.isRTL ? 0 : undefined,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderTopRightRadius: I18nManager.isRTL ? 12 : 0,
+    borderBottomRightRadius: I18nManager.isRTL ? 12 : 0,
+  },
+  content: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  specialCase: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.2)',
+  },
+});
