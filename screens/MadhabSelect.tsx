@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, FlatList, I18nManager } from 'react-native';
+import { View, Text, FlatList, I18nManager, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
 import { t } from '../lib/i18n';
@@ -44,23 +43,20 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
         initialNumToRender={5}
         windowSize={5}
         renderItem={({ item }) => (
-          <Card
-            variant="outlined"
-            leftBorder={theme.colors.primary}
+          <TouchableOpacity
+            style={styles.madhabItem}
             onPress={() => {
               dispatch({ type: 'SET_MADHAB', payload: item.key });
               navigation.navigate('HeirSelection');
             }}
-            style={{
-              flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-              alignItems: 'center',
-            }}
+            activeOpacity={0.7}
             accessibilityLabel={`${item.title}. ${item.desc}`}
             accessibilityHint={t('a11y_select_madhab', { madhab: item.title })}
             accessibilityRole="button"
           >
-            <Text style={[{ marginEnd: 12 }, theme.typography.h1]}>{item.icon}</Text>
-            <View>
+            <View style={[styles.leftBorder, { backgroundColor: theme.colors.primary }]} />
+            <Text style={[styles.icon, theme.typography.h1]}>{item.icon}</Text>
+            <View style={styles.content}>
               <Text
                 style={[
                   theme.typography.h2,
@@ -78,9 +74,50 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
                 {item.desc}
               </Text>
             </View>
-          </Card>
+            {I18nManager.isRTL ? (
+              <Text style={styles.chevron}>‹</Text>
+            ) : (
+              <Text style={styles.chevron}>›</Text>
+            )}
+          </TouchableOpacity>
         )}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  madhabItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  leftBorder: {
+    position: 'absolute',
+    left: I18nManager.isRTL ? undefined : 0,
+    right: I18nManager.isRTL ? 0 : undefined,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderTopRightRadius: I18nManager.isRTL ? 12 : 0,
+    borderBottomRightRadius: I18nManager.isRTL ? 12 : 0,
+  },
+  icon: {
+    marginHorizontal: 16,
+  },
+  content: {
+    flex: 1,
+  },
+  chevron: {
+    fontSize: 28,
+    color: '#9CA3AF',
+    marginHorizontal: 8,
+  },
+});
