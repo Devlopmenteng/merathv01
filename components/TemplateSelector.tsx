@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet, StyleProp, ViewStyle, I18nManager } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import {
@@ -90,37 +89,48 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
           key={template.id}
           onPress={() => setSelectedTemplate(template)}
           style={styles.templateCard}
+          activeOpacity={0.7}
         >
-          <Card
-            variant={isSelected ? 'filled' : 'outlined'}
-            {...(template.popular ? { leftBorder: theme.colors.secondary } : {})}
-            style={
-              [
-                styles.card,
-                isSelected ? { borderColor: theme.colors.primary, borderWidth: 2 } : {},
-              ] as StyleProp<ViewStyle>
+          <View
+            style={[
+              styles.card,
+              isSelected
+                ? { borderColor: theme.colors.primary, borderWidth: 2, backgroundColor: 'rgba(59, 130, 246, 0.05)' }
+                : { backgroundColor: 'rgba(255, 255, 255, 0.95)', borderWidth: 1, borderColor: 'rgba(0, 0, 0, 0.05)' },
+              template.popular ? { borderLeftWidth: 3, borderLeftColor: theme.colors.secondary } : {},
+            ] as StyleProp<ViewStyle>
             }
           >
-            <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>
-            <Text style={[styles.templateDescription, { color: theme.colors.text.secondary }]}>
-              {template.description}
-            </Text>
-            {template.notes && (
-              <Text style={[styles.templateNotes, { color: theme.colors.outline }]}>
-                💡 {template.notes}
+            <View style={styles.content}>
+              <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>
+              <Text style={[styles.templateDescription, { color: theme.colors.text.secondary }]}>
+                {template.description}
               </Text>
+              {template.notes && (
+                <Text style={[styles.templateNotes, { color: theme.colors.outline }]}>
+                  💡 {template.notes}
+                </Text>
+              )}
+              {template.popular && (
+                <Text style={[styles.popularBadge, { color: theme.colors.secondary }]}>
+                  ⭐ Popular
+                </Text>
+              )}
+              {template.recommendedMadhab && (
+                <Text style={[styles.recommendedMadhab, { color: theme.colors.primary }]}>
+                  Recommended: {template.recommendedMadhab}
+                </Text>
+              )}
+            </View>
+            {isSelected && (
+              <View style={[
+                styles.checkmark,
+                { backgroundColor: theme.colors.primary }
+              ]}>
+                <Text style={{ color: theme.colors.onPrimary, fontWeight: 'bold' }}>✓</Text>
+              </View>
             )}
-            {template.popular && (
-              <Text style={[styles.popularBadge, { color: theme.colors.secondary }]}>
-                ⭐ Popular
-              </Text>
-            )}
-            {template.recommendedMadhab && (
-              <Text style={[styles.recommendedMadhab, { color: theme.colors.primary }]}>
-                Recommended: {template.recommendedMadhab}
-              </Text>
-            )}
-          </Card>
+          </View>
         </TouchableOpacity>
       );
     };
@@ -244,7 +254,23 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   card: {
+    borderRadius: 12,
     padding: 16,
+    overflow: 'hidden',
+  },
+  content: {
+    flex: 1,
+  },
+  checkmark: {
+    position: 'absolute',
+    top: 12,
+    right: I18nManager.isRTL ? undefined : 12,
+    left: I18nManager.isRTL ? 12 : undefined,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   templateName: {
     marginBottom: 4,
