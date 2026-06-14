@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet, I18nManager } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, I18nManager, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
-import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 
 type HomeNavigation = {
@@ -101,25 +100,32 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
 
         <View style={[isGrid ? styles.gridContainer : styles.listContainer]}>
           {menuItems.map((item) => (
-            <Card
+            <TouchableOpacity
               key={item.screen}
               onPress={() => navigation.navigate(item.screen)}
-              style={
-                [
-                  isGrid
-                    ? styles.gridItem
-                    : {
-                        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-                        alignItems: 'center',
-                      },
-                  item.primary && styles.primaryMenuItem,
-                ] as any
-              }
+              style={[
+                isGrid
+                  ? styles.gridItem
+                  : [
+                      styles.listItem,
+                      { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row', alignItems: 'center' },
+                    ],
+                item.primary && styles.primaryMenuItem,
+              ]}
+              activeOpacity={0.7}
               accessibilityLabel={`${item.title}. ${item.description}`}
               accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
               accessibilityRole="button"
             >
-              <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>{item.icon}</Text>
+              <View
+                style={[
+                  styles.iconContainer,
+                  item.primary && styles.primaryIconContainer,
+                  { borderLeftColor: item.primary ? theme.colors.primary : theme.colors.outline },
+                ]}
+              >
+                <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>{item.icon}</Text>
+              </View>
               <View style={styles.menuItemContent}>
                 <Text
                   style={[
@@ -145,7 +151,12 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                   {item.description}
                 </Text>
               </View>
-            </Card>
+              {I18nManager.isRTL ? (
+                <Text style={styles.chevron}>‹</Text>
+              ) : (
+                <Text style={styles.chevron}>›</Text>
+              )}
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -160,19 +171,45 @@ const styles = StyleSheet.create({
   menuItemContent: {
     flex: 1,
   },
-  menuIcon: {
-    fontSize: 32,
-    marginEnd: 16,
+  iconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderLeftWidth: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: I18nManager.isRTL ? 0 : 16,
+    marginLeft: I18nManager.isRTL ? 16 : 0,
   },
-  primaryMenuItem: {
-    borderWidth: 2,
-    borderColor: 'transparent',
+  primaryIconContainer: {
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+  },
+  menuIcon: {
+    fontSize: 28,
   },
   primaryIcon: {
-    fontSize: 40,
+    fontSize: 36,
+  },
+  primaryMenuItem: {
+    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+  },
+  listItem: {
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  chevron: {
+    fontSize: 28,
+    color: '#9CA3AF',
+    marginLeft: I18nManager.isRTL ? 0 : 8,
+    marginRight: I18nManager.isRTL ? 8 : 0,
   },
   listContainer: {
-    gap: 16,
+    gap: 0,
   },
   gridContainer: {
     flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
@@ -181,7 +218,11 @@ const styles = StyleSheet.create({
   },
   gridItem: {
     width: '48%',
-    flexDirection: 'column',
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
 });
