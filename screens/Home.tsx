@@ -108,7 +108,10 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                   ? styles.gridItem
                   : [
                       styles.listItem,
-                      { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row', alignItems: 'center' },
+                      {
+                        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+                        alignItems: 'center',
+                      },
                     ],
                 item.primary && styles.primaryMenuItem,
               ]}
@@ -124,7 +127,9 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                   { borderLeftColor: item.primary ? theme.colors.primary : theme.colors.outline },
                 ]}
               >
-                <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>{item.icon}</Text>
+                <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>
+                  {item.icon}
+                </Text>
               </View>
               <View style={styles.menuItemContent}>
                 <Text

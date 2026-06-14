@@ -270,19 +270,19 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         marginBottom: 16,
       }}
     >
-      <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
+      <Text style={[{ fontWeight: 'bold', marginBottom: 12, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.button]}>
         {t('comparison_summary')}
       </Text>
 
       {comparisonSummary.totalMadhhabsDiffering === 0 ? (
-        <Text style={{ color: theme.colors.success }}>✅ {t('all_madhhabs_consistent')}</Text>
+        <Text style={{ color: theme.colors.success, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>✅ {t('all_madhhabs_consistent')}</Text>
       ) : (
         <View>
-          <Text style={{ marginBottom: 8 }}>
+          <Text style={{ marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
             ⚠️ {comparisonSummary.totalMadhhabsDiffering} {t('madhhabs_differ')}
           </Text>
           {comparisonSummary.maxDifference > 0 && (
-            <Text style={{ marginBottom: 8 }}>
+            <Text style={{ marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
               {t('max_difference')}:{' '}
               {formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (
               {localizeHeirName(
@@ -297,9 +297,9 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
 
       {Object.keys(comparisonSummary.specialCasesApplied).length > 0 && (
         <View style={{ marginTop: 12 }}>
-          <Text style={{ fontWeight: 'bold', marginBottom: 8 }}>{t('special_cases')}:</Text>
+          <Text style={{ fontWeight: 'bold', marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{t('special_cases')}:</Text>
           {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
-            <Text key={madhab} style={[{ marginBottom: 4 }, theme.typography.caption]}>
+            <Text key={madhab} style={[{ marginBottom: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.caption]}>
               • {t('madhab_name_' + madhab, { defaultValue: madhab })}: {cases.join(', ')}
             </Text>
           ))}
@@ -341,10 +341,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           marginBottom: 16,
         }}
       >
-        <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
+        <Text style={[{ fontWeight: 'bold', marginBottom: 12, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.button]}>
           {t('special_cases_title')}
         </Text>
-        <Text style={[{ fontWeight: 'bold', marginBottom: 12 }, theme.typography.button]}>
+        <Text style={[{ fontWeight: 'bold', marginBottom: 12, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.button]}>
           {t('difference_analysis')}
         </Text>
 
@@ -357,20 +357,20 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               borderColor: theme.colors.outline,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>
+            <Text style={{ fontWeight: 'bold', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
               {localizeHeirName(diff.heirKey, diff.heirKey)}
             </Text>
-            <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
+            <Text style={[{ color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.caption]}>
               {t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs{' '}
               {t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}
             </Text>
-            <Text style={theme.typography.caption}>
+            <Text style={[theme.typography.caption, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
               Difference: {formatCurrencyLocale(diff.amountDifference, i18n.locale)} (
               {diff.percentageDifference.toFixed(1)}%)
             </Text>
             {diff.isSignificant && (
               <Text
-                style={[{ color: theme.colors.warning, marginTop: 4 }, theme.typography.caption]}
+                style={[{ color: theme.colors.warning, marginTop: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.caption]}
               >
                 ⚠️ {t('significant_difference')}
               </Text>
@@ -399,6 +399,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 width: isLandscape ? 200 : isTablet ? 180 : 140,
                 fontWeight: 'bold',
                 paddingHorizontal: 8,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
               numberOfLines={1}
             >
@@ -409,6 +410,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 width: isLandscape ? 100 : isTablet ? 80 : 60,
                 fontWeight: 'bold',
                 textAlign: 'center',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
               {t('count')}
@@ -422,6 +424,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                   textAlign: 'center',
                   fontWeight: 'bold',
                   paddingHorizontal: 4,
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
                 }}
               >
                 {t('madhab_name_' + m, { defaultValue: m })}
@@ -442,12 +445,12 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               }}
             >
               <Text
-                style={{ width: isLandscape ? 200 : isTablet ? 180 : 140, paddingHorizontal: 8 }}
+                style={{ width: isLandscape ? 200 : isTablet ? 180 : 140, paddingHorizontal: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
                 numberOfLines={1}
               >
                 {localizeHeirName(row.heirKey, row.heirKey)}
               </Text>
-              <Text style={{ width: isLandscape ? 100 : isTablet ? 80 : 60, textAlign: 'center' }}>
+              <Text style={{ width: isLandscape ? 100 : isTablet ? 80 : 60, textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
                 {getCount(row.heirKey)}
               </Text>
               {row.sharesByMadhab.map((data, index) => (
@@ -460,13 +463,13 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                 >
                   {data ? (
                     <>
-                      <Text style={theme.typography.caption}>{data.fraction}</Text>
-                      <Text style={[{ color: theme.colors.outline }, theme.typography.caption]}>
+                      <Text style={[theme.typography.caption, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{data.fraction}</Text>
+                      <Text style={[{ color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.caption]}>
                         {data.percentage}
                       </Text>
                       <Text
                         style={[
-                          { fontWeight: 'bold', color: theme.colors.primary },
+                          { fontWeight: 'bold', color: theme.colors.primary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
                           theme.typography.caption,
                         ]}
                       >
@@ -474,7 +477,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                       </Text>
                     </>
                   ) : (
-                    <Text style={{ color: theme.colors.outline }}>—</Text>
+                    <Text style={{ color: theme.colors.outline, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>—</Text>
                   )}
                 </View>
               ))}
@@ -501,7 +504,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           marginBottom: 16,
         }}
       >
-        <Text style={theme.typography.h1}>{t('comparison_title')}</Text>
+        <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{t('comparison_title')}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
           style={{
@@ -511,7 +514,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+          <Text style={{ color: theme.colors.primary, fontWeight: 'bold', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
             {t('back_to_home')}
           </Text>
         </TouchableOpacity>
@@ -529,7 +532,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         >
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text
-            style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary }]}
+            style={[theme.typography.button, { marginTop: 8, color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
           >
             {t('calculating')}
           </Text>
@@ -545,13 +548,14 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             marginTop: 16,
           }}
         >
-          <Text style={[{ textAlign: 'center' }, theme.typography.button]}>{t('no_history')}</Text>
+          <Text style={[{ textAlign: 'center', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }, theme.typography.button]}>{t('no_history')}</Text>
           <Text
             style={{
               textAlign: 'center',
               ...theme.typography.button,
               marginTop: 8,
               color: theme.colors.secondary,
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
             }}
           >
             {t('start_new_calculation')}
@@ -603,6 +607,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
                         inputRange: [0, 1],
                         outputRange: [theme.colors.onSurface, theme.colors.onPrimary],
                       }),
+                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
                     }}
                   >
                     {t('madhab_name_' + m, { defaultValue: m })}

@@ -126,10 +126,7 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
   return (
     <ScrollView style={styles.container}>
       {/* Templates Button */}
-      <TouchableOpacity
-        style={styles.templatesButton}
-        onPress={() => setTemplatesVisible(true)}
-      >
+      <TouchableOpacity style={styles.templatesButton} onPress={() => setTemplatesVisible(true)}>
         <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
       </TouchableOpacity>
 

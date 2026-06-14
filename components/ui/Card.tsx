@@ -1,5 +1,11 @@
 import React, { useMemo, memo } from 'react';
-import { View, TouchableOpacity, ViewStyle, AccessibilityRole, AccessibilityState } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ViewStyle,
+  AccessibilityRole,
+  AccessibilityState,
+} from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
 type CardVariant = 'elevated' | 'outlined' | 'filled' | 'tonal';

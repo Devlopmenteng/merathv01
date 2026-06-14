@@ -166,7 +166,10 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
                   </Text>
                   <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
                   <Text
-                    style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}
+                    style={[
+                      theme.typography.caption,
+                      { marginTop: 4, color: theme.colors.outline },
+                    ]}
                   >
                     {item.definitionAr}
                   </Text>

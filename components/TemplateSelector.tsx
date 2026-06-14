@@ -1,5 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet, StyleProp, ViewStyle, I18nManager } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  I18nManager,
+} from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
@@ -92,13 +102,24 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
           activeOpacity={0.7}
         >
           <View
-            style={[
-              styles.card,
-              isSelected
-                ? { borderColor: theme.colors.primary, borderWidth: 2, backgroundColor: 'rgba(59, 130, 246, 0.05)' }
-                : { backgroundColor: 'rgba(255, 255, 255, 0.95)', borderWidth: 1, borderColor: 'rgba(0, 0, 0, 0.05)' },
-              template.popular ? { borderLeftWidth: 3, borderLeftColor: theme.colors.secondary } : {},
-            ] as StyleProp<ViewStyle>
+            style={
+              [
+                styles.card,
+                isSelected
+                  ? {
+                      borderColor: theme.colors.primary,
+                      borderWidth: 2,
+                      backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                    }
+                  : {
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      borderWidth: 1,
+                      borderColor: 'rgba(0, 0, 0, 0.05)',
+                    },
+                template.popular
+                  ? { borderLeftWidth: 3, borderLeftColor: theme.colors.secondary }
+                  : {},
+              ] as StyleProp<ViewStyle>
             }
           >
             <View style={styles.content}>
@@ -123,10 +144,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
               )}
             </View>
             {isSelected && (
-              <View style={[
-                styles.checkmark,
-                { backgroundColor: theme.colors.primary }
-              ]}>
+              <View style={[styles.checkmark, { backgroundColor: theme.colors.primary }]}>
                 <Text style={{ color: theme.colors.onPrimary, fontWeight: 'bold' }}>✓</Text>
               </View>
             )}
