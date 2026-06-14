@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, I18nManager } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, I18nManager, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
 import { backArrow } from '../lib/utils/rtl';
@@ -100,7 +99,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         {t('calculation_steps')}
       </Text>
 
-      <Card variant="outlined">
+      <View style={styles.infoCard}>
         <Text
           style={[
             theme.typography.bodySmall,
@@ -135,15 +134,14 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           {t('madhab')}:{' '}
           {t('madhab_name_' + auditEntry.madhab, { defaultValue: auditEntry.madhab })}
         </Text>
-      </Card>
+      </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {auditEntry.steps && auditEntry.steps.length > 0 ? (
           auditEntry.steps.map((step, index) => (
-            <Card
+            <View
               key={index}
-              variant="outlined"
-              style={{ overflow: 'hidden' }}
+              style={styles.stepCard}
               accessible
               accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
@@ -202,10 +200,10 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
               >
                 {localizeStepDesc(step.description)}
               </Text>
-            </Card>
+            </View>
           ))
         ) : (
-          <Card variant="outlined" padding="lg">
+          <View style={styles.emptyCard}>
             <Text
               style={[
                 theme.typography.body,
@@ -214,11 +212,11 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
             >
               {t('no_steps_available')}
             </Text>
-          </Card>
+          </View>
         )}
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
-          <Card variant="outlined" style={{ marginTop: theme.spacing.md }}>
+          <View style={styles.hijabCard}>
             <Text
               style={[
                 theme.typography.h3,
@@ -245,9 +243,44 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
                 • {log}
               </Text>
             ))}
-          </Card>
+          </View>
         )}
       </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  infoCard: {
+    padding: 16,
+    marginBottom: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  stepCard: {
+    overflow: 'hidden',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  emptyCard: {
+    padding: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  hijabCard: {
+    marginTop: 16,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(239, 68, 68, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.1)',
+  },
+});
