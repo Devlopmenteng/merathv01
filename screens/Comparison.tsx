@@ -21,7 +21,6 @@ import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeForma
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { t, i18n } from '../lib/i18n';
 import { localizeHeirName } from '../lib/utils/shareLocalization';
-import { Card } from '../components/ui/Card';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -383,7 +382,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
   };
 
   const renderComparisonTable = () => (
-    <Card variant="outlined" style={styles.comparisonTableCard}>
+    <View style={styles.comparisonTableCard}>
       <ScrollView horizontal showsHorizontalScrollIndicator={true}>
         <View style={{ minWidth: isLandscape ? 800 : 700 }}>
           {/* Header row */}
@@ -483,7 +482,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           );
         })}
       </ScrollView>
-    </Card>
+    </View>
   );
 
   return (
@@ -673,5 +672,10 @@ const styles = StyleSheet.create({
   comparisonTableCard: {
     marginTop: 16,
     marginBottom: 16,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
 });
