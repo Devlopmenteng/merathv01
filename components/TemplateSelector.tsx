@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
@@ -98,7 +98,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
               [
                 styles.card,
                 isSelected ? { borderColor: theme.colors.primary, borderWidth: 2 } : {},
-              ] as any
+              ] as StyleProp<ViewStyle>
             }
           >
             <Text style={[styles.templateName, theme.typography.h4]}>{template.name}</Text>

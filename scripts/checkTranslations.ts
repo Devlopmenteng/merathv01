@@ -7,7 +7,7 @@ const ar = require('../lib/i18n/locales/ar.json');
 const ms = require('../lib/i18n/locales/ms.json');
 const ur = require('../lib/i18n/locales/ur.json');
 
-function getAllKeys(obj: any, prefix = ''): string[] {
+function getAllKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   let keys: string[] = [];
   for (const key in obj) {
     const newPrefix = prefix ? `${prefix}.${key}` : key;
@@ -20,7 +20,7 @@ function getAllKeys(obj: any, prefix = ''): string[] {
   return keys;
 }
 
-const translations: Record<string, any> = { en, ar, ms, ur };
+const translations: Record<string, Record<string, unknown>> = { en, ar, ms, ur };
 const referenceKeys = getAllKeys(en);
 
 console.log('=== Translation Coverage Check ===\n');

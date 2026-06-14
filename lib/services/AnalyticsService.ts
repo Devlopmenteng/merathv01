@@ -8,7 +8,7 @@
  * @module lib/services/AnalyticsService
  */
 
-import { ConsentService } from './ConsentService';
+import { ConsentService, ConsentType } from './ConsentService';
 import { SecurityAuditService, SecurityEventType, SecuritySeverity } from './SecurityAuditService';
 import { sanitizeForLogging } from '../utils/validation';
 
@@ -87,7 +87,7 @@ class AnalyticsServiceClass {
   async initialize(): Promise<void> {
     try {
       // Check user consent for analytics
-      const analyticsConsent = await ConsentService.getConsent('analytics' as any);
+      const analyticsConsent = await ConsentService.getConsent(ConsentType.ANALYTICS);
 
       this.config.enabled = analyticsConsent === 'granted';
 
@@ -116,7 +116,7 @@ class AnalyticsServiceClass {
       }
 
       // Check consent again to be safe
-      const analyticsConsent = await ConsentService.getConsent('analytics' as any);
+      const analyticsConsent = await ConsentService.getConsent(ConsentType.ANALYTICS);
       if (analyticsConsent !== 'granted') {
         return;
       }
@@ -195,7 +195,7 @@ class AnalyticsServiceClass {
    * Enable analytics (with consent)
    */
   async enable(): Promise<void> {
-    await ConsentService.grantConsent('analytics' as any);
+    await ConsentService.grantConsent(ConsentType.ANALYTICS);
     this.config.enabled = true;
 
     await SecurityAuditService.logEvent(
@@ -209,7 +209,7 @@ class AnalyticsServiceClass {
    * Disable analytics (opt-out)
    */
   async disable(): Promise<void> {
-    await ConsentService.revokeConsent('analytics' as any);
+    await ConsentService.revokeConsent(ConsentType.ANALYTICS);
     this.config.enabled = false;
 
     // Flush any remaining events

@@ -1,5 +1,5 @@
 import React, { useMemo, memo } from 'react';
-import { View, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, TouchableOpacity, ViewStyle, AccessibilityRole, AccessibilityState } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
 type CardVariant = 'elevated' | 'outlined' | 'filled' | 'tonal';
@@ -116,10 +116,10 @@ export const Card: React.FC<CardProps> = memo(
           activeOpacity={0.7}
           onPress={onPress}
           style={[containerStyle, style, { minHeight: 44 }]}
-          accessibilityRole={(accessibilityRole as any) || 'button'}
+          accessibilityRole={(accessibilityRole as AccessibilityRole) || 'button'}
           accessibilityLabel={accessibilityLabel}
           accessibilityHint={accessibilityHint}
-          accessibilityState={accessibilityState as any}
+          accessibilityState={accessibilityState as AccessibilityState}
         >
           {children}
         </TouchableOpacity>

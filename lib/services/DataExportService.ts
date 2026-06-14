@@ -8,7 +8,7 @@
  * @module lib/services/DataExportService
  */
 
-import { ConsentService } from './ConsentService';
+import { ConsentService, ConsentType } from './ConsentService';
 import { getAuditTrail } from './AuditTrailService';
 import { SecurityAuditService, SecurityEventType, SecuritySeverity } from './SecurityAuditService';
 
@@ -69,7 +69,7 @@ class DataExportServiceClass {
   async exportAllData(format: ExportFormat = ExportFormat.JSON): Promise<DataExportResult> {
     try {
       // Check if user has consented to data processing
-      const processingConsent = await ConsentService.getConsent('data_processing' as any);
+      const processingConsent = await ConsentService.getConsent(ConsentType.DATA_PROCESSING);
 
       if (processingConsent !== 'granted') {
         throw new Error('User has not consented to data processing');
