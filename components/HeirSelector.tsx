@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from './ui/Card';
 import { HeirType, HeirEntry } from '../lib/engine/types';
 import { HEIR_NAMES } from '../lib/engine/constants';
 import { applyHijab } from '../lib/engine/hijab';
@@ -127,13 +126,12 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
   return (
     <ScrollView style={styles.container}>
       {/* Templates Button */}
-      <Card
-        variant="tonal"
+      <TouchableOpacity
+        style={styles.templatesButton}
         onPress={() => setTemplatesVisible(true)}
-        style={{ alignItems: 'center' }}
       >
         <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
-      </Card>
+      </TouchableOpacity>
 
       {CATEGORIES.map((cat) => {
         const open = expanded.has(cat.titleKey);
@@ -193,6 +191,15 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  templatesButton: {
+    padding: 16,
+    marginBottom: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.2)',
+    alignItems: 'center',
   },
   category: {
     marginBottom: 12,
