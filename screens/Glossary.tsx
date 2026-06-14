@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, I18nManager } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, I18nManager, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
@@ -154,23 +153,26 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={GLOSSARY}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <Card
-                variant="outlined"
-                leftBorder={theme.colors.primary}
-                style={{ marginBottom: theme.spacing.md }}
+              <TouchableOpacity
+                style={styles.glossaryItem}
+                activeOpacity={0.7}
+                accessibilityLabel={`${item.term} – ${item.termAr}. ${item.definition}`}
+                accessibilityRole="button"
               >
-                <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
-                  {item.term} – {item.termAr}
-                </Text>
-                <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
-                <Text
-                  style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}
-                >
-                  {item.definitionAr}
-                </Text>
-              </Card>
+                <View style={[styles.leftBorder, { backgroundColor: theme.colors.primary }]} />
+                <View style={styles.content}>
+                  <Text style={[theme.typography.h3, { color: theme.colors.primary }]}>
+                    {item.term} – {item.termAr}
+                  </Text>
+                  <Text style={[theme.typography.body, { marginTop: 4 }]}>{item.definition}</Text>
+                  <Text
+                    style={[theme.typography.caption, { marginTop: 4, color: theme.colors.outline }]}
+                  >
+                    {item.definitionAr}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             )}
-            contentContainerStyle={{ gap: theme.spacing.md }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={8}
             updateCellsBatchingPeriod={50}
@@ -183,7 +185,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={INHERITANCE_VERSES}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <Card variant="outlined" style={{ marginBottom: theme.spacing.md }}>
+              <View style={styles.verseItem}>
                 <Text
                   style={[
                     theme.typography.h3,
@@ -222,9 +224,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
                 >
                   {t('topic')}: {item.topic}
                 </Text>
-              </Card>
+              </View>
             )}
-            contentContainerStyle={{ gap: theme.spacing.md }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={8}
             updateCellsBatchingPeriod={50}
@@ -237,7 +238,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={HADITH}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <Card variant="outlined" style={{ marginBottom: theme.spacing.md }}>
+              <View style={styles.hadithItem}>
                 <Text
                   style={[
                     { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
@@ -257,9 +258,8 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
                 >
                   {item.reference}
                 </Text>
-              </Card>
+              </View>
             )}
-            contentContainerStyle={{ gap: theme.spacing.md }}
             removeClippedSubviews={true}
             maxToRenderPerBatch={8}
             updateCellsBatchingPeriod={50}
@@ -272,3 +272,47 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  glossaryItem: {
+    flexDirection: 'row',
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  leftBorder: {
+    position: 'absolute',
+    left: I18nManager.isRTL ? undefined : 0,
+    right: I18nManager.isRTL ? 0 : undefined,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderTopRightRadius: I18nManager.isRTL ? 12 : 0,
+    borderBottomRightRadius: I18nManager.isRTL ? 12 : 0,
+  },
+  content: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  verseItem: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  hadithItem: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+});
