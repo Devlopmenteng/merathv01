@@ -3,7 +3,6 @@ import { t, i18n } from '../lib/i18n';
 import React, { useState, useCallback } from 'react';
 import { ScrollView, View, Text, StyleSheet, I18nManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useAppTheme } from '../hooks/useAppTheme';
@@ -146,7 +145,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         {t('estate_details')}
       </Text>
 
-      <Card variant="outlined" style={styles.sectionCard}>
+      <View style={styles.sectionCard}>
         <Text
           style={[
             theme.typography.h4,
@@ -174,9 +173,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           accessibilityLabel={t('date')}
           accessibilityHint={t('a11y_enter_case_date')}
         />
-      </Card>
+      </View>
 
-      <Card variant="outlined" style={styles.sectionCard}>
+      <View style={styles.sectionCard}>
         <Text
           style={[
             theme.typography.h4,
@@ -240,10 +239,10 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           }
           accessibilityState={{ error: !!willError }}
         />
-      </Card>
+      </View>
 
       {(parseFloat(total) > 0 || parseFloat(funeral) > 0 || parseFloat(debts) > 0) && (
-        <Card variant="tonal">
+        <View style={styles.summaryCard}>
           <Text
             style={[
               theme.typography.h4,
@@ -282,7 +281,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
               i18n.locale
             )}
           </Text>
-        </Card>
+        </View>
       )}
 
       <Button
@@ -319,5 +318,18 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
 const styles = StyleSheet.create({
   sectionCard: {
     marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  summaryCard: {
+    padding: 16,
+    marginBottom: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.2)',
   },
 });
