@@ -5,6 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Merath',
   slug: 'merath_mobile',
   scheme: 'merath',
+  owner: 'smartengineer',
   android: {
     package: 'com.merath_mobile.merath',
     intentFilters: [
@@ -18,7 +19,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     eas: {
-      projectId: 'a524145d-db5e-41df-ac7b-94b4334a3cf5',
+      projectId: '2c2de43d-16e9-4c3f-88b6-be678d534494',
     },
   },
 });
