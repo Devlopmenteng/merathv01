@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { Card } from '../components/ui/Card';
 import { t, tp, i18n } from '../lib/i18n';
 import { backArrow } from '../lib/utils/rtl';
 import { formatNumber } from '../lib/utils/localeFormatting';
@@ -244,7 +243,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredTemplates.length === 0 ? (
-          <Card variant="outlined" padding="lg">
+          <View style={styles.emptyState}>
             <Text
               style={[
                 theme.typography.body,
@@ -253,7 +252,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             >
               {t('no_templates_found')}
             </Text>
-          </Card>
+          </View>
         ) : (
           filteredTemplates.map((template) => (
             <TouchableOpacity
@@ -462,6 +461,13 @@ const styles = StyleSheet.create({
   }, // chip uses fixed values intentionally for pill-shape design
   templateCard: {
     overflow: 'hidden',
+  },
+  emptyState: {
+    padding: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   detailsRow: {
     flexDirection: 'row',
