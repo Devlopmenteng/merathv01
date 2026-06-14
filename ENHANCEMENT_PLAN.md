@@ -459,9 +459,9 @@ Split into 4 sub-phases for better organization
 1. **Medium Priority**: Phase 8 (Modern UI Redesign - Remove Cards) - Complete UI overhaul using modern patterns
 2. **Lower Priority**: Phase 5 (Testing & Quality Assurance) - Comprehensive testing framework (E2E, visual regression)
 
-### Phase 8: Modern UI Redesign - Remove Cards ❌ **NOT STARTED**
-**Session ID**: TBD (to be assigned in next session)
-**Commit**: TBD
+### Phase 8: Modern UI Redesign - Remove Cards 🔄 **IN PROGRESS**
+**Session ID**: Current session
+**Commit**: Multiple commits (55ea41c, 0cc2ed9, 39f6df7, 8f24b0b, fffc242)
 **Directory**: `/workspaces/merathv01`
 **Path**: Root directory (affects multiple screens and components)
 
@@ -511,17 +511,60 @@ The existing design does not feel modern. Move away from cards entirely and rede
 - **FiqhRules.tsx**: Uses Card components for fiqh rules
 - **Home.tsx**: Uses Card components for quick actions
 
-#### Screens to Redesign
-1. **Heir Selection Screen** - Replace card-based heir category grouping with modern pattern
-2. **Estate Setup Screen** - Replace card-based input fields with modern input pattern
-3. **Calculation Results Screen** - Replace card-based results display with modern visualization
-4. **Comparison Screen** - Replace card-based comparison table with modern data visualization
-5. **History Screen** - Replace card-based history items with modern list pattern
-6. **Settings Screen** - Replace card-based settings groups with modern settings pattern
-7. **Glossary Screen** - Replace card-based glossary items with modern content pattern
-8. **Test Cases Screen** - Replace card-based test case items with modern selection pattern
-9. **Fiqh Rules Screen** - Replace card-based fiqh rules with modern content pattern
-10. **Home Screen** - Replace card-based quick actions with modern navigation pattern
+#### Completed Screens (6/10):
+- ✅ **Home Screen** - Replaced Card with TouchableOpacity
+  - Icon containers with left accent borders
+  - Semi-transparent backgrounds instead of cards
+  - Chevron indicators for navigation
+  - RTL support maintained
+  
+- ✅ **History Screen** - Replaced Card with TouchableOpacity
+  - Left border accent for visual hierarchy
+  - Modern list item design with subtle borders
+  - Chevron indicators
+  - RTL support maintained
+  
+- ✅ **Settings Screen** - Replaced Card with section-based layout
+  - Section headers for grouping (Appearance, Resources, About, Support, Legal)
+  - Modern list items with subtle borders
+  - Dividers for grouped items
+  - Left accent border for danger items (clear cache)
+  - RTL support maintained
+  
+- ✅ **Glossary Screen** - Replaced Card with TouchableOpacity and View
+  - Left border accent for glossary items
+  - Subtle backgrounds for verse and hadith items
+  - Modern list item design with rounded corners
+  - RTL support maintained
+  
+- ✅ **TestCases Screen** - Replaced Card with View
+  - Empty state uses simple View with modern styling
+  - Template items already used TouchableOpacity with custom styling
+  - No functional changes to template cards
+  - RTL support maintained
+  
+- ✅ **FiqhRules Screen** - Replaced Card with View
+  - Madhab notes use View with left border
+  - Special cases use View with subtle background
+  - Modern styling with StyleSheet
+  - RTL support maintained
+
+#### Remaining Screens (6/10):
+1. **MadhabSelect Screen** - Replace Card with modern list pattern (3 Card matches)
+2. **EstateSetup Screen** - Replace Card-based input fields with modern input pattern (8 Card matches)
+3. **Results Screen** - Replace Card-based results display with modern visualization (4 Card matches)
+4. **Comparison Screen** - Replace Card-based comparison table with modern data visualization (4 Card matches)
+5. **CalculationSteps Screen** - Replace Card-based calculation steps with modern pattern (9 Card matches)
+6. **HeirSelector Component** - Replace Card in component with modern pattern (used by HeirSelection screen)
+
+#### Modern Design Patterns Implemented:
+- **Left Border Accent**: Used for visual hierarchy and emphasis
+- **Semi-transparent Backgrounds**: `rgba(255, 255, 255, 0.95)` instead of solid cards
+- **Subtle Borders**: `borderWidth: 1` with `borderColor: 'rgba(0, 0, 0, 0.05)'`
+- **Section Headers**: Uppercase, small text for grouping
+- **Dividers**: Horizontal lines for grouped items
+- **Chevron Indicators**: For navigation affordance
+- **RTL Support**: All redesigned screens maintain RTL compatibility
 
 ---
 
@@ -530,6 +573,10 @@ The existing design does not feel modern. Move away from cards entirely and rede
 Based on the current state and analysis, here are the recommended next phases in priority order:
 
 ### **Priority 1: Phase 8 - Modern UI Redesign (Remove Cards)**
+**Status**: 🔄 **IN PROGRESS** (6/10 screens completed)
+**Progress**: 
+- ✅ Home, History, Settings, Glossary, TestCases, FiqhRules completed
+- ⏳ MadhabSelect, EstateSetup, Results, Comparison, CalculationSteps, HeirSelector remaining
 **Rationale**: The current card-based design feels dated. A modern UI redesign will provide:
 - More contemporary and dynamic user experience
 - Better space utilization with modern patterns
