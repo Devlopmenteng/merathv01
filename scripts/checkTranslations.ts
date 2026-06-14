@@ -2,12 +2,13 @@
  * Quick script to check translation coverage
  */
 
+// @ts-ignore - Utility script, type safety not critical
 const en = require('../lib/i18n/locales/en.json');
 const ar = require('../lib/i18n/locales/ar.json');
 const ms = require('../lib/i18n/locales/ms.json');
 const ur = require('../lib/i18n/locales/ur.json');
 
-function getAllKeys(obj: Record<string, unknown>, prefix = ''): string[] {
+function getAllKeys(obj: any, prefix = ''): string[] {
   let keys: string[] = [];
   for (const key in obj) {
     const newPrefix = prefix ? `${prefix}.${key}` : key;
