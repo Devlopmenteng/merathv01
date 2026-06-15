@@ -35,7 +35,7 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.outline },
+        { backgroundColor: 'transparent', borderBottomColor: theme.colors.outline },
       ]}
     >
       {steps.map((stepKey, index) => (

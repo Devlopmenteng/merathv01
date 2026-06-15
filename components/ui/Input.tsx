@@ -101,7 +101,7 @@ export const Input: React.FC<Props> = ({
       outputRange: [16, 12],
     }),
     color: error ? theme.colors.error : focused ? theme.colors.primary : theme.colors.outline,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: 'transparent',
     paddingHorizontal: 6,
     zIndex: 1,
   };

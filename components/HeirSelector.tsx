@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 12,
-    borderWidth: 1,
+
     alignItems: 'center',
   },
   templatesButtonText: {

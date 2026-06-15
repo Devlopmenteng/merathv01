@@ -16,7 +16,6 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeFormatting';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { elevation } from '../lib/constants/theme';
 
 type HistoryNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -76,10 +75,10 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           {item.caseName || t('no_name')} – {item.caseDate || t('no_date')}
         </Text>
         <View style={styles.detailRow}>
-          <Badge 
-            text={t('madhab_name_' + item.madhab, { defaultValue: item.madhab }).toUpperCase()} 
-            variant="info" 
-            size="small" 
+          <Badge
+            text={t('madhab_name_' + item.madhab, { defaultValue: item.madhab }).toUpperCase()}
+            variant="info"
+            size="small"
           />
           <Text
             style={[
@@ -149,12 +148,11 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         style={{
           padding: theme.spacing.sm,
           borderWidth: 2,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.borderRadius.md,
+
           marginBottom: theme.spacing.md,
           color: theme.colors.onSurface,
-          backgroundColor: theme.colors.surface,
-          ...theme.elevation.small,
+          backgroundColor: 'transparent',
+
           textAlign: I18nManager.isRTL ? 'right' : 'left',
           writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
         }}
@@ -184,15 +182,17 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           </Text>
         </View>
       ) : filtered.length === 0 ? (
-        <View style={{ 
-          flex: 1, 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          paddingVertical: 40,
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: 12,
-          marginVertical: theme.spacing.xl
-        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 40,
+            backgroundColor: 'transparent',
+            borderRadius: 12,
+            marginVertical: theme.spacing.xl,
+          }}
+        >
           <Text style={{ fontSize: 48, marginBottom: 16 }}>📜</Text>
           <Text
             style={[
@@ -236,9 +236,8 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   leftBorder: {
     position: 'absolute',

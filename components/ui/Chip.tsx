@@ -32,22 +32,18 @@ export const Chip: React.FC<ChipProps> = ({
       case 'input':
         return {
           backgroundColor: selected ? theme.colors.primaryContainer : theme.colors.surfaceVariant,
-          borderWidth: 1,
+
           borderColor: selected ? chipColor : theme.colors.outline,
-          borderRadius: theme.borderRadius.sm,
         };
       case 'suggestion':
         return {
-          backgroundColor: theme.colors.surfaceVariant,
+          backgroundColor: 'transparent',
           borderWidth: 0,
-          borderRadius: theme.borderRadius.sm,
-          ...theme.elevation.small,
         };
       default:
         return {
           backgroundColor: selected ? chipColor : theme.colors.surfaceVariant,
           borderWidth: 0,
-          borderRadius: theme.borderRadius.full,
         };
     }
   };

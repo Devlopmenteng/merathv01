@@ -31,10 +31,9 @@ export const Modal: React.FC<ModalProps> = React.memo(
             style={[
               styles.sheet,
               {
-                backgroundColor: theme.colors.surface,
+                backgroundColor: 'transparent',
                 maxHeight: maxHeight,
                 paddingBottom: insets.bottom + theme.spacing.md,
-                ...theme.elevation.large,
               },
             ]}
           >

@@ -7,7 +7,6 @@ import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
 import { t, i18n } from '../lib/i18n';
 import { Button } from '../components/ui/Button';
-import { elevation } from '../lib/constants/theme';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
 
@@ -33,7 +32,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.borderRadius.md,
+
             backgroundColor:
               activeTab === 'glossary' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -60,7 +59,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.borderRadius.md,
+
             backgroundColor:
               activeTab === 'verses' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -85,7 +84,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.borderRadius.md,
+
             backgroundColor:
               activeTab === 'hadith' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -110,7 +109,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
           style={{
             flex: 1,
             padding: theme.spacing.sm,
-            borderRadius: theme.borderRadius.md,
+
             backgroundColor:
               activeTab === 'fiqh' ? theme.colors.primary : theme.colors.surfaceVariant,
             alignItems: 'center',
@@ -274,9 +273,8 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   leftBorder: {
     position: 'absolute',
@@ -298,16 +296,14 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   hadithItem: {
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
 });

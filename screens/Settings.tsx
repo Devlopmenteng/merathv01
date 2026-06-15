@@ -21,7 +21,6 @@ import { t } from '../lib/i18n';
 import { forwardArrow } from '../lib/utils/rtl';
 import { showAlert } from '../lib/utils/alerts';
 import { Button } from '../components/ui/Button';
-import { elevation } from '../lib/constants/theme';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -111,10 +110,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           alignItems: 'center',
           paddingVertical: theme.spacing.sm,
           paddingHorizontal: theme.spacing.md,
-          backgroundColor: theme.colors.surfaceVariant,
-          borderRadius: theme.borderRadius.md,
-          borderWidth: 1,
-          borderColor: theme.colors.outline,
+          backgroundColor: 'transparent',
         }}
         onPress={() => setLanguageModalVisible(true)}
         accessibilityLabel={t('language__')}
@@ -154,11 +150,10 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <View
             style={{
-              backgroundColor: theme.colors.surface,
+              backgroundColor: 'transparent',
               borderTopLeftRadius: theme.borderRadius.xl,
               borderTopRightRadius: theme.borderRadius.xl,
               padding: theme.spacing.lg,
-              ...theme.elevation.large,
             }}
           >
             <Text
@@ -452,22 +447,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
     marginBottom: 8,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   aboutCard: {
     padding: 16,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   card: {
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   cardItem: {
     paddingVertical: 16,

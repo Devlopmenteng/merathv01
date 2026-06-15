@@ -6,7 +6,6 @@ import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
 import { localizeStepTitle, localizeStepDesc } from '../lib/utils/shareLocalization';
 import { Button } from '../components/ui/Button';
-import { elevation } from '../lib/constants/theme';
 
 type CalculationStepsNavigation = {
   navigate: (screen: string) => void;
@@ -236,32 +235,28 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   stepCard: {
     overflow: 'hidden',
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   emptyCard: {
     padding: 24,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   hijabCard: {
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(239, 68, 68, 0.1)',
-    ...elevation.small,
   },
 });

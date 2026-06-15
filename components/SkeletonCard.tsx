@@ -37,7 +37,7 @@ const Skeleton = React.memo(({ width = 100, height = 20 }: { width?: number; hei
         width,
         height,
         backgroundColor: bg,
-        borderRadius: theme.borderRadius.xs,
+
         marginBottom: theme.spacing.sm,
       }}
     />

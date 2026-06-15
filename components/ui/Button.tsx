@@ -147,11 +147,10 @@ export const Button: React.FC<Props> = memo(
         backgroundColor: isOutlined || isGhost ? 'transparent' : buttonColor,
         borderWidth: isOutlined || isGhost ? 2 : 0,
         borderColor: buttonColor,
-        borderRadius: theme.borderRadius.md,
+
         alignItems: 'center',
         opacity: disabled ? 0.38 : 1,
         transform: [{ scale: pressed && !disabled ? 0.97 : 1 }],
-        ...theme.elevation.small,
       },
       fullWidth && styles.fullWidth,
       style,

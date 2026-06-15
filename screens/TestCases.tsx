@@ -25,7 +25,6 @@ import {
 import { useCalc } from '../lib/context/CalcContext';
 import { Alert } from 'react-native';
 import { Button } from '../components/ui/Button';
-import { elevation } from '../lib/constants/theme';
 
 type TestCasesNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -147,12 +146,11 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         style={{
           padding: theme.spacing.sm,
           borderWidth: 2,
-          borderColor: theme.colors.outline,
-          borderRadius: theme.borderRadius.md,
+
           marginBottom: theme.spacing.md,
           color: theme.colors.onSurface,
-          backgroundColor: theme.colors.surface,
-          ...theme.elevation.small,
+          backgroundColor: 'transparent',
+
           textAlign: I18nManager.isRTL ? 'right' : 'left',
           writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
         }}
@@ -178,7 +176,6 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
             {
               backgroundColor:
                 selectedCategory === null ? theme.colors.primary : theme.colors.surfaceVariant,
-              borderColor: theme.colors.outline,
             },
           ]}
           onPress={() => handleCategoryFilter(null)}
@@ -206,7 +203,6 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   selectedCategory === category
                     ? theme.colors.primary
                     : theme.colors.surfaceVariant,
-                borderColor: theme.colors.outline,
               },
             ]}
             onPress={() => handleCategoryFilter(category)}
@@ -254,11 +250,10 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                   backgroundColor: template.popular
                     ? theme.colors.primary + '10'
                     : theme.colors.surface,
-                  borderRadius: theme.borderRadius.lg,
+
                   padding: theme.spacing.md,
                   marginBottom: theme.spacing.md,
-                  ...theme.elevation.small,
-                  borderWidth: 1,
+
                   borderColor: template.popular ? theme.colors.primary : theme.colors.outline,
                 },
               ]}
@@ -277,7 +272,6 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
                     backgroundColor: theme.colors.primary,
                     paddingHorizontal: theme.spacing.sm,
                     paddingVertical: theme.spacing.xs,
-                    borderRadius: theme.borderRadius.sm,
                   }}
                 >
                   <Text
@@ -447,7 +441,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     marginEnd: 8,
-    borderWidth: 1,
+
     minHeight: 44,
   }, // chip uses fixed values intentionally for pill-shape design
   templateCard: {
@@ -456,9 +450,8 @@ const styles = StyleSheet.create({
   emptyState: {
     padding: 24,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   detailsRow: {
     flexDirection: 'row',

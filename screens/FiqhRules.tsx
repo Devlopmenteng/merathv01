@@ -4,7 +4,6 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { FIQH_NOTES } from '../lib/services/FiqhReferences';
 import { MADHAB_NAMES } from '../lib/engine/constants';
 import { t } from '../lib/i18n';
-import { elevation } from '../lib/constants/theme';
 
 const FIXED_SHARES = [
   { shareKey: 'share_half', heirsKey: 'heirs_half' },
@@ -121,7 +120,10 @@ export const FiqhRules = () => {
         {t('special_cases_title')}
       </Text>
       {SPECIAL_CASES.map((caseItem) => (
-        <View key={caseItem.nameKey} style={[styles.specialCase, { backgroundColor: theme.colors.surface }]}>
+        <View
+          key={caseItem.nameKey}
+          style={[styles.specialCase, { backgroundColor: theme.colors.surface }]}
+        >
           <Text
             style={[
               theme.typography.h3,
@@ -160,7 +162,7 @@ export const FiqhRules = () => {
             style={{
               flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
               borderBottomWidth: 1,
-              borderColor: theme.colors.outline,
+
               paddingBottom: 8,
               marginBottom: 8,
             }}
@@ -227,7 +229,7 @@ export const FiqhRules = () => {
             style={{
               flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
               borderBottomWidth: 1,
-              borderColor: theme.colors.outline,
+
               paddingBottom: 8,
               marginBottom: 8,
             }}
@@ -298,9 +300,8 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...elevation.small,
   },
   leftBorder: {
     position: 'absolute',
@@ -322,8 +323,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(239, 68, 68, 0.2)',
-    ...elevation.small,
   },
 });

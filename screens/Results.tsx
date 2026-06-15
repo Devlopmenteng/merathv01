@@ -281,7 +281,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
             style={{
               flexDirection: 'row',
               backgroundColor: idx % 2 === 0 ? theme.colors.surface : theme.colors.surfaceVariant,
-              borderRadius: theme.borderRadius.sm,
+
               paddingVertical: 8,
             }}
           >
@@ -424,8 +424,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               padding: theme.spacing.xl,
               alignItems: 'center',
               marginBottom: theme.spacing.lg,
-              ...theme.elevation.large,
-              borderWidth: 1,
+
               borderColor: 'rgba(255, 255, 255, 0.1)',
             }}
           >
@@ -464,7 +463,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               style={{
                 height: 8,
                 flex: 1,
-                backgroundColor: theme.colors.surfaceVariant,
+                backgroundColor: 'transparent',
                 borderRadius: 4,
                 overflow: 'hidden',
               }}
@@ -607,8 +606,7 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
               marginTop: theme.spacing.lg,
               marginBottom: theme.spacing.md,
               padding: theme.spacing.md,
-              backgroundColor: theme.colors.surfaceVariant,
-              borderRadius: theme.borderRadius.md,
+              backgroundColor: 'transparent',
             }}
             accessibilityLabel={showSteps ? t('a11y_hide_steps') : t('a11y_show_steps')}
             accessibilityHint={
@@ -663,7 +661,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   successOverlay: {

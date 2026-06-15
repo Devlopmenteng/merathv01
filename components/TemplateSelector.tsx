@@ -113,7 +113,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
                     }
                   : {
                       backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      borderWidth: 1,
+
                       borderColor: 'rgba(0, 0, 0, 0.05)',
                     },
                 template.popular
@@ -262,7 +262,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    borderWidth: 1,
   },
   templatesScroll: {
     flex: 1,

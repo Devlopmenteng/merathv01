@@ -22,7 +22,7 @@ export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.outline },
+        { backgroundColor: 'transparent', borderTopColor: theme.colors.outline },
       ]}
     >
       <TouchableOpacity style={styles.button} onPress={onCompare}>

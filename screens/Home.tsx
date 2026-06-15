@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     marginBottom: 12,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   chevron: {
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
 });

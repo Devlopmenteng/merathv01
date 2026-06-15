@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     padding: 20,
     borderRadius: 16,
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   infoAlert: {
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 24,
     borderRadius: 16,
-    borderWidth: 1,
+
     borderColor: 'rgba(16, 185, 129, 0.2)',
   },
 });

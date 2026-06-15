@@ -7,7 +7,6 @@ import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
 import { t } from '../lib/i18n';
 import { StepIndicator } from '../components/StepIndicator';
-import { elevation } from '../lib/constants/theme';
 
 const madhabs: {
   key: Madhab;
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 16,
     overflow: 'hidden',
-    ...elevation.medium,
   },
   madhabGradient: {
     padding: 20,

@@ -29,7 +29,7 @@ export const FeedbackButton = () => {
       style={{
         padding: theme.spacing.md,
         backgroundColor: theme.colors.secondary,
-        borderRadius: theme.borderRadius.sm,
+
         marginVertical: theme.spacing.sm,
       }}
     >

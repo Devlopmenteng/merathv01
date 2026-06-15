@@ -13,7 +13,7 @@ export const SupportButton = () => {
       style={{
         padding: theme.spacing.md,
         backgroundColor: theme.colors.primary,
-        borderRadius: theme.borderRadius.sm,
+
         marginVertical: theme.spacing.sm,
       }}
     >

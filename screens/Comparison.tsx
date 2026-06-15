@@ -282,7 +282,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         {hasSpecialCases && (
           <View
             style={{
-              backgroundColor: theme.colors.surfaceVariant,
+              backgroundColor: 'transparent',
               padding: 16,
               borderRadius: 12,
               marginBottom: 16,
@@ -357,7 +357,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
             style={{
               flexDirection: 'row',
               borderBottomWidth: 1,
-              borderColor: theme.colors.outline,
+
               paddingBottom: 8,
             }}
           >
@@ -407,7 +407,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               style={{
                 flexDirection: 'row',
                 borderBottomWidth: 1,
-                borderColor: theme.colors.outline,
+
                 paddingVertical: 12,
               }}
             >
@@ -522,7 +522,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
       {loading && (
         <View
           style={{
-            backgroundColor: theme.colors.surfaceVariant,
+            backgroundColor: 'transparent',
             padding: 16,
             borderRadius: 12,
             marginTop: 16,
@@ -548,7 +548,7 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
       {!loading && !hasData && (
         <View
           style={{
-            backgroundColor: theme.colors.surfaceVariant,
+            backgroundColor: 'transparent',
             padding: 16,
             borderRadius: 12,
             marginTop: 16,
@@ -693,7 +693,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderWidth: 1,
+
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
 });

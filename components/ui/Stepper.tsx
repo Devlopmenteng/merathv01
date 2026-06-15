@@ -71,7 +71,6 @@ export const Stepper: React.FC<Props> = React.memo(
                 : theme.colors.surfaceVariant,
               opacity: canDecrease ? 1 : 0.38,
               transform: [{ scale: pressedDecrease && canDecrease ? 0.95 : 1 }],
-              ...theme.elevation.small,
             },
           ]}
         >
@@ -125,7 +124,6 @@ export const Stepper: React.FC<Props> = React.memo(
                 : theme.colors.surfaceVariant,
               opacity: canIncrease ? 1 : 0.38,
               transform: [{ scale: pressedIncrease && canIncrease ? 0.95 : 1 }],
-              ...theme.elevation.small,
             },
           ]}
         >
