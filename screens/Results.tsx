@@ -8,7 +8,7 @@ import { t } from '../lib/i18n';
 import { calculateInheritanceWithCache } from '../lib/inheritance/calculateAdapter';
 import type { CalculationResult, Madhab } from '../lib/engine/types';
 
-export const Results = ({ navigation }: { navigation: any }) => {
+export const Results = ({ navigation }: { navigation: { navigate: (screen: string, params?: Record<string, unknown>) => void } }) => {
   const theme = useAppTheme();
   const { state } = useCalc();
   const [result, setResult] = useState<CalculationResult | null>(null);

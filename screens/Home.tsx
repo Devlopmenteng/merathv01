@@ -9,7 +9,7 @@ import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet
 import { Divider } from '../components/ui/Divider';
 import { SCENARIO_TEMPLATES } from '../lib/templates/ScenarioTemplates';
 
-type HomeNavigation = { navigate: (screen: string, params?: any) => void };
+type HomeNavigation = { navigate: (screen: string, params?: Record<string, unknown>) => void };
 
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();

@@ -8,12 +8,12 @@ const ar = require('../lib/i18n/locales/ar.json');
 const ms = require('../lib/i18n/locales/ms.json');
 const ur = require('../lib/i18n/locales/ur.json');
 
-function getAllKeys(obj: any, prefix = ''): string[] {
+function getAllKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   let keys: string[] = [];
   for (const key in obj) {
     const newPrefix = prefix ? `${prefix}.${key}` : key;
     if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-      keys = keys.concat(getAllKeys(obj[key], newPrefix));
+      keys = keys.concat(getAllKeys(obj[key] as Record<string, unknown>, newPrefix));
     } else {
       keys.push(newPrefix);
     }
