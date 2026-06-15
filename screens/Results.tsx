@@ -27,7 +27,12 @@ export const Results = ({ navigation }: { navigation: any }) => {
 
   const handleRecalc = () => navigation.navigate('EstateSetup');
 
-  if (!result) return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text>Loading...</Text></View>;
+  if (!result)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
 
   const renderDistribution = () => (
     <View>
@@ -49,8 +54,18 @@ export const Results = ({ navigation }: { navigation: any }) => {
         <Text style={theme.typography.h1}>{t('inheritance_report')}</Text>
         <Divider />
         <View style={styles.tabBar}>
-          {['distribution', 'steps', 'compare'].map(tab => (
-            <Pressable key={tab} onPress={() => setActiveTab(tab)} style={[styles.tab, activeTab === tab && { borderBottomColor: theme.colors.primary, borderBottomWidth: 2 }]}>
+          {['distribution', 'steps', 'compare'].map((tab) => (
+            <Pressable
+              key={tab}
+              onPress={() => setActiveTab(tab)}
+              style={[
+                styles.tab,
+                activeTab === tab && {
+                  borderBottomColor: theme.colors.primary,
+                  borderBottomWidth: 2,
+                },
+              ]}
+            >
               <Text style={activeTab === tab ? { color: theme.colors.primary } : {}}>{t(tab)}</Text>
             </Pressable>
           ))}

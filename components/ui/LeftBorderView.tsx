@@ -12,10 +12,8 @@ type Props = {
 export const LeftBorderView: React.FC<Props> = ({ children, color, style, padding = 16 }) => {
   const theme = useAppTheme();
   const borderColor = color || theme.colors.primary;
-  const borderProp = I18nManager.isRTL ? { borderRightWidth: 4, borderRightColor: borderColor } : { borderLeftWidth: 4, borderLeftColor: borderColor };
-  return (
-    <View style={[{ padding, marginBottom: 8 }, borderProp, style]}>
-      {children}
-    </View>
-  );
+  const borderProp = I18nManager.isRTL
+    ? { borderRightWidth: 4, borderRightColor: borderColor }
+    : { borderLeftWidth: 4, borderLeftColor: borderColor };
+  return <View style={[{ padding, marginBottom: 8 }, borderProp, style]}>{children}</View>;
 };

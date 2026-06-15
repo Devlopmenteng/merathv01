@@ -19,42 +19,59 @@ export const Glossary = () => {
       <View style={{ padding: theme.spacing.lg, paddingTop: insets.top + theme.spacing.lg }}>
         <Text style={theme.typography.h1}>{t('glossary')}</Text>
         <View style={styles.tabBar}>
-          {TABS.map(tab => (
-            <Pressable key={tab} onPress={() => setActiveTab(tab)} style={[styles.tab, activeTab === tab && { borderBottomColor: theme.colors.primary, borderBottomWidth: 2 }]}>
+          {TABS.map((tab) => (
+            <Pressable
+              key={tab}
+              onPress={() => setActiveTab(tab)}
+              style={[
+                styles.tab,
+                activeTab === tab && {
+                  borderBottomColor: theme.colors.primary,
+                  borderBottomWidth: 2,
+                },
+              ]}
+            >
               <Text style={activeTab === tab ? { color: theme.colors.primary } : {}}>{t(tab)}</Text>
             </Pressable>
           ))}
         </View>
         <Divider />
         <ScrollView>
-          {activeTab === 'terms' && GLOSSARY.map((item, i) => (
-            <View key={i} style={styles.listItem}>
-              <View style={[styles.leftBorder, { borderLeftColor: theme.colors.primary }]} />
-              <View style={styles.content}>
-                <Text style={theme.typography.h3}>{item.term} – {item.termAr}</Text>
-                <Text>{item.definition}</Text>
+          {activeTab === 'terms' &&
+            GLOSSARY.map((item, i) => (
+              <View key={i} style={styles.listItem}>
+                <View style={[styles.leftBorder, { borderLeftColor: theme.colors.primary }]} />
+                <View style={styles.content}>
+                  <Text style={theme.typography.h3}>
+                    {item.term} – {item.termAr}
+                  </Text>
+                  <Text>{item.definition}</Text>
+                </View>
               </View>
-            </View>
-          ))}
-          {activeTab === 'verses' && INHERITANCE_VERSES.map((v, i) => (
-            <View key={i} style={styles.listItem}>
-              <View style={[styles.leftBorder, { borderLeftColor: theme.colors.success }]} />
-              <View style={styles.content}>
-                <Text style={theme.typography.h4}>{v.surah} {v.verseNumber}</Text>
-                <Text>{v.arabic}</Text>
-                <Text>{v.translation}</Text>
+            ))}
+          {activeTab === 'verses' &&
+            INHERITANCE_VERSES.map((v, i) => (
+              <View key={i} style={styles.listItem}>
+                <View style={[styles.leftBorder, { borderLeftColor: theme.colors.success }]} />
+                <View style={styles.content}>
+                  <Text style={theme.typography.h4}>
+                    {v.surah} {v.verseNumber}
+                  </Text>
+                  <Text>{v.arabic}</Text>
+                  <Text>{v.translation}</Text>
+                </View>
               </View>
-            </View>
-          ))}
-          {activeTab === 'hadith' && HADITH.map((h, i) => (
-            <View key={i} style={styles.listItem}>
-              <View style={[styles.leftBorder, { borderLeftColor: theme.colors.warning }]} />
-              <View style={styles.content}>
-                <Text>{h.text}</Text>
-                <Text style={theme.typography.caption}>{h.reference}</Text>
+            ))}
+          {activeTab === 'hadith' &&
+            HADITH.map((h, i) => (
+              <View key={i} style={styles.listItem}>
+                <View style={[styles.leftBorder, { borderLeftColor: theme.colors.warning }]} />
+                <View style={styles.content}>
+                  <Text>{h.text}</Text>
+                  <Text style={theme.typography.caption}>{h.reference}</Text>
+                </View>
               </View>
-            </View>
-          ))}
+            ))}
           {activeTab === 'fiqh' && <Text>Fiqh rules content (from FiqhRules screen merged)</Text>}
         </ScrollView>
       </View>

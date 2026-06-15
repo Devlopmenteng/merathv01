@@ -25,7 +25,9 @@ export const RadioButton: React.FC<Props> = ({ label, value, selected, onSelect,
       ]}
     >
       <View style={[styles.radio, { borderColor: theme.colors.primary }]}>
-        {selected && <View style={[styles.radioInner, { backgroundColor: theme.colors.primary }]} />}
+        {selected && (
+          <View style={[styles.radioInner, { backgroundColor: theme.colors.primary }]} />
+        )}
       </View>
       <Text
         style={[
@@ -41,7 +43,16 @@ export const RadioButton: React.FC<Props> = ({ label, value, selected, onSelect,
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', paddingVertical: 12, paddingHorizontal: 0, marginBottom: 8 },
-  radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginRight: I18nManager.isRTL ? 0 : 12, marginLeft: I18nManager.isRTL ? 12 : 0 },
+  radio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: I18nManager.isRTL ? 0 : 12,
+    marginLeft: I18nManager.isRTL ? 12 : 0,
+  },
   radioInner: { width: 10, height: 10, borderRadius: 5 },
   disabled: { opacity: 0.5 },
   pressed: { opacity: 0.8 },

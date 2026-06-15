@@ -32,6 +32,16 @@ export const FAB: React.FC<Props> = ({ onPress, icon, disabled }) => {
 };
 
 const styles = StyleSheet.create({
-  fab: { position: 'absolute', bottom: 16, right: 16, width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center', elevation: 0 },
+  fab: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 0,
+  },
   icon: { fontSize: 24 },
 });

@@ -13,17 +13,26 @@ export const History = ({ navigation }: { navigation: any }) => {
   const [entries, setEntries] = useState<AuditEntry[]>([]);
   const [filter, setFilter] = useState('');
 
-  useEffect(() => { getAuditTrail().then(setEntries); }, []);
+  useEffect(() => {
+    getAuditTrail().then(setEntries);
+  }, []);
 
-  const filtered = entries.filter(e => e.caseName?.includes(filter) || e.madhab.includes(filter));
+  const filtered = entries.filter((e) => e.caseName?.includes(filter) || e.madhab.includes(filter));
 
   const renderItem = ({ item }: { item: AuditEntry }) => (
-    <Pressable onPress={() => navigation.navigate('CalculationSteps', { auditEntry: item })} style={({ pressed }) => [styles.item, pressed && { opacity: 0.7 }]}>
+    <Pressable
+      onPress={() => navigation.navigate('CalculationSteps', { auditEntry: item })}
+      style={({ pressed }) => [styles.item, pressed && { opacity: 0.7 }]}
+    >
       <View style={[styles.leftBorder, { borderLeftColor: theme.colors.primary }]} />
       <View style={styles.content}>
         <Text style={theme.typography.h4}>{item.caseName || t('no_name')}</Text>
-        <Text style={theme.typography.caption}>{item.madhab} • {item.caseDate}</Text>
-        <Text>{t('netEstate')}: {item.netTotal}</Text>
+        <Text style={theme.typography.caption}>
+          {item.madhab} • {item.caseDate}
+        </Text>
+        <Text>
+          {t('netEstate')}: {item.netTotal}
+        </Text>
       </View>
     </Pressable>
   );
@@ -32,8 +41,15 @@ export const History = ({ navigation }: { navigation: any }) => {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={{ padding: theme.spacing.lg, paddingTop: insets.top + theme.spacing.lg }}>
         <Text style={theme.typography.h1}>{t('history_screen_title')}</Text>
-        <TextInput placeholder={t('search_placeholder')} value={filter} onChangeText={setFilter} style={styles.searchInput} />
-        <ScrollView horizontal style={{ marginVertical: 8 }}><Chip label="All" selected /> <Chip label="Hanafi" /> <Chip label="Maliki" /></ScrollView>
+        <TextInput
+          placeholder={t('search_placeholder')}
+          value={filter}
+          onChangeText={setFilter}
+          style={styles.searchInput}
+        />
+        <ScrollView horizontal style={{ marginVertical: 8 }}>
+          <Chip label="All" selected /> <Chip label="Hanafi" /> <Chip label="Maliki" />
+        </ScrollView>
         <Divider />
         <FlatList data={filtered} renderItem={renderItem} keyExtractor={(_, i) => String(i)} />
       </View>
@@ -43,7 +59,13 @@ export const History = ({ navigation }: { navigation: any }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  searchInput: { borderWidth: 1, borderColor: '#ccc', padding: 8, borderRadius: 8, marginVertical: 8 },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 8,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
   item: { flexDirection: 'row', marginBottom: 12, paddingVertical: 8 },
   leftBorder: { borderLeftWidth: 4, marginRight: 12 },
   content: { flex: 1 },

@@ -23,9 +23,20 @@ export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigat
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 80 }}>
-        <Text style={[theme.typography.h1, { marginBottom: theme.spacing.md }]}>{t('select_heirs')}</Text>
-        <HeirSelector heirs={state.heirs} onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })} />
-        <Button title={t('calculate_inheritance')} onPress={handleCalculate} mode="filled" fullWidth style={{ marginTop: theme.spacing.lg }} />
+        <Text style={[theme.typography.h1, { marginBottom: theme.spacing.md }]}>
+          {t('select_heirs')}
+        </Text>
+        <HeirSelector
+          heirs={state.heirs}
+          onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })}
+        />
+        <Button
+          title={t('calculate_inheritance')}
+          onPress={handleCalculate}
+          mode="filled"
+          fullWidth
+          style={{ marginTop: theme.spacing.lg }}
+        />
       </ScrollView>
       <FAB onPress={handleReset} icon="⟳" />
     </View>

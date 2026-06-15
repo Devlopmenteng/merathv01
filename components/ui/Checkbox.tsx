@@ -26,13 +26,21 @@ export const Checkbox: React.FC<Props> = ({ label, checked, onToggle, disabled }
       <View
         style={[
           styles.checkbox,
-          { borderColor: theme.colors.primary, backgroundColor: checked ? theme.colors.primary : 'transparent' },
+          {
+            borderColor: theme.colors.primary,
+            backgroundColor: checked ? theme.colors.primary : 'transparent',
+          },
         ]}
       >
         {checked && <Text style={[styles.checkmark, { color: theme.colors.onPrimary }]}>✓</Text>}
       </View>
       {label && (
-        <Text style={[theme.typography.body, { color: disabled ? theme.colors.text.disabled : theme.colors.onBackground }]}>
+        <Text
+          style={[
+            theme.typography.body,
+            { color: disabled ? theme.colors.text.disabled : theme.colors.onBackground },
+          ]}
+        >
           {label}
         </Text>
       )}
@@ -42,7 +50,16 @@ export const Checkbox: React.FC<Props> = ({ label, checked, onToggle, disabled }
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', paddingVertical: 8, paddingHorizontal: 0 },
-  checkbox: { width: 20, height: 20, borderRadius: 4, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginRight: I18nManager.isRTL ? 0 : 12, marginLeft: I18nManager.isRTL ? 12 : 0 },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: I18nManager.isRTL ? 0 : 12,
+    marginLeft: I18nManager.isRTL ? 12 : 0,
+  },
   checkmark: { fontSize: 12, fontWeight: 'bold' },
   disabled: { opacity: 0.5 },
   pressed: { opacity: 0.8 },

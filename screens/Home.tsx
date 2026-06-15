@@ -14,10 +14,12 @@ type HomeNavigation = { navigate: (screen: string, params?: any) => void };
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { } = useResponsive();
+  const {} = useResponsive();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-  const openTemplates = useCallback(() => { bottomSheetRef.current?.present(); }, []);
+  const openTemplates = useCallback(() => {
+    bottomSheetRef.current?.present();
+  }, []);
 
   const menuItems = [
     { title: t('calculate_inheritance'), icon: '📊', screen: 'EstateSetup', primary: true },
@@ -29,21 +31,33 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   return (
     <BottomSheetModalProvider>
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: insets.bottom + theme.spacing.xxl, paddingTop: insets.top + theme.spacing.lg }}>
+        <ScrollView
+          contentContainerStyle={{
+            padding: theme.spacing.lg,
+            paddingBottom: insets.bottom + theme.spacing.xxl,
+            paddingTop: insets.top + theme.spacing.lg,
+          }}
+        >
           <View style={styles.header}>
-            <Text style={[theme.typography.h1, styles.title]}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
-            <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>{t('app_description')}</Text>
+            <Text style={[theme.typography.h1, styles.title]}>
+              {t('merath_v10__islamic_inheritance_calculator')}
+            </Text>
+            <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>
+              {t('app_description')}
+            </Text>
           </View>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsScroll}>
-            {['four_schools', 'blood_relatives', 'awl_radd'].map(key => <Chip key={key} label={t(key)} selected={false} />)}
+            {['four_schools', 'blood_relatives', 'awl_radd'].map((key) => (
+              <Chip key={key} label={t(key)} selected={false} />
+            ))}
             <Chip label={t('quick_templates')} onPress={openTemplates} selected={false} />
           </ScrollView>
 
           <Divider />
 
           <View>
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <Pressable
                 key={item.screen}
                 onPress={() => navigation.navigate(item.screen)}
@@ -58,25 +72,40 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                   <Text style={styles.icon}>{item.icon}</Text>
                 </View>
                 <View style={styles.menuText}>
-                  <Text style={[theme.typography.h3, { color: theme.colors.onSurface }]}>{item.title}</Text>
+                  <Text style={[theme.typography.h3, { color: theme.colors.onSurface }]}>
+                    {item.title}
+                  </Text>
                 </View>
-                <Text style={[styles.chevron, { color: theme.colors.outline }]}>{I18nManager.isRTL ? '←' : '→'}</Text>
+                <Text style={[styles.chevron, { color: theme.colors.outline }]}>
+                  {I18nManager.isRTL ? '←' : '→'}
+                </Text>
               </Pressable>
             ))}
           </View>
         </ScrollView>
 
-        <BottomSheetModal ref={bottomSheetRef} snapPoints={['60%']} backgroundStyle={{ backgroundColor: theme.colors.surface }}>
+        <BottomSheetModal
+          ref={bottomSheetRef}
+          snapPoints={['60%']}
+          backgroundStyle={{ backgroundColor: theme.colors.surface }}
+        >
           <View style={{ padding: theme.spacing.lg }}>
-            <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>{t('quick_templates')}</Text>
-            {SCENARIO_TEMPLATES.slice(0, 10).map(template => (
+            <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>
+              {t('quick_templates')}
+            </Text>
+            {SCENARIO_TEMPLATES.slice(0, 10).map((template) => (
               <Pressable
                 key={template.id}
-                onPress={() => { bottomSheetRef.current?.dismiss(); navigation.navigate('HeirSelection', { template }); }}
+                onPress={() => {
+                  bottomSheetRef.current?.dismiss();
+                  navigation.navigate('HeirSelection', { template });
+                }}
                 style={({ pressed }) => [styles.templateItem, pressed && { opacity: 0.7 }]}
               >
                 <Text style={theme.typography.body}>{template.name}</Text>
-                <Text style={[theme.typography.caption, { color: theme.colors.text.secondary }]}>{template.description}</Text>
+                <Text style={[theme.typography.caption, { color: theme.colors.text.secondary }]}>
+                  {template.description}
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -91,10 +120,27 @@ const styles = StyleSheet.create({
   header: { marginBottom: 24 },
   title: { marginBottom: 8 },
   chipsScroll: { flexDirection: 'row', marginBottom: 16 },
-  menuItem: { alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)' },
-  iconContainer: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderLeftWidth: 4, marginRight: I18nManager.isRTL ? 0 : 16, marginLeft: I18nManager.isRTL ? 16 : 0 },
+  menuItem: {
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderLeftWidth: 4,
+    marginRight: I18nManager.isRTL ? 0 : 16,
+    marginLeft: I18nManager.isRTL ? 16 : 0,
+  },
   icon: { fontSize: 24 },
   menuText: { flex: 1 },
   chevron: { fontSize: 20 },
-  templateItem: { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)' },
+  templateItem: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
 });

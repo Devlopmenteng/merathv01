@@ -29,32 +29,89 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
   const [will, setWill] = useState(state.will ? String(state.will) : '');
 
   const handleNext = useCallback(() => {
-    dispatch({ type: 'SET_ESTATE', payload: { total: parseFloat(total) || 0, funeral: parseFloat(funeral) || 0, debts: parseFloat(debts) || 0, will: parseFloat(will) || 0 } });
+    dispatch({
+      type: 'SET_ESTATE',
+      payload: {
+        total: parseFloat(total) || 0,
+        funeral: parseFloat(funeral) || 0,
+        debts: parseFloat(debts) || 0,
+        will: parseFloat(will) || 0,
+      },
+    });
     navigation.navigate('HeirSelection');
   }, [total, funeral, debts, will, dispatch, navigation]);
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: insets.bottom + theme.spacing.xxl, paddingTop: insets.top + theme.spacing.lg }}>
-        <Text style={[theme.typography.h1, { marginBottom: theme.spacing.md }]}>{t('estate_details')}</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1, backgroundColor: theme.colors.background }}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          padding: theme.spacing.lg,
+          paddingBottom: insets.bottom + theme.spacing.xxl,
+          paddingTop: insets.top + theme.spacing.lg,
+        }}
+      >
+        <Text style={[theme.typography.h1, { marginBottom: theme.spacing.md }]}>
+          {t('estate_details')}
+        </Text>
 
         <LeftBorderView color={theme.colors.primary}>
-          <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>{t('select_madhab')}</Text>
-          {MADHABS.map(madhab => (
-            <RadioButton key={madhab.value} label={madhab.label} value={madhab.value} selected={state.madhab === madhab.value} onSelect={(val) => dispatch({ type: 'SET_MADHAB', payload: val })} />
+          <Text style={[theme.typography.h3, { marginBottom: theme.spacing.sm }]}>
+            {t('select_madhab')}
+          </Text>
+          {MADHABS.map((madhab) => (
+            <RadioButton
+              key={madhab.value}
+              label={madhab.label}
+              value={madhab.value}
+              selected={state.madhab === madhab.value}
+              onSelect={(val) => dispatch({ type: 'SET_MADHAB', payload: val })}
+            />
           ))}
         </LeftBorderView>
 
         <Divider />
 
         <LeftBorderView>
-          <Input label={t('total_estate')} value={total} onChangeText={setTotal} keyboardType="numeric" currency />
-          <Input label={t('funeral_costs')} value={funeral} onChangeText={setFuneral} keyboardType="numeric" currency />
-          <Input label={t('debts')} value={debts} onChangeText={setDebts} keyboardType="numeric" currency />
-          <Input label={t('will_optional')} value={will} onChangeText={setWill} keyboardType="numeric" currency />
+          <Input
+            label={t('total_estate')}
+            value={total}
+            onChangeText={setTotal}
+            keyboardType="numeric"
+            currency
+          />
+          <Input
+            label={t('funeral_costs')}
+            value={funeral}
+            onChangeText={setFuneral}
+            keyboardType="numeric"
+            currency
+          />
+          <Input
+            label={t('debts')}
+            value={debts}
+            onChangeText={setDebts}
+            keyboardType="numeric"
+            currency
+          />
+          <Input
+            label={t('will_optional')}
+            value={will}
+            onChangeText={setWill}
+            keyboardType="numeric"
+            currency
+          />
         </LeftBorderView>
 
-        <Button title={t('next_select_school')} onPress={handleNext} mode="filled" fullWidth style={{ marginTop: theme.spacing.lg }} />
+        <Button
+          title={t('next_select_school')}
+          onPress={handleNext}
+          mode="filled"
+          fullWidth
+          style={{ marginTop: theme.spacing.lg }}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
