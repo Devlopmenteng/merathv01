@@ -7,7 +7,11 @@ import { Divider } from '../components/ui/Divider';
 import { Chip } from '../components/ui/Chip';
 import { t } from '../lib/i18n';
 
-export const History = ({ navigation }: { navigation: { navigate: (screen: string, params?: Record<string, unknown>) => void } }) => {
+export const History = ({
+  navigation,
+}: {
+  navigation: { navigate: (screen: string, params?: Record<string, unknown>) => void };
+}) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
   const [entries, setEntries] = useState<AuditEntry[]>([]);
