@@ -1,4 +1,4 @@
-// Unified Islamic-inspired design system for Merath
+// Modern design system for Merath - Inspired by HTML concept
 // ─────────────────────────────────────────────────
 
 // ── 8px grid spacing (with 2px/4px micro steps) ──
@@ -88,75 +88,75 @@ export const elevation = {
 
 // ── Chart palette (8 color‑blind safe colors, verified via Machado 2009) ──
 const chartColors = [
-  '#1B5E3B',
-  '#C8923C',
-  '#A93545',
-  '#2E6B8A',
-  '#CC79A7',
-  '#6B8E7B',
-  '#B87D3A',
-  '#7799BB',
+  '#4f46e5', // Primary indigo
+  '#10b981', // Success green
+  '#f59e0b', // Warning amber
+  '#ef4444', // Danger red
+  '#3b82f6', // Info blue
+  '#8b5cf6', // Purple
+  '#ec4899', // Pink
+  '#06b6d4', // Cyan
 ];
 
-// ── Madhab accent colors ──
+// ── Madhab accent colors (HTML-inspired) ──
 const madhabColors = {
-  hanafi: '#A93545',
-  maliki: '#B87D3A',
-  shafii: '#2E6B8A',
-  hanbali: '#4A7C59',
+  hanafi: '#dc2626', // Red gradient
+  maliki: '#7c3aed', // Purple gradient
+  shafii: '#059669', // Green gradient
+  hanbali: '#0284c7', // Blue gradient
 };
 
-// ── Light Theme — Parchment & Paradise Green ──
+// ── Light Theme — Modern Gradient Design ──
 export const lightTheme = {
   colors: {
-    primary: '#1B5E3B',
-    primaryDark: '#0F3D26',
-    primaryLight: '#E6F2EC',
-    primaryContainer: '#E6F2EC',
-    secondary: '#C8923C',
-    secondaryLight: '#FDF3E3',
-    secondaryContainer: '#FDF3E3',
-    tertiary: '#CC79A7',
-    tertiaryContainer: '#F9ECF3',
-    accent: '#1A6B7A',
-    accentLight: '#E4F2F5',
-    success: '#2E7D32',
-    successLight: '#E8F5E9',
-    warning: '#E68A00',
-    warningLight: '#FFF8E1',
-    error: '#BA1A1A',
-    errorLight: '#FFEBEE',
-    errorContainer: '#FFDAD6',
-    info: '#1565C0',
-    infoLight: '#E3F2FD',
-    background: '#FAF7F2',
-    surface: '#FFFFFF',
-    surfaceVariant: '#F0EBE3',
-    surfaceTint: '#1B5E3B',
-    outline: '#7A766C',
-    outlineVariant: '#CBC4B8',
-    backdrop: 'rgba(26, 20, 12, 0.55)',
+    primary: '#4f46e5', // Indigo
+    primaryDark: '#3730a3', // Darker indigo
+    primaryLight: '#e0e7ff', // Light indigo
+    primaryContainer: '#e0e7ff',
+    secondary: '#8b5cf6', // Purple
+    secondaryLight: '#ede9fe',
+    secondaryContainer: '#ede9fe',
+    tertiary: '#ec4899', // Pink
+    tertiaryContainer: '#fce7f3',
+    accent: '#06b6d4', // Cyan
+    accentLight: '#cffafe',
+    success: '#10b981', // Emerald
+    successLight: '#d1fae5',
+    warning: '#f59e0b', // Amber
+    warningLight: '#fef3c7',
+    error: '#ef4444', // Red
+    errorLight: '#fee2e2',
+    errorContainer: '#fecaca',
+    info: '#3b82f6', // Blue
+    infoLight: '#dbeafe',
+    background: '#f8fafc', // Slate 50
+    surface: '#ffffff',
+    surfaceVariant: '#f1f5f9', // Slate 100
+    surfaceTint: '#4f46e5',
+    outline: '#cbd5e1', // Slate 300
+    outlineVariant: '#e2e8f0', // Slate 200
+    backdrop: 'rgba(15, 23, 42, 0.6)',
     scrim: 'rgba(0, 0, 0, 0.32)',
     text: {
-      primary: '#1A1612',
-      secondary: '#5C5347',
-      disabled: '#9E9589',
+      primary: '#0f172a', // Slate 900
+      secondary: '#64748b', // Slate 500
+      disabled: '#94a3b8', // Slate 400
     },
-    onPrimary: '#FFFFFF',
-    onSecondary: '#FFFFFF',
-    onBackground: '#1C1B16',
-    onSurface: '#1C1B16',
-    onSurfaceVariant: '#49473E',
-    shadow: '#1A1612',
+    onPrimary: '#ffffff',
+    onSecondary: '#ffffff',
+    onBackground: '#0f172a',
+    onSurface: '#0f172a',
+    onSurfaceVariant: '#475569',
+    shadow: '#1e293b', // Slate 800
     chart: chartColors,
     madhab: madhabColors,
     elevationLevels: {
-      level0: '#FAF7F2',
-      level1: '#FFFFFF',
-      level2: '#FFFFFF',
-      level3: '#FFFFFF',
-      level4: '#FFFFFF',
-      level5: '#FFFFFF',
+      level0: '#f8fafc',
+      level1: '#ffffff',
+      level2: '#ffffff',
+      level3: '#ffffff',
+      level4: '#ffffff',
+      level5: '#ffffff',
     },
   },
   spacing,
@@ -165,47 +165,47 @@ export const lightTheme = {
   elevation,
 };
 
-// ── Dark Theme — Warm Charcoal & Luminous Green ──
+// ── Dark Theme — Modern Dark Slate & Luminous Accents ──
 export const darkTheme = {
   colors: {
-    primary: '#6FCF97',
-    primaryDark: '#1B5E3B',
-    primaryLight: '#1A3A2A',
-    primaryContainer: '#1A3A2A',
-    secondary: '#F0C75E',
-    secondaryLight: '#3D2E10',
-    secondaryContainer: '#3D2E10',
-    tertiary: '#D6B48A',
-    tertiaryContainer: '#3D2E20',
-    accent: '#5ABCC9',
-    accentLight: '#132D32',
-    success: '#66BB6A',
-    successLight: '#1B3A1B',
-    warning: '#FFB74D',
-    warningLight: '#3D2E0A',
-    error: '#EF5350',
-    errorLight: '#4A1616',
-    errorContainer: '#4A1616',
-    info: '#42A5F5',
-    infoLight: '#0D2744',
-    background: '#1A1814',
-    surface: '#22201C',
-    surfaceVariant: '#2D2A24',
-    surfaceTint: '#6FCF97',
-    outline: '#8D887E',
-    outlineVariant: '#44413A',
-    backdrop: 'rgba(0, 0, 0, 0.7)',
-    scrim: 'rgba(0, 0, 0, 0.6)',
+    primary: '#818cf8', // Lighter indigo for dark mode
+    primaryDark: '#4f46e5',
+    primaryLight: '#1e1b4b',
+    primaryContainer: '#1e1b4b',
+    secondary: '#a78bfa', // Lighter purple
+    secondaryLight: '#2e1065',
+    secondaryContainer: '#2e1065',
+    tertiary: '#f472b6', // Lighter pink
+    tertiaryContainer: '#4a044e',
+    accent: '#22d3ee', // Lighter cyan
+    accentLight: '#164e63',
+    success: '#34d399', // Lighter emerald
+    successLight: '#064e3b',
+    warning: '#fbbf24', // Lighter amber
+    warningLight: '#451a03',
+    error: '#f87171', // Lighter red
+    errorLight: '#7f1d1d',
+    errorContainer: '#450a0a',
+    info: '#60a5fa', // Lighter blue
+    infoLight: '#1e3a8a',
+    background: '#0f172a', // Slate 900
+    surface: '#1e293b', // Slate 800
+    surfaceVariant: '#334155', // Slate 700
+    surfaceTint: '#818cf8',
+    outline: '#475569',
+    outlineVariant: '#1e293b',
+    backdrop: 'rgba(0, 0, 0, 0.8)',
+    scrim: 'rgba(0, 0, 0, 0.7)',
     text: {
-      primary: '#E3E0D8',
-      secondary: '#C4BDB2',
-      disabled: '#7A746C',
+      primary: '#f1f5f9', // Slate 100
+      secondary: '#cbd5e1', // Slate 300
+      disabled: '#64748b', // Slate 500
     },
-    onPrimary: '#0A2A16',
-    onSecondary: '#2A1E05',
-    onBackground: '#E3E0D8',
-    onSurface: '#E3E0D8',
-    onSurfaceVariant: '#C4BDB2',
+    onPrimary: '#0f172a',
+    onSecondary: '#0f172a',
+    onBackground: '#f1f5f9',
+    onSurface: '#f1f5f9',
+    onSurfaceVariant: '#e2e8f0',
     shadow: '#000000',
     chart: chartColors,
     madhab: madhabColors,

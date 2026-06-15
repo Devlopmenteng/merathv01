@@ -78,26 +78,56 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
           paddingTop: insets.top + theme.spacing.lg,
         }}
       >
-        <View style={{ marginBottom: theme.spacing.xxl }}>
-          <Text
-            style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
-          >
-            {t('merath_v10__islamic_inheritance_calculator')}
-          </Text>
-          <Text
-            style={[
-              theme.typography.body,
-              {
-                color: theme.colors.text.secondary,
-                marginTop: theme.spacing.sm,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              },
-            ]}
-          >
-            {t('app_description')}
-          </Text>
+        {/* Modern Header with Gradient Background */}
+        <View
+          style={[
+            styles.headerSection,
+            {
+              backgroundColor: 'rgba(79, 70, 229, 0.1)',
+              borderLeftColor: theme.colors.primary,
+            },
+          ]}
+        >
+          <View style={styles.headerContent}>
+            <View style={[styles.iconContainer, { backgroundColor: 'rgba(79, 70, 229, 0.2)' }]}>
+              <Text style={styles.headerIcon}>⚖️</Text>
+            </View>
+            <View>
+              <Text
+                style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+              >
+                {t('merath_v10__islamic_inheritance_calculator')}
+              </Text>
+              <Text
+                style={[
+                  theme.typography.body,
+                  {
+                    color: theme.colors.text.secondary,
+                    marginTop: theme.spacing.sm,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                  },
+                ]}
+              >
+                {t('app_description')}
+              </Text>
+            </View>
+          </View>
+          
+          {/* Feature Badges */}
+          <View style={styles.badgesContainer}>
+            <View style={[styles.featureBadge, { backgroundColor: 'rgba(79, 70, 229, 0.1)' }]}>
+              <Text style={[styles.badgeText, { color: theme.colors.primary }]}>✓ {t('four_schools')}</Text>
+            </View>
+            <View style={[styles.featureBadge, { backgroundColor: 'rgba(16, 185, 129, 0.1)' }]}>
+              <Text style={[styles.badgeText, { color: theme.colors.success }]}>✓ {t('blood_relatives')}</Text>
+            </View>
+            <View style={[styles.featureBadge, { backgroundColor: 'rgba(245, 158, 11, 0.1)' }]}>
+              <Text style={[styles.badgeText, { color: theme.colors.warning }]}>✓ {t('awl_radd')}</Text>
+            </View>
+          </View>
         </View>
 
+        {/* Modern Menu Grid */}
         <View style={[isGrid ? styles.gridContainer : styles.listContainer]}>
           {menuItems.map((item) => (
             <TouchableOpacity
@@ -173,6 +203,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  headerSection: {
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 24,
+    borderLeftWidth: 4,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  headerIcon: {
+    fontSize: 32,
+  },
+  badgesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  featureBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
   menuItemContent: {
     flex: 1,
   },
@@ -188,7 +246,7 @@ const styles = StyleSheet.create({
     marginLeft: I18nManager.isRTL ? 16 : 0,
   },
   primaryIconContainer: {
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    backgroundColor: 'rgba(79, 70, 229, 0.1)',
   },
   menuIcon: {
     fontSize: 28,
@@ -197,7 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
   },
   primaryMenuItem: {
-    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+    backgroundColor: 'rgba(79, 70, 229, 0.05)',
   },
   listItem: {
     padding: 16,

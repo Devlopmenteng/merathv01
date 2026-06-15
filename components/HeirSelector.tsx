@@ -125,21 +125,34 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
 
   return (
     <ScrollView style={styles.container}>
-      {/* Templates Button */}
-      <TouchableOpacity style={styles.templatesButton} onPress={() => setTemplatesVisible(true)}>
-        <Text style={{ color: theme.colors.primary }}>{t('quick_templates')}</Text>
+      {/* Modern Templates Button */}
+      <TouchableOpacity
+        style={[styles.templatesButton, { backgroundColor: theme.colors.primaryLight }]}
+        onPress={() => setTemplatesVisible(true)}
+      >
+        <Text style={[styles.templatesButtonText, { color: theme.colors.primary }]}>
+          {t('quick_templates')}
+        </Text>
       </TouchableOpacity>
 
       {CATEGORIES.map((cat) => {
         const open = expanded.has(cat.titleKey);
         return (
-          <View key={cat.titleKey} style={styles.category}>
+          <View key={cat.titleKey} style={[styles.category, { backgroundColor: theme.colors.surface }]}>
             <TouchableOpacity
               onPress={() => toggleExpand(cat.titleKey)}
-              style={[styles.categoryHeader, { borderBottomColor: theme.colors.outline }]}
+              style={[
+                styles.categoryHeader,
+                {
+                  borderBottomColor: theme.colors.outline,
+                  backgroundColor: open ? theme.colors.primaryLight : 'transparent',
+                },
+              ]}
             >
-              <Text style={theme.typography.h3}>{t(cat.titleKey)}</Text>
-              <Text style={{ fontSize: 18 }}>
+              <Text style={[styles.categoryTitle, { color: open ? theme.colors.primary : theme.colors.onSurface }]}>
+                {t(cat.titleKey)}
+              </Text>
+              <Text style={[styles.categoryIcon, { color: theme.colors.text.secondary }]}>
                 {open ? flipDirectionalIcon('▲') : flipDirectionalIcon('▼')}
               </Text>
             </TouchableOpacity>
@@ -193,19 +206,30 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 12,
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(59, 130, 246, 0.2)',
     alignItems: 'center',
+  },
+  templatesButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   category: {
     marginBottom: 12,
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   categoryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 12,
+    padding: 16,
     borderBottomWidth: 1,
+  },
+  categoryTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  categoryIcon: {
+    fontSize: 18,
   },
 });

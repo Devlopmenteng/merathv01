@@ -33,10 +33,11 @@ export const HeirRow: React.FC<HeirRowProps> = ({
   const rowStyle = [
     styles.row,
     {
+      backgroundColor: isBlocked ? theme.colors.errorLight : (count > 0 ? theme.colors.primaryLight : 'transparent'),
       borderBottomColor: theme.colors.outline,
       flexDirection: (I18nManager.isRTL ? 'row-reverse' : 'row') as 'row' | 'row-reverse',
     },
-    isBlocked && { backgroundColor: theme.colors.error + '20', opacity: 0.7 },
+    isBlocked && { opacity: 0.6 },
   ];
 
   const iconColor = isBlocked ? theme.colors.outline : iconConfig?.color || theme.colors.primary;
@@ -97,13 +98,18 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
   },
   iconContainer: {
-    width: 40,
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginEnd: 12,
   },
   icon: {
     fontSize: 24,

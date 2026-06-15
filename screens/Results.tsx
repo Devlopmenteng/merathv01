@@ -29,6 +29,8 @@ import { useResponsive } from '../hooks/useResponsive';
 import { ResultsSkeleton } from '../components/SkeletonCard';
 import { StepTimeline } from '../components/StepTimeline';
 import { StickyBottomBar } from '../components/StickyBottomBar';
+import { Badge } from '../components/ui/Badge';
+import { Alert } from '../components/ui/Alert';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { saveAuditTrail } from '../lib/services/AuditTrailService';
@@ -248,31 +250,19 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   const specialCaseElements = useMemo(() => {
     if (!result) return null;
     const cases = [];
-    if (result.awlApplied) cases.push({ name: t('awl'), desc: t('awl_desc') });
-    if (result.raddApplied) cases.push({ name: t('radd'), desc: t('radd_desc') });
+    if (result.awlApplied) cases.push({ name: t('awl'), variant: 'awl' as const, desc: t('awl_desc') });
+    if (result.raddApplied) cases.push({ name: t('radd'), variant: 'radd' as const, desc: t('radd_desc') });
     if (result.bloodRelativesApplied)
-      cases.push({ name: t('bloodRelatives'), desc: t('blood_relatives_desc') });
+      cases.push({ name: t('bloodRelatives'), variant: 'relative' as const, desc: t('blood_relatives_desc') });
     if (cases.length === 0) return null;
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginVertical: 12 }}>
         {cases.map((c, i) => (
-          <View
-            key={i}
-            style={{
-              backgroundColor: theme.colors.primaryLight,
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 20,
-            }}
-          >
-            <Text style={[{ color: theme.colors.primary }, theme.typography.caption]}>
-              {c.name}
-            </Text>
-          </View>
+          <Badge key={i} text={c.name} variant={c.variant} />
         ))}
       </View>
     );
-  }, [result, theme.colors.primaryLight, theme.colors.primary]);
+  }, [result]);
 
   const distributionRows = useMemo(() => {
     if (!result) return null;
@@ -411,54 +401,57 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
 
           {/* Treasury Notification */}
           {result.shares.some((s) => s.key === 'treasury') && (
-            <View
-              style={{
-                backgroundColor: theme.colors.warning,
-                padding: theme.spacing.md,
-                borderRadius: theme.borderRadius.sm,
-                marginBottom: theme.spacing.md,
-              }}
-              accessibilityLiveRegion="assertive"
-              accessibilityRole="alert"
-            >
-              <Text
-                style={[
-                  theme.typography.body,
-                  { color: theme.colors.onBackground, textAlign: 'center' },
-                ]}
-              >
-                {t('treasury_notice')}
-              </Text>
-            </View>
+            <Alert
+              title="⚠️ Treasury"
+              message={t('treasury_notice')}
+              variant="warning"
+              style={{ marginBottom: theme.spacing.md }}
+            />
           )}
 
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.primaryDark || theme.colors.primary]}
             start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={{
-              borderRadius: theme.borderRadius.lg,
+              borderRadius: 16,
               padding: theme.spacing.xl,
               alignItems: 'center',
               marginBottom: theme.spacing.lg,
-              ...theme.elevation.medium,
+              ...theme.elevation.large,
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.1)',
             }}
           >
-            <Text
-              style={[
-                { color: theme.colors.onPrimary, marginBottom: theme.spacing.xs },
-                theme.typography.button,
-              ]}
-            >
-              {t('netEstate')}
-            </Text>
-            <AnimatedNumber
-              value={result.netEstate ?? 0}
-              style={[
-                { color: theme.colors.onPrimary, fontWeight: 'bold' },
-                theme.typography.display,
-              ]}
-            />
+            <View style={{ alignItems: 'center', gap: 8 }}>
+              <Text
+                style={[
+                  { color: theme.colors.onPrimary, opacity: 0.9 },
+                  theme.typography.label,
+                ]}
+              >
+                {t('netEstate')}
+              </Text>
+              <AnimatedNumber
+                value={result.netEstate ?? 0}
+                style={[
+                  { 
+                    color: theme.colors.onPrimary, 
+                    fontWeight: '800',
+                    fontSize: 48,
+                    letterSpacing: -1,
+                  },
+                ]}
+              />
+              <Text
+                style={[
+                  { color: theme.colors.onPrimary, opacity: 0.7 },
+                  theme.typography.caption,
+                ]}
+              >
+                {t('currency_symbol')}{formatCurrencyLocale(result.netEstate ?? 0, i18n.locale)}
+              </Text>
+            </View>
           </LinearGradient>
 
           <View

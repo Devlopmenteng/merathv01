@@ -13,7 +13,7 @@ import { useAppTheme } from '../../hooks/useAppTheme';
 type Props = {
   title: string;
   onPress: () => void;
-  mode?: 'filled' | 'outlined' | 'gradient' | 'ghost';
+  mode?: 'filled' | 'outlined' | 'gradient' | 'ghost' | 'success' | 'danger' | 'warning';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   loading?: boolean;
@@ -67,6 +67,17 @@ export const Button: React.FC<Props> = memo(
     const isOutlined = mode === 'outlined';
     const isGradient = mode === 'gradient';
     const isGhost = mode === 'ghost';
+    const isSuccess = mode === 'success';
+    const isDanger = mode === 'danger';
+    const isWarning = mode === 'warning';
+
+    // Determine gradient colors based on mode
+    const gradientColors = useMemo(() => {
+      if (isSuccess) return [theme.colors.success, '#059669'] as const;
+      if (isDanger) return [theme.colors.error, '#dc2626'] as const;
+      if (isWarning) return [theme.colors.warning, '#d97706'] as const;
+      return [theme.colors.primary, theme.colors.primaryDark] as const;
+    }, [isSuccess, isDanger, isWarning, theme.colors]);
 
     const sizeStyles = useMemo(() => {
       switch (size) {
@@ -99,7 +110,14 @@ export const Button: React.FC<Props> = memo(
       }
     }, [size]);
 
-    const textColor = isOutlined || isGhost ? theme.colors.primary : theme.colors.onPrimary;
+    const buttonColor = useMemo(() => {
+      if (isSuccess) return theme.colors.success;
+      if (isDanger) return theme.colors.error;
+      if (isWarning) return theme.colors.warning;
+      return theme.colors.primary;
+    }, [isSuccess, isDanger, isWarning, theme.colors]);
+
+    const textColor = isOutlined || isGhost ? buttonColor : theme.colors.onPrimary;
 
     const content = (
       <View style={styles.contentRow}>
@@ -126,9 +144,9 @@ export const Button: React.FC<Props> = memo(
       styles.button,
       sizeStyles,
       {
-        backgroundColor: isOutlined || isGhost ? 'transparent' : theme.colors.primary,
+        backgroundColor: isOutlined || isGhost ? 'transparent' : buttonColor,
         borderWidth: isOutlined || isGhost ? 2 : 0,
-        borderColor: theme.colors.primary,
+        borderColor: buttonColor,
         borderRadius: theme.borderRadius.md,
         alignItems: 'center',
         opacity: disabled ? 0.38 : 1,
@@ -139,7 +157,7 @@ export const Button: React.FC<Props> = memo(
       style,
     ];
 
-    if (isGradient) {
+    if (isGradient || isSuccess || isDanger || isWarning) {
       return (
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
@@ -155,7 +173,7 @@ export const Button: React.FC<Props> = memo(
             style={[buttonStyle, { overflow: 'hidden', borderWidth: 0 }]}
           >
             <LinearGradient
-              colors={[theme.colors.primary, theme.colors.primaryDark]}
+              colors={gradientColors}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[

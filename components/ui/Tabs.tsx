@@ -1,129 +1,96 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, I18nManager } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 
-type Tab = {
+type TabItem = {
   key: string;
-  label: string;
+  title: string;
+  icon?: string;
 };
 
-type TabsProps = {
-  tabs: Tab[];
+type Props = {
+  tabs: TabItem[];
   activeTab: string;
-  onChange: (key: string) => void;
-  variant?: 'primary' | 'underlined';
+  onTabChange: (key: string) => void;
+  style?: object;
 };
 
-export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, variant = 'primary' }) => {
+export const Tabs: React.FC<Props> = ({ tabs, activeTab, onTabChange, style }) => {
   const theme = useAppTheme();
+  const [indicatorPosition] = useState(new Animated.Value(0));
 
-  if (variant === 'underlined') {
-    return (
-      <View
-        style={[styles.underlinedContainer, { borderBottomColor: theme.colors.outlineVariant }]}
-      >
-        {tabs.map((tab) => {
-          const isActive = tab.key === activeTab;
+  const handleTabChange = (key: string, index: number) => {
+    onTabChange(key);
+    Animated.spring(indicatorPosition, {
+      toValue: index,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 0,
+    }).start();
+  };
+
+  return (
+    <View style={[styles.container, style]}>
+      <View style={styles.tabsContainer}>
+        {tabs.map((tab, index) => {
+          const isActive = activeTab === tab.key;
           return (
             <TouchableOpacity
               key={tab.key}
-              onPress={() => onChange(tab.key)}
+              onPress={() => handleTabChange(tab.key, index)}
+              style={styles.tab}
+              activeOpacity={0.7}
               accessibilityRole="tab"
               accessibilityState={{ selected: isActive }}
-              style={styles.underlinedTab}
+              accessibilityLabel={tab.title}
             >
               <Text
                 style={[
-                  styles.underlinedLabel,
+                  styles.tabText,
                   {
-                    color: isActive ? theme.colors.primary : theme.colors.onSurfaceVariant,
-                    fontWeight: isActive ? '600' : '400',
+                    color: isActive ? theme.colors.primary : theme.colors.text.secondary,
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
                   },
                 ]}
               >
-                {tab.label}
+                {tab.icon && `${tab.icon} `}
+                {tab.title}
               </Text>
-              {isActive && (
-                <View
-                  style={[styles.underlinedIndicator, { backgroundColor: theme.colors.primary }]}
-                />
-              )}
+              {isActive && <Animated.View style={[styles.indicator, { backgroundColor: theme.colors.primary }]} />}
             </TouchableOpacity>
           );
         })}
       </View>
-    );
-  }
-
-  return (
-    <View style={[styles.primaryContainer, { backgroundColor: theme.colors.surfaceVariant }]}>
-      {tabs.map((tab) => {
-        const isActive = tab.key === activeTab;
-        return (
-          <TouchableOpacity
-            key={tab.key}
-            onPress={() => onChange(tab.key)}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: isActive }}
-            style={[
-              styles.primaryTab,
-              isActive && {
-                backgroundColor: theme.colors.primary,
-                ...theme.elevation.small,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.primaryLabel,
-                {
-                  color: isActive ? theme.colors.onPrimary : theme.colors.onSurface,
-                  fontWeight: isActive ? '600' : '400',
-                },
-              ]}
-            >
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  primaryContainer: {
+  container: {
+    marginBottom: 16,
+  },
+  tabsContainer: {
     flexDirection: 'row',
-    borderRadius: 12,
-    padding: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
   },
-  primaryTab: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  primaryLabel: {
-    fontSize: 14,
-  },
-  underlinedContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 2,
-  },
-  underlinedTab: {
-    flex: 1,
+  tab: {
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    alignItems: 'center',
+    position: 'relative',
   },
-  underlinedLabel: {
+  tabText: {
     fontSize: 14,
-    marginBottom: 8,
+    fontWeight: '600',
+    textAlign: 'center',
   },
-  underlinedIndicator: {
+  indicator: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     height: 3,
     borderTopLeftRadius: 3,
     borderTopRightRadius: 3,
-    width: '60%',
   },
 });

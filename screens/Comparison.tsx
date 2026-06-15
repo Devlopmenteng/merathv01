@@ -21,6 +21,9 @@ import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeForma
 import { heirsArrayToObject } from '../lib/utils/heirsConverter';
 import { t, i18n } from '../lib/i18n';
 import { localizeHeirName } from '../lib/utils/shareLocalization';
+import { Alert as AlertComponent } from '../components/ui/Alert';
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
 
 const TABS: Madhab[] = ['hanafi', 'maliki', 'shafii', 'hanbali'];
 
@@ -261,193 +264,79 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
     ]);
   }, [state, comparisonSummary, differenceAnalysis, results]);
 
-  const renderSummary = () => (
-    <View
-      style={{
-        backgroundColor: theme.colors.surfaceVariant,
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 16,
-      }}
-    >
-      <Text
-        style={[
-          {
-            fontWeight: 'bold',
-            marginBottom: 12,
-            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-          },
-          theme.typography.button,
-        ]}
-      >
-        {t('comparison_summary')}
-      </Text>
+  const renderSummary = () => {
+    const hasSpecialCases = Object.keys(comparisonSummary.specialCasesApplied).length > 0;
+    const message = comparisonSummary.totalMadhhabsDiffering === 0
+      ? `✅ ${t('all_madhhabs_consistent')}`
+      : `⚠️ ${comparisonSummary.totalMadhhabsDiffering} ${t('madhhabs_differ')}${comparisonSummary.maxDifference > 0 ? `\n${t('max_difference')}: ${formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (${localizeHeirName(comparisonSummary.mostDifferentHeir, comparisonSummary.mostDifferentHeir)})` : ''}`;
 
-      {comparisonSummary.totalMadhhabsDiffering === 0 ? (
-        <Text
-          style={{
-            color: theme.colors.success,
-            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-          }}
-        >
-          ✅ {t('all_madhhabs_consistent')}
-        </Text>
-      ) : (
-        <View>
-          <Text style={{ marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
-            ⚠️ {comparisonSummary.totalMadhhabsDiffering} {t('madhhabs_differ')}
-          </Text>
-          {comparisonSummary.maxDifference > 0 && (
-            <Text style={{ marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
-              {t('max_difference')}:{' '}
-              {formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (
-              {localizeHeirName(
-                comparisonSummary.mostDifferentHeir,
-                comparisonSummary.mostDifferentHeir
-              )}
-              )
-            </Text>
-          )}
-        </View>
-      )}
-
-      {Object.keys(comparisonSummary.specialCasesApplied).length > 0 && (
-        <View style={{ marginTop: 12 }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              marginBottom: 8,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            }}
-          >
-            {t('special_cases')}:
-          </Text>
-          {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
+    return (
+      <>
+        <AlertComponent
+          title={t('comparison_summary')}
+          message={message}
+          variant={comparisonSummary.totalMadhhabsDiffering === 0 ? 'success' : 'warning'}
+          style={{ marginBottom: 16 }}
+        />
+        {hasSpecialCases && (
+          <View style={{ 
+            backgroundColor: theme.colors.surfaceVariant, 
+            padding: 16, 
+            borderRadius: 12, 
+            marginBottom: 16 
+          }}>
             <Text
-              key={madhab}
-              style={[
-                { marginBottom: 4, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-                theme.typography.caption,
-              ]}
+              style={{
+                fontWeight: 'bold',
+                marginBottom: 8,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                color: theme.colors.text.primary,
+              }}
             >
-              • {t('madhab_name_' + madhab, { defaultValue: madhab })}: {cases.join(', ')}
+              {t('special_cases')}:
             </Text>
-          ))}
-        </View>
-      )}
-    </View>
-  );
+            {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
+              <View key={madhab} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                <Text
+                  style={{
+                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                    color: theme.colors.text.secondary,
+                  }}
+                >
+                  • {t('madhab_name_' + madhab, { defaultValue: madhab })}:
+                </Text>
+                <Badge text={cases[0]} variant="info" size="small" />
+              </View>
+            ))}
+          </View>
+        )}
+      </>
+    );
+  };
 
   const renderDifferenceAnalysis = () => {
     if (differenceAnalysis.length === 0) {
       return (
-        <View
-          style={{
-            backgroundColor: theme.colors.surfaceVariant,
-            padding: 16,
-            borderRadius: 12,
-            marginBottom: 16,
-          }}
-        >
-          <Text
-            style={{
-              color: theme.colors.success,
-              textAlign: 'center',
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            }}
-          >
-            ✅ {t('no_significant_differences')}
-          </Text>
-        </View>
+        <AlertComponent
+          title="✅ No Differences"
+          message={t('no_significant_differences')}
+          variant="success"
+          style={{ marginBottom: 16 }}
+        />
       );
     }
 
     return (
-      <View
-        style={{
-          backgroundColor: theme.colors.surfaceVariant,
-          padding: 16,
-          borderRadius: 12,
-          marginBottom: 16,
-        }}
-      >
-        <Text
-          style={[
-            {
-              fontWeight: 'bold',
-              marginBottom: 12,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-            theme.typography.button,
-          ]}
-        >
-          {t('special_cases_title')}
-        </Text>
-        <Text
-          style={[
-            {
-              fontWeight: 'bold',
-              marginBottom: 12,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-            theme.typography.button,
-          ]}
-        >
-          {t('difference_analysis')}
-        </Text>
-
-        {differenceAnalysis.slice(0, 5).map((diff, index) => (
-          <View
-            key={index}
-            style={{
-              paddingVertical: 8,
-              borderBottomWidth: 1,
-              borderColor: theme.colors.outline,
-            }}
-          >
-            <Text
-              style={{ fontWeight: 'bold', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
-            >
-              {localizeHeirName(diff.heirKey, diff.heirKey)}
-            </Text>
-            <Text
-              style={[
-                {
-                  color: theme.colors.outline,
-                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                },
-                theme.typography.caption,
-              ]}
-            >
-              {t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs{' '}
-              {t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}
-            </Text>
-            <Text
-              style={[
-                theme.typography.caption,
-                { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-              ]}
-            >
-              Difference: {formatCurrencyLocale(diff.amountDifference, i18n.locale)} (
-              {diff.percentageDifference.toFixed(1)}%)
-            </Text>
-            {diff.isSignificant && (
-              <Text
-                style={[
-                  {
-                    color: theme.colors.warning,
-                    marginTop: 4,
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  },
-                  theme.typography.caption,
-                ]}
-              >
-                ⚠️ {t('significant_difference')}
-              </Text>
-            )}
-          </View>
-        ))}
-      </View>
+      <AlertComponent
+        title={t('difference_analysis')}
+        message={
+          differenceAnalysis.slice(0, 5).map((diff) => (
+            `${localizeHeirName(diff.heirKey, diff.heirKey)}: ${t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs ${t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}\nDiff: ${formatCurrencyLocale(diff.amountDifference, i18n.locale)} (${diff.percentageDifference.toFixed(1)}%)${diff.isSignificant ? '\n⚠️ Significant' : ''}`
+          )).join('\n\n')
+        }
+        variant="info"
+        style={{ marginBottom: 16 }}
+      />
     );
   };
 
@@ -615,25 +504,11 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
         >
           {t('comparison_title')}
         </Text>
-        <TouchableOpacity
+        <Button
+          title={t('back_to_home')}
           onPress={() => navigation.navigate('Home')}
-          style={{
-            backgroundColor: theme.colors.surfaceVariant,
-            paddingHorizontal: 12,
-            paddingVertical: 8,
-            borderRadius: 8,
-          }}
-        >
-          <Text
-            style={{
-              color: theme.colors.primary,
-              fontWeight: 'bold',
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            }}
-          >
-            {t('back_to_home')}
-          </Text>
-        </TouchableOpacity>
+          mode="outlined"
+        />
       </View>
 
       {loading && (

@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, Text, FlatList, I18nManager, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { Madhab } from '../lib/engine/types';
 import { t } from '../lib/i18n';
 import { StepIndicator } from '../components/StepIndicator';
+import { elevation } from '../lib/constants/theme';
 
-const madhabs: { key: Madhab; title: string; desc: string; icon: string }[] = [
-  { key: 'hanafi', title: t('madhab_hanafi'), desc: t('madhab_hanafi_desc'), icon: '📖' },
-  { key: 'maliki', title: t('madhab_maliki'), desc: t('madhab_maliki_desc'), icon: '⚖️' },
-  { key: 'shafii', title: t('madhab_shafii'), desc: t('madhab_shafii_desc'), icon: '🕌' },
-  { key: 'hanbali', title: t('madhab_hanbali'), desc: t('madhab_hanbali_desc'), icon: '📜' },
+const madhabs: { key: Madhab; title: string; desc: string; icon: string; colors: readonly [string, string] }[] = [
+  { key: 'hanafi', title: t('madhab_hanafi'), desc: t('madhab_hanafi_desc'), icon: '🔴', colors: ['#dc2626', '#ef4444'] as const },
+  { key: 'maliki', title: t('madhab_maliki'), desc: t('madhab_maliki_desc'), icon: '🟣', colors: ['#7c3aed', '#8b5cf6'] as const },
+  { key: 'shafii', title: t('madhab_shafii'), desc: t('madhab_shafii_desc'), icon: '🟢', colors: ['#059669', '#10b981'] as const },
+  { key: 'hanbali', title: t('madhab_hanbali'), desc: t('madhab_hanbali_desc'), icon: '🔵', colors: ['#0284c7', '#0ea5e9'] as const },
 ];
 
 type MadhabSelectNavigation = {
@@ -49,36 +51,25 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
               dispatch({ type: 'SET_MADHAB', payload: item.key });
               navigation.navigate('HeirSelection');
             }}
-            activeOpacity={0.7}
+            activeOpacity={0.8}
             accessibilityLabel={`${item.title}. ${item.desc}`}
             accessibilityHint={t('a11y_select_madhab', { madhab: item.title })}
             accessibilityRole="button"
           >
-            <View style={[styles.leftBorder, { backgroundColor: theme.colors.primary }]} />
-            <Text style={[styles.icon, theme.typography.h1]}>{item.icon}</Text>
-            <View style={styles.content}>
-              <Text
-                style={[
-                  theme.typography.h2,
-                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-                ]}
-              >
+            <LinearGradient
+              colors={item.colors}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.madhabGradient}
+            >
+              <Text style={styles.madhabIcon}>{item.icon}</Text>
+              <Text style={[styles.madhabTitle, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
                 {item.title}
               </Text>
-              <Text
-                style={[
-                  theme.typography.body,
-                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-                ]}
-              >
-                {item.desc}
+              <Text style={[styles.madhabDesc, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+                {t('imam')} {item.title}
               </Text>
-            </View>
-            {I18nManager.isRTL ? (
-              <Text style={styles.chevron}>‹</Text>
-            ) : (
-              <Text style={styles.chevron}>›</Text>
-            )}
+            </LinearGradient>
           </TouchableOpacity>
         )}
       />
@@ -88,36 +79,30 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
 
 const styles = StyleSheet.create({
   madhabItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
     marginBottom: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 16,
+    overflow: 'hidden',
+    ...elevation.medium,
   },
-  leftBorder: {
-    position: 'absolute',
-    left: I18nManager.isRTL ? undefined : 0,
-    right: I18nManager.isRTL ? 0 : undefined,
-    top: 0,
-    bottom: 0,
-    width: 4,
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderTopRightRadius: I18nManager.isRTL ? 12 : 0,
-    borderBottomRightRadius: I18nManager.isRTL ? 12 : 0,
+  madhabGradient: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  icon: {
-    marginHorizontal: 16,
+  madhabIcon: {
+    fontSize: 36,
+    marginBottom: 8,
   },
-  content: {
-    flex: 1,
+  madhabTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 4,
+    textAlign: 'center',
   },
-  chevron: {
-    fontSize: 28,
-    color: '#9CA3AF',
-    marginHorizontal: 8,
+  madhabDesc: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
   },
 });

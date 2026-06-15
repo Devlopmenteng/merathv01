@@ -124,13 +124,21 @@ export const Input: React.FC<Props> = ({
       }
     : theme.elevation.small;
 
+  const backgroundColor = error
+    ? theme.colors.errorLight
+    : focused && !error
+      ? theme.colors.primaryLight
+      : disabled
+        ? theme.colors.surfaceVariant
+        : theme.colors.surface;
+
   return (
     <View style={[styles.container, style]}>
       <View
         style={[
           styles.inputContainer,
           {
-            backgroundColor: disabled ? theme.colors.surfaceVariant : theme.colors.surface,
+            backgroundColor,
             borderColor,
             ...shadowStyle,
           },

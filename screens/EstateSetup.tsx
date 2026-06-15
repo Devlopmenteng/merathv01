@@ -136,20 +136,41 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         currentStep={0}
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
-      <Text
-        style={[
-          theme.typography.h1,
-          { marginBottom: theme.spacing.lg, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-        ]}
-      >
-        {t('estate_details')}
-      </Text>
+      
+      {/* Modern Header */}
+      <View style={[styles.headerSection, { borderLeftColor: theme.colors.primary }]}>
+        <View style={styles.headerContent}>
+          <View style={[styles.headerIcon, { backgroundColor: theme.colors.primaryLight }]}>
+            <Text style={styles.headerEmoji}>💰</Text>
+          </View>
+          <View>
+            <Text
+              style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+            >
+              {t('estate_details')}
+            </Text>
+            <Text
+              style={[
+                theme.typography.body,
+                {
+                  color: theme.colors.text.secondary,
+                  marginTop: theme.spacing.xs,
+                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                },
+              ]}
+            >
+              {t('estate_details_description')}
+            </Text>
+          </View>
+        </View>
+      </View>
 
-      <View style={styles.sectionCard}>
+      {/* Case Info Section */}
+      <View style={[styles.sectionCard, { backgroundColor: theme.colors.surface }]}>
         <Text
           style={[
             theme.typography.h4,
-            { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            { marginBottom: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           ]}
         >
           {t('case_info')}
@@ -175,11 +196,12 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         />
       </View>
 
-      <View style={styles.sectionCard}>
+      {/* Estate Section with Alert */}
+      <View style={[styles.sectionCard, { backgroundColor: theme.colors.surface }]}>
         <Text
           style={[
             theme.typography.h4,
-            { marginBottom: theme.spacing.sm, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            { marginBottom: theme.spacing.md, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           ]}
         >
           {t('estate')}
@@ -241,8 +263,19 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         />
       </View>
 
+      {/* Order of Rights Alert */}
+      <View style={[styles.infoAlert, { borderLeftColor: theme.colors.warning }]}>
+        <Text style={[styles.alertTitle, { color: theme.colors.warning }]}>
+          ⚠️ {t('rights_order_title')}
+        </Text>
+        <Text style={[styles.alertMessage, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          {t('rights_order_description')}
+        </Text>
+      </View>
+
+      {/* Summary Card */}
       {(parseFloat(total) > 0 || parseFloat(funeral) > 0 || parseFloat(debts) > 0) && (
-        <View style={styles.summaryCard}>
+        <View style={[styles.summaryCard, { backgroundColor: theme.colors.successLight }]}>
           <Text
             style={[
               theme.typography.h4,
@@ -257,7 +290,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
           <Text
             style={[
               theme.typography.display,
-              { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr', color: theme.colors.success },
             ]}
             accessibilityLiveRegion="polite"
             accessibilityLabel={`${t('net_estate')}: ${formatCurrencyLocale(Math.max(0, net - (parseFloat(will) || 0)), i18n.locale)}`}
@@ -284,17 +317,20 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         </View>
       )}
 
+      {/* Template Button */}
       <Button
-        title="📋 Use Quick Setup Template"
+        title={t('quick_templates')}
         onPress={() => setShowTemplateSelector(true)}
         mode="outlined"
         fullWidth
         style={{ marginBottom: theme.spacing.md }}
       />
 
+      {/* Next Button */}
       <Button
         title={t('next_select_school')}
         onPress={onNext}
+        mode="gradient"
         disabled={!total || parseFloat(total) <= 0}
         style={{ marginTop: theme.spacing.lg }}
         accessibilityLabel={t('next_select_school')}
@@ -316,19 +352,55 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
 };
 
 const styles = StyleSheet.create({
+  headerSection: {
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 24,
+    borderLeftWidth: 4,
+    backgroundColor: 'rgba(79, 70, 229, 0.05)',
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  headerEmoji: {
+    fontSize: 28,
+  },
   sectionCard: {
     marginBottom: 24,
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    padding: 20,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
-  summaryCard: {
+  infoAlert: {
     padding: 16,
-    marginBottom: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    marginBottom: 24,
+    borderLeftWidth: 4,
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+  },
+  alertTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 8,
+  },
+  alertMessage: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  summaryCard: {
+    padding: 20,
+    marginBottom: 24,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(16, 185, 129, 0.2)',
   },
