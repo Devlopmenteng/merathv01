@@ -6,7 +6,8 @@ import { GLOSSARY } from '../lib/constants/glossary';
 import { FiqhRules } from './FiqhRules';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
 import { t, i18n } from '../lib/i18n';
-import { backArrow } from '../lib/utils/rtl';
+import { Button } from '../components/ui/Button';
+import { elevation } from '../lib/constants/theme';
 
 type Tab = 'glossary' | 'verses' | 'hadith' | 'fiqh';
 
@@ -21,21 +22,12 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <TouchableOpacity
+      <Button
+        title={t('back_to_home')}
         onPress={() => navigation.navigate('Home')}
-        style={{ padding: theme.spacing.md, marginBottom: theme.spacing.sm }}
-        accessibilityLabel={t('back_to_home')}
-        accessibilityRole="button"
-      >
-        <Text
-          style={[
-            { color: theme.colors.primary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-            theme.typography.button,
-          ]}
-        >
-          {backArrow()} {t('back_to_home')}
-        </Text>
-      </TouchableOpacity>
+        mode="outlined"
+        style={{ margin: theme.spacing.md, marginBottom: theme.spacing.sm }}
+      />
       <View style={{ flexDirection: 'row', padding: theme.spacing.md, gap: theme.spacing.sm }}>
         <TouchableOpacity
           style={{
@@ -154,7 +146,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={styles.glossaryItem}
+                style={[styles.glossaryItem, { backgroundColor: theme.colors.surface }]}
                 activeOpacity={0.7}
                 accessibilityLabel={`${item.term} – ${item.termAr}. ${item.definition}`}
                 accessibilityRole="button"
@@ -188,7 +180,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={INHERITANCE_VERSES}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <View style={styles.verseItem}>
+              <View style={[styles.verseItem, { backgroundColor: theme.colors.surface }]}>
                 <Text
                   style={[
                     theme.typography.h3,
@@ -241,7 +233,7 @@ export const Glossary = ({ navigation }: { navigation: GlossaryNavigation }) => 
             data={HADITH}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={({ item }) => (
-              <View style={styles.hadithItem}>
+              <View style={[styles.hadithItem, { backgroundColor: theme.colors.surface }]}>
                 <Text
                   style={[
                     { marginBottom: 8, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
@@ -282,9 +274,9 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   leftBorder: {
     position: 'absolute',
@@ -306,16 +298,16 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   hadithItem: {
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
 });

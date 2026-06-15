@@ -11,7 +11,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t, tp, i18n } from '../lib/i18n';
-import { backArrow } from '../lib/utils/rtl';
 import { formatNumber } from '../lib/utils/localeFormatting';
 import {
   SCENARIO_TEMPLATES,
@@ -25,6 +24,8 @@ import {
 } from '../lib/templates/ScenarioTemplates';
 import { useCalc } from '../lib/context/CalcContext';
 import { Alert } from 'react-native';
+import { Button } from '../components/ui/Button';
+import { elevation } from '../lib/constants/theme';
 
 type TestCasesNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -119,22 +120,12 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
         paddingBottom: insets.bottom,
       }}
     >
-      <TouchableOpacity
+      <Button
+        title={t('back')}
         onPress={() => navigation.goBack()}
+        mode="outlined"
         style={{ marginBottom: theme.spacing.md }}
-        accessibilityLabel={t('back')}
-        accessibilityRole="button"
-      >
-        <Text
-          style={[
-            { color: theme.colors.primary },
-            theme.typography.button,
-            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-          ]}
-        >
-          {backArrow()} {t('back')}
-        </Text>
-      </TouchableOpacity>
+      />
 
       <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
         {t('test_cases')}
@@ -243,7 +234,7 @@ export const TestCases = ({ navigation }: { navigation: TestCasesNavigation }) =
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredTemplates.length === 0 ? (
-          <View style={styles.emptyState}>
+          <View style={[styles.emptyState, { backgroundColor: theme.colors.surface }]}>
             <Text
               style={[
                 theme.typography.body,
@@ -465,9 +456,9 @@ const styles = StyleSheet.create({
   emptyState: {
     padding: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   detailsRow: {
     flexDirection: 'row',

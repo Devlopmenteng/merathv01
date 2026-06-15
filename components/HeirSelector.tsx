@@ -138,7 +138,10 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
       {CATEGORIES.map((cat) => {
         const open = expanded.has(cat.titleKey);
         return (
-          <View key={cat.titleKey} style={[styles.category, { backgroundColor: theme.colors.surface }]}>
+          <View
+            key={cat.titleKey}
+            style={[styles.category, { backgroundColor: theme.colors.surface }]}
+          >
             <TouchableOpacity
               onPress={() => toggleExpand(cat.titleKey)}
               style={[
@@ -149,7 +152,12 @@ export const HeirSelector: React.FC<Props> = React.memo(({ heirs, onHeirsChange 
                 },
               ]}
             >
-              <Text style={[styles.categoryTitle, { color: open ? theme.colors.primary : theme.colors.onSurface }]}>
+              <Text
+                style={[
+                  styles.categoryTitle,
+                  { color: open ? theme.colors.primary : theme.colors.onSurface },
+                ]}
+              >
                 {t(cat.titleKey)}
               </Text>
               <Text style={[styles.categoryIcon, { color: theme.colors.text.secondary }]}>

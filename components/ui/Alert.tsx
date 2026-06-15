@@ -55,11 +55,21 @@ export const Alert: React.FC<Props> = memo(({ title, message, variant = 'info', 
         </View>
         <View style={styles.textContainer}>
           {title && (
-            <Text style={[styles.title, { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+            <Text
+              style={[
+                styles.title,
+                { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+              ]}
+            >
               {title}
             </Text>
           )}
-          <Text style={[styles.message, { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+          <Text
+            style={[
+              styles.message,
+              { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            ]}
+          >
             {message}
           </Text>
         </View>

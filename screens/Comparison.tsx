@@ -266,9 +266,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
 
   const renderSummary = () => {
     const hasSpecialCases = Object.keys(comparisonSummary.specialCasesApplied).length > 0;
-    const message = comparisonSummary.totalMadhhabsDiffering === 0
-      ? `✅ ${t('all_madhhabs_consistent')}`
-      : `⚠️ ${comparisonSummary.totalMadhhabsDiffering} ${t('madhhabs_differ')}${comparisonSummary.maxDifference > 0 ? `\n${t('max_difference')}: ${formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (${localizeHeirName(comparisonSummary.mostDifferentHeir, comparisonSummary.mostDifferentHeir)})` : ''}`;
+    const message =
+      comparisonSummary.totalMadhhabsDiffering === 0
+        ? `✅ ${t('all_madhhabs_consistent')}`
+        : `⚠️ ${comparisonSummary.totalMadhhabsDiffering} ${t('madhhabs_differ')}${comparisonSummary.maxDifference > 0 ? `\n${t('max_difference')}: ${formatCurrencyLocale(comparisonSummary.maxDifference, i18n.locale)} (${localizeHeirName(comparisonSummary.mostDifferentHeir, comparisonSummary.mostDifferentHeir)})` : ''}`;
 
     return (
       <>
@@ -279,12 +280,14 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
           style={{ marginBottom: 16 }}
         />
         {hasSpecialCases && (
-          <View style={{ 
-            backgroundColor: theme.colors.surfaceVariant, 
-            padding: 16, 
-            borderRadius: 12, 
-            marginBottom: 16 
-          }}>
+          <View
+            style={{
+              backgroundColor: theme.colors.surfaceVariant,
+              padding: 16,
+              borderRadius: 12,
+              marginBottom: 16,
+            }}
+          >
             <Text
               style={{
                 fontWeight: 'bold',
@@ -296,7 +299,10 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
               {t('special_cases')}:
             </Text>
             {Object.entries(comparisonSummary.specialCasesApplied).map(([madhab, cases]) => (
-              <View key={madhab} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+              <View
+                key={madhab}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 }}
+              >
                 <Text
                   style={{
                     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
@@ -329,11 +335,13 @@ export const Comparison = React.memo(({ navigation }: { navigation: ComparisonNa
     return (
       <AlertComponent
         title={t('difference_analysis')}
-        message={
-          differenceAnalysis.slice(0, 5).map((diff) => (
-            `${localizeHeirName(diff.heirKey, diff.heirKey)}: ${t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs ${t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}\nDiff: ${formatCurrencyLocale(diff.amountDifference, i18n.locale)} (${diff.percentageDifference.toFixed(1)}%)${diff.isSignificant ? '\n⚠️ Significant' : ''}`
-          )).join('\n\n')
-        }
+        message={differenceAnalysis
+          .slice(0, 5)
+          .map(
+            (diff) =>
+              `${localizeHeirName(diff.heirKey, diff.heirKey)}: ${t('madhab_name_' + diff.madhab1, { defaultValue: diff.madhab1 })} vs ${t('madhab_name_' + diff.madhab2, { defaultValue: diff.madhab2 })}\nDiff: ${formatCurrencyLocale(diff.amountDifference, i18n.locale)} (${diff.percentageDifference.toFixed(1)}%)${diff.isSignificant ? '\n⚠️ Significant' : ''}`
+          )
+          .join('\n\n')}
         variant="info"
         style={{ marginBottom: 16 }}
       />

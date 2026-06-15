@@ -94,7 +94,10 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
             </View>
             <View>
               <Text
-                style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+                style={[
+                  theme.typography.h1,
+                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                ]}
               >
                 {t('merath_v10__islamic_inheritance_calculator')}
               </Text>
@@ -112,17 +115,23 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
               </Text>
             </View>
           </View>
-          
+
           {/* Feature Badges */}
           <View style={styles.badgesContainer}>
             <View style={[styles.featureBadge, { backgroundColor: 'rgba(79, 70, 229, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.primary }]}>✓ {t('four_schools')}</Text>
+              <Text style={[styles.badgeText, { color: theme.colors.primary }]}>
+                ✓ {t('four_schools')}
+              </Text>
             </View>
             <View style={[styles.featureBadge, { backgroundColor: 'rgba(16, 185, 129, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.success }]}>✓ {t('blood_relatives')}</Text>
+              <Text style={[styles.badgeText, { color: theme.colors.success }]}>
+                ✓ {t('blood_relatives')}
+              </Text>
             </View>
             <View style={[styles.featureBadge, { backgroundColor: 'rgba(245, 158, 11, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.warning }]}>✓ {t('awl_radd')}</Text>
+              <Text style={[styles.badgeText, { color: theme.colors.warning }]}>
+                ✓ {t('awl_radd')}
+              </Text>
             </View>
           </View>
         </View>

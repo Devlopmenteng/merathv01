@@ -250,10 +250,16 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
   const specialCaseElements = useMemo(() => {
     if (!result) return null;
     const cases = [];
-    if (result.awlApplied) cases.push({ name: t('awl'), variant: 'awl' as const, desc: t('awl_desc') });
-    if (result.raddApplied) cases.push({ name: t('radd'), variant: 'radd' as const, desc: t('radd_desc') });
+    if (result.awlApplied)
+      cases.push({ name: t('awl'), variant: 'awl' as const, desc: t('awl_desc') });
+    if (result.raddApplied)
+      cases.push({ name: t('radd'), variant: 'radd' as const, desc: t('radd_desc') });
     if (result.bloodRelativesApplied)
-      cases.push({ name: t('bloodRelatives'), variant: 'relative' as const, desc: t('blood_relatives_desc') });
+      cases.push({
+        name: t('bloodRelatives'),
+        variant: 'relative' as const,
+        desc: t('blood_relatives_desc'),
+      });
     if (cases.length === 0) return null;
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginVertical: 12 }}>
@@ -425,18 +431,15 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
           >
             <View style={{ alignItems: 'center', gap: 8 }}>
               <Text
-                style={[
-                  { color: theme.colors.onPrimary, opacity: 0.9 },
-                  theme.typography.label,
-                ]}
+                style={[{ color: theme.colors.onPrimary, opacity: 0.9 }, theme.typography.label]}
               >
                 {t('netEstate')}
               </Text>
               <AnimatedNumber
                 value={result.netEstate ?? 0}
                 style={[
-                  { 
-                    color: theme.colors.onPrimary, 
+                  {
+                    color: theme.colors.onPrimary,
                     fontWeight: '800',
                     fontSize: 48,
                     letterSpacing: -1,
@@ -444,12 +447,10 @@ export const Results = ({ navigation }: { navigation: ResultsNavigation }) => {
                 ]}
               />
               <Text
-                style={[
-                  { color: theme.colors.onPrimary, opacity: 0.7 },
-                  theme.typography.caption,
-                ]}
+                style={[{ color: theme.colors.onPrimary, opacity: 0.7 }, theme.typography.caption]}
               >
-                {t('currency_symbol')}{formatCurrencyLocale(result.netEstate ?? 0, i18n.locale)}
+                {t('currency_symbol')}
+                {formatCurrencyLocale(result.netEstate ?? 0, i18n.locale)}
               </Text>
             </View>
           </LinearGradient>

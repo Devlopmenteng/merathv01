@@ -4,7 +4,17 @@ import { useAppTheme } from '../../hooks/useAppTheme';
 
 type Props = {
   text: string;
-  variant?: 'fard' | 'asaba' | 'radd' | 'blocked' | 'relative' | 'awl' | 'success' | 'warning' | 'error' | 'info';
+  variant?:
+    | 'fard'
+    | 'asaba'
+    | 'radd'
+    | 'blocked'
+    | 'relative'
+    | 'awl'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info';
   size?: 'small' | 'medium' | 'large';
   style?: object;
 };

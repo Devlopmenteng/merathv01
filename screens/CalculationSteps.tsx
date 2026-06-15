@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, I18nManager, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, I18nManager, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
-import { backArrow } from '../lib/utils/rtl';
 import { localizeStepTitle, localizeStepDesc } from '../lib/utils/shareLocalization';
+import { Button } from '../components/ui/Button';
+import { elevation } from '../lib/constants/theme';
 
 type CalculationStepsNavigation = {
   navigate: (screen: string) => void;
@@ -36,22 +37,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           paddingBottom: insets.bottom,
         }}
       >
-        <TouchableOpacity
+        <Button
+          title={t('back')}
           onPress={() => navigation.goBack()}
+          mode="outlined"
           style={{ marginBottom: theme.spacing.md }}
-          accessibilityLabel={t('back')}
-          accessibilityRole="button"
-        >
-          <Text
-            style={[
-              { color: theme.colors.primary },
-              theme.typography.button,
-              { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-            ]}
-          >
-            {backArrow()} {t('back')}
-          </Text>
-        </TouchableOpacity>
+        />
         <Text
           style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
@@ -78,28 +69,18 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         paddingBottom: insets.bottom,
       }}
     >
-      <TouchableOpacity
+      <Button
+        title={t('back')}
         onPress={() => navigation.goBack()}
+        mode="outlined"
         style={{ marginBottom: theme.spacing.md }}
-        accessibilityLabel={t('back')}
-        accessibilityRole="button"
-      >
-        <Text
-          style={[
-            { color: theme.colors.primary },
-            theme.typography.button,
-            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-          ]}
-        >
-          {backArrow()} {t('back')}
-        </Text>
-      </TouchableOpacity>
+      />
 
       <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
         {t('calculation_steps')}
       </Text>
 
-      <View style={styles.infoCard}>
+      <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
         <Text
           style={[
             theme.typography.bodySmall,
@@ -141,7 +122,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           auditEntry.steps.map((step, index) => (
             <View
               key={index}
-              style={styles.stepCard}
+              style={[styles.stepCard, { backgroundColor: theme.colors.surface }]}
               accessible
               accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
@@ -203,7 +184,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
             </View>
           ))
         ) : (
-          <View style={styles.emptyCard}>
+          <View style={[styles.emptyCard, { backgroundColor: theme.colors.surface }]}>
             <Text
               style={[
                 theme.typography.body,
@@ -216,7 +197,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         )}
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
-          <View style={styles.hijabCard}>
+          <View style={[styles.hijabCard, { backgroundColor: theme.colors.surface }]}>
             <Text
               style={[
                 theme.typography.h3,
@@ -255,32 +236,32 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   stepCard: {
     overflow: 'hidden',
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   emptyCard: {
     padding: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   hijabCard: {
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
-    backgroundColor: 'rgba(239, 68, 68, 0.05)',
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.1)',
+    ...elevation.small,
   },
 });

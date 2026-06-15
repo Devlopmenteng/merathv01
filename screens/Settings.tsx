@@ -18,8 +18,10 @@ import { useTheme } from '../lib/context/ThemeContext';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useLanguage } from '../lib/context/LanguageContext';
 import { t } from '../lib/i18n';
-import { backArrow, forwardArrow } from '../lib/utils/rtl';
+import { forwardArrow } from '../lib/utils/rtl';
 import { showAlert } from '../lib/utils/alerts';
+import { Button } from '../components/ui/Button';
+import { elevation } from '../lib/constants/theme';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -200,23 +202,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
                 )}
               </TouchableOpacity>
             ))}
-            <TouchableOpacity
-              style={{
-                marginTop: theme.spacing.lg,
-                paddingVertical: theme.spacing.md,
-                backgroundColor: theme.colors.primary,
-                borderRadius: theme.borderRadius.md,
-                alignItems: 'center',
-                ...theme.elevation.small,
-              }}
+            <Button
+              title={t('cancel')}
               onPress={() => setLanguageModalVisible(false)}
-              accessibilityLabel={t('cancel')}
-              accessibilityRole="button"
-            >
-              <Text style={{ color: theme.colors.onPrimary, fontWeight: '600' }}>
-                {t('cancel')}
-              </Text>
-            </TouchableOpacity>
+              mode="outlined"
+              style={{ marginTop: theme.spacing.lg }}
+            />
           </View>
         </Pressable>
       </Modal>
@@ -231,22 +222,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         paddingTop: insets.top + theme.spacing.lg,
       }}
     >
-      <TouchableOpacity
+      <Button
+        title={t('back_to_home')}
         onPress={() => navigation.navigate('Home')}
+        mode="outlined"
         style={{ marginBottom: theme.spacing.md }}
-        accessibilityLabel={t('back_to_home')}
-        accessibilityRole="button"
-      >
-        <Text
-          style={[
-            { color: theme.colors.primary },
-            theme.typography.button,
-            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-          ]}
-        >
-          {backArrow()} {t('back_to_home')}
-        </Text>
-      </TouchableOpacity>
+      />
       <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
         {t('settings')}
       </Text>
@@ -257,7 +238,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           {t('appearance')}
         </Text>
-        <View style={styles.settingItem}>
+        <View style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}>
           <Text
             style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
           >
@@ -272,7 +253,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             accessibilityState={{ selected: isDark }}
           />
         </View>
-        <View style={styles.settingItem}>
+        <View style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}>
           <Text
             style={[
               theme.typography.body,
@@ -295,7 +276,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           {t('resources')}
         </Text>
         <TouchableOpacity
-          style={styles.settingItem}
+          style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={() => navigation.navigate('Glossary')}
           accessibilityLabel={t('glossary_and_education')}
           accessibilityHint={t('a11y_view_glossary')}
@@ -316,7 +297,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           {t('about')}
         </Text>
-        <View style={styles.aboutCard}>
+        <View style={[styles.aboutCard, { backgroundColor: theme.colors.surface }]}>
           <Text
             style={[
               theme.typography.h3,
@@ -358,7 +339,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           {t('support')}
         </Text>
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
           <TouchableOpacity
             style={styles.cardItem}
             onPress={handleRateUs}
@@ -402,7 +383,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           {t('legal')}
         </Text>
         <TouchableOpacity
-          style={styles.settingItem}
+          style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={handlePrivacyPolicy}
           accessibilityLabel={t('privacy_policy')}
           accessibilityHint={t('a11y_view_privacy_policy')}
@@ -416,7 +397,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.settingItem, styles.dangerItem]}
+          style={[styles.settingItem, styles.dangerItem, { backgroundColor: theme.colors.surface }]}
           onPress={handleClearCache}
           accessibilityLabel={t('clear_cache_reset')}
           accessibilityHint={t('a11y_clear_cache')}
@@ -433,7 +414,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.settingItem}
+          style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={handleLegalNotices}
           accessibilityLabel={t('legal_notices')}
           accessibilityHint={t('a11y_view_legal_notices')}
@@ -469,24 +450,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 12,
     marginBottom: 8,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   aboutCard: {
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   cardItem: {
     paddingVertical: 16,

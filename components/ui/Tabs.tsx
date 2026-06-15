@@ -56,7 +56,11 @@ export const Tabs: React.FC<Props> = ({ tabs, activeTab, onTabChange, style }) =
                 {tab.icon && `${tab.icon} `}
                 {tab.title}
               </Text>
-              {isActive && <Animated.View style={[styles.indicator, { backgroundColor: theme.colors.primary }]} />}
+              {isActive && (
+                <Animated.View
+                  style={[styles.indicator, { backgroundColor: theme.colors.primary }]}
+                />
+              )}
             </TouchableOpacity>
           );
         })}

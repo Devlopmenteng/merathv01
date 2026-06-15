@@ -136,7 +136,7 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         currentStep={0}
         steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
       />
-      
+
       {/* Modern Header */}
       <View style={[styles.headerSection, { borderLeftColor: theme.colors.primary }]}>
         <View style={styles.headerContent}>
@@ -268,7 +268,9 @@ export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation 
         <Text style={[styles.alertTitle, { color: theme.colors.warning }]}>
           ⚠️ {t('rights_order_title')}
         </Text>
-        <Text style={[styles.alertMessage, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+        <Text
+          style={[styles.alertMessage, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        >
           {t('rights_order_description')}
         </Text>
       </View>

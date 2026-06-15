@@ -9,11 +9,41 @@ import { t } from '../lib/i18n';
 import { StepIndicator } from '../components/StepIndicator';
 import { elevation } from '../lib/constants/theme';
 
-const madhabs: { key: Madhab; title: string; desc: string; icon: string; colors: readonly [string, string] }[] = [
-  { key: 'hanafi', title: t('madhab_hanafi'), desc: t('madhab_hanafi_desc'), icon: '🔴', colors: ['#dc2626', '#ef4444'] as const },
-  { key: 'maliki', title: t('madhab_maliki'), desc: t('madhab_maliki_desc'), icon: '🟣', colors: ['#7c3aed', '#8b5cf6'] as const },
-  { key: 'shafii', title: t('madhab_shafii'), desc: t('madhab_shafii_desc'), icon: '🟢', colors: ['#059669', '#10b981'] as const },
-  { key: 'hanbali', title: t('madhab_hanbali'), desc: t('madhab_hanbali_desc'), icon: '🔵', colors: ['#0284c7', '#0ea5e9'] as const },
+const madhabs: {
+  key: Madhab;
+  title: string;
+  desc: string;
+  icon: string;
+  colors: readonly [string, string];
+}[] = [
+  {
+    key: 'hanafi',
+    title: t('madhab_hanafi'),
+    desc: t('madhab_hanafi_desc'),
+    icon: '🔴',
+    colors: ['#dc2626', '#ef4444'] as const,
+  },
+  {
+    key: 'maliki',
+    title: t('madhab_maliki'),
+    desc: t('madhab_maliki_desc'),
+    icon: '🟣',
+    colors: ['#7c3aed', '#8b5cf6'] as const,
+  },
+  {
+    key: 'shafii',
+    title: t('madhab_shafii'),
+    desc: t('madhab_shafii_desc'),
+    icon: '🟢',
+    colors: ['#059669', '#10b981'] as const,
+  },
+  {
+    key: 'hanbali',
+    title: t('madhab_hanbali'),
+    desc: t('madhab_hanbali_desc'),
+    icon: '🔵',
+    colors: ['#0284c7', '#0ea5e9'] as const,
+  },
 ];
 
 type MadhabSelectNavigation = {
@@ -63,10 +93,17 @@ export const MadhabSelect = ({ navigation }: { navigation: MadhabSelectNavigatio
               style={styles.madhabGradient}
             >
               <Text style={styles.madhabIcon}>{item.icon}</Text>
-              <Text style={[styles.madhabTitle, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+              <Text
+                style={[
+                  styles.madhabTitle,
+                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+                ]}
+              >
                 {item.title}
               </Text>
-              <Text style={[styles.madhabDesc, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+              <Text
+                style={[styles.madhabDesc, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+              >
                 {t('imam')} {item.title}
               </Text>
             </LinearGradient>

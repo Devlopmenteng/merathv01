@@ -5,16 +5,18 @@ import {
   Text,
   FlatList,
   TextInput,
-  TouchableOpacity,
   ActivityIndicator,
   I18nManager,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAuditTrail, searchAuditTrail, AuditEntry } from '../lib/services/AuditTrailService';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { formatCurrency as formatCurrencyLocale } from '../lib/utils/localeFormatting';
-import { backArrow } from '../lib/utils/rtl';
+import { Button } from '../components/ui/Button';
+import { Badge } from '../components/ui/Badge';
+import { elevation } from '../lib/constants/theme';
 
 type HistoryNavigation = {
   navigate: (screen: string, params?: Record<string, unknown>) => void;
@@ -55,9 +57,9 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
 
   const renderItem = ({ item }: { item: AuditEntry }) => (
     <TouchableOpacity
-      style={styles.historyItem}
+      style={[styles.historyItem, { backgroundColor: theme.colors.surface }]}
       onPress={() => navigation.navigate('CalculationSteps', { auditEntry: item })}
-      activeOpacity={0.7}
+      activeOpacity={0.8}
       accessibilityLabel={`${item.caseName || t('no_name')} – ${item.caseDate || t('no_date')}. ${t('madhab')}: ${t('madhab_name_' + item.madhab, { defaultValue: item.madhab })}. ${t('netEstate')}: ${formatCurrencyLocale(item.netTotal, i18n.locale)}`}
       accessibilityHint={t('a11y_view_calculation_details')}
       accessibilityRole="button"
@@ -67,59 +69,38 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         <Text
           style={[
             styles.caseName,
-            theme.typography.button,
-            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
+            theme.typography.h4,
+            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr', color: theme.colors.onSurface },
           ]}
         >
           {item.caseName || t('no_name')} – {item.caseDate || t('no_date')}
         </Text>
-        <Text
-          style={[
-            styles.detailText,
-            {
-              color: theme.colors.text.secondary,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-          ]}
-        >
-          {t('madhab')}: {t('madhab_name_' + item.madhab, { defaultValue: item.madhab })}
-        </Text>
-        <Text
-          style={[
-            styles.detailText,
-            {
-              color: theme.colors.text.secondary,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-          ]}
-        >
-          {t('netEstate')}: {formatCurrencyLocale(item.netTotal, i18n.locale)}
-        </Text>
-        <Text
-          style={[
-            styles.detailText,
-            {
-              marginTop: theme.spacing.sm,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-          ]}
-        >
-          {t('heirs')}:
-        </Text>
+        <View style={styles.detailRow}>
+          <Badge 
+            text={t('madhab_name_' + item.madhab, { defaultValue: item.madhab }).toUpperCase()} 
+            variant="info" 
+            size="small" 
+          />
+          <Text
+            style={[
+              styles.detailText,
+              {
+                color: theme.colors.text.secondary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
+            {t('netEstate')}: {formatCurrencyLocale(item.netTotal, i18n.locale)}
+          </Text>
+        </View>
         <View style={styles.heirsList}>
           {item.shares.slice(0, 3).map((share, i) => (
-            <Text
+            <Badge
               key={i}
-              style={[
-                styles.heirText,
-                {
-                  color: theme.colors.text.secondary,
-                  writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                },
-              ]}
-            >
-              • {share.name}: {formatCurrencyLocale(share.amount, i18n.locale)}
-            </Text>
+              text={`${share.name}: ${formatCurrencyLocale(share.amount, i18n.locale)}`}
+              variant="success"
+              size="small"
+            />
           ))}
           {item.shares.length > 3 && (
             <Text
@@ -155,22 +136,12 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
         paddingBottom: insets.bottom,
       }}
     >
-      <TouchableOpacity
+      <Button
+        title={t('back_to_home')}
         onPress={() => navigation.navigate('Home')}
+        mode="outlined"
         style={{ marginBottom: theme.spacing.md }}
-        accessibilityLabel={t('back_to_home')}
-        accessibilityRole="button"
-      >
-        <Text
-          style={[
-            { color: theme.colors.primary },
-            theme.typography.button,
-            { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-          ]}
-        >
-          {backArrow()} {t('back_to_home')}
-        </Text>
-      </TouchableOpacity>
+      />
       <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
         {t('history_screen_title')}
       </Text>
@@ -180,7 +151,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           borderWidth: 2,
           borderColor: theme.colors.outline,
           borderRadius: theme.borderRadius.md,
-          marginVertical: theme.spacing.md,
+          marginBottom: theme.spacing.md,
           color: theme.colors.onSurface,
           backgroundColor: theme.colors.surface,
           ...theme.elevation.small,
@@ -201,7 +172,7 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text
             style={[
-              theme.typography.button,
+              theme.typography.body,
               {
                 marginTop: 8,
                 color: theme.colors.text.secondary,
@@ -213,18 +184,29 @@ export const History = ({ navigation }: { navigation: HistoryNavigation }) => {
           </Text>
         </View>
       ) : filtered.length === 0 ? (
-        <Text
-          style={[
-            theme.typography.body,
-            {
-              textAlign: 'center',
-              marginTop: theme.spacing.xl,
-              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-            },
-          ]}
-        >
-          {t('no_history')}
-        </Text>
+        <View style={{ 
+          flex: 1, 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          paddingVertical: 40,
+          backgroundColor: theme.colors.surfaceVariant,
+          borderRadius: 12,
+          marginVertical: theme.spacing.xl
+        }}>
+          <Text style={{ fontSize: 48, marginBottom: 16 }}>📜</Text>
+          <Text
+            style={[
+              theme.typography.h3,
+              {
+                textAlign: 'center',
+                color: theme.colors.text.secondary,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              },
+            ]}
+          >
+            {t('no_history')}
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={filtered}
@@ -254,9 +236,9 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
+    ...elevation.small,
   },
   leftBorder: {
     position: 'absolute',
@@ -276,19 +258,26 @@ const styles = StyleSheet.create({
   },
   caseName: {
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: 8,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
   },
   detailText: {
-    fontSize: 13,
+    fontSize: 14,
   },
   heirsList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: 6,
     marginTop: 4,
   },
   heirText: {
     fontSize: 12,
-    marginHorizontal: 4,
+    color: '#9CA3AF',
   },
   chevron: {
     fontSize: 24,

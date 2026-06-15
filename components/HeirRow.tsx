@@ -33,7 +33,11 @@ export const HeirRow: React.FC<HeirRowProps> = ({
   const rowStyle = [
     styles.row,
     {
-      backgroundColor: isBlocked ? theme.colors.errorLight : (count > 0 ? theme.colors.primaryLight : 'transparent'),
+      backgroundColor: isBlocked
+        ? theme.colors.errorLight
+        : count > 0
+          ? theme.colors.primaryLight
+          : 'transparent',
       borderBottomColor: theme.colors.outline,
       flexDirection: (I18nManager.isRTL ? 'row-reverse' : 'row') as 'row' | 'row-reverse',
     },
