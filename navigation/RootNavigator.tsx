@@ -6,13 +6,10 @@ import type { StackAnimationTypes } from 'react-native-screens';
 import { t } from '../lib/i18n';
 import { lightTheme } from '../lib/constants/theme';
 
-// Preload critical screens for better performance
+// Preload critical screens
 const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
 const EstateSetup = lazy(() =>
   import('../screens/EstateSetup').then((module) => ({ default: module.EstateSetup }))
-);
-const MadhabSelect = lazy(() =>
-  import('../screens/MadhabSelect').then((module) => ({ default: module.MadhabSelect }))
 );
 const HeirSelection = lazy(() =>
   import('../screens/HeirSelection').then((module) => ({ default: module.HeirSelection }))
@@ -21,21 +18,7 @@ const Results = lazy(() =>
   import('../screens/Results').then((module) => ({ default: module.Results }))
 );
 
-// Preload critical screens after initial render
-const preloadCriticalScreens = () => {
-  Promise.all([
-    import('../screens/Home'),
-    import('../screens/EstateSetup'),
-    import('../screens/MadhabSelect'),
-    import('../screens/HeirSelection'),
-    import('../screens/Results'),
-  ]);
-};
-
-// Less frequently used screens remain lazy loaded
-const Comparison = lazy(() =>
-  import('../screens/Comparison').then((module) => ({ default: module.Comparison }))
-);
+// Other screens
 const Settings = lazy(() =>
   import('../screens/Settings').then((module) => ({ default: module.Settings }))
 );
@@ -48,28 +31,21 @@ const Glossary = lazy(() =>
 const CalculationSteps = lazy(() =>
   import('../screens/CalculationSteps').then((module) => ({ default: module.CalculationSteps }))
 );
-const TestCases = lazy(() =>
-  import('../screens/TestCases').then((module) => ({ default: module.TestCases }))
-);
 
 const Stack = createNativeStackNavigator();
 
-// Deep linking configuration
 const linking = {
   prefixes: ['merath://', 'https://merath.app'],
   config: {
     screens: {
       Home: '',
       EstateSetup: 'estate',
-      MadhabSelect: 'madhab',
       HeirSelection: 'heirs',
       Results: 'results',
-      Comparison: 'compare',
       Settings: 'settings',
       History: 'history',
       Glossary: 'glossary',
       CalculationSteps: 'steps',
-      TestCases: 'tests',
     },
   },
 };
@@ -88,11 +64,14 @@ const LoadingView = () => (
 export default function RootNavigator() {
   const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
 
-  // Preload critical screens after initial mount
   useEffect(() => {
-    // Delay preloading to avoid affecting initial render
     const timer = setTimeout(() => {
-      preloadCriticalScreens();
+      Promise.all([
+        import('../screens/Home'),
+        import('../screens/EstateSetup'),
+        import('../screens/HeirSelection'),
+        import('../screens/Results'),
+      ]);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -108,11 +87,6 @@ export default function RootNavigator() {
             options={() => ({ title: t('estate_details') })}
           />
           <Stack.Screen
-            name="MadhabSelect"
-            component={MadhabSelect}
-            options={() => ({ title: t('select_madhab') })}
-          />
-          <Stack.Screen
             name="HeirSelection"
             component={HeirSelection}
             options={() => ({ title: t('select_heirs') })}
@@ -121,11 +95,6 @@ export default function RootNavigator() {
             name="Results"
             component={Results}
             options={() => ({ title: t('inheritance_report') })}
-          />
-          <Stack.Screen
-            name="Comparison"
-            component={Comparison}
-            options={() => ({ title: t('compare') })}
           />
           <Stack.Screen
             name="Settings"
@@ -146,11 +115,6 @@ export default function RootNavigator() {
             name="CalculationSteps"
             component={CalculationSteps as React.ComponentType<unknown>}
             options={() => ({ title: t('calculation_steps') })}
-          />
-          <Stack.Screen
-            name="TestCases"
-            component={TestCases}
-            options={() => ({ title: t('test_cases') })}
           />
         </Stack.Navigator>
       </Suspense>

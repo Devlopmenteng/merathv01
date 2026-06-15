@@ -1,300 +1,100 @@
-import React, { useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet, I18nManager, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useRef, useCallback } from 'react';
+import { View, Text, ScrollView, I18nManager, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useResponsive } from '../hooks/useResponsive';
 import { t } from '../lib/i18n';
+import { Chip } from '../components/ui/Chip';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { Divider } from '../components/ui/Divider';
+import { SCENARIO_TEMPLATES } from '../lib/templates/ScenarioTemplates';
 
-type HomeNavigation = {
-  navigate: (screen: string) => void;
-};
+type HomeNavigation = { navigate: (screen: string, params?: any) => void };
 
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { breakpoint } = useResponsive();
-  const isGrid = breakpoint === 'lg' || breakpoint === 'xl';
+  const { } = useResponsive();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-  const menuItems = useMemo(
-    () => [
-      {
-        title: t('calculate_inheritance'),
-        description: t('start_new_calculation'),
-        icon: '📊',
-        screen: 'EstateSetup',
-        primary: true,
-      },
-      {
-        title: t('compare'),
-        description: t('comparison_title'),
-        icon: '⚖️',
-        screen: 'Comparison',
-        primary: false,
-      },
-      {
-        title: t('history'),
-        description: t('view_previous_calculations'),
-        icon: '📜',
-        screen: 'History',
-        primary: false,
-      },
-      {
-        title: t('glossary'),
-        description: t('learn_terminology'),
-        icon: '📖',
-        screen: 'Glossary',
-        primary: false,
-      },
-      {
-        title: t('settings'),
-        description: t('configure_app'),
-        icon: '⚙️',
-        screen: 'Settings',
-        primary: false,
-      },
-      {
-        title: t('test_cases'),
-        description: t('test_cases_description'),
-        icon: '🧪',
-        screen: 'TestCases',
-        primary: false,
-      },
-    ],
-    []
-  );
+  const openTemplates = useCallback(() => { bottomSheetRef.current?.present(); }, []);
+
+  const menuItems = [
+    { title: t('calculate_inheritance'), icon: '📊', screen: 'EstateSetup', primary: true },
+    { title: t('history'), icon: '📜', screen: 'History' },
+    { title: t('glossary'), icon: '📖', screen: 'Glossary' },
+    { title: t('settings'), icon: '⚙️', screen: 'Settings' },
+  ];
 
   return (
-    <LinearGradient
-      colors={[theme.colors.background, theme.colors.surfaceVariant]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.container}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          padding: theme.spacing.lg,
-          paddingBottom: theme.spacing.xxl + insets.bottom,
-          paddingTop: insets.top + theme.spacing.lg,
-        }}
-      >
-        {/* Modern Header with Gradient Background */}
-        <View
-          style={[
-            styles.headerSection,
-            {
-              backgroundColor: 'rgba(79, 70, 229, 0.1)',
-              borderLeftColor: theme.colors.primary,
-            },
-          ]}
-        >
-          <View style={styles.headerContent}>
-            <View style={[styles.iconContainer, { backgroundColor: 'rgba(79, 70, 229, 0.2)' }]}>
-              <Text style={styles.headerIcon}>⚖️</Text>
-            </View>
-            <View>
-              <Text
-                style={[
-                  theme.typography.h1,
-                  { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-                ]}
-              >
-                {t('merath_v10__islamic_inheritance_calculator')}
-              </Text>
-              <Text
-                style={[
-                  theme.typography.body,
-                  {
-                    color: theme.colors.text.secondary,
-                    marginTop: theme.spacing.sm,
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  },
-                ]}
-              >
-                {t('app_description')}
-              </Text>
-            </View>
+    <BottomSheetModalProvider>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: insets.bottom + theme.spacing.xxl, paddingTop: insets.top + theme.spacing.lg }}>
+          <View style={styles.header}>
+            <Text style={[theme.typography.h1, styles.title]}>{t('merath_v10__islamic_inheritance_calculator')}</Text>
+            <Text style={[theme.typography.body, { color: theme.colors.text.secondary }]}>{t('app_description')}</Text>
           </View>
 
-          {/* Feature Badges */}
-          <View style={styles.badgesContainer}>
-            <View style={[styles.featureBadge, { backgroundColor: 'rgba(79, 70, 229, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.primary }]}>
-                ✓ {t('four_schools')}
-              </Text>
-            </View>
-            <View style={[styles.featureBadge, { backgroundColor: 'rgba(16, 185, 129, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.success }]}>
-                ✓ {t('blood_relatives')}
-              </Text>
-            </View>
-            <View style={[styles.featureBadge, { backgroundColor: 'rgba(245, 158, 11, 0.1)' }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.warning }]}>
-                ✓ {t('awl_radd')}
-              </Text>
-            </View>
-          </View>
-        </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsScroll}>
+            {['four_schools', 'blood_relatives', 'awl_radd'].map(key => <Chip key={key} label={t(key)} selected={false} />)}
+            <Chip label={t('quick_templates')} onPress={openTemplates} selected={false} />
+          </ScrollView>
 
-        {/* Modern Menu Grid */}
-        <View style={[isGrid ? styles.gridContainer : styles.listContainer]}>
-          {menuItems.map((item) => (
-            <TouchableOpacity
-              key={item.screen}
-              onPress={() => navigation.navigate(item.screen)}
-              style={[
-                isGrid
-                  ? styles.gridItem
-                  : [
-                      styles.listItem,
-                      {
-                        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-                        alignItems: 'center',
-                      },
-                    ],
-                item.primary && styles.primaryMenuItem,
-              ]}
-              activeOpacity={0.7}
-              accessibilityLabel={`${item.title}. ${item.description}`}
-              accessibilityHint={t('a11y_navigate_to_screen', { screen: item.title })}
-              accessibilityRole="button"
-            >
-              <View
-                style={[
-                  styles.iconContainer,
-                  item.primary && styles.primaryIconContainer,
-                  { borderLeftColor: item.primary ? theme.colors.primary : theme.colors.outline },
+          <Divider />
+
+          <View>
+            {menuItems.map(item => (
+              <Pressable
+                key={item.screen}
+                onPress={() => navigation.navigate(item.screen)}
+                style={({ pressed }) => [
+                  styles.menuItem,
+                  { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' },
+                  item.primary && { backgroundColor: 'rgba(79,70,229,0.05)' },
+                  pressed && { opacity: 0.7 },
                 ]}
               >
-                <Text style={[styles.menuIcon, item.primary && styles.primaryIcon]}>
-                  {item.icon}
-                </Text>
-              </View>
-              <View style={styles.menuItemContent}>
-                <Text
-                  style={[
-                    item.primary ? theme.typography.h2 : theme.typography.h3,
-                    {
-                      color: theme.colors.onSurface,
-                      marginBottom: theme.spacing.xs,
-                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                    },
-                  ]}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={[
-                    theme.typography.body,
-                    {
-                      color: theme.colors.text.secondary,
-                      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                    },
-                  ]}
-                >
-                  {item.description}
-                </Text>
-              </View>
-              {I18nManager.isRTL ? (
-                <Text style={styles.chevron}>‹</Text>
-              ) : (
-                <Text style={styles.chevron}>›</Text>
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </LinearGradient>
+                <View style={[styles.iconContainer, { borderLeftColor: theme.colors.primary }]}>
+                  <Text style={styles.icon}>{item.icon}</Text>
+                </View>
+                <View style={styles.menuText}>
+                  <Text style={[theme.typography.h3, { color: theme.colors.onSurface }]}>{item.title}</Text>
+                </View>
+                <Text style={[styles.chevron, { color: theme.colors.outline }]}>{I18nManager.isRTL ? '←' : '→'}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+
+        <BottomSheetModal ref={bottomSheetRef} snapPoints={['60%']} backgroundStyle={{ backgroundColor: theme.colors.surface }}>
+          <View style={{ padding: theme.spacing.lg }}>
+            <Text style={[theme.typography.h2, { marginBottom: theme.spacing.md }]}>{t('quick_templates')}</Text>
+            {SCENARIO_TEMPLATES.slice(0, 10).map(template => (
+              <Pressable
+                key={template.id}
+                onPress={() => { bottomSheetRef.current?.dismiss(); navigation.navigate('HeirSelection', { template }); }}
+                style={({ pressed }) => [styles.templateItem, pressed && { opacity: 0.7 }]}
+              >
+                <Text style={theme.typography.body}>{template.name}</Text>
+                <Text style={[theme.typography.caption, { color: theme.colors.text.secondary }]}>{template.description}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </BottomSheetModal>
+      </View>
+    </BottomSheetModalProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerSection: {
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 24,
-    borderLeftWidth: 4,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  headerIcon: {
-    fontSize: 32,
-  },
-  badgesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  featureBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  menuItemContent: {
-    flex: 1,
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderLeftWidth: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: I18nManager.isRTL ? 0 : 16,
-    marginLeft: I18nManager.isRTL ? 16 : 0,
-  },
-  primaryIconContainer: {
-    backgroundColor: 'rgba(79, 70, 229, 0.1)',
-  },
-  menuIcon: {
-    fontSize: 28,
-  },
-  primaryIcon: {
-    fontSize: 36,
-  },
-  primaryMenuItem: {
-    backgroundColor: 'rgba(79, 70, 229, 0.05)',
-  },
-  listItem: {
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    marginBottom: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-  },
-  chevron: {
-    fontSize: 28,
-    color: '#9CA3AF',
-    marginLeft: I18nManager.isRTL ? 0 : 8,
-    marginRight: I18nManager.isRTL ? 8 : 0,
-  },
-  listContainer: {
-    gap: 0,
-  },
-  gridContainer: {
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    flexWrap: 'wrap',
-    gap: 16,
-  },
-  gridItem: {
-    width: '48%',
-    padding: 20,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    alignItems: 'center',
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-  },
+  container: { flex: 1 },
+  header: { marginBottom: 24 },
+  title: { marginBottom: 8 },
+  chipsScroll: { flexDirection: 'row', marginBottom: 16 },
+  menuItem: { alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)' },
+  iconContainer: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderLeftWidth: 4, marginRight: I18nManager.isRTL ? 0 : 16, marginLeft: I18nManager.isRTL ? 16 : 0 },
+  icon: { fontSize: 24 },
+  menuText: { flex: 1 },
+  chevron: { fontSize: 20 },
+  templateItem: { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)' },
 });

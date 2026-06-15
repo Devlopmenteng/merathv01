@@ -1,77 +1,35 @@
-import { StepIndicator } from '../components/StepIndicator';
-import { t } from '../lib/i18n';
-import React, { useCallback } from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView, Platform, I18nManager } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { HeirSelector } from '../components/HeirSelector';
 import { Button } from '../components/ui/Button';
+import { FAB } from '../components/ui/FAB';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
-import { OnboardingTooltip } from '../components/OnboardingTooltip';
-import { validateHeirsConfig } from '../lib/utils/validation';
-import { heirsArrayToObject } from '../lib/utils/heirsConverter';
-import { showAlert } from '../lib/utils/alerts';
+import { t } from '../lib/i18n';
 
-type HeirSelectionNavigation = {
-  navigate: (screen: string) => void;
-};
+type HeirSelectionNavigation = { navigate: (screen: string) => void };
 
 export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigation }) => {
   const theme = useAppTheme();
-  const insets = useSafeAreaInsets();
   const { state, dispatch } = useCalc();
 
-  const onNext = useCallback(() => {
-    // Convert array to object for validation
-    const heirsObject = heirsArrayToObject(state.heirs);
-
-    const validation = validateHeirsConfig(heirsObject as Record<string, number>);
-
-    if (!validation.valid) {
-      showAlert(t('validation_error'), validation.errors.join('\n'));
-      return;
-    }
-
-    dispatch({ type: 'SET_HEIRS', payload: state.heirs });
+  const handleCalculate = () => {
     navigation.navigate('Results');
-  }, [state.heirs, dispatch, navigation]);
+  };
+
+  const handleReset = () => {
+    dispatch({ type: 'SET_HEIRS', payload: [] });
+  };
 
   return (
-    <View style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <ScrollView
-          contentContainerStyle={{
-            padding: theme.spacing.lg,
-            paddingTop: insets.top + theme.spacing.lg,
-            paddingBottom: insets.bottom,
-          }}
-        >
-          <StepIndicator
-            currentStep={2}
-            steps={['step_estate', 'step_madhab', 'step_heirs', 'step_results']}
-          />
-          <Text
-            style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
-          >
-            {t('select_heirs')}
-          </Text>
-          <HeirSelector
-            heirs={state.heirs}
-            onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })}
-          />
-          <Button
-            title={t('calculate_inheritance')}
-            onPress={onNext}
-            style={{ marginTop: theme.spacing.lg }}
-            accessibilityLabel={t('calculate_inheritance')}
-            accessibilityHint={t('a11y_calculate_inheritance_hint')}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
-      <OnboardingTooltip />
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 80 }}>
+        <Text style={[theme.typography.h1, { marginBottom: theme.spacing.md }]}>{t('select_heirs')}</Text>
+        <HeirSelector heirs={state.heirs} onHeirsChange={(heirs) => dispatch({ type: 'SET_HEIRS', payload: heirs })} />
+        <Button title={t('calculate_inheritance')} onPress={handleCalculate} mode="filled" fullWidth style={{ marginTop: theme.spacing.lg }} />
+      </ScrollView>
+      <FAB onPress={handleReset} icon="⟳" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({ container: { flex: 1 } });
