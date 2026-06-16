@@ -61,9 +61,7 @@ export const Chip: React.FC<ChipProps> = ({
       {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
       <AppText
         variant="label"
-        color={
-          selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface
-        }
+        color={selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface}
       >
         {label}
       </AppText>

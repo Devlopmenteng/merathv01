@@ -1,11 +1,5 @@
 import React, { useState, useRef, useMemo, memo } from 'react';
-import {
-  TouchableOpacity,
-  ActivityIndicator,
-  View,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { TouchableOpacity, ActivityIndicator, View, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { AppText } from './AppText';
@@ -114,11 +108,7 @@ export const Button: React.FC<Props> = memo(
         {loading ? (
           <ActivityIndicator color={textColor} size="small" />
         ) : (
-          <AppText
-            variant="button"
-            color={textColor}
-            style={{ textAlign: 'center' }}
-          >
+          <AppText variant="button" color={textColor} style={{ textAlign: 'center' }}>
             {title}
           </AppText>
         )}

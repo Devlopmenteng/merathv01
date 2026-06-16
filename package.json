@@ -75,6 +75,11 @@
   },
   "private": true,
   "expo": {
+    "install": {
+      "exclude": [
+        "react-native-worklets"
+      ]
+    },
     "doctor": {
       "reactNativeDirectoryCheck": {
         "exclude": [

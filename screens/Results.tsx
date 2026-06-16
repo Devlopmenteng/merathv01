@@ -59,10 +59,17 @@ export const Results = ({
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={{ padding: isTablet ? theme.spacing.xxl : theme.spacing.lg, paddingBottom: 80 }}>
+      <ScrollView
+        contentContainerStyle={{
+          padding: isTablet ? theme.spacing.xxl : theme.spacing.lg,
+          paddingBottom: 80,
+        }}
+      >
         <Text style={theme.typography.h1}>{t('inheritance_report')}</Text>
         <Divider />
-        <View style={[styles.tabBar, isTablet && { justifyContent: 'center', gap: theme.spacing.lg }]}>
+        <View
+          style={[styles.tabBar, isTablet && { justifyContent: 'center', gap: theme.spacing.lg }]}
+        >
           {['distribution', 'steps', 'compare'].map((tab) => (
             <Pressable
               key={tab}

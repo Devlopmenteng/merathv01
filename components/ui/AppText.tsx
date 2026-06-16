@@ -60,9 +60,15 @@ export const AppText: React.FC<AppTextProps> = ({
           fontSize: token.fontSize,
           fontWeight: token.fontWeight,
           lineHeight: token.lineHeight,
-          letterSpacing: 'letterSpacing' in token ? (token as { letterSpacing?: number }).letterSpacing : undefined,
+          letterSpacing:
+            'letterSpacing' in token
+              ? (token as { letterSpacing?: number }).letterSpacing
+              : undefined,
           color: color || theme.colors.text.primary,
-          textTransform: 'textTransform' in token ? (token as { textTransform?: 'uppercase' }).textTransform : undefined,
+          textTransform:
+            'textTransform' in token
+              ? (token as { textTransform?: 'uppercase' }).textTransform
+              : undefined,
           writingDirection: isRTL ? 'rtl' : 'ltr',
         },
         style,

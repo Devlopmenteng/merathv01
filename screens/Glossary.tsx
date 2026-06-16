@@ -21,7 +21,12 @@ export const Glossary = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={{ padding: isTablet ? theme.spacing.xxl : theme.spacing.lg, paddingTop: insets.top + theme.spacing.lg }}>
+      <View
+        style={{
+          padding: isTablet ? theme.spacing.xxl : theme.spacing.lg,
+          paddingTop: insets.top + theme.spacing.lg,
+        }}
+      >
         <Text style={theme.typography.h1}>{t('glossary')}</Text>
         <View style={styles.tabBar}>
           {TABS.map((tab) => (

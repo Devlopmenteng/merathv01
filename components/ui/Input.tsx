@@ -148,7 +148,9 @@ export const Input: React.FC<Props> = ({
         <Animated.Text style={labelStyle}>{label}</Animated.Text>
         {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
         {prefix && (
-          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>{prefix}</AppText>
+          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>
+            {prefix}
+          </AppText>
         )}
         <TextInput
           value={localValue}
@@ -171,14 +173,20 @@ export const Input: React.FC<Props> = ({
           placeholderTextColor={theme.colors.outline}
         />
         {suffix && (
-          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>{suffix}</AppText>
+          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>
+            {suffix}
+          </AppText>
         )}
         {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
       </View>
       {error ? (
-        <AppText variant="caption" color={theme.colors.error} style={styles.helperText}>{error}</AppText>
+        <AppText variant="caption" color={theme.colors.error} style={styles.helperText}>
+          {error}
+        </AppText>
       ) : helper ? (
-        <AppText variant="caption" color={theme.colors.text.secondary} style={styles.helperText}>{helper}</AppText>
+        <AppText variant="caption" color={theme.colors.text.secondary} style={styles.helperText}>
+          {helper}
+        </AppText>
       ) : null}
       {maxLength && (
         <AppText variant="labelSmall" color={theme.colors.text.disabled} style={styles.charCount}>

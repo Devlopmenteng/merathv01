@@ -65,9 +65,7 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
             >
               <AppText
                 variant="label"
-                color={
-                  currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary
-                }
+                color={currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary}
               >
                 {index + 1}
               </AppText>
@@ -88,10 +86,7 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
           </View>
           <AppText
             variant="caption"
-            color={circleAnims[index].interpolate({
-              inputRange: [0, 1],
-              outputRange: [theme.colors.text.secondary, theme.colors.primary],
-            }) as any} // eslint-disable-line @typescript-eslint/no-explicit-any
+            color={currentStep >= index ? theme.colors.primary : theme.colors.text.secondary}
             style={styles.stepLabel}
           >
             {t(stepKey)}

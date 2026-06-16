@@ -81,7 +81,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         {t('calculation_steps')}
       </Text>
 
-      <View style={[styles.infoCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}>
+      <View
+        style={[
+          styles.infoCard,
+          { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
+        ]}
+      >
         <Text
           style={[
             theme.typography.bodySmall,
@@ -123,7 +128,10 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           auditEntry.steps.map((step, index) => (
             <View
               key={index}
-              style={[styles.stepCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}
+              style={[
+                styles.stepCard,
+                { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
+              ]}
               accessible
               accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
@@ -185,7 +193,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
             </View>
           ))
         ) : (
-          <View style={[styles.emptyCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}>
+          <View
+            style={[
+              styles.emptyCard,
+              { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
+            ]}
+          >
             <Text
               style={[
                 theme.typography.body,
@@ -198,7 +211,12 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         )}
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
-          <View style={[styles.hijabCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.errorLight }]}>
+          <View
+            style={[
+              styles.hijabCard,
+              { backgroundColor: theme.colors.surface, borderColor: theme.colors.errorLight },
+            ]}
+          >
             <Text
               style={[
                 theme.typography.h3,
