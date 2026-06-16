@@ -1,6 +1,6 @@
 {
   "extends": "expo/tsconfig.base",
-  "exclude": ["lib/engine.bak.*", "backup_*"],
+  "exclude": ["lib/engine.bak.*", "backup_*", "__tests__/e2e/**"],
   "compilerOptions": {
     "strict": true,
     "noImplicitAny": true,

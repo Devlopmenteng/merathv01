@@ -53,7 +53,7 @@ type CalcContextType = {
   dispatch: React.Dispatch<Action>;
 };
 
-const CalcContext = createContext<CalcContextType | undefined>(undefined);
+export const CalcContext = createContext<CalcContextType | undefined>(undefined);
 
 export const CalcProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(calcReducer, initialState);

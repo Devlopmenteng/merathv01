@@ -66,10 +66,9 @@ export class EnhancedInheritanceCalculationEngine {
     isAkdariyya?: boolean;
   } = {};
 
-  private static readonly madhabConfigCache = new BoundedCache<
-    Madhab,
-    MadhhabConfig | null
-  >(DEFAULT_CACHE_CONFIGS.madhab);
+  private static readonly madhabConfigCache = new BoundedCache<Madhab, MadhhabConfig | null>(
+    DEFAULT_CACHE_CONFIGS.madhab
+  );
   private static readonly madhabRuleCache = new BoundedCache<
     string,
     MadhhabRules[keyof MadhhabRules] | undefined
@@ -91,8 +90,8 @@ export class EnhancedInheritanceCalculationEngine {
    */
   static clearMadhabCache(madhab: Madhab): void {
     EnhancedInheritanceCalculationEngine.madhabConfigCache.set(madhab, null);
-    EnhancedInheritanceCalculationEngine.madhabRuleCache.clearMatching(
-      (key: string) => key.startsWith(`${madhab}:`)
+    EnhancedInheritanceCalculationEngine.madhabRuleCache.clearMatching((key: string) =>
+      key.startsWith(`${madhab}:`)
     );
   }
 

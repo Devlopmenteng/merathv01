@@ -6,7 +6,7 @@ import { lightTheme, darkTheme, typography as baseTypography } from '../constant
 import type { ResponsiveProps } from '../../hooks/useResponsive';
 import { InitializationService } from '../services/InitializationService';
 
-const ThemeContext = createContext({
+export const ThemeContext = createContext({
   isDark: false,
   toggleTheme: () => {},
   theme: lightTheme,

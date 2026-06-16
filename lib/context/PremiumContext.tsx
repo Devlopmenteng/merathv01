@@ -9,7 +9,7 @@ type PremiumContextType = {
   togglePremium: () => void;
 };
 
-const PremiumContext = createContext<PremiumContextType>({
+export const PremiumContext = createContext<PremiumContextType>({
   isPremium: false,
   isReady: false,
   togglePremium: () => {},

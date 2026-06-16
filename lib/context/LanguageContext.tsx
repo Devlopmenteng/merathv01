@@ -16,7 +16,7 @@ type LanguageContextType = {
   forceUpdate: () => void;
 };
 
-const LanguageContext = createContext<LanguageContextType>({
+export const LanguageContext = createContext<LanguageContextType>({
   locale: APP_DEFAULTS.DEFAULT_LOCALE,
   isReady: false,
   isRTL: false,
@@ -50,7 +50,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     async (nextLocale: string) => {
       // Update i18n first
       initI18n(nextLocale);
-      
+
       // Update locale state (triggers RTL setup effect)
       setLocale(nextLocale);
 
