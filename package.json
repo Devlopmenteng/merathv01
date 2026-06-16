@@ -72,7 +72,6 @@
     "vitest": "^4.1.6"
   },
   "private": true,
-  "packageManager": "npm@11.9.0",
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
