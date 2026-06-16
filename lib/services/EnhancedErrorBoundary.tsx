@@ -207,25 +207,67 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
 
               {this.state.isRetrying ? (
                 <>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: colors.text.primary }}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 'bold',
+                      marginBottom: 8,
+                      color: colors.text.primary,
+                    }}
+                  >
                     Attempting Recovery...
                   </Text>
-                  <Text style={{ fontSize: 14, color: colors.text.secondary, marginBottom: 16, textAlign: 'center' }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: colors.text.secondary,
+                      marginBottom: 16,
+                      textAlign: 'center',
+                    }}
+                  >
                     {this.state.retryMessage}
                   </Text>
                 </>
               ) : (
                 <>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: colors.error }}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 'bold',
+                      marginBottom: 8,
+                      color: colors.error,
+                    }}
+                  >
                     Something Went Wrong
                   </Text>
-                  <Text style={{ fontSize: 14, color: colors.text.secondary, marginBottom: 16, textAlign: 'center' }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: colors.text.secondary,
+                      marginBottom: 16,
+                      textAlign: 'center',
+                    }}
+                  >
                     {this.getUserMessage()}
                   </Text>
 
                   {__DEV__ && this.state.errorInfo && (
-                    <View style={{ marginVertical: 12, paddingVertical: 12, borderTopWidth: 1, borderTopColor: colors.outline, width: '100%' }}>
-                      <Text style={{ fontSize: 12, color: colors.text.secondary, fontFamily: 'monospace' }}>
+                    <View
+                      style={{
+                        marginVertical: 12,
+                        paddingVertical: 12,
+                        borderTopWidth: 1,
+                        borderTopColor: colors.outline,
+                        width: '100%',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: colors.text.secondary,
+                          fontFamily: 'monospace',
+                        }}
+                      >
                         Stack: {this.state.error?.message}
                       </Text>
                     </View>
@@ -275,7 +317,9 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
                         alignItems: 'center',
                       }}
                     >
-                      <Text style={{ color: colors.text.primary, fontWeight: 'bold', fontSize: 14 }}>
+                      <Text
+                        style={{ color: colors.text.primary, fontWeight: 'bold', fontSize: 14 }}
+                      >
                         Dismiss
                       </Text>
                     </TouchableOpacity>

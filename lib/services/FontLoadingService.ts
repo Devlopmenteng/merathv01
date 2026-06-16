@@ -160,9 +160,7 @@ class FontLoadingService {
       const MAX_CACHE_AGE = 7 * 24 * 60 * 60 * 1000;
 
       return (
-        cacheData.loaded &&
-        cacheData.version === this.CACHE_VERSION &&
-        cacheAge < MAX_CACHE_AGE
+        cacheData.loaded && cacheData.version === this.CACHE_VERSION && cacheAge < MAX_CACHE_AGE
       );
     } catch (error) {
       console.warn('[FontLoadingService] Cache check failed:', error);

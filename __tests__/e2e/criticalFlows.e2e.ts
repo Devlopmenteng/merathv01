@@ -22,7 +22,9 @@ describe('Merath App - Critical User Flows', () => {
 
   describe('App Initialization', () => {
     it('should launch successfully', async () => {
-      await waitFor(element(by.id('homeScreen'))).toBeVisible().withTimeout(5000);
+      await waitFor(element(by.id('homeScreen')))
+        .toBeVisible()
+        .withTimeout(5000);
       expect(element(by.id('homeScreen'))).toBeVisible();
     });
 
@@ -42,7 +44,9 @@ describe('Merath App - Critical User Flows', () => {
   describe('Estate Setup Flow', () => {
     it('should navigate to estate setup', async () => {
       await element(by.id('calculationTab')).tap();
-      await waitFor(element(by.id('estateSetupScreen'))).toBeVisible().withTimeout(3000);
+      await waitFor(element(by.id('estateSetupScreen')))
+        .toBeVisible()
+        .withTimeout(3000);
       expect(element(by.id('estateSetupScreen'))).toBeVisible();
     });
 
@@ -78,7 +82,9 @@ describe('Merath App - Critical User Flows', () => {
       const nextButton = element(by.id('estateSetupNextButton'));
       await nextButton.tap();
 
-      await waitFor(element(by.id('heirSelectionScreen'))).toBeVisible().withTimeout(3000);
+      await waitFor(element(by.id('heirSelectionScreen')))
+        .toBeVisible()
+        .withTimeout(3000);
       expect(element(by.id('heirSelectionScreen'))).toBeVisible();
     });
   });
@@ -91,7 +97,9 @@ describe('Merath App - Critical User Flows', () => {
       await element(by.id('estateTotalInput')).typeText('100000');
       await element(by.id('estateTotalInput')).tapReturnKey();
       await element(by.id('estateSetupNextButton')).tap();
-      await waitFor(element(by.id('heirSelectionScreen'))).toBeVisible().withTimeout(3000);
+      await waitFor(element(by.id('heirSelectionScreen')))
+        .toBeVisible()
+        .withTimeout(3000);
     });
 
     it('should display heir categories', async () => {
@@ -104,7 +112,9 @@ describe('Merath App - Critical User Flows', () => {
       const addSpouseButton = element(by.id('addSpouseButton'));
       await addSpouseButton.tap();
 
-      await waitFor(element(by.id('spouseRow-0'))).toBeVisible().withTimeout(2000);
+      await waitFor(element(by.id('spouseRow-0')))
+        .toBeVisible()
+        .withTimeout(2000);
       expect(element(by.id('spouseRow-0'))).toBeVisible();
     });
 
@@ -121,7 +131,9 @@ describe('Merath App - Critical User Flows', () => {
       const calculateButton = element(by.id('calculateButton'));
       await calculateButton.tap();
 
-      await waitFor(element(by.id('resultsScreen'))).toBeVisible().withTimeout(5000);
+      await waitFor(element(by.id('resultsScreen')))
+        .toBeVisible()
+        .withTimeout(5000);
       expect(element(by.id('resultsScreen'))).toBeVisible();
     });
   });
@@ -141,7 +153,9 @@ describe('Merath App - Critical User Flows', () => {
       const exportButton = element(by.id('exportButton'));
       await exportButton.tap();
 
-      await waitFor(element(by.id('exportModal'))).toBeVisible().withTimeout(2000);
+      await waitFor(element(by.id('exportModal')))
+        .toBeVisible()
+        .withTimeout(2000);
       expect(element(by.id('exportModal'))).toBeVisible();
     });
 
@@ -158,7 +172,9 @@ describe('Merath App - Critical User Flows', () => {
   describe('Settings Navigation', () => {
     it('should navigate to settings', async () => {
       await element(by.id('settingsTab')).tap();
-      await waitFor(element(by.id('settingsScreen'))).toBeVisible().withTimeout(2000);
+      await waitFor(element(by.id('settingsScreen')))
+        .toBeVisible()
+        .withTimeout(2000);
       expect(element(by.id('settingsScreen'))).toBeVisible();
     });
 
@@ -210,7 +226,9 @@ describe('Merath App - Critical User Flows', () => {
       const startTime = Date.now();
 
       await element(by.id('calculateButton')).tap();
-      await waitFor(element(by.id('resultsScreen'))).toBeVisible().withTimeout(5000);
+      await waitFor(element(by.id('resultsScreen')))
+        .toBeVisible()
+        .withTimeout(5000);
 
       const duration = Date.now() - startTime;
       expect(duration).toBeLessThan(5000); // 5 second threshold
