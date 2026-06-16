@@ -104,6 +104,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
   const LanguageDropdown = () => (
     <>
       <TouchableOpacity
+        activeOpacity={0.7}
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -150,7 +151,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         >
           <View
             style={{
-              backgroundColor: 'transparent',
+              backgroundColor: theme.colors.surface,
               borderTopLeftRadius: theme.borderRadius.xl,
               borderTopRightRadius: theme.borderRadius.xl,
               padding: theme.spacing.lg,
@@ -170,6 +171,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
             {LANGUAGES.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
+                activeOpacity={0.7}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
@@ -229,7 +231,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View style={styles.section}>
         <Text
-          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {t('appearance')}
         </Text>
@@ -266,11 +268,12 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View style={styles.section}>
         <Text
-          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {t('resources')}
         </Text>
         <TouchableOpacity
+          activeOpacity={0.7}
           style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={() => navigation.navigate('Glossary')}
           accessibilityLabel={t('glossary_and_education')}
@@ -288,7 +291,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View style={styles.section}>
         <Text
-          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {t('about')}
         </Text>
@@ -330,12 +333,13 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View style={styles.section}>
         <Text
-          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {t('support')}
         </Text>
         <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
           <TouchableOpacity
+            activeOpacity={0.7}
             style={styles.cardItem}
             onPress={handleRateUs}
             accessibilityLabel={t('rate_us_send_feedback')}
@@ -353,6 +357,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity
+            activeOpacity={0.7}
             style={styles.cardItem}
             onPress={handleEmailFeedback}
             accessibilityLabel={t('feedback_title')}
@@ -373,15 +378,16 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
 
       <View style={styles.section}>
         <Text
-          style={[styles.sectionHeader, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
         >
           {t('legal')}
         </Text>
         <TouchableOpacity
+          activeOpacity={0.7}
           style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={handlePrivacyPolicy}
           accessibilityLabel={t('privacy_policy')}
-          accessibilityHint={t('a11y_view_privacy_policy')}
+          accessibilityHint={t('a11y_privacy_policy')}
           accessibilityRole="button"
         >
           <Text
@@ -392,6 +398,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           <Text style={{ fontSize: 18, color: theme.colors.primary }}>{forwardArrow()}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          activeOpacity={0.7}
           style={[styles.settingItem, styles.dangerItem, { backgroundColor: theme.colors.surface }]}
           onPress={handleClearCache}
           accessibilityLabel={t('clear_cache_reset')}
@@ -409,10 +416,11 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
           <Text style={{ fontSize: 18, color: theme.colors.error }}>🗑️</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          activeOpacity={0.7}
           style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
           onPress={handleLegalNotices}
           accessibilityLabel={t('legal_notices')}
-          accessibilityHint={t('a11y_view_legal_notices')}
+          accessibilityHint={t('a11y_legal_notices')}
           accessibilityRole="button"
         >
           <Text
@@ -434,7 +442,6 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
     textTransform: 'uppercase',
     marginBottom: 8,
     letterSpacing: 0.5,
