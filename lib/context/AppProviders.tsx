@@ -7,7 +7,7 @@ import { initializeOfflineCache } from '../services/OfflineCacheService';
 
 export const AppProviders = React.memo(({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
-    // Initialize offline cache on app start
+    // Initialize offline cache on app start (separate from main initialization)
     initializeOfflineCache().catch((error) => {
       console.error('Failed to initialize offline cache:', error);
     });

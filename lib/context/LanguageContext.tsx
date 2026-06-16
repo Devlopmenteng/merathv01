@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { I18nManager } from 'react-native';
 import { initI18n } from '../i18n';
 import { APP_DEFAULTS } from '../constants/appDefaults';
+import { InitializationService } from '../services/InitializationService';
 
 // RTL languages
 const RTL_LOCALES = ['ar', 'ur'];
@@ -30,42 +31,33 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
   const isRTL = useMemo(() => RTL_LOCALES.includes(locale), [locale]);
 
+  // Initialize from coordinated service instead of independent AsyncStorage fetch
   useEffect(() => {
-    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE)
-      .then((storedLocale) => {
-        const initialLocale = storedLocale || APP_DEFAULTS.DEFAULT_LOCALE;
-        initI18n(initialLocale);
-        setLocale(initialLocale);
-
-        // Set RTL direction if needed
-        const shouldBeRTL = RTL_LOCALES.includes(initialLocale);
-        I18nManager.allowRTL(shouldBeRTL);
-
-        // In React Native 0.71+, forceRTL works synchronously without restart
-        if (I18nManager.isRTL !== shouldBeRTL) {
-          I18nManager.forceRTL(shouldBeRTL);
-        }
-      })
-      .finally(() => setIsReady(true));
+    const initState = InitializationService.getState();
+    if (initState) {
+      setLocale(initState.locale);
+      setIsReady(true);
+    }
   }, []);
+
+  // SEPARATE EFFECT: Apply RTL setup whenever locale changes (decoupled from render)
+  useEffect(() => {
+    const shouldBeRTL = RTL_LOCALES.includes(locale);
+    setupRTL(shouldBeRTL);
+  }, [locale]);
 
   const changeLocale = useCallback(
     async (nextLocale: string) => {
+      // Update i18n first
       initI18n(nextLocale);
+      
+      // Update locale state (triggers RTL setup effect)
       setLocale(nextLocale);
 
-      // Force re-render of all components by updating state
+      // Force re-render of all components
       forceUpdate({});
 
-      // Update RTL direction
-      const shouldBeRTL = RTL_LOCALES.includes(nextLocale);
-      I18nManager.allowRTL(shouldBeRTL);
-
-      // In React Native 0.71+, this works synchronously without restart
-      if (I18nManager.isRTL !== shouldBeRTL) {
-        I18nManager.forceRTL(shouldBeRTL);
-      }
-
+      // Persist preference
       await AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.LANGUAGE_PREFERENCE, nextLocale);
     },
     [forceUpdate]
@@ -86,3 +78,20 @@ export const useLanguage = () => {
   if (!context) throw new Error('useLanguage must be used within a LanguageProvider');
   return context;
 };
+
+/**
+ * Setup RTL configuration (extracted for clarity and decoupling from render cycle)
+ * This function is called from InitializationService during app startup
+ * and also when locale changes (but not during React render)
+ */
+export function setupRTL(shouldBeRTL: boolean): void {
+  try {
+    if (I18nManager.isRTL !== shouldBeRTL) {
+      I18nManager.allowRTL(shouldBeRTL);
+      // In React Native 0.71+, this works synchronously without restart
+      I18nManager.forceRTL(shouldBeRTL);
+    }
+  } catch (error) {
+    console.warn('[LanguageContext] Failed to setup RTL:', error);
+  }
+}

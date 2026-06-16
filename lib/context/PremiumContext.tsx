@@ -1,6 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { APP_DEFAULTS } from '../constants/appDefaults';
+import { InitializationService } from '../services/InitializationService';
 
 type PremiumContextType = {
   isPremium: boolean;
@@ -18,15 +19,16 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
   const [isPremium, setIsPremium] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
+  // Initialize from coordinated service instead of independent AsyncStorage fetch
   useEffect(() => {
-    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM)
-      .then((val) => {
-        setIsPremium(val === 'true');
-      })
-      .finally(() => setIsReady(true));
+    const initState = InitializationService.getState();
+    if (initState) {
+      setIsPremium(initState.isPremium);
+      setIsReady(true);
+    }
   }, []);
 
-  const togglePremium = React.useCallback(() => {
+  const togglePremium = useCallback(() => {
     setIsPremium((current) => {
       const next = !current;
       AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.PREMIUM, next ? 'true' : 'false');
@@ -34,7 +36,7 @@ export const PremiumProvider = ({ children }: { children: React.ReactNode }) => 
     });
   }, []);
 
-  const value = React.useMemo(
+  const value = useMemo(
     () => ({ isPremium, isReady, togglePremium }),
     [isPremium, isReady, togglePremium]
   );

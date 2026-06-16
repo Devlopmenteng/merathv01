@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -21,6 +21,7 @@ import { OfflineIndicator } from './components/OfflineIndicator';
 import { AppProviders } from './lib/context/AppProviders';
 import { useTheme } from './lib/context/ThemeContext';
 import { lightTheme } from './lib/constants/theme';
+import { InitializationService } from './lib/services/InitializationService';
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -47,7 +48,22 @@ export default function App() {
     NotoNaskhArabic_700Bold,
   });
 
-  if (!fontsLoaded) {
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    // Initialize app services (AsyncStorage, i18n, RTL) before rendering contexts
+    InitializationService.initialize()
+      .then(() => {
+        setAppReady(true);
+      })
+      .catch((error) => {
+        console.error('[App] Initialization failed:', error);
+        // Still render app even if initialization fails
+        setAppReady(true);
+      });
+  }, []);
+
+  if (!fontsLoaded || !appReady) {
     return (
       <View style={styles.splash}>
         <ActivityIndicator size="large" color={lightTheme.colors.primary} />

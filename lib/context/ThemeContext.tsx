@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { useColorScheme, useWindowDimensions } from 'react-native';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { useWindowDimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { APP_DEFAULTS } from '../constants/appDefaults';
 import { lightTheme, darkTheme, typography as baseTypography } from '../constants/theme';
 import type { ResponsiveProps } from '../../hooks/useResponsive';
+import { InitializationService } from '../services/InitializationService';
 
 const ThemeContext = createContext({
   isDark: false,
@@ -15,19 +16,18 @@ const ThemeContext = createContext({
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const systemColorScheme = useColorScheme();
   const [isDark, setIsDark] = useState(false);
   const { width, height, scale, fontScale } = useWindowDimensions();
 
+  // Use initialized state from InitializationService instead of independent AsyncStorage fetch
   useEffect(() => {
-    AsyncStorage.getItem(APP_DEFAULTS.STORAGE_KEYS.THEME_PREFERENCE).then((value) => {
-      if (value === 'dark') setIsDark(true);
-      else if (value === 'light') setIsDark(false);
-      else setIsDark(false);
-    });
-  }, [systemColorScheme]);
+    const initState = InitializationService.getState();
+    if (initState) {
+      setIsDark(initState.isDarkMode);
+    }
+  }, []);
 
-  const toggleTheme = React.useCallback(() => {
+  const toggleTheme = useCallback(() => {
     setIsDark((current) => {
       const next = !current;
       AsyncStorage.setItem(APP_DEFAULTS.STORAGE_KEYS.THEME_PREFERENCE, next ? 'dark' : 'light');

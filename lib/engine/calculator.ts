@@ -27,6 +27,7 @@ import type {
   HeirShareObject,
   EngineState,
 } from './types';
+import { BoundedCache, DEFAULT_CACHE_CONFIGS } from './CacheManager';
 import { HijabSystem } from './hijab';
 import { FixedSharesCalculator } from './FixedSharesCalculator';
 import { AsabaCalculator } from './AsabaCalculator';
@@ -65,11 +66,47 @@ export class EnhancedInheritanceCalculationEngine {
     isAkdariyya?: boolean;
   } = {};
 
-  private static readonly madhabConfigCache = new Map<Madhab, MadhhabConfig | null>();
-  private static readonly madhabRuleCache = new Map<
+  private static readonly madhabConfigCache = new BoundedCache<
+    Madhab,
+    MadhhabConfig | null
+  >(DEFAULT_CACHE_CONFIGS.madhab);
+  private static readonly madhabRuleCache = new BoundedCache<
     string,
     MadhhabRules[keyof MadhhabRules] | undefined
-  >();
+  >(DEFAULT_CACHE_CONFIGS.rules);
+
+  // ========== Cache Management Methods ==========
+
+  /**
+   * Invalidate all caches (use sparingly, mainly for testing)
+   */
+  static clearAllCaches(): void {
+    EnhancedInheritanceCalculationEngine.madhabConfigCache.clear();
+    EnhancedInheritanceCalculationEngine.madhabRuleCache.clear();
+  }
+
+  /**
+   * Invalidate madhab-specific caches
+   * Call this when madhab rules might have changed
+   */
+  static clearMadhabCache(madhab: Madhab): void {
+    EnhancedInheritanceCalculationEngine.madhabConfigCache.set(madhab, null);
+    EnhancedInheritanceCalculationEngine.madhabRuleCache.clearMatching(
+      (key: string) => key.startsWith(`${madhab}:`)
+    );
+  }
+
+  /**
+   * Get cache statistics for monitoring
+   */
+  static getCacheStats() {
+    return {
+      madhab: EnhancedInheritanceCalculationEngine.madhabConfigCache.getStats(),
+      rules: EnhancedInheritanceCalculationEngine.madhabRuleCache.getStats(),
+    };
+  }
+
+  // ========== End Cache Management Methods ==========
 
   private state: EngineState = {
     blockedHeirs: [],
@@ -141,7 +178,7 @@ export class EnhancedInheritanceCalculationEngine {
 
   private getMadhabConfig(): MadhhabConfig | null {
     const cached = EnhancedInheritanceCalculationEngine.madhabConfigCache.get(this.madhab);
-    if (cached !== undefined) {
+    if (cached !== null) {
       return cached;
     }
 
@@ -153,7 +190,7 @@ export class EnhancedInheritanceCalculationEngine {
   private getMadhabRule<K extends keyof MadhhabRules>(ruleKey: K): MadhhabRules[K] | undefined {
     const cacheKey = `${this.madhab}:${ruleKey}`;
     const cached = EnhancedInheritanceCalculationEngine.madhabRuleCache.get(cacheKey);
-    if (cached !== undefined) {
+    if (cached !== null) {
       return cached as MadhhabRules[K];
     }
 
