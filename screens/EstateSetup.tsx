@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button';
 import { LeftBorderView } from '../components/ui/LeftBorderView';
 import { Divider } from '../components/ui/Divider';
 import { t } from '../lib/i18n';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 type EstateSetupNavigation = { navigate: (screen: string) => void };
 
@@ -22,6 +23,7 @@ const MADHABS = [
 export const EstateSetup = ({ navigation }: { navigation: EstateSetupNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
+  useLocalizedTitle('estate_details');
   const { state, dispatch } = useCalc();
   const [total, setTotal] = useState(state.total ? String(state.total) : '');
   const [funeral, setFuneral] = useState(state.funeral ? String(state.funeral) : '');

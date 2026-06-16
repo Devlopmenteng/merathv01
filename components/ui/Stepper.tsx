@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { t } from '../../lib/i18n';
+import { AppText } from './AppText';
 
 type Props = {
   value: number;
@@ -18,33 +19,33 @@ export const Stepper: React.FC<Props> = React.memo(
     const [pressedDecrease, setPressedDecrease] = useState(false);
     const [pressedIncrease, setPressedIncrease] = useState(false);
 
-    const getSizeStyles = () => {
+    const sizeConfig = useMemo(() => {
       switch (size) {
         case 'small':
           return {
             buttonSize: 36,
-            fontSize: 20,
+            symbolSize: 20,
             spacing: 12,
-            valueFontSize: 16,
+            valueVariant: 'body' as const,
           };
         case 'large':
           return {
             buttonSize: 44,
-            fontSize: 24,
+            symbolSize: 24,
             spacing: 16,
-            valueFontSize: 20,
+            valueVariant: 'h4' as const,
           };
-        default: // medium
+        default:
           return {
             buttonSize: 40,
-            fontSize: 22,
+            symbolSize: 22,
             spacing: 14,
-            valueFontSize: 18,
+            valueVariant: 'body' as const,
           };
       }
-    };
+    }, [size]);
 
-    const { buttonSize, fontSize, spacing, valueFontSize } = getSizeStyles();
+    const { buttonSize, symbolSize, spacing, valueVariant } = sizeConfig;
 
     const canDecrease = value > min;
     const canIncrease = value < max;
@@ -78,7 +79,7 @@ export const Stepper: React.FC<Props> = React.memo(
             style={[
               styles.buttonText,
               {
-                fontSize,
+                fontSize: symbolSize,
                 color: canDecrease ? theme.colors.text.primary : theme.colors.text.disabled,
               },
             ]}
@@ -91,18 +92,13 @@ export const Stepper: React.FC<Props> = React.memo(
           accessible
           accessibilityLabel={t('a11y_current_value', { value })}
         >
-          <Text
-            style={[
-              styles.valueText,
-              {
-                fontSize: valueFontSize,
-                fontWeight: '600',
-                color: theme.colors.text.primary,
-              },
-            ]}
+          <AppText
+            variant={valueVariant}
+            color={theme.colors.text.primary}
+            style={styles.valueText}
           >
             {value}
-          </Text>
+          </AppText>
         </View>
         <TouchableOpacity
           onPress={onIncrease}
@@ -131,7 +127,7 @@ export const Stepper: React.FC<Props> = React.memo(
             style={[
               styles.buttonText,
               {
-                fontSize,
+                fontSize: symbolSize,
                 color: canIncrease ? theme.colors.primary : theme.colors.text.disabled,
               },
             ]}

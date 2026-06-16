@@ -103,19 +103,19 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = React.memo(
         >
           <View
             style={
-              [
-                styles.card,
-                isSelected
-                  ? {
-                      borderColor: theme.colors.primary,
-                      borderWidth: 2,
-                      backgroundColor: 'rgba(59, 130, 246, 0.05)',
-                    }
-                  : {
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-
-                      borderColor: 'rgba(0, 0, 0, 0.05)',
-                    },
+               [
+                  styles.card,
+                  isSelected
+                    ? {
+                        borderColor: theme.colors.primary,
+                        borderWidth: 2,
+                        backgroundColor: theme.colors.primaryLight,
+                      }
+                    : {
+                        backgroundColor: theme.colors.surface,
+                        borderColor: theme.colors.outline,
+                        borderWidth: 1,
+                      },
                 template.popular
                   ? { borderLeftWidth: 3, borderLeftColor: theme.colors.secondary }
                   : {},

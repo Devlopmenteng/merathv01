@@ -22,6 +22,8 @@
   "dependencies": {
     "@emnapi/core": "^1.10.0",
     "@emnapi/runtime": "^1.10.0",
+    "@expo-google-fonts/inter": "^0.4.2",
+    "@expo-google-fonts/noto-naskh-arabic": "^0.4.5",
     "@expo/vector-icons": "^15.1.1",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@react-native-async-storage/async-storage": "2.2.0",

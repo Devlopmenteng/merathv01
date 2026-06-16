@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useCalc } from '../lib/context/CalcContext';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useTheme } from '../lib/context/ThemeContext';
 import { FAB } from '../components/ui/FAB';
 import { Divider } from '../components/ui/Divider';
 import { t } from '../lib/i18n';
 import { calculateInheritanceWithCache } from '../lib/inheritance/calculateAdapter';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 import type { CalculationResult, Madhab } from '../lib/engine/types';
 
 export const Results = ({
@@ -14,6 +16,9 @@ export const Results = ({
   navigation: { navigate: (screen: string, params?: Record<string, unknown>) => void };
 }) => {
   const theme = useAppTheme();
+  useLocalizedTitle('inheritance_report');
+  const { responsive } = useTheme();
+  const isTablet = responsive.isTablet || responsive.isLargeTablet;
   const { state } = useCalc();
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [activeTab, setActiveTab] = useState('distribution');
@@ -54,10 +59,10 @@ export const Results = ({
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: 80 }}>
+      <ScrollView contentContainerStyle={{ padding: isTablet ? theme.spacing.xxl : theme.spacing.lg, paddingBottom: 80 }}>
         <Text style={theme.typography.h1}>{t('inheritance_report')}</Text>
         <Divider />
-        <View style={styles.tabBar}>
+        <View style={[styles.tabBar, isTablet && { justifyContent: 'center', gap: theme.spacing.lg }]}>
           {['distribution', 'steps', 'compare'].map((tab) => (
             <Pressable
               key={tab}

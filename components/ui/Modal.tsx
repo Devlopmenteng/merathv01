@@ -38,7 +38,7 @@ export const Modal: React.FC<ModalProps> = React.memo(
             ]}
           >
             <Pressable onPress={() => {}} style={styles.content}>
-              <View style={styles.handleBar} />
+              <View style={[styles.handleBar, { backgroundColor: theme.colors.outline }]} />
               {title && (
                 <View style={styles.header}>
                   <Text style={[theme.typography.h3, { flex: 1 }]}>{title}</Text>

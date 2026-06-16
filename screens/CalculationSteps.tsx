@@ -6,6 +6,7 @@ import { t } from '../lib/i18n';
 import type { AuditEntry } from '../lib/services/AuditTrailService';
 import { localizeStepTitle, localizeStepDesc } from '../lib/utils/shareLocalization';
 import { Button } from '../components/ui/Button';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 type CalculationStepsNavigation = {
   navigate: (screen: string) => void;
@@ -24,6 +25,7 @@ type Props = {
 export const CalculationSteps = ({ route, navigation }: Props) => {
   const { auditEntry } = route.params || {};
   const theme = useAppTheme();
+  useLocalizedTitle('calculation_steps');
   const insets = useSafeAreaInsets();
 
   if (!auditEntry) {
@@ -79,7 +81,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         {t('calculation_steps')}
       </Text>
 
-      <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
+      <View style={[styles.infoCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}>
         <Text
           style={[
             theme.typography.bodySmall,
@@ -121,7 +123,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
           auditEntry.steps.map((step, index) => (
             <View
               key={index}
-              style={[styles.stepCard, { backgroundColor: theme.colors.surface }]}
+              style={[styles.stepCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}
               accessible
               accessibilityLabel={t('a11y_step_prefix', { number: index + 1, title: step.title })}
             >
@@ -183,7 +185,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
             </View>
           ))
         ) : (
-          <View style={[styles.emptyCard, { backgroundColor: theme.colors.surface }]}>
+          <View style={[styles.emptyCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]}>
             <Text
               style={[
                 theme.typography.body,
@@ -196,7 +198,7 @@ export const CalculationSteps = ({ route, navigation }: Props) => {
         )}
 
         {auditEntry.hijabLog && auditEntry.hijabLog.length > 0 && (
-          <View style={[styles.hijabCard, { backgroundColor: theme.colors.surface }]}>
+          <View style={[styles.hijabCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.errorLight }]}>
             <Text
               style={[
                 theme.typography.h3,
@@ -235,28 +237,20 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   stepCard: {
     overflow: 'hidden',
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   emptyCard: {
     padding: 24,
     borderRadius: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   hijabCard: {
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
-
-    borderColor: 'rgba(239, 68, 68, 0.1)',
   },
 });

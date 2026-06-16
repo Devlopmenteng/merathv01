@@ -21,6 +21,8 @@ import { t } from '../lib/i18n';
 import { forwardArrow } from '../lib/utils/rtl';
 import { showAlert } from '../lib/utils/alerts';
 import { Button } from '../components/ui/Button';
+import { AppText } from '../components/ui/AppText';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -42,6 +44,7 @@ type SettingsNavigation = {
 export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => {
   const { isDark, toggleTheme } = useTheme();
   const theme = useAppTheme();
+  useLocalizedTitle('settings');
   const insets = useSafeAreaInsets();
   const { locale, changeLocale } = useLanguage();
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
@@ -225,16 +228,23 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
         mode="outlined"
         style={{ marginBottom: theme.spacing.md }}
       />
-      <Text style={[theme.typography.h1, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>
+      <AppText variant="h1" style={{ writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
         {t('settings')}
-      </Text>
+      </AppText>
 
       <View style={styles.section}>
-        <Text
-          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        <AppText
+          variant="label"
+          color={theme.colors.text.secondary}
+          style={[
+            styles.sectionHeader,
+            {
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
         >
           {t('appearance')}
-        </Text>
+        </AppText>
         <View style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}>
           <Text
             style={[theme.typography.body, { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
@@ -267,11 +277,18 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </View>
 
       <View style={styles.section}>
-        <Text
-          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        <AppText
+          variant="label"
+          color={theme.colors.text.secondary}
+          style={[
+            styles.sectionHeader,
+            {
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
         >
           {t('resources')}
-        </Text>
+        </AppText>
         <TouchableOpacity
           activeOpacity={0.7}
           style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
@@ -290,11 +307,18 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </View>
 
       <View style={styles.section}>
-        <Text
-          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        <AppText
+          variant="label"
+          color={theme.colors.text.secondary}
+          style={[
+            styles.sectionHeader,
+            {
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
         >
           {t('about')}
-        </Text>
+        </AppText>
         <View style={[styles.aboutCard, { backgroundColor: theme.colors.surface }]}>
           <Text
             style={[
@@ -332,11 +356,18 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </View>
 
       <View style={styles.section}>
-        <Text
-          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        <AppText
+          variant="label"
+          color={theme.colors.text.secondary}
+          style={[
+            styles.sectionHeader,
+            {
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
         >
           {t('support')}
-        </Text>
+        </AppText>
         <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
           <TouchableOpacity
             activeOpacity={0.7}
@@ -355,7 +386,7 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
               {t('rate_us_send_feedback')}
             </Text>
           </TouchableOpacity>
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.cardItem}
@@ -377,11 +408,18 @@ export const Settings = ({ navigation }: { navigation: SettingsNavigation }) => 
       </View>
 
       <View style={styles.section}>
-        <Text
-          style={[styles.sectionHeader, { color: theme.colors.text.secondary, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}
+        <AppText
+          variant="label"
+          color={theme.colors.text.secondary}
+          style={[
+            styles.sectionHeader,
+            {
+              writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+            },
+          ]}
         >
           {t('legal')}
-        </Text>
+        </AppText>
         <TouchableOpacity
           activeOpacity={0.7}
           style={[styles.settingItem, { backgroundColor: theme.colors.surface }]}
@@ -440,7 +478,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionHeader: {
-    fontSize: 13,
     fontWeight: '600',
     textTransform: 'uppercase',
     marginBottom: 8,
@@ -454,19 +491,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
     marginBottom: 8,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   aboutCard: {
     padding: 16,
     borderRadius: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   card: {
     borderRadius: 12,
-
-    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   cardItem: {
     paddingVertical: 16,

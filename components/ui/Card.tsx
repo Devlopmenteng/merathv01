@@ -59,29 +59,27 @@ export const Card: React.FC<CardProps> = memo(
       switch (variant) {
         case 'elevated':
           return {
-            backgroundColor: 'transparent',
-
-            borderWidth: 0,
+            backgroundColor: theme.colors.surface,
+            ...theme.elevation.medium,
           };
         case 'outlined':
           return {
-            backgroundColor: 'transparent',
+            backgroundColor: theme.colors.surface,
+            borderWidth: 1,
+            borderColor: theme.colors.outline,
           };
         case 'filled':
           return {
-            backgroundColor: 'transparent',
-            borderWidth: 0,
+            backgroundColor: theme.colors.surfaceVariant,
           };
         case 'tonal':
           return {
             backgroundColor: theme.colors.primaryContainer,
-            borderWidth: 0,
           };
         default:
           return {
-            backgroundColor: 'transparent',
-
-            borderWidth: 0,
+            backgroundColor: theme.colors.surface,
+            ...theme.elevation.medium,
           };
       }
     }, [
@@ -91,12 +89,12 @@ export const Card: React.FC<CardProps> = memo(
       theme.colors.primaryContainer,
       theme.colors.outline,
       theme.elevation.medium,
-      theme.elevation.none,
     ]);
 
     const containerStyle = useMemo(
       (): ViewStyle => ({
         padding: paddingValue,
+        borderRadius: theme.borderRadius.lg,
         marginBottom: theme.spacing.md,
         ...(leftBorder
           ? {

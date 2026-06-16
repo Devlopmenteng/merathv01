@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, Animated, KeyboardTypeOptions, StyleSheet } from 'react-native';
+import { View, TextInput, Animated, KeyboardTypeOptions, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { formatCurrency, parseCurrency } from '../../lib/utils/currencyFormatter';
+import { AppText } from './AppText';
 
 type Props = {
   label: string;
@@ -98,7 +99,7 @@ export const Input: React.FC<Props> = ({
     }),
     fontSize: animatedLabel.interpolate({
       inputRange: [0, 1],
-      outputRange: [16, 12],
+      outputRange: [theme.typography.body.fontSize, theme.typography.caption.fontSize],
     }),
     color: error ? theme.colors.error : focused ? theme.colors.primary : theme.colors.outline,
     backgroundColor: 'transparent',
@@ -147,7 +148,7 @@ export const Input: React.FC<Props> = ({
         <Animated.Text style={labelStyle}>{label}</Animated.Text>
         {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
         {prefix && (
-          <Text style={[styles.affix, { color: theme.colors.text.secondary }]}>{prefix}</Text>
+          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>{prefix}</AppText>
         )}
         <TextInput
           value={localValue}
@@ -163,24 +164,26 @@ export const Input: React.FC<Props> = ({
             styles.input,
             {
               color: disabled ? theme.colors.outline : theme.colors.onSurface,
+              fontSize: theme.typography.body.fontSize,
+              fontWeight: theme.typography.body.fontWeight,
             },
           ]}
           placeholderTextColor={theme.colors.outline}
         />
         {suffix && (
-          <Text style={[styles.affix, { color: theme.colors.text.secondary }]}>{suffix}</Text>
+          <AppText variant="label" color={theme.colors.text.secondary} style={styles.affix}>{suffix}</AppText>
         )}
         {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
       </View>
       {error ? (
-        <Text style={[styles.helperText, { color: theme.colors.error }]}>{error}</Text>
+        <AppText variant="caption" color={theme.colors.error} style={styles.helperText}>{error}</AppText>
       ) : helper ? (
-        <Text style={[styles.helperText, { color: theme.colors.text.secondary }]}>{helper}</Text>
+        <AppText variant="caption" color={theme.colors.text.secondary} style={styles.helperText}>{helper}</AppText>
       ) : null}
       {maxLength && (
-        <Text style={[styles.charCount, { color: theme.colors.text.disabled }]}>
+        <AppText variant="labelSmall" color={theme.colors.text.disabled} style={styles.charCount}>
           {localValue.length}/{maxLength}
-        </Text>
+        </AppText>
       )}
     </View>
   );

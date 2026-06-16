@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { AppText } from './AppText';
 
 type ChipVariant = 'filter' | 'input' | 'suggestion';
 
@@ -58,17 +59,14 @@ export const Chip: React.FC<ChipProps> = ({
       style={[styles.chip, getVariantStyle(), disabled && { opacity: 0.38 }]}
     >
       {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
-      <Text
-        style={[
-          styles.label,
-          {
-            color:
-              selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface,
-          },
-        ]}
+      <AppText
+        variant="label"
+        color={
+          selected && variant === 'filter' ? theme.colors.onPrimary : theme.colors.onSurface
+        }
       >
         {label}
-      </Text>
+      </AppText>
     </TouchableOpacity>
   );
 };
@@ -84,9 +82,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginEnd: 4,
-  },
-  label: {
-    fontSize: 13,
-    fontWeight: '500',
   },
 });

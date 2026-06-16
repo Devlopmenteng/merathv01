@@ -50,14 +50,31 @@ export const typography = {
   },
 };
 
+// ── Font families ──
+export const fonts = {
+  latin: {
+    400: 'Inter_400Regular',
+    500: 'Inter_500Medium',
+    600: 'Inter_600SemiBold',
+    700: 'Inter_700Bold',
+  },
+  arabic: {
+    400: 'NotoNaskhArabic_400Regular',
+    500: 'NotoNaskhArabic_500Medium',
+    600: 'NotoNaskhArabic_600SemiBold',
+    700: 'NotoNaskhArabic_700Bold',
+  },
+};
+
 // ── Elevation surface levels (MD3 tonal layering for dark mode) ──
+// Baseline #121212 with primary (#818cf8) tonal overlay at increasing opacities
 const darkElevationLevels = {
-  level0: '#1A1814',
-  level1: '#22201C',
-  level2: '#262420',
-  level3: '#2A2723',
-  level4: '#2C2925',
-  level5: '#2E2B27',
+  level0: '#121212',
+  level1: '#1B1C24',
+  level2: '#1F212E',
+  level3: '#242637',
+  level4: '#282A40',
+  level5: '#2D2F49',
 };
 
 // ── Elevation system ──
@@ -165,35 +182,35 @@ export const lightTheme = {
   elevation,
 };
 
-// ── Dark Theme — Modern Dark Slate & Luminous Accents ──
+// ── Dark Theme — #121212 Baseline with MD3 Tonal Elevation ──
 export const darkTheme = {
   colors: {
-    primary: '#818cf8', // Lighter indigo for dark mode
+    primary: '#818cf8', // Indigo 400 — luminous accent on dark bg
     primaryDark: '#4f46e5',
     primaryLight: '#1e1b4b',
     primaryContainer: '#1e1b4b',
-    secondary: '#a78bfa', // Lighter purple
+    secondary: '#a78bfa',
     secondaryLight: '#2e1065',
     secondaryContainer: '#2e1065',
-    tertiary: '#f472b6', // Lighter pink
+    tertiary: '#f472b6',
     tertiaryContainer: '#4a044e',
-    accent: '#22d3ee', // Lighter cyan
+    accent: '#22d3ee',
     accentLight: '#164e63',
-    success: '#34d399', // Lighter emerald
+    success: '#34d399',
     successLight: '#064e3b',
-    warning: '#fbbf24', // Lighter amber
+    warning: '#fbbf24',
     warningLight: '#451a03',
-    error: '#f87171', // Lighter red
+    error: '#f87171',
     errorLight: '#7f1d1d',
     errorContainer: '#450a0a',
-    info: '#60a5fa', // Lighter blue
+    info: '#60a5fa',
     infoLight: '#1e3a8a',
-    background: '#0f172a', // Slate 900
-    surface: '#1e293b', // Slate 800
-    surfaceVariant: '#334155', // Slate 700
+    background: '#121212', // Baseline dark
+    surface: '#1B1C24', // MD3 level 1 (8% primary tint)
+    surfaceVariant: '#242637', // MD3 level 3 (16% primary tint)
     surfaceTint: '#818cf8',
-    outline: '#475569',
-    outlineVariant: '#1e293b',
+    outline: '#52525b', // Zinc 600 — improved visibility on dark
+    outlineVariant: '#334155', // Slate 700
     backdrop: 'rgba(0, 0, 0, 0.8)',
     scrim: 'rgba(0, 0, 0, 0.7)',
     text: {

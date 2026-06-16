@@ -6,6 +6,7 @@ import { useAppTheme } from '../hooks/useAppTheme';
 import { Divider } from '../components/ui/Divider';
 import { Chip } from '../components/ui/Chip';
 import { t } from '../lib/i18n';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 export const History = ({
   navigation,
@@ -13,6 +14,7 @@ export const History = ({
   navigation: { navigate: (screen: string, params?: Record<string, unknown>) => void };
 }) => {
   const theme = useAppTheme();
+  useLocalizedTitle('history_screen_title');
   const insets = useSafeAreaInsets();
   const [entries, setEntries] = useState<AuditEntry[]>([]);
   const [filter, setFilter] = useState('');
@@ -49,7 +51,7 @@ export const History = ({
           placeholder={t('search_placeholder')}
           value={filter}
           onChangeText={setFilter}
-          style={styles.searchInput}
+          style={[styles.searchInput, { borderColor: theme.colors.outline }]}
         />
         <ScrollView horizontal style={{ marginVertical: 8 }}>
           <Chip label="All" selected /> <Chip label="Hanafi" /> <Chip label="Maliki" />
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   searchInput: {
     borderWidth: 1,
-    borderColor: '#ccc',
     padding: 8,
     borderRadius: 8,
     marginVertical: 8,

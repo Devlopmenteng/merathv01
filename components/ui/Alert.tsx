@@ -1,7 +1,8 @@
 import React, { memo } from 'react';
-import { View, Text, StyleSheet, I18nManager } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { AppText } from './AppText';
 
 type Props = {
   title?: string;
@@ -55,23 +56,13 @@ export const Alert: React.FC<Props> = memo(({ title, message, variant = 'info', 
         </View>
         <View style={styles.textContainer}>
           {title && (
-            <Text
-              style={[
-                styles.title,
-                { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-              ]}
-            >
+            <AppText variant="body" color={config.textColor} style={styles.title}>
               {title}
-            </Text>
+            </AppText>
           )}
-          <Text
-            style={[
-              styles.message,
-              { color: config.textColor, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
-            ]}
-          >
+          <AppText variant="bodySmall" color={config.textColor}>
             {message}
-          </Text>
+          </AppText>
         </View>
       </LinearGradient>
     </View>
@@ -103,12 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
-    fontWeight: '700',
     marginBottom: 4,
-  },
-  message: {
-    fontSize: 14,
-    lineHeight: 20,
   },
 });

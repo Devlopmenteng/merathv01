@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
+import { AppText } from './ui/AppText';
 
 export const OfflineIndicator: React.FC = () => {
   const theme = useAppTheme();
@@ -11,9 +12,9 @@ export const OfflineIndicator: React.FC = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.error }]}>
-      <Text style={[styles.text, { color: theme.colors.onSurface }]}>
+      <AppText variant="caption" color={theme.colors.onSurface} style={styles.text}>
         ⚠️ You're offline. Some features may be limited.
-      </Text>
+      </AppText>
     </View>
   );
 };
@@ -25,7 +26,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 12,
     fontWeight: '600',
   },
 });

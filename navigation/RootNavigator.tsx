@@ -1,10 +1,10 @@
-import React, { Suspense, lazy, useRef, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, I18nManager } from 'react-native';
-import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+import React, { Suspense, lazy } from 'react';
+import { View, StyleSheet, I18nManager } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { StackAnimationTypes } from 'react-native-screens';
 import { t } from '../lib/i18n';
-import { lightTheme } from '../lib/constants/theme';
+import { SkeletonLoader } from '../components/ui/SkeletonLoader';
 
 // Preload critical screens
 const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
@@ -34,22 +34,6 @@ const CalculationSteps = lazy(() =>
 
 const Stack = createNativeStackNavigator();
 
-const linking = {
-  prefixes: ['merath://', 'https://merath.app'],
-  config: {
-    screens: {
-      Home: '',
-      EstateSetup: 'estate',
-      HeirSelection: 'heirs',
-      Results: 'results',
-      Settings: 'settings',
-      History: 'history',
-      Glossary: 'glossary',
-      CalculationSteps: 'steps',
-    },
-  },
-};
-
 const screenOptions = {
   headerShown: true,
   animation: (I18nManager.isRTL ? 'slide_from_left' : 'slide_from_right') as StackAnimationTypes,
@@ -57,27 +41,19 @@ const screenOptions = {
 
 const LoadingView = () => (
   <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color={lightTheme.colors.primary} />
+    <View style={styles.skeletonGroup}>
+      <SkeletonLoader height={24} style={styles.skeletonWide} />
+      <SkeletonLoader height={16} style={styles.skeletonNarrow} />
+      <SkeletonLoader height={48} style={styles.skeletonBlock} />
+      <SkeletonLoader height={48} style={styles.skeletonBlock} />
+      <SkeletonLoader height={48} style={styles.skeletonBlock} />
+    </View>
   </View>
 );
 
 export default function RootNavigator() {
-  const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      Promise.all([
-        import('../screens/Home'),
-        import('../screens/EstateSetup'),
-        import('../screens/HeirSelection'),
-        import('../screens/Results'),
-      ]);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <NavigationContainer ref={navigationRef} linking={linking} fallback={<LoadingView />}>
+    <NavigationContainer fallback={<LoadingView />}>
       <Suspense fallback={<LoadingView />}>
         <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
@@ -127,5 +103,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 24,
+  },
+  skeletonGroup: {
+    width: '100%',
+    gap: 16,
+  },
+  skeletonWide: {
+    width: '60%',
+    marginBottom: 4,
+  },
+  skeletonNarrow: {
+    width: '40%',
+    marginBottom: 16,
+  },
+  skeletonBlock: {
+    width: '100%',
+    borderRadius: 12,
   },
 });

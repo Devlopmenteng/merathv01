@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { View, Text, StyleSheet, I18nManager } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { AppText } from './AppText';
 
 type Props = {
   text: string;
@@ -36,13 +37,20 @@ export const Badge: React.FC<Props> = memo(({ text, variant = 'info', size = 'me
   };
 
   const sizeStyles = {
-    small: { paddingHorizontal: 8, paddingVertical: 2, fontSize: 10 },
-    medium: { paddingHorizontal: 12, paddingVertical: 4, fontSize: 12 },
-    large: { paddingHorizontal: 16, paddingVertical: 6, fontSize: 14 },
+    small: { paddingHorizontal: 8, paddingVertical: 2 },
+    medium: { paddingHorizontal: 12, paddingVertical: 4 },
+    large: { paddingHorizontal: 16, paddingVertical: 6 },
+  };
+
+  const sizeToVariant = {
+    small: 'labelSmall' as const,
+    medium: 'caption' as const,
+    large: 'label' as const,
   };
 
   const currentVariant = variantStyles[variant] || variantStyles.info;
   const currentSize = sizeStyles[size];
+  const textVariant = sizeToVariant[size];
 
   return (
     <View
@@ -56,18 +64,9 @@ export const Badge: React.FC<Props> = memo(({ text, variant = 'info', size = 'me
         style,
       ]}
     >
-      <Text
-        style={[
-          styles.text,
-          {
-            color: currentVariant.color,
-            fontSize: currentSize.fontSize,
-            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-          },
-        ]}
-      >
+      <AppText variant={textVariant} color={currentVariant.color} style={styles.text}>
         {text}
-      </Text>
+      </AppText>
     </View>
   );
 });

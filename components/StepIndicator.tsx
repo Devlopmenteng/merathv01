@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { t } from '../lib/i18n';
+import { AppText } from './ui/AppText';
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -62,17 +63,14 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
                 currentStep >= index && styles.activeCircle,
               ]}
             >
-              <Text
-                style={[
-                  styles.stepNumber,
-                  {
-                    color:
-                      currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary,
-                  },
-                ]}
+              <AppText
+                variant="label"
+                color={
+                  currentStep >= index ? theme.colors.onPrimary : theme.colors.text.secondary
+                }
               >
                 {index + 1}
-              </Text>
+              </AppText>
             </Animated.View>
             {index < steps.length - 1 && (
               <Animated.View
@@ -88,19 +86,16 @@ export const StepIndicator = ({ currentStep, steps }: StepIndicatorProps) => {
               />
             )}
           </View>
-          <Animated.Text
-            style={[
-              styles.stepLabel,
-              {
-                color: circleAnims[index].interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [theme.colors.text.secondary, theme.colors.primary],
-                }),
-              },
-            ]}
+          <AppText
+            variant="caption"
+            color={circleAnims[index].interpolate({
+              inputRange: [0, 1],
+              outputRange: [theme.colors.text.secondary, theme.colors.primary],
+            }) as any} // eslint-disable-line @typescript-eslint/no-explicit-any
+            style={styles.stepLabel}
           >
             {t(stepKey)}
-          </Animated.Text>
+          </AppText>
         </View>
       ))}
     </View>
@@ -137,7 +132,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   stepNumber: {
-    fontSize: 14,
     fontWeight: 'bold',
   },
   line: {
@@ -147,7 +141,6 @@ const styles = StyleSheet.create({
   },
   activeLine: {},
   stepLabel: {
-    fontSize: 12,
     marginTop: 4,
     textAlign: 'center',
   },

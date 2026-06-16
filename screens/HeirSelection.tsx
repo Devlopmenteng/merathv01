@@ -5,11 +5,13 @@ import { FAB } from '../components/ui/FAB';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useCalc } from '../lib/context/CalcContext';
 import { t } from '../lib/i18n';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 type HeirSelectionNavigation = { navigate: (screen: string) => void };
 
 export const HeirSelection = ({ navigation }: { navigation: HeirSelectionNavigation }) => {
   const theme = useAppTheme();
+  useLocalizedTitle('select_heirs');
   const { state, dispatch } = useCalc();
 
   const handleCalculate = () => {

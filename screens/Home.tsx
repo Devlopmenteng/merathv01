@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import { View, Text, ScrollView, I18nManager, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
-import { useResponsive } from '../hooks/useResponsive';
+import { useTheme } from '../lib/context/ThemeContext';
 import { t } from '../lib/i18n';
 import { Chip } from '../components/ui/Chip';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -14,8 +14,11 @@ type HomeNavigation = { navigate: (screen: string, params?: Record<string, unkno
 export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
-  const {} = useResponsive();
+  const { responsive } = useTheme();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const isTablet = responsive.isTablet || responsive.isLargeTablet;
+  const contentPadding = isTablet ? theme.spacing.xxl : theme.spacing.lg;
 
   const openTemplates = useCallback(() => {
     bottomSheetRef.current?.present();
@@ -33,7 +36,7 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <ScrollView
           contentContainerStyle={{
-            padding: theme.spacing.lg,
+            padding: contentPadding,
             paddingBottom: insets.bottom + theme.spacing.xxl,
             paddingTop: insets.top + theme.spacing.lg,
           }}
@@ -56,15 +59,19 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
 
           <Divider />
 
-          <View>
+          <View style={isTablet ? styles.tabletGrid : undefined}>
             {menuItems.map((item) => (
               <Pressable
                 key={item.screen}
                 onPress={() => navigation.navigate(item.screen)}
                 style={({ pressed }) => [
                   styles.menuItem,
-                  { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' },
-                  item.primary && { backgroundColor: 'rgba(79,70,229,0.05)' },
+                  {
+                    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+                    borderBottomColor: theme.colors.outlineVariant,
+                    ...(isTablet ? { width: '48%', marginBottom: theme.spacing.md } : {}),
+                  },
+                  item.primary && { backgroundColor: theme.colors.primaryLight },
                   pressed && { opacity: 0.7 },
                 ]}
               >
@@ -100,7 +107,11 @@ export const Home = ({ navigation }: { navigation: HomeNavigation }) => {
                   bottomSheetRef.current?.dismiss();
                   navigation.navigate('HeirSelection', { template });
                 }}
-                style={({ pressed }) => [styles.templateItem, pressed && { opacity: 0.7 }]}
+                style={({ pressed }) => [
+                  styles.templateItem,
+                  { borderBottomColor: theme.colors.outlineVariant },
+                  pressed && { opacity: 0.7 },
+                ]}
               >
                 <Text style={theme.typography.body}>{template.name}</Text>
                 <Text style={[theme.typography.caption, { color: theme.colors.text.secondary }]}>
@@ -124,7 +135,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
   },
   iconContainer: {
     width: 48,
@@ -141,6 +151,10 @@ const styles = StyleSheet.create({
   templateItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  tabletGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
 });

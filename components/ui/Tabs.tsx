@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, I18nManager } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { AppText } from './AppText';
 
 type TabItem = {
   key: string;
@@ -31,7 +32,7 @@ export const Tabs: React.FC<Props> = ({ tabs, activeTab, onTabChange, style }) =
 
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.tabsContainer}>
+      <View style={[styles.tabsContainer, { borderBottomColor: theme.colors.outline }]}>
         {tabs.map((tab, index) => {
           const isActive = activeTab === tab.key;
           return (
@@ -44,18 +45,13 @@ export const Tabs: React.FC<Props> = ({ tabs, activeTab, onTabChange, style }) =
               accessibilityState={{ selected: isActive }}
               accessibilityLabel={tab.title}
             >
-              <Text
-                style={[
-                  styles.tabText,
-                  {
-                    color: isActive ? theme.colors.primary : theme.colors.text.secondary,
-                    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-                  },
-                ]}
+              <AppText
+                variant="button"
+                color={isActive ? theme.colors.primary : theme.colors.text.secondary}
               >
                 {tab.icon && `${tab.icon} `}
                 {tab.title}
-              </Text>
+              </AppText>
               {isActive && (
                 <Animated.View
                   style={[styles.indicator, { backgroundColor: theme.colors.primary }]}
@@ -76,17 +72,11 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
   },
   tab: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     position: 'relative',
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   indicator: {
     position: 'absolute',

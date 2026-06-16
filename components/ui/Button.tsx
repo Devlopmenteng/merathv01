@@ -1,7 +1,6 @@
 import React, { useState, useRef, useMemo, memo } from 'react';
 import {
   TouchableOpacity,
-  Text,
   ActivityIndicator,
   View,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { AppText } from './AppText';
 
 type Props = {
   title: string;
@@ -99,17 +99,6 @@ export const Button: React.FC<Props> = memo(
       }
     }, [size, theme.spacing.sm, theme.spacing.md, theme.spacing.lg, theme.spacing.xl]);
 
-    const fontSize = useMemo(() => {
-      switch (size) {
-        case 'small':
-          return 14;
-        case 'large':
-          return 18;
-        default:
-          return 16;
-      }
-    }, [size]);
-
     const buttonColor = useMemo(() => {
       if (isSuccess) return theme.colors.success;
       if (isDanger) return theme.colors.error;
@@ -125,17 +114,13 @@ export const Button: React.FC<Props> = memo(
         {loading ? (
           <ActivityIndicator color={textColor} size="small" />
         ) : (
-          <Text
-            style={{
-              color: textColor,
-              textAlign: 'center',
-              fontSize: fontSize,
-              fontWeight: '600',
-              letterSpacing: 0.5,
-            }}
+          <AppText
+            variant="button"
+            color={textColor}
+            style={{ textAlign: 'center' }}
           >
             {title}
-          </Text>
+          </AppText>
         )}
       </View>
     );

@@ -2,21 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useTheme } from '../lib/context/ThemeContext';
 import { GLOSSARY } from '../lib/constants/glossary';
 import { INHERITANCE_VERSES, HADITH } from '../lib/constants/quran_hadith';
 import { Divider } from '../components/ui/Divider';
 import { t } from '../lib/i18n';
+import { useLocalizedTitle } from '../hooks/useLocalizedTitle';
 
 const TABS = ['terms', 'verses', 'hadith', 'fiqh'];
 
 export const Glossary = () => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { responsive } = useTheme();
+  const isTablet = responsive.isTablet || responsive.isLargeTablet;
+  useLocalizedTitle('glossary');
   const [activeTab, setActiveTab] = useState('terms');
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={{ padding: theme.spacing.lg, paddingTop: insets.top + theme.spacing.lg }}>
+      <View style={{ padding: isTablet ? theme.spacing.xxl : theme.spacing.lg, paddingTop: insets.top + theme.spacing.lg }}>
         <Text style={theme.typography.h1}>{t('glossary')}</Text>
         <View style={styles.tabBar}>
           {TABS.map((tab) => (
@@ -37,18 +42,20 @@ export const Glossary = () => {
         </View>
         <Divider />
         <ScrollView>
-          {activeTab === 'terms' &&
-            GLOSSARY.map((item, i) => (
-              <View key={i} style={styles.listItem}>
-                <View style={[styles.leftBorder, { borderLeftColor: theme.colors.primary }]} />
-                <View style={styles.content}>
-                  <Text style={theme.typography.h3}>
-                    {item.term} – {item.termAr}
-                  </Text>
-                  <Text>{item.definition}</Text>
+          <View style={isTablet ? styles.tabletGrid : undefined}>
+            {activeTab === 'terms' &&
+              GLOSSARY.map((item, i) => (
+                <View key={i} style={[styles.listItem, isTablet && { width: '48%' }]}>
+                  <View style={[styles.leftBorder, { borderLeftColor: theme.colors.primary }]} />
+                  <View style={styles.content}>
+                    <Text style={theme.typography.h3}>
+                      {item.term} – {item.termAr}
+                    </Text>
+                    <Text>{item.definition}</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
+          </View>
           {activeTab === 'verses' &&
             INHERITANCE_VERSES.map((v, i) => (
               <View key={i} style={styles.listItem}>
@@ -86,4 +93,9 @@ const styles = StyleSheet.create({
   listItem: { flexDirection: 'row', marginBottom: 12, paddingVertical: 8 },
   leftBorder: { borderLeftWidth: 4, marginRight: 12 },
   content: { flex: 1 },
+  tabletGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
 });
