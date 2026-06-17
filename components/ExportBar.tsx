@@ -18,7 +18,7 @@ type ExportBarProps = {
 
 export const ExportBar: React.FC<ExportBarProps> = React.memo(
   ({ resultData, estate, heirs, children }) => {
-    const viewShotRef = useRef<ViewShot>(null);
+    const viewShotRef = useRef<React.ElementRef<typeof ViewShot> | null>(null);
     const theme = useAppTheme();
 
     const generatePDF = async () => {
