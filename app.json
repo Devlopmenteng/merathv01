@@ -12,7 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.merath_mobile.merath",
-      "permissions": ["INTERNET", "USE_FINGERPRINT", "USE_BIOMETRIC"],
+      "permissions": ["INTERNET", "USE_FINGERPRINT", "USE_BIOMETRIC"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
